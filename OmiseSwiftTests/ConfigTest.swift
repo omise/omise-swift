@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import OmiseSwiftIOS
+import Omise
 
 class ConfigTest: OmiseSwiftTestCase {
     func testCtor() {

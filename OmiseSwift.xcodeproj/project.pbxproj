@@ -18,8 +18,8 @@
 		2270E3A31CC7751600F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
 		2270E3A41CC7798B00F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
 		2270E3A51CC7799000F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
-		2270E3AF1CC78D4200F18814 /* OmiseSwiftOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* OmiseSwiftOSX.framework */; };
-		2270E3BE1CC78D8900F18814 /* OmiseSwiftIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C327D1CC762440060112E /* OmiseSwiftIOS.framework */; };
+		2270E3AF1CC78D4200F18814 /* Omise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* Omise.framework */; };
+		2270E3BE1CC78D8900F18814 /* Omise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C327D1CC762440060112E /* Omise.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,10 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		220C326D1CC762330060112E /* OmiseSwiftOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmiseSwiftOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		220C326D1CC762330060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220C32701CC762330060112E /* OmiseSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmiseSwift.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
-		220C327D1CC762440060112E /* OmiseSwiftIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmiseSwiftIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		220C327D1CC762440060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22112D081CC7910700D0DB54 /* ConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTest.swift; sourceTree = "<group>"; };
 		22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseSwiftTestCase.swift; sourceTree = "<group>"; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E3AF1CC78D4200F18814 /* OmiseSwiftOSX.framework in Frameworks */,
+				2270E3AF1CC78D4200F18814 /* Omise.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E3BE1CC78D8900F18814 /* OmiseSwiftIOS.framework in Frameworks */,
+				2270E3BE1CC78D8900F18814 /* Omise.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,8 +102,8 @@
 		220C326E1CC762330060112E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				220C326D1CC762330060112E /* OmiseSwiftOSX.framework */,
-				220C327D1CC762440060112E /* OmiseSwiftIOS.framework */,
+				220C326D1CC762330060112E /* Omise.framework */,
+				220C327D1CC762440060112E /* Omise.framework */,
 				2270E3AA1CC78D4200F18814 /* OmiseSwiftOSXTests.xctest */,
 				2270E3B91CC78D8900F18814 /* OmiseSwiftIOSTests.xctest */,
 			);
@@ -170,7 +170,7 @@
 			);
 			name = OmiseSwiftOSX;
 			productName = OmiseSwift;
-			productReference = 220C326D1CC762330060112E /* OmiseSwiftOSX.framework */;
+			productReference = 220C326D1CC762330060112E /* Omise.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		220C327C1CC762440060112E /* OmiseSwiftIOS */ = {
@@ -188,7 +188,7 @@
 			);
 			name = OmiseSwiftIOS;
 			productName = OmiseSwiftX;
-			productReference = 220C327D1CC762440060112E /* OmiseSwiftIOS.framework */;
+			productReference = 220C327D1CC762440060112E /* Omise.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		2270E3A91CC78D4200F18814 /* OmiseSwiftOSXTests */ = {
@@ -460,7 +460,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Omise;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -481,7 +481,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Omise;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -499,7 +499,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Omise;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -519,7 +519,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Omise;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
