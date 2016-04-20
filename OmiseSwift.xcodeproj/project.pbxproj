@@ -14,7 +14,28 @@
 		2270E3A31CC7751600F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
 		2270E3A41CC7798B00F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
 		2270E3A51CC7799000F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
+		2270E3AD1CC78D4200F18814 /* OmiseSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */; };
+		2270E3AF1CC78D4200F18814 /* OmiseSwiftOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* OmiseSwiftOSX.framework */; };
+		2270E3BE1CC78D8900F18814 /* OmiseSwiftIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C327D1CC762440060112E /* OmiseSwiftIOS.framework */; };
+		2270E3C51CC78E4B00F18814 /* OmiseSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2270E3B01CC78D4200F18814 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 220C32641CC762330060112E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 220C326C1CC762330060112E;
+			remoteInfo = OmiseSwiftOSX;
+		};
+		2270E3BF1CC78D8900F18814 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 220C32641CC762330060112E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 220C327C1CC762440060112E;
+			remoteInfo = OmiseSwiftIOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		220C326D1CC762330060112E /* OmiseSwiftOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmiseSwiftOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -25,6 +46,11 @@
 		2270E39D1CC7649A00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		2270E3A01CC7718000F18814 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		2270E3A21CC7751600F18814 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		2270E3AA1CC78D4200F18814 /* OmiseSwiftOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OmiseSwiftOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmiseSwiftTests.swift; sourceTree = "<group>"; };
+		2270E3AE1CC78D4200F18814 /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
+		2270E3B91CC78D8900F18814 /* OmiseSwiftIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OmiseSwiftIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2270E3C41CC78DDB00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +68,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2270E3A71CC78D4200F18814 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2270E3AF1CC78D4200F18814 /* OmiseSwiftOSX.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2270E3B61CC78D8900F18814 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2270E3BE1CC78D8900F18814 /* OmiseSwiftIOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -49,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				220C326F1CC762330060112E /* OmiseSwift */,
+				2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */,
 				220C326E1CC762330060112E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,6 +101,8 @@
 			children = (
 				220C326D1CC762330060112E /* OmiseSwiftOSX.framework */,
 				220C327D1CC762440060112E /* OmiseSwiftIOS.framework */,
+				2270E3AA1CC78D4200F18814 /* OmiseSwiftOSXTests.xctest */,
+				2270E3B91CC78D8900F18814 /* OmiseSwiftIOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,6 +118,16 @@
 				2270E3A01CC7718000F18814 /* Request.swift */,
 			);
 			path = OmiseSwift;
+			sourceTree = "<group>";
+		};
+		2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				2270E3C41CC78DDB00F18814 /* Info-iOS.plist */,
+				2270E3AE1CC78D4200F18814 /* Info-OSX.plist */,
+				2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */,
+			);
+			path = OmiseSwiftTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,12 +187,49 @@
 			productReference = 220C327D1CC762440060112E /* OmiseSwiftIOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		2270E3A91CC78D4200F18814 /* OmiseSwiftOSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2270E3B21CC78D4200F18814 /* Build configuration list for PBXNativeTarget "OmiseSwiftOSXTests" */;
+			buildPhases = (
+				2270E3A61CC78D4200F18814 /* Sources */,
+				2270E3A71CC78D4200F18814 /* Frameworks */,
+				2270E3A81CC78D4200F18814 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2270E3B11CC78D4200F18814 /* PBXTargetDependency */,
+			);
+			name = OmiseSwiftOSXTests;
+			productName = OmiseSwiftTests;
+			productReference = 2270E3AA1CC78D4200F18814 /* OmiseSwiftOSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2270E3B81CC78D8900F18814 /* OmiseSwiftIOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2270E3C11CC78D8900F18814 /* Build configuration list for PBXNativeTarget "OmiseSwiftIOSTests" */;
+			buildPhases = (
+				2270E3B51CC78D8900F18814 /* Sources */,
+				2270E3B61CC78D8900F18814 /* Frameworks */,
+				2270E3B71CC78D8900F18814 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2270E3C01CC78D8900F18814 /* PBXTargetDependency */,
+			);
+			name = OmiseSwiftIOSTests;
+			productName = OmiseSwiftIOSTests;
+			productReference = 2270E3B91CC78D8900F18814 /* OmiseSwiftIOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		220C32641CC762330060112E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Omise;
 				TargetAttributes = {
@@ -145,6 +237,12 @@
 						CreatedOnToolsVersion = 7.3;
 					};
 					220C327C1CC762440060112E = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					2270E3A91CC78D4200F18814 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					2270E3B81CC78D8900F18814 = {
 						CreatedOnToolsVersion = 7.3;
 					};
 				};
@@ -163,6 +261,8 @@
 			targets = (
 				220C326C1CC762330060112E /* OmiseSwiftOSX */,
 				220C327C1CC762440060112E /* OmiseSwiftIOS */,
+				2270E3A91CC78D4200F18814 /* OmiseSwiftOSXTests */,
+				2270E3B81CC78D8900F18814 /* OmiseSwiftIOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -176,6 +276,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		220C327B1CC762440060112E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2270E3A81CC78D4200F18814 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2270E3B71CC78D8900F18814 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -205,7 +319,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2270E3A61CC78D4200F18814 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2270E3AD1CC78D4200F18814 /* OmiseSwiftTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2270E3B51CC78D8900F18814 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2270E3C51CC78E4B00F18814 /* OmiseSwiftTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2270E3B11CC78D4200F18814 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 220C326C1CC762330060112E /* OmiseSwiftOSX */;
+			targetProxy = 2270E3B01CC78D4200F18814 /* PBXContainerItemProxy */;
+		};
+		2270E3C01CC78D8900F18814 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 220C327C1CC762440060112E /* OmiseSwiftIOS */;
+			targetProxy = 2270E3BF1CC78D8900F18814 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		220C32731CC762330060112E /* Debug */ = {
@@ -378,6 +521,55 @@
 			};
 			name = Release;
 		};
+		2270E3B31CC78D4200F18814 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "OmiseSwiftTests/Info-OSX.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2270E3B41CC78D4200F18814 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "OmiseSwiftTests/Info-OSX.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		2270E3C21CC78D8900F18814 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2270E3C31CC78D8900F18814 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -407,6 +599,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		2270E3B21CC78D4200F18814 /* Build configuration list for PBXNativeTarget "OmiseSwiftOSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2270E3B31CC78D4200F18814 /* Debug */,
+				2270E3B41CC78D4200F18814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2270E3C11CC78D8900F18814 /* Build configuration list for PBXNativeTarget "OmiseSwiftIOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2270E3C21CC78D8900F18814 /* Debug */,
+				2270E3C31CC78D8900F18814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
