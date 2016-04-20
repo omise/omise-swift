@@ -10,8 +10,10 @@
 		220C32711CC762330060112E /* OmiseSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* OmiseSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2270E3991CC763F700F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E39A1CC7640B00F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
-		2270E39C1CC7643A00F18814 /* Info-OSX.plist in Resources */ = {isa = PBXBuildFile; fileRef = 220C32721CC762330060112E /* Info-OSX.plist */; };
-		2270E39F1CC7649C00F18814 /* Info-iOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2270E39D1CC7649A00F18814 /* Info-iOS.plist */; };
+		2270E3A11CC7718000F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
+		2270E3A31CC7751600F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
+		2270E3A41CC7798B00F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
+		2270E3A51CC7799000F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,8 @@
 		220C327D1CC762440060112E /* OmiseSwiftIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmiseSwiftIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		2270E39D1CC7649A00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
+		2270E3A01CC7718000F18814 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		2270E3A21CC7751600F18814 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 				2270E39D1CC7649A00F18814 /* Info-iOS.plist */,
 				220C32721CC762330060112E /* Info-OSX.plist */,
 				2270E3981CC763F700F18814 /* Client.swift */,
+				2270E3A21CC7751600F18814 /* Config.swift */,
+				2270E3A01CC7718000F18814 /* Request.swift */,
 			);
 			path = OmiseSwift;
 			sourceTree = "<group>";
@@ -166,7 +172,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E39C1CC7643A00F18814 /* Info-OSX.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +179,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E39F1CC7649C00F18814 /* Info-iOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +190,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
+				2270E3A11CC7718000F18814 /* Request.swift in Sources */,
+				2270E3A31CC7751600F18814 /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +200,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
+				2270E3A41CC7798B00F18814 /* Request.swift in Sources */,
+				2270E3A51CC7799000F18814 /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
