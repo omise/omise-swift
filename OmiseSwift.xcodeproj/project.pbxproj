@@ -8,16 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		220C32711CC762330060112E /* OmiseSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* OmiseSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
+		22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
+		22112D0C1CC7910700D0DB54 /* OmiseSwiftTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */; };
+		22112D0D1CC7910700D0DB54 /* OmiseSwiftTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */; };
 		2270E3991CC763F700F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E39A1CC7640B00F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E3A11CC7718000F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
 		2270E3A31CC7751600F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
 		2270E3A41CC7798B00F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
 		2270E3A51CC7799000F18814 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A21CC7751600F18814 /* Config.swift */; };
-		2270E3AD1CC78D4200F18814 /* OmiseSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */; };
 		2270E3AF1CC78D4200F18814 /* OmiseSwiftOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* OmiseSwiftOSX.framework */; };
 		2270E3BE1CC78D8900F18814 /* OmiseSwiftIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C327D1CC762440060112E /* OmiseSwiftIOS.framework */; };
-		2270E3C51CC78E4B00F18814 /* OmiseSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,12 +44,13 @@
 		220C32701CC762330060112E /* OmiseSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmiseSwift.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
 		220C327D1CC762440060112E /* OmiseSwiftIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmiseSwiftIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		22112D081CC7910700D0DB54 /* ConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTest.swift; sourceTree = "<group>"; };
+		22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseSwiftTestCase.swift; sourceTree = "<group>"; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		2270E39D1CC7649A00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		2270E3A01CC7718000F18814 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		2270E3A21CC7751600F18814 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		2270E3AA1CC78D4200F18814 /* OmiseSwiftOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OmiseSwiftOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmiseSwiftTests.swift; sourceTree = "<group>"; };
 		2270E3AE1CC78D4200F18814 /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
 		2270E3B91CC78D8900F18814 /* OmiseSwiftIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OmiseSwiftIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2270E3C41CC78DDB00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
@@ -125,7 +128,8 @@
 			children = (
 				2270E3C41CC78DDB00F18814 /* Info-iOS.plist */,
 				2270E3AE1CC78D4200F18814 /* Info-OSX.plist */,
-				2270E3AC1CC78D4200F18814 /* OmiseSwiftTests.swift */,
+				22112D081CC7910700D0DB54 /* ConfigTest.swift */,
+				22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */,
 			);
 			path = OmiseSwiftTests;
 			sourceTree = "<group>";
@@ -323,7 +327,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E3AD1CC78D4200F18814 /* OmiseSwiftTests.swift in Sources */,
+				22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
+				22112D0C1CC7910700D0DB54 /* OmiseSwiftTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +336,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2270E3C51CC78E4B00F18814 /* OmiseSwiftTests.swift in Sources */,
+				22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
+				22112D0D1CC7910700D0DB54 /* OmiseSwiftTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,17 +530,20 @@
 		2270E3B31CC78D4200F18814 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-OSX.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		2270E3B41CC78D4200F18814 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-OSX.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -546,6 +555,7 @@
 		2270E3C21CC78D8900F18814 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -553,12 +563,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftIOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		2270E3C31CC78D8900F18814 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -607,6 +619,7 @@
 				2270E3B41CC78D4200F18814 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2270E3C11CC78D8900F18814 /* Build configuration list for PBXNativeTarget "OmiseSwiftIOSTests" */ = {
 			isa = XCConfigurationList;
@@ -615,6 +628,7 @@
 				2270E3C31CC78D8900F18814 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

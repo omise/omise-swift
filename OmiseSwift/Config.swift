@@ -1,15 +1,15 @@
 import Foundation
 
 public class Config {
-    let apiVersion: String?
-    let publicKey: String
-    let secretKey: String
+    public let apiVersion: String?
+    public let publicKey: String
+    public let secretKey: String
     
-    convenience init(publicKey: String, secretKey: String) {
+    public convenience init(publicKey: String, secretKey: String) {
         self.init(publicKey: publicKey, secretKey: secretKey)
     }
     
-    init(publicKey: String, secretKey: String, apiVersion: String?) {
+    public init(publicKey: String, secretKey: String, apiVersion: String?) {
         self.publicKey = publicKey
         self.secretKey = secretKey
         self.apiVersion = apiVersion
