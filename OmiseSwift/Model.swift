@@ -25,13 +25,15 @@ public class Model: NSObject {
         set { BoolProperty.set(self, key: "live", toValue: newValue) }
     }
     
+    public var created: NSDate? {
+        get { return DateProperty.get(self, key: "created") }
+        set { DateProperty.set(self, key: "created", toValue: newValue) }
+    }
+    
     public var deleted: Bool? {
         get { return BoolProperty.get(self, key: "deleted") }
         set { BoolProperty.set(self, key: "deleted", toValue: newValue) }
     }
-    
-    // TODO: created time deleted
-    
     
     public init(attributes: [String: NSObject]) {
         self.attributes = attributes

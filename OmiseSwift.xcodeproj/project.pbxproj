@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		220C32711CC762330060112E /* OmiseSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* OmiseSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		220D1C3C1CC8E226006C7FD6 /* DateProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D1C3B1CC8E226006C7FD6 /* DateProperty.swift */; };
+		220D1C3D1CC8E313006C7FD6 /* DateProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D1C3B1CC8E226006C7FD6 /* DateProperty.swift */; };
 		22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
 		22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
 		22112D0C1CC7910700D0DB54 /* OmiseSwiftTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */; };
@@ -58,6 +60,7 @@
 		220C32701CC762330060112E /* OmiseSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmiseSwift.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
 		220C327D1CC762440060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		220D1C3B1CC8E226006C7FD6 /* DateProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateProperty.swift; sourceTree = "<group>"; };
 		22112D081CC7910700D0DB54 /* ConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTest.swift; sourceTree = "<group>"; };
 		22112D091CC7910700D0DB54 /* OmiseSwiftTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseSwiftTestCase.swift; sourceTree = "<group>"; };
 		22112D0E1CC7944900D0DB54 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				22112D2A1CC79A9F00D0DB54 /* BoolProperty.swift */,
+				220D1C3B1CC8E226006C7FD6 /* DateProperty.swift */,
 				22112D191CC796F000D0DB54 /* Int64Property.swift */,
 				22112D161CC7964000D0DB54 /* Property.swift */,
 				22112D241CC798BC00D0DB54 /* StringProperty.swift */,
@@ -355,6 +359,7 @@
 				22112D1D1CC7970600D0DB54 /* Int64Property.swift in Sources */,
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
 				22112D251CC798BC00D0DB54 /* StringProperty.swift in Sources */,
+				220D1C3C1CC8E226006C7FD6 /* DateProperty.swift in Sources */,
 				22112D211CC7971100D0DB54 /* Model.swift in Sources */,
 				22112D281CC79A0500D0DB54 /* Account.swift in Sources */,
 				2270E3A11CC7718000F18814 /* Request.swift in Sources */,
@@ -372,6 +377,7 @@
 				22112D1C1CC7970500D0DB54 /* Int64Property.swift in Sources */,
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
 				22112D261CC798BC00D0DB54 /* StringProperty.swift in Sources */,
+				220D1C3D1CC8E313006C7FD6 /* DateProperty.swift in Sources */,
 				22112D201CC7971000D0DB54 /* Model.swift in Sources */,
 				22112D291CC79A0500D0DB54 /* Account.swift in Sources */,
 				2270E3A41CC7798B00F18814 /* Request.swift in Sources */,
