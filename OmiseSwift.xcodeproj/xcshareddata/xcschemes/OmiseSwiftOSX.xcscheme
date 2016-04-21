@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "220C326C1CC762330060112E"
-               BuildableName = "OmiseSwiftOSX.framework"
+               BuildableName = "Omise.framework"
                BlueprintName = "OmiseSwiftOSX"
                ReferencedContainer = "container:OmiseSwift.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "220C326C1CC762330060112E"
-            BuildableName = "OmiseSwiftOSX.framework"
+            BuildableName = "Omise.framework"
             BlueprintName = "OmiseSwiftOSX"
             ReferencedContainer = "container:OmiseSwift.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "220C326C1CC762330060112E"
-            BuildableName = "OmiseSwiftOSX.framework"
+            BuildableName = "Omise.framework"
             BlueprintName = "OmiseSwiftOSX"
             ReferencedContainer = "container:OmiseSwift.xcodeproj">
          </BuildableReference>
