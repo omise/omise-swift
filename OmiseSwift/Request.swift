@@ -6,10 +6,8 @@ public class Request: NSObject {
     public let session: NSURLSession
     public let dataTask: NSURLSessionTask
     
-    // TODO: Completion block / callbacks.
-    
-    init?(config: Config, session: NSURLSession, method: String, url: NSURL) {
-        guard let request = Request.buildRequest(config, method: method, url: url) else {
+    init?(config: Config, session: NSURLSession, method: String, url: NSURL, payload: NSData?) {
+        guard let request = Request.buildRequest(config, method: method, url: url, payload: payload) else {
             return nil
         }
         
@@ -20,11 +18,12 @@ public class Request: NSObject {
         super.init()
     }
     
-    static func buildRequest(config: Config, method: String, url: NSURL) -> NSURLRequest? {
+    static func buildRequest(config: Config, method: String, url: NSURL, payload: NSData?) -> NSURLRequest? {
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = method
         request.cachePolicy = .UseProtocolCachePolicy
         request.timeoutInterval = 6.0
+        request.HTTPBody = payload
         
         let apiKey = url.host?.containsString("vault.omise.co") ?? false ?
             config.publicKey :
