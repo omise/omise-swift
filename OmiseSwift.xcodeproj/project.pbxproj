@@ -52,6 +52,8 @@
 		229873741CCE299E00970F8C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298736E1CCE207500970F8C /* Endpoint.swift */; };
 		229873761CCE29D700970F8C /* OperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873751CCE29D700970F8C /* OperationTest.swift */; };
 		229873771CCE29D700970F8C /* OperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873751CCE29D700970F8C /* OperationTest.swift */; };
+		2298737B1CCE324D00970F8C /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873781CCE31B600970F8C /* Parameters.swift */; };
+		2298737C1CCE324E00970F8C /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873781CCE31B600970F8C /* Parameters.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,7 @@
 		2298736B1CCE205700970F8C /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		2298736E1CCE207500970F8C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		229873751CCE29D700970F8C /* OperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationTest.swift; sourceTree = "<group>"; };
+		229873781CCE31B600970F8C /* Parameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,7 @@
 				22112D121CC7954F00D0DB54 /* Balance.swift */,
 				2298735D1CCE15D400970F8C /* OmiseError.swift */,
 				229873601CCE15F300970F8C /* OmiseObject.swift */,
+				229873781CCE31B600970F8C /* Parameters.swift */,
 				22112D0E1CC7944900D0DB54 /* ResourceObject.swift */,
 			);
 			name = Models;
@@ -420,6 +424,7 @@
 				22112D2B1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */,
 				229873371CCDF3EE00970F8C /* Converter.swift in Sources */,
 				2270E3A31CC7751600F18814 /* Config.swift in Sources */,
+				2298737B1CCE324D00970F8C /* Parameters.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +447,7 @@
 				22112D2C1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */,
 				229873361CCDF3EE00970F8C /* Converter.swift in Sources */,
 				2270E3A51CC7799000F18814 /* Config.swift in Sources */,
+				2298737C1CCE324E00970F8C /* Parameters.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

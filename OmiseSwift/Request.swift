@@ -1,5 +1,6 @@
 import Foundation
 
+// TODO: Fold this into Client.perform(operation: Operation) -> Operation.result
 public class Request: NSObject {
     public let config: Config
     public let url: NSURL

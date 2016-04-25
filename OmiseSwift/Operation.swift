@@ -1,6 +1,7 @@
 import Foundation
 
-public class Operation {
+// TODO: Success/error result.
+public class Operation<TResult: OmiseObject> {
     public let endpoint: Endpoint
     public let method: String
     public let path: String
@@ -10,6 +11,7 @@ public class Operation {
         return endpoint.url.URLByAppendingPathComponent(path)
     }
     
+    // TODO: Nested payloads. Move this to specialized Encoder class.
     public var payload: NSData? {
         let str = NSMutableString()
         
