@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 import Omise
 
-class ConfigTest: OmiseSwiftTestCase {
+class ConfigTest: OmiseTestCase {
     func testCtor() {
         let config = Config(publicKey: "123", secretKey: "456", apiVersion: "dandy")
         XCTAssertEqual(config.publicKey, "123")
