@@ -2,7 +2,7 @@ import Foundation
 
 public class Account: Model {
     public var email: String? {
-        get { return StringProperty.get(self, key: "email") }
-        set { StringProperty.set(self, key: "email", toValue: newValue) }
+        get { return get("email", StringConverter.self) }
+        set { set("email", StringConverter.self, toValue: newValue) }
     }
 }

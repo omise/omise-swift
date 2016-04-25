@@ -6,33 +6,33 @@ public class Model: NSObject {
     public var attributes: Attributes
     
     public var object: String? {
-        get { return StringProperty.get(self, key: "object") }
-        set { StringProperty.set(self, key: "object", toValue: newValue) }
+        get { return get("object", StringConverter.self) }
+        set { set("object", StringConverter.self, toValue: newValue) }
     }
     
     public var id: String? {
-        get { return StringProperty.get(self, key: "id") }
-        set { StringProperty.set(self, key: "id", toValue: newValue) }
+        get { return get("id", StringConverter.self) }
+        set { set("id", StringConverter.self, toValue: newValue) }
     }
     
     public var location: String? {
-        get { return StringProperty.get(self, key: "location") }
-        set { StringProperty.set(self, key: "location", toValue: newValue) }
+        get { return get("location", StringConverter.self) }
+        set { set("location", StringConverter.self, toValue: newValue) }
     }
     
     public var live: Bool? {
-        get { return BoolProperty.get(self, key: "live") }
-        set { BoolProperty.set(self, key: "live", toValue: newValue) }
+        get { return get("live", BoolConverter.self) }
+        set { set("live", BoolConverter.self, toValue: newValue) }
     }
     
     public var created: NSDate? {
-        get { return DateProperty.get(self, key: "created") }
-        set { DateProperty.set(self, key: "created", toValue: newValue) }
+        get { return get("created", DateConverter.self) }
+        set { set("created", DateConverter.self, toValue: newValue) }
     }
     
     public var deleted: Bool? {
-        get { return BoolProperty.get(self, key: "deleted") }
-        set { BoolProperty.set(self, key: "deleted", toValue: newValue) }
+        get { return get("deleted", BoolConverter.self) }
+        set { set("deleted", BoolConverter.self, toValue: newValue) }
     }
     
     public init(attributes: [String: NSObject]) {
