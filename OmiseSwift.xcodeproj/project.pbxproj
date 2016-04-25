@@ -181,11 +181,11 @@
 			isa = PBXGroup;
 			children = (
 				229873591CCE0B5A00970F8C /* Fixtures */,
-				229873381CCDF8AA00970F8C /* Models */,
 				2270E3C41CC78DDB00F18814 /* Info-iOS.plist */,
 				2270E3AE1CC78D4200F18814 /* Info-OSX.plist */,
 				22112D081CC7910700D0DB54 /* ConfigTest.swift */,
 				22112D091CC7910700D0DB54 /* OmiseTestCase.swift */,
+				229873381CCDF8AA00970F8C /* Models */,
 			);
 			path = OmiseSwiftTests;
 			sourceTree = "<group>";

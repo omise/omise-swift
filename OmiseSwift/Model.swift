@@ -21,8 +21,8 @@ public class Model: NSObject {
     }
     
     public var live: Bool? {
-        get { return get("live", BoolConverter.self) }
-        set { set("live", BoolConverter.self, toValue: newValue) }
+        get { return get("livemode", BoolConverter.self) }
+        set { set("livemode", BoolConverter.self, toValue: newValue) }
     }
     
     public var created: NSDate? {
@@ -35,7 +35,11 @@ public class Model: NSObject {
         set { set("deleted", BoolConverter.self, toValue: newValue) }
     }
     
-    public init(attributes: [String: NSObject]) {
+    public required override init() {
+        self.attributes = [:]
+    }
+    
+    public required init(attributes: [String: NSObject]) {
         self.attributes = attributes
         super.init()
     }
