@@ -1,6 +1,6 @@
 import Foundation
 
-public class Balance: Model {
+public class Balance: ResourceObject {
     public var available: Int64? {
         get { return get("available", Int64Converter.self) }
         set { set("available", Int64Converter.self, toValue: newValue) }

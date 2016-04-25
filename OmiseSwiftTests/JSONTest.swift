@@ -20,22 +20,23 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(balance.currency, "thb")
     }
     
-    private func buildFromFixtures<TModel: Model>(name: String, type: TModel.Type) -> TModel {
-        guard let data = fixturesDataFor("Fixtures/objects/\(name)_object") else {
-            XCTFail("could not fixtures file.")
-            return TModel()
+    private func buildFromFixtures<TObject: OmiseObject>(name: String, type: TObject.Type) -> TObject {
+        let path = "Fixtures/objects/\(name)_object"
+        guard let data = fixturesDataFor(path) else {
+            XCTFail("could not load fixtures path: \(path)")
+            return TObject()
         }
         
         guard let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) else {
             XCTFail("fixture file maybe corrupt.")
-            return TModel()
+            return TObject()
         }
         
-        guard let json = jsonData as? Model.Attributes else {
+        guard let json = jsonData as? OmiseObject.Attributes else {
             XCTFail("JSON deserialization failure.")
-            return TModel()
+            return TObject()
         }
         
-        return TModel(attributes: json)
+        return TObject(attributes: json)
     }
 }

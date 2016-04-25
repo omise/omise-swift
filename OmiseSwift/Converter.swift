@@ -7,7 +7,7 @@ protocol Converter {
     static func convertToAttribute(value: TargetType?) -> NSObject?
 }
 
-extension Model {
+extension OmiseObject {
     func get<TConv: Converter>(key: String, _ converter: TConv.Type) -> TConv.TargetType? {
         return TConv.convertFromAttribute(self.attributes[key])
     }
