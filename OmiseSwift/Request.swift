@@ -72,24 +72,31 @@ public class Request<TResult: OmiseObject>: NSObject {
         
         switch httpResponse.statusCode {
         case 400..<600:
-            var error =  OmiseError.Unexpected(message: "error response with no error data.")
-            if let d = data, let err: APIError = OmiseSerializer.deserialize(d) {
-                error = OmiseError.API(err: err)
+            guard let d = data else {
+                callback?(nil, OmiseError.Unexpected(message: "error response with no data."))
+                return
             }
             
-            callback?(nil, error)
+            guard let err: APIError = OmiseSerializer.deserialize(d) else {
+                callback?(nil, OmiseError.Unexpected(message: "error response deserialization failure."))
+                return
+            }
+            
+            callback?(nil, OmiseError.API(err: err))
             break
             
         case 200..<300:
-            if let d = data {
-                if let result: TResult = OmiseSerializer.deserialize(d) {
-                    callback?(result, nil)
-                } else {
-                    callback?(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
-                }
-            } else {
+            guard let d = data else {
                 callback?(nil, OmiseError.Unexpected(message: "response 200 but no data"))
+                return
             }
+            
+            guard let result: TResult = OmiseSerializer.deserialize(d) else {
+                callback?(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
+                return
+            }
+            
+            callback?(result, nil)
             break
             
         default:
