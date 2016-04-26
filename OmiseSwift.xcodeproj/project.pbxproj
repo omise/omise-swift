@@ -54,6 +54,10 @@
 		229873771CCE29D700970F8C /* OperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873751CCE29D700970F8C /* OperationTest.swift */; };
 		2298737B1CCE324D00970F8C /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873781CCE31B600970F8C /* Parameters.swift */; };
 		2298737C1CCE324E00970F8C /* Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873781CCE31B600970F8C /* Parameters.swift */; };
+		2298737E1CCF3B0900970F8C /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298737D1CCF3B0900970F8C /* URLEncoder.swift */; };
+		2298737F1CCF3B0900970F8C /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298737D1CCF3B0900970F8C /* URLEncoder.swift */; };
+		229873831CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873801CCF3B1900970F8C /* URLEncoderTest.swift */; };
+		229873841CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873801CCF3B1900970F8C /* URLEncoderTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +109,8 @@
 		2298736E1CCE207500970F8C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		229873751CCE29D700970F8C /* OperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationTest.swift; sourceTree = "<group>"; };
 		229873781CCE31B600970F8C /* Parameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parameters.swift; sourceTree = "<group>"; };
+		2298737D1CCF3B0900970F8C /* URLEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
+		229873801CCF3B1900970F8C /* URLEncoderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLEncoderTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +194,7 @@
 				229873601CCE15F300970F8C /* OmiseObject.swift */,
 				229873781CCE31B600970F8C /* Parameters.swift */,
 				22112D0E1CC7944900D0DB54 /* ResourceObject.swift */,
+				2298737D1CCF3B0900970F8C /* URLEncoder.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -222,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				229873391CCDF8B200970F8C /* JSONTest.swift */,
+				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -415,6 +423,7 @@
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
 				229873741CCE299E00970F8C /* Endpoint.swift in Sources */,
 				22112D251CC798BC00D0DB54 /* StringConverter.swift in Sources */,
+				2298737E1CCF3B0900970F8C /* URLEncoder.swift in Sources */,
 				229873661CCE164F00970F8C /* OmiseError.swift in Sources */,
 				220D1C3C1CC8E226006C7FD6 /* DateConverter.swift in Sources */,
 				22112D211CC7971100D0DB54 /* ResourceObject.swift in Sources */,
@@ -438,6 +447,7 @@
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
 				229873731CCE299D00970F8C /* Endpoint.swift in Sources */,
 				22112D261CC798BC00D0DB54 /* StringConverter.swift in Sources */,
+				2298737F1CCF3B0900970F8C /* URLEncoder.swift in Sources */,
 				229873651CCE164F00970F8C /* OmiseError.swift in Sources */,
 				220D1C3D1CC8E313006C7FD6 /* DateConverter.swift in Sources */,
 				22112D201CC7971000D0DB54 /* ResourceObject.swift in Sources */,
@@ -455,6 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				229873831CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
 				229873761CCE29D700970F8C /* OperationTest.swift in Sources */,
 				229873691CCE190B00970F8C /* Resource.swift in Sources */,
@@ -467,6 +478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				229873841CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
 				2298733C1CCDF99800970F8C /* JSONTest.swift in Sources */,
 				229873771CCE29D700970F8C /* OperationTest.swift in Sources */,
 				2298736A1CCE190B00970F8C /* Resource.swift in Sources */,
