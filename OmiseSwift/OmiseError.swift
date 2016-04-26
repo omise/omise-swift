@@ -1,16 +1,18 @@
 import Foundation
 
-public class OmiseError: OmiseObject {
-    public var code: String? {
-        get { return get("code", StringConverter.self) }
-        set { set("code", StringConverter.self, toValue: newValue) }
-    }
+public enum OmiseError: ErrorType {
+    case Unexpected(message: String)
+    case Configuration(message: String)
+    case API(err: APIError)
     
-    public var message: String? {
-        get { return get("message", StringConverter.self) }
-        set { set("message", StringConverter.self, toValue: newValue) }
+    var message: String {
+        switch self {
+        case .Unexpected(let message):
+            return "unexpected error: \(message)"
+        case .Configuration(let message):
+            return "configuration error: \(message)"
+        case .API(let err):
+            return "(\(err.statusCode ?? 0)/\(err.code)) \(err.message)"
+        }
     }
-}
-
-extension OmiseError: ErrorType {
 }

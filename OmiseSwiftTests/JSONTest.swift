@@ -27,16 +27,11 @@ class JSONTest: OmiseTestCase {
             return TObject()
         }
         
-        guard let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) else {
-            XCTFail("fixture file maybe corrupt.")
-            return TObject()
-        }
-        
-        guard let json = jsonData as? OmiseObject.Attributes else {
+        guard let result: TObject = OmiseSerializer.deserialize(data) else {
             XCTFail("JSON deserialization failure.")
             return TObject()
         }
         
-        return TObject(attributes: json)
+        return result
     }
 }

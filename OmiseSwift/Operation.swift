@@ -1,73 +1,50 @@
 import Foundation
 
-// TODO: Success/error result.
 public class Operation<TResult: OmiseObject> {
     public let endpoint: Endpoint
     public let method: String
-    public let path: String
-    public let values: OmiseObject.Attributes
-    
-    public var url: NSURL {
-        return endpoint.url.URLByAppendingPathComponent(path)
-    }
-    
-    // TODO: Nested payloads. Move this to specialized Encoder class.
-    public var payload: NSData? {
-        let str = NSMutableString()
-        
-        for (key, value) in values {
-            str.appendString("&")
-            
-            guard let escapedKey = queryEncode(key) else {
-                NSLog("error encoding payload key: \(key)")
-                continue
-            }
-            
-            str.appendString(escapedKey)
-            str.appendString("=")
-            
-            switch value {
-            case let v as String:
-                guard let escapedValue = queryEncode(v) else {
-                    NSLog("error encoding payload value: \(value)")
-                    continue
-                }
-                
-                str.appendString(escapedValue)
-                
-            case let n as NSNumber:
-                str.appendString(n.stringValue)
-                
-            case let d as NSDate:
-                guard let dateStr = DateConverter.convertToAttribute(d) as? String,
-                    let s = queryEncode(dateStr) else {
-                    NSLog("error encoding payload date value: \(d)")
-                    continue
-                }
-                
-                str.appendString(s)
-                
-            default: break
-                // ignore nils
-            }
-            
-        }
-        
-        if str.length > 0 { // initial &
-            str.deleteCharactersInRange(NSRange(location: 0, length: 1))
-        }
-        
-        return str.dataUsingEncoding(NSUTF8StringEncoding)
-    }
+    public let url: NSURL
+    public let payload: NSData?
     
     public init(endpoint: Endpoint, method: String, path: String, values: OmiseObject.Attributes) {
         self.endpoint = endpoint
-        self.method = method
-        self.path = path
-        self.values = values
-    }
-    
-    private func queryEncode(v: String) -> String? {
-        return v.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+        self.method = method.uppercaseString
+        
+        let url = endpoint.url.URLByAppendingPathComponent(path)
+        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+            NSLog("failed to build url components for url: \(url)")
+            self.url = url
+            self.payload = nil
+            return
+        }
+        
+        let queryItems = URLEncoder.encode(values)
+        if queryItems.count > 0 {
+            urlComponents.queryItems = queryItems
+        }
+        
+        switch method.uppercaseString {
+        case "GET", "HEAD":
+            guard let completeUrl = urlComponents.URL else {
+                NSLog("failed to rebuild url from components of url: \(url)")
+                self.url = url
+                self.payload = nil
+                return
+            }
+            
+            self.url = completeUrl
+            self.payload = nil
+            
+        default:
+            guard let payloadString = urlComponents.percentEncodedQuery else {
+                NSLog("failed to build request payload for url: \(url)")
+                self.url = url
+                self.payload = nil
+                return
+            }
+            
+            self.url = url
+            self.payload = payloadString.dataUsingEncoding(NSUTF8StringEncoding)
+        }
     }
 }

@@ -3,28 +3,37 @@ import Omise
 import XCTest
 
 class OperationTest: OmiseTestCase {
-    let operation = Operation(
-        endpoint: Endpoint.Vault,
-        method: "GET",
-        path: "/account",
-        values: [
-            "hello": "world",
-            "key": "with spaces"
-        ]
-    )
-    
     func testCtor() {
+        let operation = Operation(
+            endpoint: Endpoint.Vault,
+            method: "get",
+            path: "/account",
+            values: [
+                "hello": "world",
+                "key": "with spaces"
+            ]
+        )
+        
+        let expectedUrl = "https://vault.omise.co/account?hello=world&key=with%20spaces"
+        
         XCTAssertEqual(operation.endpoint, Endpoint.Vault)
-        XCTAssertEqual(operation.method, "GET")
-        XCTAssertEqual(operation.path, "/account")
-        XCTAssertEqual(operation.values, ["hello": "world", "key": "with spaces"])
+        XCTAssertEqual(operation.method, "GET") // method upcased
+        XCTAssertEqual(operation.url.absoluteString, expectedUrl)
+        XCTAssertEqual(operation.payload, nil)
     }
     
-    func testURL() {
-        XCTAssertEqual(operation.url.absoluteString, "https://vault.omise.co/account")
-    }
+    func testCtorWithPayload() {
+        let operation = Operation(
+            endpoint: Endpoint.Vault,
+            method: "post",
+            path: "/account",
+            values: [
+                "hello": "world",
+                "key": "with spaces",
+                "morekeys": "with=symbols=&?"
+            ]
+        )
     
-    func testPayload() {
         guard let payload = operation.payload,
             let payloadStr = String(data: payload, encoding: NSUTF8StringEncoding) else {
             return XCTFail("payload encoding failure.")
@@ -32,5 +41,6 @@ class OperationTest: OmiseTestCase {
         
         XCTAssert(payloadStr.containsString("hello=world"))
         XCTAssert(payloadStr.containsString("key=with%20spaces"))
+        XCTAssert(payloadStr.containsString("morekeys=with%3Dsymbols%3D%26?"))
     }
 }
