@@ -14,6 +14,10 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     
     public var attributes: JSONAttributes = [:]
     
+    public var encodedAttributes: [NSURLQueryItem] {
+        return URLEncoder.encode(attributes)
+    }
+    
     public var endpoint: Endpoint {
         return Endpoint.API
     }
@@ -51,7 +55,7 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
                 return url
             }
             
-            let queries = URLEncoder.encode(attributes)
+            let queries = encodedAttributes
             guard queries.count > 0 else { return url }
             
             urlComponents.queryItems = URLEncoder.encode(attributes)
@@ -73,7 +77,7 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
             return nil
         }
         
-        let queries = URLEncoder.encode(attributes)
+        let queries = encodedAttributes
         guard queries.count > 0 else { return nil }
         
         urlComponents.queryItems = URLEncoder.encode(attributes)
