@@ -35,10 +35,10 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     }
     
     public var payload: NSData? {
-        return buildPayload(attributes)
+        return buildPayload()
     }
     
-    public init() {
+    public required init() {
     }
     
     private func buildUrl() -> NSURL {
@@ -50,6 +50,9 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
                 NSLog("failed to build url components for url: \(url)")
                 return url
             }
+            
+            let queries = URLEncoder.encode(attributes)
+            guard queries.count > 0 else { return url }
             
             urlComponents.queryItems = URLEncoder.encode(attributes)
             guard let parameterizedUrl = urlComponents.URL else {
@@ -64,12 +67,16 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
         }
     }
     
-    private func buildPayload(values: JSONAttributes) -> NSData? {
+    private func buildPayload() -> NSData? {
         guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
             NSLog("failed to build url components for url: \(url)")
             return nil
         }
         
+        let queries = URLEncoder.encode(attributes)
+        guard queries.count > 0 else { return nil }
+        
+        urlComponents.queryItems = URLEncoder.encode(attributes)
         return urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
     }
 }

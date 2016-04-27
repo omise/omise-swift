@@ -3,16 +3,6 @@ import Omise
 import XCTest
 
 class OperationTest: OmiseTestCase {
-    func testDefaultCtor() {
-        let operation: DefaultOperation<Account> = DefaultOperation()
-        
-        let expectedUrl = "https://vault.omise.co/account?hello=world&key=with%20spaces"
-        XCTAssertEqual(operation.endpoint, Endpoint.Vault)
-        XCTAssertEqual(operation.method, "GET") // method upcased
-        XCTAssertEqual(operation.url.absoluteString, expectedUrl)
-        XCTAssertEqual(operation.payload, nil)
-    }
-    
     class DefaultWithPayload: DefaultOperation<Account> {
         override var method: String { return "POST" }
         
@@ -20,19 +10,35 @@ class OperationTest: OmiseTestCase {
             get { return get("hello", StringConverter.self) }
             set { set("hello", StringConverter.self, toValue: newValue) }
         }
+        
+        var key: String? {
+            get { return get("key", StringConverter.self) }
+            set { set("key", StringConverter.self, toValue: newValue) }
+        }
+        
+        required init() { }
     }
     
-    func testDefaultCtorWithPayload() {
+    func testDefault() {
+        let operation: DefaultOperation<Account> = DefaultOperation()
+        
+        let expectedUrl = "https://api.omise.co/"
+        XCTAssertEqual(operation.endpoint, Endpoint.API)
+        XCTAssertEqual(operation.method, "GET") // method upcased
+        XCTAssertEqual(operation.url.absoluteString, expectedUrl)
+        XCTAssertEqual(operation.payload, nil)
+    }
+    
+    func testOperationWithPayload() {
         let operation = DefaultWithPayload()
         operation.hello = "world"
+        operation.key = "value with spaces and=symbols?!&"
     
         guard let payload = operation.payload,
             let payloadStr = String(data: payload, encoding: NSUTF8StringEncoding) else {
             return XCTFail("payload encoding failure.")
         }
         
-        XCTAssert(payloadStr.containsString("hello=world"))
-        XCTAssert(payloadStr.containsString("key=with%20spaces"))
-        XCTAssert(payloadStr.containsString("morekeys=with%3Dsymbols%3D%26?"))
+        XCTAssertEqual("hello=world&key=value%20with%20spaces%20and%3Dsymbols?!%26", payloadStr)
     }
 }
