@@ -1,19 +1,19 @@
 import Foundation
 
 // TODO: Fold this into Client.perform(operation: Operation) -> Operation.result
-public class Request<TResult: OmiseObject>: NSObject {
-    typealias Callback = (TResult?, ErrorType?) -> ()
+public class Request<TOperation: Operation where TOperation.Result: OmiseObject>: NSObject {
+    public typealias Callback = (TOperation.Result?, ErrorType?) -> ()
     
     private var dataTask: NSURLSessionTask? = nil
     private var callback: Callback? = nil
     
     public let config: Config
-    public let operation: Operation<TResult>
+    public let operation: TOperation
     
     public let request: NSURLRequest
     public let session: NSURLSession
     
-    public init?(config: Config, session: NSURLSession, operation: Operation<TResult>) {
+    public init?(config: Config, session: NSURLSession, operation: TOperation) {
         guard let request = Request.buildRequest(config, operation: operation) else {
             return nil
         }
@@ -28,8 +28,9 @@ public class Request<TResult: OmiseObject>: NSObject {
         self.dataTask = session.dataTaskWithRequest(request, completionHandler: didComplete)
     }
     
-    static func buildRequest(config: Config, operation: Operation<TResult>) -> NSURLRequest? {
+    static func buildRequest(config: Config, operation: TOperation) -> NSURLRequest? {
         let request = NSMutableURLRequest(URL: operation.url)
+    
         request.HTTPMethod = operation.method
         request.cachePolicy = .UseProtocolCachePolicy
         request.timeoutInterval = 6.0
@@ -49,58 +50,59 @@ public class Request<TResult: OmiseObject>: NSObject {
     }
     
     static func encodeApiKeyForAuthorization(apiKey: String) -> String? {
-        return "\(apiKey):X"
+        guard let md5 = "\(apiKey):X"
             .dataUsingEncoding(NSUTF8StringEncoding)?
-            .base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            .base64EncodedStringWithOptions(.Encoding64CharacterLineLength) else {
+                return nil
+        }
+        
+        return "Basic \(md5)"
     }
     
-    func startWithCallback(callback: Callback?) {
+    func startWithCallback(callback: Request<TOperation>.Callback?) -> Request<TOperation> {
         self.callback = callback
         self.dataTask?.resume()
+        return self
     }
     
     private func didComplete(data: NSData?, response: NSURLResponse?, error: NSError?) {
+        guard let cb = callback else {
+            return // no one to notify
+        }
+        
         if let e = error {
-            callback?(nil, e)
-            return
+            return cb(nil, e)
         }
         
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            callback?(nil, OmiseError.Unexpected(message: "no response."))
-            return
+            return cb(nil, OmiseError.Unexpected(message: "no error and no response."))
         }
         
         switch httpResponse.statusCode {
         case 400..<600:
             guard let d = data else {
-                callback?(nil, OmiseError.Unexpected(message: "error response with no data."))
-                return
+                return cb(nil, OmiseError.Unexpected(message: "error response with no data."))
             }
             
             guard let err: APIError = OmiseSerializer.deserialize(d) else {
-                callback?(nil, OmiseError.Unexpected(message: "error response deserialization failure."))
-                return
+                return cb(nil, OmiseError.Unexpected(message: "error response deserialization failure."))
             }
             
-            callback?(nil, OmiseError.API(err: err))
-            break
+            return cb(nil, OmiseError.API(err: err))
             
         case 200..<300:
             guard let d = data else {
-                callback?(nil, OmiseError.Unexpected(message: "response 200 but no data"))
-                return
+                return cb(nil, OmiseError.Unexpected(message: "HTTP 200 but no data"))
             }
             
-            guard let result: TResult = OmiseSerializer.deserialize(d) else {
-                callback?(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
-                return
+            guard let result: TOperation.Result = OmiseSerializer.deserialize(d) else {
+                return cb(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
             }
             
-            callback?(result, nil)
-            break
+            return cb(result, nil)
             
         default:
-            break
+            NSLog("unrecognized HTTP status code: \(httpResponse.statusCode)")
         }
     }
 }

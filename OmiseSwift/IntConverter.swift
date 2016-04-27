@@ -1,14 +1,14 @@
 import Foundation
 
-class IntConverter: Converter {
-    typealias TargetType = Int
+public class IntConverter: Converter {
+    public typealias Target = Int
     
-    static func convertFromAttribute(value: NSObject?) -> TargetType? {
+    public static func convertFromAttribute(value: NSObject?) -> Target? {
         guard let n = value as? NSNumber else { return nil }
         return n.integerValue
     }
     
-    static func convertToAttribute(value: TargetType?) -> NSObject? {
+    public static func convertToAttribute(value: Target?) -> NSObject? {
         guard let n = value else { return nil }
         return NSNumber(long: n)
     }

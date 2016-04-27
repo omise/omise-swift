@@ -1,14 +1,14 @@
 import Foundation
 
-class BoolConverter: Converter {
-    typealias TargetType = Bool
+public class BoolConverter: Converter {
+    public typealias Target = Bool
     
-    static func convertFromAttribute(value: NSObject?) -> TargetType? {
+    public static func convertFromAttribute(value: NSObject?) -> Target? {
         guard let n = value as? NSNumber else { return nil }
         return n.boolValue
     }
     
-    static func convertToAttribute(value: TargetType?) -> NSObject? {
+    public static func convertToAttribute(value: Target?) -> NSObject? {
         guard let b = value else { return nil }
         return NSNumber(bool: b)
     }

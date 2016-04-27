@@ -1,7 +1,7 @@
 import Foundation
 
-class DateConverter: Converter {
-    typealias TargetType = NSDate
+public class DateConverter: Converter {
+    public typealias Target = NSDate
     
     static let formatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -10,12 +10,12 @@ class DateConverter: Converter {
         return formatter
     }()
     
-    static func convertFromAttribute(value: NSObject?) -> TargetType? {
+    public static func convertFromAttribute(value: NSObject?) -> Target? {
         guard let s = value as? NSString else { return nil }
         return formatter.dateFromString(s as String)
     }
     
-    static func convertToAttribute(value: TargetType?) -> NSObject? {
+    public static func convertToAttribute(value: Target?) -> NSObject? {
         guard let d = value else { return nil }
         return formatter.stringFromDate(d)
     }

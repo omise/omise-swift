@@ -3,36 +3,28 @@ import Omise
 import XCTest
 
 class OperationTest: OmiseTestCase {
-    func testCtor() {
-        let operation = Operation(
-            endpoint: Endpoint.Vault,
-            method: "get",
-            path: "/account",
-            values: [
-                "hello": "world",
-                "key": "with spaces"
-            ]
-        )
+    func testDefaultCtor() {
+        let operation: DefaultOperation<Account> = DefaultOperation()
         
         let expectedUrl = "https://vault.omise.co/account?hello=world&key=with%20spaces"
-        
         XCTAssertEqual(operation.endpoint, Endpoint.Vault)
         XCTAssertEqual(operation.method, "GET") // method upcased
         XCTAssertEqual(operation.url.absoluteString, expectedUrl)
         XCTAssertEqual(operation.payload, nil)
     }
     
-    func testCtorWithPayload() {
-        let operation = Operation(
-            endpoint: Endpoint.Vault,
-            method: "post",
-            path: "/account",
-            values: [
-                "hello": "world",
-                "key": "with spaces",
-                "morekeys": "with=symbols=&?"
-            ]
-        )
+    class DefaultWithPayload: DefaultOperation<Account> {
+        override var method: String { return "POST" }
+        
+        var hello: String? {
+            get { return get("hello", StringConverter.self) }
+            set { set("hello", StringConverter.self, toValue: newValue) }
+        }
+    }
+    
+    func testDefaultCtorWithPayload() {
+        let operation = DefaultWithPayload()
+        operation.hello = "world"
     
         guard let payload = operation.payload,
             let payloadStr = String(data: payload, encoding: NSUTF8StringEncoding) else {

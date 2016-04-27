@@ -4,14 +4,14 @@ import XCTest
 
 class URLEncoderTest: OmiseTestCase {
     func testEncodeBasic() {
-        let values: OmiseObject.Attributes = ["hello": "world"]
+        let values: JSONAttributes = ["hello": "world"]
         let result = URLEncoder.encode(values)
         XCTAssertEqual("hello", result[0].name)
         XCTAssertEqual("world", result[0].value)
     }
     
     func testEncodeMultipleTypes() {
-        let values: OmiseObject.Attributes = [
+        let values: JSONAttributes = [
             "0hello": "world",
             "1num": 42,
             "2number": NSNumber(long: 64),
@@ -34,9 +34,9 @@ class URLEncoderTest: OmiseTestCase {
     }
     
     func testEncodeNested() {
-        let values: OmiseObject.Attributes = [
+        let values: JSONAttributes = [
             "0outer": "normal",
-            "1nested": ["inside": "inner"] as OmiseObject.Attributes,
+            "1nested": ["inside": "inner"] as JSONAttributes,
             "2deeper": ["nesting": ["also": "works"]]
         ]
         

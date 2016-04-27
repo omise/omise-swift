@@ -1,19 +1,8 @@
 import Foundation
 
-protocol Converter {
-    associatedtype TargetType
+public protocol Converter {
+    associatedtype Target
     
-    static func convertFromAttribute(value: NSObject?) -> TargetType?
-    static func convertToAttribute(value: TargetType?) -> NSObject?
+    static func convertFromAttribute(value: NSObject?) -> Target?
+    static func convertToAttribute(value: Target?) -> NSObject?
 }
-
-extension OmiseObject {
-    func get<TConv: Converter>(key: String, _ converter: TConv.Type) -> TConv.TargetType? {
-        return TConv.convertFromAttribute(self.attributes[key])
-    }
-    
-    func set<TConv: Converter>(key: String, _ converter: TConv.Type, toValue value: TConv.TargetType?) {
-        self.attributes[key] = TConv.convertToAttribute(value)
-    }
-}
-

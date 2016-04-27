@@ -1,8 +1,7 @@
 import Foundation
 
-public class OmiseObject: NSObject {
-    public typealias Attributes = [String: NSObject]
-    public var attributes: Attributes = [:]
+public class OmiseObject: NSObject, AttributesContainer {
+    public var attributes: JSONAttributes = [:]
     
     public var object: String? {
         get { return get("object", StringConverter.self) }

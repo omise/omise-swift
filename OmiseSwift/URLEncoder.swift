@@ -1,12 +1,12 @@
 import Foundation
 
 public class URLEncoder {
-    public class func encode(attributes: OmiseObject.Attributes) -> [NSURLQueryItem] {
+    public class func encode(attributes: JSONAttributes) -> [NSURLQueryItem] {
         return encodeDict(attributes, parentKey: nil)
             .sort({ (item1, item2) in item1.name < item2.name })
     }
     
-    private class func encodeDict(dict: OmiseObject.Attributes, parentKey: String?) -> [NSURLQueryItem] {
+    private class func encodeDict(dict: JSONAttributes, parentKey: String?) -> [NSURLQueryItem] {
         return dict.flatMap(encodePair(parentKey))
     }
     
@@ -19,7 +19,7 @@ public class URLEncoder {
                 nestedKey = key
             }
             
-            if let attributes = value as? OmiseObject.Attributes {
+            if let attributes = value as? JSONAttributes {
                 return encodeDict(attributes, parentKey: nestedKey)
             } else {
                 return [NSURLQueryItem(name: nestedKey, value: encodeScalar(value))]

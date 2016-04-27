@@ -1,14 +1,14 @@
 import Foundation
 
-class Int64Converter: Converter {
-    typealias TargetType = Int64
+public class Int64Converter: Converter {
+    public typealias Target = Int64
     
-    static func convertFromAttribute(value: NSObject?) -> TargetType? {
+    public static func convertFromAttribute(value: NSObject?) -> Target? {
         guard let n = value as? NSNumber else { return nil }
         return n.longLongValue
     }
     
-    static func convertToAttribute(value: TargetType?) -> NSObject? {
+    public static func convertToAttribute(value: Target?) -> NSObject? {
         guard let n = value else { return nil }
         return NSNumber(longLong: n)
     }

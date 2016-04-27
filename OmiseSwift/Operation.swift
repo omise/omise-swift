@@ -1,50 +1,75 @@
 import Foundation
 
-public class Operation<TResult: OmiseObject> {
-    public let endpoint: Endpoint
-    public let method: String
-    public let url: NSURL
-    public let payload: NSData?
+public protocol Operation: class {
+    associatedtype Result
     
-    public init(endpoint: Endpoint, method: String, path: String, values: OmiseObject.Attributes) {
-        self.endpoint = endpoint
-        self.method = method.uppercaseString
-        
+    var endpoint: Endpoint { get }
+    var method: String { get }
+    var url: NSURL { get }
+    var payload: NSData? { get }
+}
+
+public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContainer {
+    public typealias Result = TResult
+    
+    public var attributes: JSONAttributes = [:]
+    
+    public var endpoint: Endpoint {
+        return Endpoint.API
+    }
+    
+    public var method: String {
+        return "GET"
+    }
+    
+    public var path: String {
+        return "/"
+    }
+    
+    public var url: NSURL {
+        return buildUrl()
+    }
+    
+    public var queryItems: [NSURLQueryItem] {
+        return []
+    }
+    
+    public var payload: NSData? {
+        return buildPayload(attributes)
+    }
+    
+    public init() {
+    }
+    
+    private func buildUrl() -> NSURL {
         let url = endpoint.url.URLByAppendingPathComponent(path)
-        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
-            NSLog("failed to build url components for url: \(url)")
-            self.url = url
-            self.payload = nil
-            return
-        }
-        
-        let queryItems = URLEncoder.encode(values)
-        if queryItems.count > 0 {
-            urlComponents.queryItems = queryItems
-        }
         
         switch method.uppercaseString {
         case "GET", "HEAD":
-            guard let completeUrl = urlComponents.URL else {
-                NSLog("failed to rebuild url from components of url: \(url)")
-                self.url = url
-                self.payload = nil
-                return
+            guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+                NSLog("failed to build url components for url: \(url)")
+                return url
             }
             
-            self.url = completeUrl
-            self.payload = nil
+            urlComponents.queryItems = URLEncoder.encode(attributes)
+            guard let parameterizedUrl = urlComponents.URL else {
+                NSLog("failed to append query items to the url: \(url)")
+                return url
+            }
+            
+            return parameterizedUrl
             
         default:
-            guard let payloadString = urlComponents.percentEncodedQuery else {
-                NSLog("failed to build request payload for url: \(url)")
-                self.url = url
-                self.payload = nil
-                return
-            }
-            
-            self.url = url
-            self.payload = payloadString.dataUsingEncoding(NSUTF8StringEncoding)
+            return url
         }
+    }
+    
+    private func buildPayload(values: JSONAttributes) -> NSData? {
+        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+            NSLog("failed to build url components for url: \(url)")
+            return nil
+        }
+        
+        return urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
     }
 }

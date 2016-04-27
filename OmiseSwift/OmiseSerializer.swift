@@ -12,7 +12,7 @@ public class OmiseSerializer {
             return nil
         }
         
-        guard let objAttributes = attributes as? OmiseObject.Attributes else {
+        guard let objAttributes = attributes as? JSONAttributes else {
             return nil
         }
         
