@@ -70,6 +70,11 @@
 		2298739B1CCF960900970F8C /* AccountOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873991CCF960900970F8C /* AccountOperationsTest.swift */; };
 		229873A01CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
 		229873A11CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
+		22BF9B9D1CD1F67600CD3CAD /* BalanceOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */; };
+		22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
+		22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
+		22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BA21CD2028500CD3CAD /* Card.swift */; };
+		22BF9BA41CD20A0E00CD3CAD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BA21CD2028500CD3CAD /* Card.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +134,9 @@
 		229873961CCF958700970F8C /* BalanceOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceOperation.swift; sourceTree = "<group>"; };
 		229873991CCF960900970F8C /* AccountOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountOperationsTest.swift; sourceTree = "<group>"; };
 		2298739D1CD09B5600970F8C /* AttributesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributesContainer.swift; sourceTree = "<group>"; };
+		22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceOperationsTest.swift; sourceTree = "<group>"; };
+		22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveTest.swift; sourceTree = "<group>"; };
+		22BF9BA21CD2028500CD3CAD /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +218,7 @@
 				22112D271CC79A0500D0DB54 /* Account.swift */,
 				2298735D1CCE15D400970F8C /* APIError.swift */,
 				22112D121CC7954F00D0DB54 /* Balance.swift */,
+				22BF9BA21CD2028500CD3CAD /* Card.swift */,
 				229873601CCE15F300970F8C /* OmiseObject.swift */,
 				229873901CCF696B00970F8C /* OmiseSerializer.swift */,
 				22112D0E1CC7944900D0DB54 /* ResourceObject.swift */,
@@ -270,6 +279,8 @@
 			isa = PBXGroup;
 			children = (
 				229873991CCF960900970F8C /* AccountOperationsTest.swift */,
+				22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */,
+				22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */,
 			);
 			name = Operations;
 			sourceTree = "<group>";
@@ -455,6 +466,8 @@
 				2298738B1CCF5D9500970F8C /* OmiseError.swift in Sources */,
 				229873941CCF93AC00970F8C /* AccountOperations.swift in Sources */,
 				22112D1D1CC7970600D0DB54 /* Int64Converter.swift in Sources */,
+				22BF9B9D1CD1F67600CD3CAD /* BalanceOperationsTest.swift in Sources */,
+				22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */,
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
 				229873741CCE299E00970F8C /* Endpoint.swift in Sources */,
 				229873971CCF958700970F8C /* BalanceOperation.swift in Sources */,
@@ -496,6 +509,7 @@
 				229873A11CD09C4A00970F8C /* AttributesContainer.swift in Sources */,
 				22112D291CC79A0500D0DB54 /* Account.swift in Sources */,
 				2270E3A41CC7798B00F18814 /* Request.swift in Sources */,
+				22BF9BA41CD20A0E00CD3CAD /* Card.swift in Sources */,
 				22112D221CC7971500D0DB54 /* Balance.swift in Sources */,
 				22112D2C1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */,
 				229873361CCDF3EE00970F8C /* Converter.swift in Sources */,
@@ -508,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873831CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
+				22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */,
 				2298739A1CCF960900970F8C /* AccountOperationsTest.swift in Sources */,
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
 				229873761CCE29D700970F8C /* OperationTest.swift in Sources */,
@@ -522,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873841CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
+				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
 				2298739B1CCF960900970F8C /* AccountOperationsTest.swift in Sources */,
 				2298733C1CCDF99800970F8C /* JSONTest.swift in Sources */,
 				229873771CCE29D700970F8C /* OperationTest.swift in Sources */,
