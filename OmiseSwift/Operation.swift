@@ -47,28 +47,25 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     
     private func buildUrl() -> NSURL {
         let url = endpoint.url.URLByAppendingPathComponent(path)
-        
-        switch method.uppercaseString {
-        case "GET", "HEAD":
-            guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
-                NSLog("failed to build url components for url: \(url)")
-                return url
-            }
-            
-            let queries = encodedAttributes
-            guard queries.count > 0 else { return url }
-            
-            urlComponents.queryItems = URLEncoder.encode(attributes)
-            guard let parameterizedUrl = urlComponents.URL else {
-                NSLog("failed to append query items to the url: \(url)")
-                return url
-            }
-            
-            return parameterizedUrl
-            
-        default:
+        guard method.uppercaseString == "GET" || method.uppercaseString == "HEAD" else {
             return url
         }
+        
+        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+            NSLog("failed to build url components for url: \(url)")
+            return url
+        }
+        
+        let queries = encodedAttributes
+        guard queries.count > 0 else { return url }
+        
+        urlComponents.queryItems = URLEncoder.encode(attributes)
+        guard let parameterizedUrl = urlComponents.URL else {
+            NSLog("failed to append query items to the url: \(url)")
+            return url
+        }
+        
+        return parameterizedUrl
     }
     
     private func buildPayload() -> NSData? {
