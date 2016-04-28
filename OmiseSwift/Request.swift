@@ -66,43 +66,47 @@ public class Request<TOperation: Operation where TOperation.Result: OmiseObject>
     }
     
     private func didComplete(data: NSData?, response: NSURLResponse?, error: NSError?) {
-        guard let cb = callback else {
-            return // no one to notify
-        }
-        
-        if let e = error {
-            return cb(nil, e)
+        if callback == nil {
+            return // no one's in the forest to hear the leaf falls
         }
         
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            return cb(nil, OmiseError.Unexpected(message: "no error and no response."))
+            return performCallback(nil, OmiseError.Unexpected(message: "no error and no response."))
         }
         
         switch httpResponse.statusCode {
         case 400..<600:
             guard let d = data else {
-                return cb(nil, OmiseError.Unexpected(message: "error response with no data."))
+                return performCallback(nil, OmiseError.Unexpected(message: "error response with no data."))
             }
             
             guard let err: APIError = OmiseSerializer.deserialize(d) else {
-                return cb(nil, OmiseError.Unexpected(message: "error response deserialization failure."))
+                return performCallback(nil, OmiseError.Unexpected(message: "error response deserialization failure."))
             }
             
-            return cb(nil, OmiseError.API(err: err))
+            return performCallback(nil, OmiseError.API(err: err))
             
         case 200..<300:
             guard let d = data else {
-                return cb(nil, OmiseError.Unexpected(message: "HTTP 200 but no data"))
+                return performCallback(nil, OmiseError.Unexpected(message: "HTTP 200 but no data"))
             }
             
             guard let result: TOperation.Result = OmiseSerializer.deserialize(d) else {
-                return cb(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
+                return performCallback(nil, OmiseError.Unexpected(message: "JSON deserialization failure."))
             }
             
-            return cb(result, nil)
+            NSLog("debug: \(result.attributes["id"])")
+            return performCallback(result, nil)
             
         default:
             NSLog("unrecognized HTTP status code: \(httpResponse.statusCode)")
+        }
+    }
+    
+    private func performCallback(result: TOperation.Result?, _ error: ErrorType?) {
+        guard let cb = callback else { return }
+        config.callbackQueue.addOperationWithBlock { 
+            cb(result, error)
         }
     }
 }
