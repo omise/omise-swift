@@ -19,13 +19,26 @@ public extension AttributesContainer {
         self.attributes[key] = TConv.convertToAttribute(value)
     }
     
+    // TODO: Cache lists
+    func getList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type) -> [TItem] {
+        let items = self.attributes[key] as? [JSONAttributes] ?? []
+        return items.map({ (attributes) -> TItem in TItem(attributes: attributes) })
+    }
+    
+    func setList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
+        attributes[key] = value.map({ (model) -> JSONAttributes in model.attributes })
+    }
+    
     func getChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type) -> TChild? {
         if let child = children[key] as? TChild {
             return child
         }
         
         let child = TChild(attributes: (attributes[key] as? JSONAttributes) ?? [:])
+        dump(String(TChild), name: "child type")
+        dump(children, name: "before")
         children[key] = child
+        dump(children, name: "after")
         return child
     }
     

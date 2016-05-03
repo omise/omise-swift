@@ -41,14 +41,20 @@ public class Charge: ResourceObject {
         set { set("transaction", StringConverter.self, toValue: newValue) }
     }
     
-    // TODO: Card (nested object/attributes)
+    public var card: Card? {
+        get { return getChild("card", Card.self) }
+        set { setChild("card", Card.self, toValue: newValue) }
+    }
     
     public var refunded: Int64? {
         get { return get("refunded", Int64Converter.self) }
         set { set("refunded", Int64Converter.self, toValue: newValue) }
     }
     
-    // TODO: Refunds (refund list)
+    public var refunds: OmiseList<Refund>? {
+        get { return getChild("refunds", OmiseList<Refund>.self) }
+        set { setChild("refunds", OmiseList<Refund>.self, toValue: newValue) }
+    }
     
     public var failureCode: String? {
         get { return get("failure_code", StringConverter.self) }
@@ -60,7 +66,7 @@ public class Charge: ResourceObject {
         set { set("failure_message", StringConverter.self, toValue: newValue) }
     }
     
-    public var customerId: String? {
+    public var customer: String? {
         get { return get("customer", StringConverter.self) }
         set { set("customer", StringConverter.self, toValue: newValue) }
     }

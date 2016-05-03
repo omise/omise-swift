@@ -40,6 +40,49 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(card.created?.timeIntervalSince1970, 1433223706.0)
     }
     
+    func testCharge() {
+        let charge = buildFromFixtures("charge", type: Charge.self)
+        XCTAssertEqual(charge.object, "charge")
+        XCTAssertEqual(charge.id, "chrg_test_5086xlsx4lghk9bpb75")
+        XCTAssertEqual(charge.status, ChargeStatus.Successful)
+        XCTAssertEqual(charge.live, false)
+        XCTAssertEqual(charge.location, "/charges/chrg_test_5086xlsx4lghk9bpb75")
+        XCTAssertEqual(charge.amount, 100000)
+        XCTAssertEqual(charge.currency, "thb")
+        XCTAssertEqual(charge.chargeDescription, nil)
+        XCTAssertEqual(charge.authorized, true)
+        XCTAssertEqual(charge.paid, true)
+        XCTAssertEqual(charge.transaction, "trxn_test_5086xltqqbv4qpmu0ri")
+        XCTAssertEqual(charge.refunded, 0)
+        XCTAssertEqual(charge.failureCode, nil)
+        XCTAssertEqual(charge.failureMessage, nil)
+        XCTAssertEqual(charge.customer, "cust_test_5086xleuh9ft4bn0ac2")
+        XCTAssertEqual(charge.ip, nil)
+        XCTAssertEqual(charge.created?.timeIntervalSince1970, 1433223709.0)
+        
+        guard let refunds = charge.refunds else { return XCTFail("refunds not deserialized") }
+        dump(String(refunds.dynamicType))
+        XCTAssertEqual(refunds.object, "list")
+        XCTAssertEqual(refunds.limit, 20)
+        
+        guard let card = charge.card else { return XCTFail("card not deserialized") }
+        XCTAssertEqual(card.object, "card")
+        XCTAssertEqual(card.id, "card_test_5086xl7amxfysl0ac5l")
+        XCTAssertEqual(card.location, "/customers/cust_test_5086xleuh9ft4bn0ac2/cards/card_test_5086xl7amxfysl0ac5l")
+    }
+    
+    func testRefund() {
+        let refund = buildFromFixtures("refund", type: Refund.self)
+        XCTAssertEqual(refund.object, "refund")
+        XCTAssertEqual(refund.id, "rfnd_test_5086xm1i7ddm3apeaev")
+        XCTAssertEqual(refund.location, "/charges/chrg_test_5086xlsx4lghk9bpb75/refunds/rfnd_test_5086xm1i7ddm3apeaev")
+        XCTAssertEqual(refund.amount, 20000)
+        XCTAssertEqual(refund.currency, "thb")
+        XCTAssertEqual(refund.charge, "chrg_test_5086xlsx4lghk9bpb75")
+        XCTAssertEqual(refund.transaction, "trxn_test_5086xm1mbshmohdhk00")
+        XCTAssertEqual(refund.created?.timeIntervalSince1970, 1433223710.0)
+    }
+    
     private func buildFromFixtures<TObject: OmiseObject>(name: String, type: TObject.Type) -> TObject {
         let path = "Fixtures/objects/\(name)_object"
         guard let data = fixturesDataFor(path) else {

@@ -1,6 +1,7 @@
 {
   "object": "charge",
   "id": "chrg_test_5086xlsx4lghk9bpb75",
+  "status": "successful",
   "livemode": false,
   "location": "/charges/chrg_test_5086xlsx4lghk9bpb75",
   "amount": 100000,
