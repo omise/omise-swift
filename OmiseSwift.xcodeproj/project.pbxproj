@@ -15,6 +15,13 @@
 		220F53641CD89E8F00344B06 /* Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBC1CD23AB600CD3CAD /* Refund.swift */; };
 		220F53681CD89FDD00344B06 /* OmiseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220F53651CD89FAD00344B06 /* OmiseList.swift */; };
 		220F53691CD89FDE00344B06 /* OmiseList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220F53651CD89FAD00344B06 /* OmiseList.swift */; };
+		220F536A1CD8B72A00344B06 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BB01CD234D500CD3CAD /* Customer.swift */; };
+		220F536B1CD8BB1F00344B06 /* Dispute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BB21CD2356200CD3CAD /* Dispute.swift */; };
+		220F536C1CD8BB9500344B06 /* DisputeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BB41CD235DC00CD3CAD /* DisputeStatus.swift */; };
+		220F536D1CD8BCD500344B06 /* Recipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BB81CD2382400CD3CAD /* Recipient.swift */; };
+		220F536E1CD8BEF100344B06 /* RecipientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBA1CD2389D00CD3CAD /* RecipientType.swift */; };
+		220F53721CD8C1F900344B06 /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220F536F1CD8C19400344B06 /* BankAccount.swift */; };
+		220F53731CD8C1FA00344B06 /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220F536F1CD8C19400344B06 /* BankAccount.swift */; };
 		22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
 		22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D081CC7910700D0DB54 /* ConfigTest.swift */; };
 		22112D0C1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseTestCase.swift */; };
@@ -121,6 +128,7 @@
 		220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
 		220F53611CD8770100344B06 /* OmiseObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseObjectTest.swift; sourceTree = "<group>"; };
 		220F53651CD89FAD00344B06 /* OmiseList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseList.swift; sourceTree = "<group>"; };
+		220F536F1CD8C19400344B06 /* BankAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankAccount.swift; sourceTree = "<group>"; };
 		22112D081CC7910700D0DB54 /* ConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTest.swift; sourceTree = "<group>"; };
 		22112D091CC7910700D0DB54 /* OmiseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseTestCase.swift; sourceTree = "<group>"; };
 		22112D0E1CC7944900D0DB54 /* ResourceObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceObject.swift; sourceTree = "<group>"; };
@@ -250,6 +258,7 @@
 				22112D271CC79A0500D0DB54 /* Account.swift */,
 				2298735D1CCE15D400970F8C /* APIError.swift */,
 				22112D121CC7954F00D0DB54 /* Balance.swift */,
+				220F536F1CD8C19400344B06 /* BankAccount.swift */,
 				22BF9BA21CD2028500CD3CAD /* Card.swift */,
 				22BF9BA51CD227B200CD3CAD /* Charge.swift */,
 				22BF9BA81CD228BB00CD3CAD /* ChargeStatus.swift */,
@@ -529,6 +538,7 @@
 				229873661CCE164F00970F8C /* APIError.swift in Sources */,
 				220D1C3C1CC8E226006C7FD6 /* DateConverter.swift in Sources */,
 				22112D211CC7971100D0DB54 /* ResourceObject.swift in Sources */,
+				220F53731CD8C1FA00344B06 /* BankAccount.swift in Sources */,
 				229873A01CD09C4A00970F8C /* AttributesContainer.swift in Sources */,
 				22112D281CC79A0500D0DB54 /* Account.swift in Sources */,
 				2270E3A11CC7718000F18814 /* Request.swift in Sources */,
@@ -551,13 +561,19 @@
 				229873631CCE163E00970F8C /* OmiseObject.swift in Sources */,
 				22BF9BAD1CD22B7900CD3CAD /* EnumConverter.swift in Sources */,
 				22BF9BA71CD227B800CD3CAD /* Charge.swift in Sources */,
+				220F536C1CD8BB9500344B06 /* DisputeStatus.swift in Sources */,
 				229873711CCE299700970F8C /* Operation.swift in Sources */,
 				2298738F1CCF675700970F8C /* IntConverter.swift in Sources */,
+				220F536A1CD8B72A00344B06 /* Customer.swift in Sources */,
 				22BF9BAC1CD22B1B00CD3CAD /* ChargeStatus.swift in Sources */,
 				2298738C1CCF5D9500970F8C /* OmiseError.swift in Sources */,
+				220F53721CD8C1F900344B06 /* BankAccount.swift in Sources */,
+				220F536E1CD8BEF100344B06 /* RecipientType.swift in Sources */,
+				220F536B1CD8BB1F00344B06 /* Dispute.swift in Sources */,
 				229873951CCF93AC00970F8C /* AccountOperations.swift in Sources */,
 				22112D1C1CC7970500D0DB54 /* Int64Converter.swift in Sources */,
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
+				220F536D1CD8BCD500344B06 /* Recipient.swift in Sources */,
 				229873731CCE299D00970F8C /* Endpoint.swift in Sources */,
 				229873981CCF958700970F8C /* BalanceOperations.swift in Sources */,
 				22112D261CC798BC00D0DB54 /* StringConverter.swift in Sources */,

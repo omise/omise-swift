@@ -1,6 +1,6 @@
 import Foundation
 
-public class OmiseList<TItem: ResourceObject>: OmiseObject {
+public class OmiseList<TItem: OmiseObject>: OmiseObject {
     public var from: NSDate? {
         get { return get("from", DateConverter.self) }
         set { set("from", DateConverter.self, toValue: newValue) }
@@ -24,5 +24,13 @@ public class OmiseList<TItem: ResourceObject>: OmiseObject {
     public var data: [TItem] {
         get { return getList("data", TItem.self) }
         set { setList("data", TItem.self, toValue: newValue) }
+    }
+    
+    public required init() {
+        super.init()
+    }
+    
+    public required init(attributes: JSONAttributes) {
+        super.init(attributes: attributes)
     }
 }

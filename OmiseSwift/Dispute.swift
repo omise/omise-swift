@@ -1,23 +1,28 @@
 import Foundation
 
 public class Dispute: ResourceObject {
-    public var amount: Int64?
-    public var currency: String?
-    // TODO: Status
-    public var message: String?
-    public var charge: String?
+    public var amount: Int64? {
+        get { return get("amount", Int64Converter.self) }
+        set { set("amount", Int64Converter.self, toValue: newValue) }
+    }
+    
+    public var currency: String? {
+        get { return get("currency", StringConverter.self) }
+        set { set("currency", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var status: DisputeStatus? {
+        get { return get("status", EnumConverter.self) }
+        set { set("status", EnumConverter.self, toValue: newValue) }
+    }
+    
+    public var message: String? {
+        get { return get("message", StringConverter.self) }
+        set { set("message", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var charge: String? {
+        get { return get("charge", StringConverter.self) }
+        set { set("charge", StringConverter.self, toValue: newValue) }
+    }
 }
-
-/* package omise
- 
- // Dispute represents Omise's dispute object.
- // See https://www.omise.co/disputes-api for more information.
- type Dispute struct {
-	Base
-	Amount   int64         `json:"amount" pretty:""`
-	Currency string        `json:"currency" pretty:""`
-	Status   DisputeStatus `json:"status" pretty:""`
-	Message  string        `json:"message"`
-	Charge   string        `json:"charge" pretty:""`
- }
-*/

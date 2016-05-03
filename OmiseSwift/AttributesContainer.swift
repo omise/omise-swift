@@ -35,10 +35,7 @@ public extension AttributesContainer {
         }
         
         let child = TChild(attributes: (attributes[key] as? JSONAttributes) ?? [:])
-        dump(String(TChild), name: "child type")
-        dump(children, name: "before")
         children[key] = child
-        dump(children, name: "after")
         return child
     }
     
