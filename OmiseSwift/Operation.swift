@@ -12,7 +12,8 @@ public protocol Operation: class {
 public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContainer {
     public typealias Result = TResult
     
-    public var attributes: JSONAttributes = [:]
+    public var attributes: JSONAttributes
+    public var children: [String : AttributesContainer]
     
     public var encodedAttributes: [NSURLQueryItem] {
         return URLEncoder.encode(attributes)
@@ -42,7 +43,9 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
         return buildPayload()
     }
     
-    public required init() {
+    public required init(attributes: JSONAttributes = [:]) {
+        self.attributes = attributes
+        self.children = [:]
     }
     
     private func buildUrl() -> NSURL {

@@ -2,6 +2,7 @@ import Foundation
 
 public class OmiseObject: NSObject, AttributesContainer {
     public var attributes: JSONAttributes = [:]
+    public var children: [String: AttributesContainer] = [:]
     
     public var object: String? {
         get { return get("object", StringConverter.self) }
@@ -14,10 +15,10 @@ public class OmiseObject: NSObject, AttributesContainer {
     }
     
     public required override init() {
-        self.attributes = [:]
+        super.init()
     }
     
-    public required init(attributes: [String: NSObject]) {
+    public required init(attributes: JSONAttributes) {
         self.attributes = attributes
         super.init()
     }
