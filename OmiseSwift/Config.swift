@@ -4,6 +4,7 @@ public class Config: NSObject {
     public let apiVersion: String?
     public let publicKey: String?
     public let secretKey: String?
+    
     public let callbackQueue: NSOperationQueue
     
     public convenience init(secretKey: String) {
@@ -19,5 +20,11 @@ public class Config: NSObject {
         self.secretKey = secretKey
         self.apiVersion = apiVersion
         self.callbackQueue = queue ?? NSOperationQueue.mainQueue()
+    }
+    
+    func performCallback(callback: () -> ()) {
+        callbackQueue.addOperationWithBlock { 
+            callback()
+        }
     }
 }

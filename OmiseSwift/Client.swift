@@ -3,33 +3,37 @@ import Foundation
 public class Client: NSObject {
     public static let sessionIdentifier = "omise.co"
     
-    private var session: NSURLSession?
-    private var queue: NSOperationQueue?
+    private let session: NSURLSession
+    private let operationQueue: NSOperationQueue
     
     public let config: Config
     
-    public init(config: Config) {
+    public init(config: Config) throws {
         self.config = config
-        super.init()
         
-        self.queue = NSOperationQueue()
+        self.operationQueue = NSOperationQueue()
         self.session = NSURLSession(
             configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration(),
             delegate: nil,
-            delegateQueue: queue)
+            delegateQueue: operationQueue)
+        super.init()
     }
     
     public func call<TOperation: Operation where TOperation.Result: OmiseObject>(operation: TOperation, callback: Request<TOperation>.Callback) -> Request<TOperation>? {
-        guard let session = self.session else {
-            NSLog("url session initialization failure.")
-            return nil
+//        guard let session = self.session else {
+//            throw OmiseError.Unexpected(message: "failed to initialize NSURLSession.")
+//        }
+        
+        do {
+            let req: Request<TOperation> = try Request(config: config, session: session, operation: operation, callback: callback)
+            return req.start()
+            
+        } catch let err as NSError {
+            config.performCallback() { callback(nil, .IO(err: err)) }
+        } catch let err as OmiseError {
+            config.performCallback() { callback(nil, err) }
         }
         
-        guard let req: Request<TOperation> = Request(config: config, session: session, operation: operation) else {
-            NSLog("request initialization failure.")
-            return nil
-        }
-        
-        return req.startWithCallback(callback)
+        return nil
     }
 }

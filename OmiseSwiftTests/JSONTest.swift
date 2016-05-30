@@ -140,11 +140,6 @@ class JSONTest: OmiseTestCase {
             return TObject()
         }
         
-        guard let result: TObject = OmiseSerializer.deserialize(data) else {
-            XCTFail("JSON deserialization failure.")
-            return TObject()
-        }
-        
-        return result
+        return try! OmiseSerializer.deserialize(data)
     }
 }

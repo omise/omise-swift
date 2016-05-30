@@ -11,10 +11,10 @@ class LiveTest: OmiseTestCase {
             queue: (NSOperationQueue.currentQueue() ?? NSOperationQueue.mainQueue())
         )
         
-        return Client(config: config)
+        return try! Client(config: config)
     }
     
-    func testAccountRetrieve() {
+    func testAccountRetrieve() throws {
         let expectation = expectationWithDescription("account result")
         let operation = Account.Retrieve()
         
@@ -35,7 +35,7 @@ class LiveTest: OmiseTestCase {
         let request = testClient.call(operation) { (result: Balance?, error: ErrorType?) -> () in
             defer { expectation.fulfill() }
             XCTAssertNil(error)
-            XCTAssertEqual(result?.available, 20485902)
+            XCTAssertEqual(result?.available, 21220352)
         }
         
         XCTAssertNotNil(request)
