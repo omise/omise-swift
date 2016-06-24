@@ -34,7 +34,7 @@ public extension AttributesContainer {
             return child
         }
         
-        let child = TChild(attributes: (attributes[key] as? JSONAttributes) ?? [:])
+        let child = childType.init(attributes: (attributes[key] as? JSONAttributes) ?? [:])
         children[key] = child
         return child
     }

@@ -20,6 +20,15 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(balance.currency, "thb")
     }
     
+    func testBankAccount() {
+        let bankAccount: BankAccount = buildFromFixtures("bank_account")
+        XCTAssertEqual(bankAccount.object, "bank_account")
+        XCTAssertEqual(bankAccount.brand, "bbl")
+        XCTAssertEqual(bankAccount.number, "1234567890")
+        XCTAssertEqual(bankAccount.name, "SOMCHAI PRASERT")
+        XCTAssertEqual(bankAccount.created?.timeIntervalSince1970, 1424944575.0)
+    }
+    
     func testCard() {
         let card: Card = buildFromFixtures("card")
         XCTAssertEqual(card.object, "card")
@@ -99,6 +108,20 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(dispute.message, "This is an unauthorized transaction")
     }
     
+    func testEvent() {
+        let event: Event = buildFromFixtures("event")
+        XCTAssertEqual(event.object, "event")
+        XCTAssertEqual(event.id, "evnt_test_526yctupnje5mbldskd")
+        XCTAssertEqual(event.live, false)
+        XCTAssertEqual(event.location, "/events/evnt_test_526yctupnje5mbldskd")
+        XCTAssertEqual(event.key, "transfer.destroy")
+        XCTAssertEqual(event.created?.timeIntervalSince1970, 1448854782.0)
+        
+        guard let transfer = event.data as? Transfer else { return XCTFail("data not deserialized into a Transfer") }
+        XCTAssertEqual(transfer.object, "transfer")
+        XCTAssertEqual(transfer.id, "trsf_test_526yctqob5djkckq88a")
+    }
+    
     func testRecipient() {
         let recipient: Recipient = buildFromFixtures("recipient")
         XCTAssertEqual(recipient.object, "recipient")
@@ -131,6 +154,51 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(refund.charge, "chrg_test_5086xlsx4lghk9bpb75")
         XCTAssertEqual(refund.transaction, "trxn_test_5086xm1mbshmohdhk00")
         XCTAssertEqual(refund.created?.timeIntervalSince1970, 1433223710.0)
+    }
+    
+    func testToken() {
+        let token: Token = buildFromFixtures("token")
+        XCTAssertEqual(token.object, "token")
+        XCTAssertEqual(token.id, "tokn_test_5086xl7c9k5rnx35qba")
+        XCTAssertEqual(token.live, false)
+        XCTAssertEqual(token.used, false)
+        XCTAssertEqual(token.location, "https://vault.omise.co/tokens/tokn_test_5086xl7c9k5rnx35qba")
+        
+        guard let card = token.card else { return XCTFail("card not deserialized") }
+        XCTAssertEqual(card.object, "card")
+        XCTAssertEqual(card.id, "card_test_5086xl7amxfysl0ac5l")
+    }
+    
+    func testTransaction() {
+        let transaction: Transaction = buildFromFixtures("transaction")
+        XCTAssertEqual(transaction.object, "transaction")
+        XCTAssertEqual(transaction.id, "trxn_test_5086v66oxpujs6nll93")
+        XCTAssertEqual(transaction.type, TransactionType.Credit)
+        XCTAssertEqual(transaction.amount, 96094)
+        XCTAssertEqual(transaction.currency, "THB")
+        XCTAssertEqual(transaction.created?.timeIntervalSince1970, 1433223294.0)
+    }
+    
+    func testTransfer() {
+        let transfer: Transfer = buildFromFixtures("transfer")
+        XCTAssertEqual(transfer.object, "transfer")
+        XCTAssertEqual(transfer.id, "trsf_test_5086uxn23hfaxv8nl0f")
+        XCTAssertEqual(transfer.live, false)
+        XCTAssertEqual(transfer.location, "/transfers/trsf_test_5086uxn23hfaxv8nl0f")
+        XCTAssertEqual(transfer.recipient, "recp_test_506zyyammqke9tmhgh2")
+        XCTAssertEqual(transfer.sent, false)
+        XCTAssertEqual(transfer.paid, false)
+        XCTAssertEqual(transfer.amount, 100000)
+        XCTAssertEqual(transfer.failureCode, nil)
+        XCTAssertEqual(transfer.failureMessage, nil)
+        XCTAssertEqual(transfer.transaction, nil)
+        XCTAssertEqual(transfer.created?.timeIntervalSince1970, 1433223253.0)
+        
+        guard let bankAccount = transfer.bankAccount else { return XCTFail("bank_account not deserialized") }
+        XCTAssertEqual(bankAccount.object, "bank_account")
+        XCTAssertEqual(bankAccount.brand, "test")
+        XCTAssertEqual(bankAccount.lastDigits, "6789")
+        XCTAssertEqual(bankAccount.name, "DEFAULT BANK ACCOUNT")
     }
     
     private func buildFromFixtures<TObject: OmiseObject>(name: String) -> TObject {

@@ -76,7 +76,10 @@ public class Charge: ResourceObject {
         set { set("ip", StringConverter.self, toValue: newValue) }
     }
     
-    // TODO: Dispute (nested model)
+    public var dispute: Dispute? {
+        get { return getChild("dispute", Dispute.self) }
+        set { setChild("dispute", Dispute.self, toValue: newValue) }
+    }
     
     public var returnUri: String? {
         get { return get("return_uri", StringConverter.self) }

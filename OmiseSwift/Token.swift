@@ -1,8 +1,15 @@
 import Foundation
 
 public class Token: ResourceObject {
-    public var used: Bool?
-    //TODO: Card (nested object)
+    public var used: Bool? {
+        get { return get("used", BoolConverter.self) }
+        set { set("used", BoolConverter.self, toValue: newValue) }
+    }
+    
+    public var card: Card? {
+        get { return getChild("card", Card.self) }
+        set { setChild("card", Card.self, toValue: newValue) }
+    }
 }
 
 /*package omise
