@@ -38,6 +38,8 @@
 		22112D291CC79A0500D0DB54 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D271CC79A0500D0DB54 /* Account.swift */; };
 		22112D2B1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D2A1CC79A9F00D0DB54 /* BoolConverter.swift */; };
 		22112D2C1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D2A1CC79A9F00D0DB54 /* BoolConverter.swift */; };
+		2218E0A21D1D419C006E0245 /* BalanceOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */; };
+		2218E0A31D1D41A1006E0245 /* BalanceOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */; };
 		2221394C1CE1BB2E00B6BF43 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBE1CD23B1400CD3CAD /* Token.swift */; };
 		2221394E1CE1BC2B00B6BF43 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2221394D1CE1BC2B00B6BF43 /* Transaction.swift */; };
 		2221394F1CE1BC2B00B6BF43 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2221394D1CE1BC2B00B6BF43 /* Transaction.swift */; };
@@ -48,6 +50,9 @@
 		222139561CE1C5B900B6BF43 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BB61CD2378C00CD3CAD /* Event.swift */; };
 		222139581CE1C5BF00B6BF43 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222139571CE1C5BF00B6BF43 /* Transfer.swift */; };
 		222139591CE1C5BF00B6BF43 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222139571CE1C5BF00B6BF43 /* Transfer.swift */; };
+		22338DB01D211D7E00811363 /* Retrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DAF1D211D7E00811363 /* Retrievable.swift */; };
+		22338DB21D21201300811363 /* ClientContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB11D21201300811363 /* ClientContainer.swift */; };
+		22338DB81D21392A00811363 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
 		2270E3991CC763F700F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E39A1CC7640B00F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E3A11CC7718000F18814 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3A01CC7718000F18814 /* Request.swift */; };
@@ -84,15 +89,10 @@
 		2298738F1CCF675700970F8C /* IntConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298738D1CCF675700970F8C /* IntConverter.swift */; };
 		229873911CCF696B00970F8C /* OmiseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873901CCF696B00970F8C /* OmiseSerializer.swift */; };
 		229873921CCF696B00970F8C /* OmiseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873901CCF696B00970F8C /* OmiseSerializer.swift */; };
-		229873941CCF93AC00970F8C /* AccountOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873931CCF93AC00970F8C /* AccountOperations.swift */; };
-		229873951CCF93AC00970F8C /* AccountOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873931CCF93AC00970F8C /* AccountOperations.swift */; };
-		229873971CCF958700970F8C /* BalanceOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873961CCF958700970F8C /* BalanceOperations.swift */; };
-		229873981CCF958700970F8C /* BalanceOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873961CCF958700970F8C /* BalanceOperations.swift */; };
 		2298739A1CCF960900970F8C /* AccountOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873991CCF960900970F8C /* AccountOperationsTest.swift */; };
 		2298739B1CCF960900970F8C /* AccountOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873991CCF960900970F8C /* AccountOperationsTest.swift */; };
 		229873A01CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
 		229873A11CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
-		22BF9B9D1CD1F67600CD3CAD /* BalanceOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */; };
 		22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
 		22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
 		22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BA21CD2028500CD3CAD /* Card.swift */; };
@@ -151,6 +151,9 @@
 		222139501CE1BC4E00B6BF43 /* TransactionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
 		222139531CE1C50100B6BF43 /* Lookup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lookup.swift; sourceTree = "<group>"; };
 		222139571CE1C5BF00B6BF43 /* Transfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transfer.swift; sourceTree = "<group>"; };
+		22338DAF1D211D7E00811363 /* Retrievable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Retrievable.swift; sourceTree = "<group>"; };
+		22338DB11D21201300811363 /* ClientContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientContainer.swift; sourceTree = "<group>"; };
+		22338DB71D21392A00811363 /* Failable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Failable.swift; sourceTree = "<group>"; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		2270E39D1CC7649A00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		2270E3A01CC7718000F18814 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
@@ -173,8 +176,6 @@
 		2298738A1CCF5D9500970F8C /* OmiseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseError.swift; sourceTree = "<group>"; };
 		2298738D1CCF675700970F8C /* IntConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntConverter.swift; sourceTree = "<group>"; };
 		229873901CCF696B00970F8C /* OmiseSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseSerializer.swift; sourceTree = "<group>"; };
-		229873931CCF93AC00970F8C /* AccountOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountOperations.swift; sourceTree = "<group>"; };
-		229873961CCF958700970F8C /* BalanceOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceOperations.swift; sourceTree = "<group>"; };
 		229873991CCF960900970F8C /* AccountOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountOperationsTest.swift; sourceTree = "<group>"; };
 		2298739D1CD09B5600970F8C /* AttributesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributesContainer.swift; sourceTree = "<group>"; };
 		22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceOperationsTest.swift; sourceTree = "<group>"; };
@@ -256,12 +257,13 @@
 				2270E3981CC763F700F18814 /* Client.swift */,
 				2270E3A21CC7751600F18814 /* Config.swift */,
 				2298736E1CCE207500970F8C /* Endpoint.swift */,
+				22338DB71D21392A00811363 /* Failable.swift */,
 				2298738A1CCF5D9500970F8C /* OmiseError.swift */,
 				2298736B1CCE205700970F8C /* Operation.swift */,
 				2270E3A01CC7718000F18814 /* Request.swift */,
 				22112D151CC7963600D0DB54 /* Converters */,
 				22112D111CC7954500D0DB54 /* Models */,
-				2298735C1CCE151200970F8C /* Operations */,
+				22338DA71D2104D100811363 /* Operations */,
 			);
 			path = OmiseSwift;
 			sourceTree = "<group>";
@@ -271,6 +273,7 @@
 			children = (
 				22112D271CC79A0500D0DB54 /* Account.swift */,
 				2298735D1CCE15D400970F8C /* APIError.swift */,
+				2298739D1CD09B5600970F8C /* AttributesContainer.swift */,
 				22112D121CC7954F00D0DB54 /* Balance.swift */,
 				220F536F1CD8C19400344B06 /* BankAccount.swift */,
 				22BF9BA21CD2028500CD3CAD /* Card.swift */,
@@ -300,8 +303,8 @@
 		22112D151CC7963600D0DB54 /* Converters */ = {
 			isa = PBXGroup;
 			children = (
-				2298739D1CD09B5600970F8C /* AttributesContainer.swift */,
 				22112D2A1CC79A9F00D0DB54 /* BoolConverter.swift */,
+				22338DB11D21201300811363 /* ClientContainer.swift */,
 				229873321CCDF1F900970F8C /* Converter.swift */,
 				220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */,
 				22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */,
@@ -310,6 +313,14 @@
 				22112D241CC798BC00D0DB54 /* StringConverter.swift */,
 			);
 			name = Converters;
+			sourceTree = "<group>";
+		};
+		22338DA71D2104D100811363 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				22338DAF1D211D7E00811363 /* Retrievable.swift */,
+			);
+			name = Operations;
 			sourceTree = "<group>";
 		};
 		2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */ = {
@@ -336,15 +347,6 @@
 				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 			);
 			name = Models;
-			sourceTree = "<group>";
-		};
-		2298735C1CCE151200970F8C /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-				229873931CCF93AC00970F8C /* AccountOperations.swift */,
-				229873961CCF958700970F8C /* BalanceOperations.swift */,
-			);
-			name = Operations;
 			sourceTree = "<group>";
 		};
 		2298739C1CCF960E00970F8C /* Operations */ = {
@@ -533,32 +535,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873641CCE163E00970F8C /* OmiseObject.swift in Sources */,
+				22338DB81D21392A00811363 /* Failable.swift in Sources */,
 				222139541CE1C50100B6BF43 /* Lookup.swift in Sources */,
 				22BF9BBF1CD23B1400CD3CAD /* Token.swift in Sources */,
 				229873721CCE299700970F8C /* Operation.swift in Sources */,
 				2298738E1CCF675700970F8C /* IntConverter.swift in Sources */,
 				2298738B1CCF5D9500970F8C /* OmiseError.swift in Sources */,
-				229873941CCF93AC00970F8C /* AccountOperations.swift in Sources */,
 				22112D1D1CC7970600D0DB54 /* Int64Converter.swift in Sources */,
 				222139511CE1BC4E00B6BF43 /* TransactionType.swift in Sources */,
 				22BF9BB51CD235DC00CD3CAD /* DisputeStatus.swift in Sources */,
-				22BF9B9D1CD1F67600CD3CAD /* BalanceOperationsTest.swift in Sources */,
 				22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */,
 				22BF9BBB1CD2389D00CD3CAD /* RecipientType.swift in Sources */,
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
 				229873741CCE299E00970F8C /* Endpoint.swift in Sources */,
-				229873971CCF958700970F8C /* BalanceOperations.swift in Sources */,
 				22BF9BA91CD228BB00CD3CAD /* ChargeStatus.swift in Sources */,
 				22BF9BB91CD2382400CD3CAD /* Recipient.swift in Sources */,
 				22BF9BB71CD2378C00CD3CAD /* Event.swift in Sources */,
 				22112D251CC798BC00D0DB54 /* StringConverter.swift in Sources */,
 				2298737E1CCF3B0900970F8C /* URLEncoder.swift in Sources */,
+				22338DB21D21201300811363 /* ClientContainer.swift in Sources */,
 				229873911CCF696B00970F8C /* OmiseSerializer.swift in Sources */,
 				22BF9BB11CD234D500CD3CAD /* Customer.swift in Sources */,
 				229873661CCE164F00970F8C /* APIError.swift in Sources */,
 				220D1C3C1CC8E226006C7FD6 /* DateConverter.swift in Sources */,
 				22112D211CC7971100D0DB54 /* ResourceObject.swift in Sources */,
 				220F53731CD8C1FA00344B06 /* BankAccount.swift in Sources */,
+				22338DB01D211D7E00811363 /* Retrievable.swift in Sources */,
 				229873A01CD09C4A00970F8C /* AttributesContainer.swift in Sources */,
 				22112D281CC79A0500D0DB54 /* Account.swift in Sources */,
 				222139581CE1C5BF00B6BF43 /* Transfer.swift in Sources */,
@@ -595,13 +597,11 @@
 				220F536E1CD8BEF100344B06 /* RecipientType.swift in Sources */,
 				222139521CE1BC4E00B6BF43 /* TransactionType.swift in Sources */,
 				220F536B1CD8BB1F00344B06 /* Dispute.swift in Sources */,
-				229873951CCF93AC00970F8C /* AccountOperations.swift in Sources */,
 				22112D1C1CC7970500D0DB54 /* Int64Converter.swift in Sources */,
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
 				222139551CE1C50100B6BF43 /* Lookup.swift in Sources */,
 				220F536D1CD8BCD500344B06 /* Recipient.swift in Sources */,
 				229873731CCE299D00970F8C /* Endpoint.swift in Sources */,
-				229873981CCF958700970F8C /* BalanceOperations.swift in Sources */,
 				22112D261CC798BC00D0DB54 /* StringConverter.swift in Sources */,
 				2298737F1CCF3B0900970F8C /* URLEncoder.swift in Sources */,
 				229873921CCF696B00970F8C /* OmiseSerializer.swift in Sources */,
@@ -629,6 +629,7 @@
 			files = (
 				229873831CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
 				22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */,
+				2218E0A21D1D419C006E0245 /* BalanceOperationsTest.swift in Sources */,
 				2298739A1CCF960900970F8C /* AccountOperationsTest.swift in Sources */,
 				220F53621CD8770100344B06 /* OmiseObjectTest.swift in Sources */,
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
@@ -645,6 +646,7 @@
 			files = (
 				229873841CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
+				2218E0A31D1D41A1006E0245 /* BalanceOperationsTest.swift in Sources */,
 				2298739B1CCF960900970F8C /* AccountOperationsTest.swift in Sources */,
 				220F53631CD8770100344B06 /* OmiseObjectTest.swift in Sources */,
 				2298733C1CCDF99800970F8C /* JSONTest.swift in Sources */,

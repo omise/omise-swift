@@ -1,26 +1,24 @@
 import Foundation
 
-public class Request<TOperation: Operation where TOperation.Result: OmiseObject>: NSObject {
-    public typealias Callback = (TOperation.Result?, OmiseError?) -> ()
+public class Request<TOperation: Operation>: NSObject {
+    public typealias Callback = Failable<TOperation.Result> -> ()
     
     private var dataTask: NSURLSessionTask? = nil
     private var callback: Callback? = nil
     
-    public let config: Config
+    public let client: Client
     public let operation: TOperation
     public let urlRequest: NSURLRequest
-    public let session: NSURLSession
     
-    public init(config: Config, session: NSURLSession, operation: TOperation, callback: Callback?) throws {
+    public init(client: Client, operation: TOperation, callback: Callback?) throws {
         self.callback = callback
         
-        self.config = config
+        self.client = client
         self.operation = operation
-        self.urlRequest = try Request.buildURLRequest(config, operation: operation)
-        self.session = session
+        self.urlRequest = try Request.buildURLRequest(client.config, operation: operation)
         super.init()
         
-        self.dataTask = session.dataTaskWithRequest(urlRequest, completionHandler: didComplete)
+        self.dataTask = client.session.dataTaskWithRequest(urlRequest, completionHandler: didComplete)
     }
     
     static func buildURLRequest(config: Config, operation: TOperation) throws -> NSURLRequest {
@@ -41,27 +39,24 @@ public class Request<TOperation: Operation where TOperation.Result: OmiseObject>
     }
     
     static func selectApiKey(config: Config, host: String) throws -> String {
+        let key: String?
         if host.containsString("vault.omise.co") {
-            guard let key = config.publicKey else {
-                throw OmiseError.Configuration(message: "vault operation requires public key.")
-            }
-            
-            return key
-            
+            key = config.publicKey
         } else {
-            guard let key = config.secretKey else {
-                throw OmiseError.Configuration(message: "API operation requires secret key.")
-            }
-            
-            return key
+            key = config.secretKey
         }
+        
+        guard let resolvedKey = key else {
+            throw OmiseError.Configuration(message: "no api key for host \(host).")
+        }
+        
+        return resolvedKey
     }
     
     static func encodeApiKeyForAuthorization(apiKey: String) throws -> String {
-        guard let md5 = "\(apiKey):X"
-            .dataUsingEncoding(NSUTF8StringEncoding)?
-            .base64EncodedStringWithOptions(.Encoding64CharacterLineLength) else {
-                throw OmiseError.Configuration(message: "bad API key (encoding failed.)")
+        let data = "\(apiKey):X".dataUsingEncoding(NSUTF8StringEncoding)
+        guard let md5 = data?.base64EncodedStringWithOptions(.Encoding64CharacterLineLength) else {
+            throw OmiseError.Configuration(message: "bad API key (encoding failed.)")
         }
         
         return "Basic \(md5)"
@@ -78,40 +73,40 @@ public class Request<TOperation: Operation where TOperation.Result: OmiseObject>
         guard callback != nil else { return }
         
         if let err = error {
-            return performCallback(nil, .IO(err: err))
+            return performCallback(.Fail(err: .IO(err: err)))
         }
         
         guard let httpResponse = response as? NSHTTPURLResponse else {
-            return performCallback(nil, .Unexpected(message: "no error and no response."))
+            return performCallback(.Fail(err: .Unexpected(message: "no error and no response.")))
         }
         
         guard let data = data else {
-            return performCallback(nil, .Unexpected(message: "empty response."))
+            return performCallback(.Fail(err: .Unexpected(message: "empty response.")))
         }
         
         do {
             switch httpResponse.statusCode {
             case 400..<600:
                 let err: APIError = try OmiseSerializer.deserialize(data)
-                return performCallback(nil, .API(err: err))
+                return performCallback(.Fail(err: .API(err: err)))
                 
             case 200..<300:
                 let result: TOperation.Result = try OmiseSerializer.deserialize(data)
-                return performCallback(result, nil)
+                return performCallback(.Success(result: result))
                 
             default:
-                return performCallback(nil, .Unexpected(message: "unrecognized HTTP status code: \(httpResponse.statusCode)"))
+                return performCallback(.Fail(err: .Unexpected(message: "unrecognized HTTP status code: \(httpResponse.statusCode)")))
             }
             
         } catch let err as NSError {
-            return performCallback(nil, .IO(err: err))
+            return performCallback(.Fail(err: .IO(err: err)))
         } catch let err as OmiseError {
-            return performCallback(nil, err)
+            return performCallback(.Fail(err: err))
         }
     }
     
-    private func performCallback(result: TOperation.Result?, _ error: OmiseError?) {
+    private func performCallback(result: Failable<TOperation.Result>) {
         guard let cb = callback else { return }
-        config.performCallback { cb(result, error) }
+        client.performCallback { cb(result) }
     }
 }

@@ -1,5 +1,7 @@
 import Foundation
 
+var defaultConfig: Config = Config(publicKey: nil, secretKey: nil, apiVersion: nil, queue: nil)
+
 public class Config: NSObject {
     public let apiVersion: String?
     public let publicKey: String?
@@ -20,11 +22,5 @@ public class Config: NSObject {
         self.secretKey = secretKey
         self.apiVersion = apiVersion
         self.callbackQueue = queue ?? NSOperationQueue.mainQueue()
-    }
-    
-    func performCallback(callback: () -> ()) {
-        callbackQueue.addOperationWithBlock { 
-            callback()
-        }
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Operation: class {
-    associatedtype Result
+    associatedtype Result: OmiseObject
     
     var endpoint: Endpoint { get }
     var method: String { get }
@@ -13,30 +13,18 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     public typealias Result = TResult
     
     public var attributes: JSONAttributes
-    public var children: [String : AttributesContainer]
+    public var children: [String : AttributesContainer] = [:]
+    
+    public var endpoint: Endpoint = Endpoint.API
+    public var method: String = "GET"
+    public var path: String = "/"
     
     public var encodedAttributes: [NSURLQueryItem] {
         return URLEncoder.encode(attributes)
     }
     
-    public var endpoint: Endpoint {
-        return Endpoint.API
-    }
-    
-    public var method: String {
-        return "GET"
-    }
-    
-    public var path: String {
-        return "/"
-    }
-    
     public var url: NSURL {
         return buildUrl()
-    }
-    
-    public var queryItems: [NSURLQueryItem] {
-        return []
     }
     
     public var payload: NSData? {
@@ -45,7 +33,6 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     
     public required init(attributes: JSONAttributes = [:]) {
         self.attributes = attributes
-        self.children = [:]
     }
     
     private func buildUrl() -> NSURL {
