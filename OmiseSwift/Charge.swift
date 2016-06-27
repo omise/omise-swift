@@ -1,6 +1,8 @@
 import Foundation
 
 public class Charge: ResourceObject {
+    public override class var resourcePath: String { return "/charges" }
+    
     public var status: ChargeStatus? {
         get { return get("status", EnumConverter.self) }
         set { set("status", EnumConverter.self, toValue: newValue) }
@@ -89,5 +91,28 @@ public class Charge: ResourceObject {
     public var authorizeUri: String? {
         get { return get("authorize_uri", StringConverter.self) }
         set { set("authorize_uri", StringConverter.self, toValue: newValue) }
+    }
+}
+
+extension Charge: Listable { }
+extension Charge: InstanceRetrievable { }
+
+func exampleCharge() {
+    Charge.list { (result) in
+        switch result {
+        case let .Success(charges):
+            print("charges: \(charges.data[0].id)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+    
+    Charge.retrieve(id: "chrg_test_123") { (result) in
+        switch result {
+        case let .Success(charge):
+            print("charge: \(charge.id) \(charge.amount)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
     }
 }

@@ -1,17 +1,12 @@
 import Foundation
 
-protocol Retrievable {
-}
+public protocol Retrievable { }
 
-extension Retrievable where Self: ResourceObject {
-    static func retrieve(using given: Client? = nil, callback: Request<DefaultOperation<Self>>.Callback?) -> Request<DefaultOperation<Self>>? {
+public extension Retrievable where Self: ResourceObject {
+    typealias RetrieveOperation = DefaultOperation<Self>
+    
+    public static func retrieve(using given: Client? = nil, callback: Request<RetrieveOperation>.Callback?) -> Request<RetrieveOperation>? {
         let client = resolveClient(given: given)
-        
-        let operation: DefaultOperation<Self> = DefaultOperation()
-        operation.endpoint = self.resourceEndpoint
-        operation.method = "GET"
-        operation.path = self.resourcePath
-        
-        return client.call(operation, callback: callback)
+        return client.call(RetrieveOperation(klass: self), callback: callback)
     }
 }
