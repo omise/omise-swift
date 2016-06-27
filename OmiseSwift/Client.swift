@@ -2,13 +2,17 @@ import Foundation
 
 var defaultClient: Client? = nil
 
-func getDefaultClient() throws -> Client {
+func getDefaultClient() -> Client {
     guard let client = defaultClient else {
-        defaultClient = try Client(config: defaultConfig)
-        return try getDefaultClient()
+        defaultClient = Client(config: defaultConfig)
+        return getDefaultClient()
     }
     
     return client
+}
+
+func resolveClient(given client: Client?, inside context: ResourceObject? = nil) -> Client {
+    return client ?? context?.attachedClient ?? getDefaultClient()
 }
 
 public class Client: NSObject {
@@ -19,7 +23,7 @@ public class Client: NSObject {
     
     public let config: Config
     
-    public init(config: Config) throws {
+    public init(config: Config) {
         self.config = config
         
         self.operationQueue = NSOperationQueue()
