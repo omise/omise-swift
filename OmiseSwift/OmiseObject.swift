@@ -1,10 +1,8 @@
 import Foundation
 
-public class OmiseObject: NSObject, ClientContainer, AttributesContainer {
+public class OmiseObject: NSObject, AttributesContainer {
     public var attributes: JSONAttributes = [:]
     public var children: [String: AttributesContainer] = [:]
-    
-    public var attachedClient: Client? = nil
     
     public var object: String? {
         get { return get("object", StringConverter.self) }

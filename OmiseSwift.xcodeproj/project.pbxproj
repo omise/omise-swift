@@ -51,7 +51,6 @@
 		222139581CE1C5BF00B6BF43 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222139571CE1C5BF00B6BF43 /* Transfer.swift */; };
 		222139591CE1C5BF00B6BF43 /* Transfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222139571CE1C5BF00B6BF43 /* Transfer.swift */; };
 		22338DB01D211D7E00811363 /* Retrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DAF1D211D7E00811363 /* Retrievable.swift */; };
-		22338DB21D21201300811363 /* ClientContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB11D21201300811363 /* ClientContainer.swift */; };
 		22338DB81D21392A00811363 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
 		2270E3991CC763F700F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
 		2270E39A1CC7640B00F18814 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270E3981CC763F700F18814 /* Client.swift */; };
@@ -93,6 +92,9 @@
 		2298739B1CCF960900970F8C /* AccountOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873991CCF960900970F8C /* AccountOperationsTest.swift */; };
 		229873A01CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
 		229873A11CD09C4A00970F8C /* AttributesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298739D1CD09B5600970F8C /* AttributesContainer.swift */; };
+		22A0F9871D21580400CA3D35 /* Listable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9861D21580400CA3D35 /* Listable.swift */; };
+		22A0F9891D215D3700CA3D35 /* InstanceRetrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9881D215D3700CA3D35 /* InstanceRetrievable.swift */; };
+		22A0F98B1D215ECC00CA3D35 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98A1D215ECC00CA3D35 /* Globals.swift */; };
 		22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
 		22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
 		22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BA21CD2028500CD3CAD /* Card.swift */; };
@@ -152,7 +154,6 @@
 		222139531CE1C50100B6BF43 /* Lookup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lookup.swift; sourceTree = "<group>"; };
 		222139571CE1C5BF00B6BF43 /* Transfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transfer.swift; sourceTree = "<group>"; };
 		22338DAF1D211D7E00811363 /* Retrievable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Retrievable.swift; sourceTree = "<group>"; };
-		22338DB11D21201300811363 /* ClientContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientContainer.swift; sourceTree = "<group>"; };
 		22338DB71D21392A00811363 /* Failable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Failable.swift; sourceTree = "<group>"; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		2270E39D1CC7649A00F18814 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
@@ -178,6 +179,9 @@
 		229873901CCF696B00970F8C /* OmiseSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmiseSerializer.swift; sourceTree = "<group>"; };
 		229873991CCF960900970F8C /* AccountOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountOperationsTest.swift; sourceTree = "<group>"; };
 		2298739D1CD09B5600970F8C /* AttributesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributesContainer.swift; sourceTree = "<group>"; };
+		22A0F9861D21580400CA3D35 /* Listable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listable.swift; sourceTree = "<group>"; };
+		22A0F9881D215D3700CA3D35 /* InstanceRetrievable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceRetrievable.swift; sourceTree = "<group>"; };
+		22A0F98A1D215ECC00CA3D35 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		22BF9B9C1CD1F67600CD3CAD /* BalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceOperationsTest.swift; sourceTree = "<group>"; };
 		22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveTest.swift; sourceTree = "<group>"; };
 		22BF9BA21CD2028500CD3CAD /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -258,6 +262,7 @@
 				2270E3A21CC7751600F18814 /* Config.swift */,
 				2298736E1CCE207500970F8C /* Endpoint.swift */,
 				22338DB71D21392A00811363 /* Failable.swift */,
+				22A0F98A1D215ECC00CA3D35 /* Globals.swift */,
 				2298738A1CCF5D9500970F8C /* OmiseError.swift */,
 				2298736B1CCE205700970F8C /* Operation.swift */,
 				2270E3A01CC7718000F18814 /* Request.swift */,
@@ -304,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				22112D2A1CC79A9F00D0DB54 /* BoolConverter.swift */,
-				22338DB11D21201300811363 /* ClientContainer.swift */,
 				229873321CCDF1F900970F8C /* Converter.swift */,
 				220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */,
 				22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */,
@@ -318,6 +322,8 @@
 		22338DA71D2104D100811363 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				22A0F9881D215D3700CA3D35 /* InstanceRetrievable.swift */,
+				22A0F9861D21580400CA3D35 /* Listable.swift */,
 				22338DAF1D211D7E00811363 /* Retrievable.swift */,
 			);
 			name = Operations;
@@ -548,16 +554,17 @@
 				22BF9BBB1CD2389D00CD3CAD /* RecipientType.swift in Sources */,
 				2270E3991CC763F700F18814 /* Client.swift in Sources */,
 				229873741CCE299E00970F8C /* Endpoint.swift in Sources */,
+				22A0F9891D215D3700CA3D35 /* InstanceRetrievable.swift in Sources */,
 				22BF9BA91CD228BB00CD3CAD /* ChargeStatus.swift in Sources */,
 				22BF9BB91CD2382400CD3CAD /* Recipient.swift in Sources */,
 				22BF9BB71CD2378C00CD3CAD /* Event.swift in Sources */,
 				22112D251CC798BC00D0DB54 /* StringConverter.swift in Sources */,
 				2298737E1CCF3B0900970F8C /* URLEncoder.swift in Sources */,
-				22338DB21D21201300811363 /* ClientContainer.swift in Sources */,
 				229873911CCF696B00970F8C /* OmiseSerializer.swift in Sources */,
 				22BF9BB11CD234D500CD3CAD /* Customer.swift in Sources */,
 				229873661CCE164F00970F8C /* APIError.swift in Sources */,
 				220D1C3C1CC8E226006C7FD6 /* DateConverter.swift in Sources */,
+				22A0F9871D21580400CA3D35 /* Listable.swift in Sources */,
 				22112D211CC7971100D0DB54 /* ResourceObject.swift in Sources */,
 				220F53731CD8C1FA00344B06 /* BankAccount.swift in Sources */,
 				22338DB01D211D7E00811363 /* Retrievable.swift in Sources */,
@@ -565,6 +572,7 @@
 				22112D281CC79A0500D0DB54 /* Account.swift in Sources */,
 				222139581CE1C5BF00B6BF43 /* Transfer.swift in Sources */,
 				2270E3A11CC7718000F18814 /* Request.swift in Sources */,
+				22A0F98B1D215ECC00CA3D35 /* Globals.swift in Sources */,
 				22112D231CC7971600D0DB54 /* Balance.swift in Sources */,
 				22BF9BAB1CD2299600CD3CAD /* EnumConverter.swift in Sources */,
 				2221394E1CE1BC2B00B6BF43 /* Transaction.swift in Sources */,

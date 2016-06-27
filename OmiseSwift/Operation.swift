@@ -31,6 +31,12 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
         return buildPayload()
     }
     
+    public convenience init(klass: ResourceObject.Type) {
+        self.init(attributes: [:])
+        self.endpoint = klass.resourceEndpoint
+        self.path = klass.resourcePath
+    }
+    
     public required init(attributes: JSONAttributes = [:]) {
         self.attributes = attributes
     }

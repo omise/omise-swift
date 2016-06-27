@@ -1,6 +1,11 @@
 import Foundation
 
 public class ResourceObject: OmiseObject {
+    var attachedClient: Client? = nil
+    
+    public class var resourcePath: String { return "/" }
+    public class var resourceEndpoint: Endpoint { return Endpoint.API }
+
     public var id: String? {
         get { return get("id", StringConverter.self) }
         set { set("id", StringConverter.self, toValue: newValue) }
