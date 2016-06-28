@@ -120,6 +120,12 @@
 		22BF9BBB1CD2389D00CD3CAD /* RecipientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBA1CD2389D00CD3CAD /* RecipientType.swift */; };
 		22BF9BBD1CD23AB600CD3CAD /* Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBC1CD23AB600CD3CAD /* Refund.swift */; };
 		22BF9BBF1CD23B1400CD3CAD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBE1CD23B1400CD3CAD /* Token.swift */; };
+		98256FEA1D22444100F91436 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
+		98256FEB1D22445100F91436 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98A1D215ECC00CA3D35 /* Globals.swift */; };
+		98256FEC1D22472900F91436 /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4C1D223FF700A62F2C /* Updatable.swift */; };
+		98256FED1D22473700F91436 /* Destroyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4E1D22412A00A62F2C /* Destroyable.swift */; };
+		98256FF21D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
+		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,6 +213,7 @@
 		22BF9BBA1CD2389D00CD3CAD /* RecipientType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientType.swift; sourceTree = "<group>"; };
 		22BF9BBC1CD23AB600CD3CAD /* Refund.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Refund.swift; sourceTree = "<group>"; };
 		22BF9BBE1CD23B1400CD3CAD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,6 +364,7 @@
 				22112D091CC7910700D0DB54 /* OmiseTestCase.swift */,
 				229873751CCE29D700970F8C /* OperationTest.swift */,
 				229873851CCF565C00970F8C /* RequestTest.swift */,
+				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
 				229873381CCDF8AA00970F8C /* Models */,
 			);
 			path = OmiseSwiftTests;
@@ -605,9 +613,11 @@
 				229873631CCE163E00970F8C /* OmiseObject.swift in Sources */,
 				2221394C1CE1BB2E00B6BF43 /* Token.swift in Sources */,
 				22BF9BAD1CD22B7900CD3CAD /* EnumConverter.swift in Sources */,
+				98256FEC1D22472900F91436 /* Updatable.swift in Sources */,
 				22BF9BA71CD227B800CD3CAD /* Charge.swift in Sources */,
 				220F536C1CD8BB9500344B06 /* DisputeStatus.swift in Sources */,
 				229873711CCE299700970F8C /* Operation.swift in Sources */,
+				98256FEA1D22444100F91436 /* Failable.swift in Sources */,
 				222139591CE1C5BF00B6BF43 /* Transfer.swift in Sources */,
 				2298738F1CCF675700970F8C /* IntConverter.swift in Sources */,
 				220F536A1CD8B72A00344B06 /* Customer.swift in Sources */,
@@ -641,6 +651,8 @@
 				2270E3A41CC7798B00F18814 /* Request.swift in Sources */,
 				22A0F98F1D2160FE00CA3D35 /* Retrievable.swift in Sources */,
 				22BF9BA41CD20A0E00CD3CAD /* Card.swift in Sources */,
+				98256FEB1D22445100F91436 /* Globals.swift in Sources */,
+				98256FED1D22473700F91436 /* Destroyable.swift in Sources */,
 				22112D221CC7971500D0DB54 /* Balance.swift in Sources */,
 				22112D2C1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */,
 				229873361CCDF3EE00970F8C /* Converter.swift in Sources */,
@@ -660,6 +672,7 @@
 				229873761CCE29D700970F8C /* OperationTest.swift in Sources */,
 				22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
 				229873891CCF566F00970F8C /* RequestTest.swift in Sources */,
+				98256FF21D225E3000F91436 /* TransferOperationsTest.swift in Sources */,
 				22112D0C1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -675,6 +688,7 @@
 				229873771CCE29D700970F8C /* OperationTest.swift in Sources */,
 				22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
 				229873881CCF566F00970F8C /* RequestTest.swift in Sources */,
+				98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

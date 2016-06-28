@@ -1,6 +1,8 @@
 import Foundation
 
 public class Transfer: ResourceObject {
+    public override class var resourcePath: String { return "/transfers" }
+    
     public var recipient: String? {
         get { return get("recipient", StringConverter.self) }
         set { set("recipient", StringConverter.self, toValue: newValue) }
@@ -46,3 +48,28 @@ public class Transfer: ResourceObject {
         set { set("transaction", StringConverter.self, toValue: newValue) }
     }
 }
+
+public class TransferParams: Params {
+    public var amount: Int64? {
+        get { return get("amount", Int64Converter.self) }
+        set { set("amount", Int64Converter.self, toValue: newValue) }
+    }
+    
+    public var recipient: String? {
+        get { return get("recipient", StringConverter.self) }
+        set { set("recipient", StringConverter.self, toValue: newValue) }
+    }
+}
+
+extension Transfer: Listable { }
+extension Transfer: InstanceRetrievable { }
+
+extension Transfer: Creatable {
+    public typealias CreateParams = TransferParams
+}
+
+extension Transfer: Updatable {
+    public typealias UpdateParams = TransferParams
+}
+
+extension Transfer: Destroyable { }

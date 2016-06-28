@@ -9,7 +9,7 @@ extension Updatable where Self: ResourceObject {
     
     public static func update(using given: Client? = nil, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
         let operation = UpdateOperation(klass: self, attributes: params.normalizedAttributes)
-        operation.method = "POST"
+        operation.method = "PATCH"
         operation.path += "/\(URLEncoder.encodeURLPath(id))"
         
         let client = resolveClient(given: given)
