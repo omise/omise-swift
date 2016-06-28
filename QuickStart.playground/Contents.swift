@@ -18,8 +18,8 @@ import Omise // <-- Make sure this works first.
  
  You will need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at https://omise.co and click the aforementioned link to obtain your keys.
  */
-let publicKey = "pkey_test_54fk8c9ik0qg8x3p160" // <-- Change to your keys to see result in playground!
-let secretKey = "skey_test_54fk8cn6464p2w42fbw"
+let publicKey = "pkey_test_change_me" // <-- Change to your keys to see result in playground!
+let secretKey = "skey_test_change_me"
 
 /*:
  Once you have the API keys, there are two ways to use the `Omise` module.
