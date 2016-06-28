@@ -8,7 +8,7 @@ extension Creatable where Self: ResourceObject {
     public typealias CreateOperation = DefaultOperation<Self>
     
     public static func create(using given: Client? = nil, params: CreateParams, callback: Request<CreateOperation>.Callback) -> Request<CreateOperation>? {
-        let operation = CreateOperation(klass: self, attributes: params.attributes)
+        let operation = CreateOperation(klass: self, attributes: params.normalizedAttributes)
         operation.method = "POST"
         
         let client = resolveClient(given: given)
