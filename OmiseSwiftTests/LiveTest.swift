@@ -11,17 +11,20 @@ class LiveTest: OmiseTestCase {
             queue: (NSOperationQueue.currentQueue() ?? NSOperationQueue.mainQueue())
         )
         
-        return try! Client(config: config)
+        return Client(config: config)
     }
     
     func testAccountRetrieve() throws {
         let expectation = expectationWithDescription("account result")
-        let operation = Account.Retrieve()
-        
-        let request = testClient.call(operation) { (result: Account?, error: ErrorType?) -> () in
+        let request = Account.retrieve(using: testClient) { (result) in
             defer { expectation.fulfill() }
-            XCTAssertNil(error)
-            XCTAssertEqual(result?.email, "omise@chakrit.net")
+            
+            switch result {
+            case let .Success(account):
+                XCTAssertEqual(account.email, "omise@chakrit.net")
+            case let .Fail(err):
+                XCTFail("\(err)")
+            }
         }
         
         XCTAssertNotNil(request)
@@ -30,12 +33,15 @@ class LiveTest: OmiseTestCase {
     
     func testBalanceRetrieve() {
         let expectation = expectationWithDescription("balance result")
-        let operation = Balance.Retrieve()
-        
-        let request = testClient.call(operation) { (result: Balance?, error: ErrorType?) -> () in
+        let request = Balance.retrieve(using: testClient) { (result) in
             defer { expectation.fulfill() }
-            XCTAssertNil(error)
-            XCTAssertEqual(result?.available, 21220352)
+            
+            switch result {
+            case let .Success(balance):
+                XCTAssertEqual(balance.available, 22118104)
+            case let .Fail(err):
+                XCTFail("\(err)")
+            }
         }
         
         XCTAssertNotNil(request)

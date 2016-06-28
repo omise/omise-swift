@@ -4,8 +4,6 @@ import XCTest
 
 class OperationTest: OmiseTestCase {
     class DefaultWithPayload: DefaultOperation<Account> {
-        override var method: String { return "POST" }
-        
         var hello: String? {
             get { return get("hello", StringConverter.self) }
             set { set("hello", StringConverter.self, toValue: newValue) }
@@ -16,7 +14,10 @@ class OperationTest: OmiseTestCase {
             set { set("key", StringConverter.self, toValue: newValue) }
         }
         
-        required init() { }
+        required init(attributes: JSONAttributes = [:]) {
+            super.init(attributes: attributes)
+            self.method = "POST"
+        }
     }
     
     func testDefault() {
