@@ -162,6 +162,7 @@
 		222139571CE1C5BF00B6BF43 /* Transfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transfer.swift; sourceTree = "<group>"; };
 		22338DAF1D211D7E00811363 /* Retrievable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Retrievable.swift; sourceTree = "<group>"; };
 		22338DB71D21392A00811363 /* Failable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Failable.swift; sourceTree = "<group>"; };
+		2258D8161D226D87006C4149 /* QuickStart.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = QuickStart.playground; sourceTree = "<group>"; };
 		225C4E4C1D223FF700A62F2C /* Updatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updatable.swift; sourceTree = "<group>"; };
 		225C4E4E1D22412A00A62F2C /* Destroyable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Destroyable.swift; sourceTree = "<group>"; };
 		2270E3981CC763F700F18814 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -245,6 +246,7 @@
 		220C32631CC762330060112E = {
 			isa = PBXGroup;
 			children = (
+				2258D8161D226D87006C4149 /* QuickStart.playground */,
 				220C326F1CC762330060112E /* OmiseSwift */,
 				2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */,
 				220C326E1CC762330060112E /* Products */,

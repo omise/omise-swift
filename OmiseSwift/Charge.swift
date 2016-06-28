@@ -94,8 +94,49 @@ public class Charge: ResourceObject {
     }
 }
 
+public class ChargeParams: Params {
+    public var customer: String? {
+        get { return get("customer", StringConverter.self) }
+        set { set("customer", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var card: String? {
+        get { return get("card", StringConverter.self) }
+        set { set("card", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var amount: Int64? {
+        get { return get("amount", Int64Converter.self) }
+        set { set("amount", Int64Converter.self, toValue: newValue) }
+    }
+    
+    public var currency: String? {
+        get { return get("currency", StringConverter.self) }
+        set { set("currency", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var description: String? {
+        get { return get("description", StringConverter.self) }
+        set { set("description", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var capture: Bool? {
+        get { return get("capture", BoolConverter.self) }
+        set { set("capture", BoolConverter.self, toValue: newValue) }
+    }
+    
+    public var returnUri: String? {
+        get { return get("return_uri", StringConverter.self) }
+        set { set("return_uri", StringConverter.self, toValue: newValue) }
+    }
+}
+
 extension Charge: Listable { }
 extension Charge: InstanceRetrievable { }
+
+extension Charge: Creatable {
+    public typealias CreateParams = ChargeParams
+}
 
 func exampleCharge() {
     Charge.list { (result) in
