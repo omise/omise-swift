@@ -138,6 +138,33 @@ extension Charge: Creatable {
     public typealias CreateParams = ChargeParams
 }
 
+extension Charge: Updatable {
+    public typealias UpdateParams = ChargeParams
+}
+
+extension Charge {
+    public typealias CaptureOperation = DefaultOperation<Charge>
+    public typealias ReverseOperation = DefaultOperation<Charge>
+    
+    public static func capture(using given: Client? = nil, id: String, callback: Request<CaptureOperation>.Callback) -> Request<CaptureOperation>? {
+        let operation = CaptureOperation(klass: self)
+        operation.method = "POST"
+        operation.path += "/\(URLEncoder.encodeURLPath(id))/capture"
+        
+        let client = resolveClient(given: given)
+        return client.call(operation, callback: callback)
+    }
+    
+    public static func reverse(using given: Client? = nil, id: String, callback: Request<ReverseOperation>.Callback) -> Request<ReverseOperation>? {
+        let operation = ReverseOperation(klass: self)
+        operation.method = "POST"
+        operation.path += "/\(URLEncoder.encodeURLPath(id))/reverse"
+        
+        let client = resolveClient(given: given)
+        return client.call(operation, callback: callback)
+    }
+}
+
 func exampleCharge() {
     Charge.list { (result) in
         switch result {
@@ -152,6 +179,15 @@ func exampleCharge() {
         switch result {
         case let .Success(charge):
             print("charge: \(charge.id) \(charge.amount)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+    
+    Charge.reverse(id: "chrg_test_123") { (result) in
+        switch result {
+        case let .Success(charge):
+            print("reversed charge: \(charge.id)")
         case let .Fail(err):
             print("error: \(err)")
         }
