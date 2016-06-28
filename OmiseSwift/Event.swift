@@ -1,6 +1,8 @@
 import Foundation
 
 public class Event: ResourceObject {
+    public override class var resourcePath: String { return "/events" }
+    
     public var key: String? {
         get { return get("key", StringConverter.self) }
         set { set("key", StringConverter.self, toValue: newValue) }
@@ -18,3 +20,6 @@ public class Event: ResourceObject {
         }
     }
 }
+
+extension Event: Listable { }
+extension Event: InstanceRetrievable { }
