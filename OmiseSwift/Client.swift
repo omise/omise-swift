@@ -1,19 +1,5 @@
 import Foundation
 
-var defaultClient: Client? = nil
-
-func getDefaultClient() -> Client {
-    guard let client = defaultClient else {
-        defaultClient = Client(config: defaultConfig)
-        return getDefaultClient()
-    }
-    
-    return client
-}
-
-func resolveClient(given client: Client?, inside context: ResourceObject? = nil) -> Client {
-    return client ?? context?.attachedClient ?? getDefaultClient()
-}
 
 public class Client: NSObject {
     public static let sessionIdentifier = "omise.co"
