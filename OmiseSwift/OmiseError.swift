@@ -15,7 +15,7 @@ public enum OmiseError: ErrorType {
         case .IO(let err):
             return "I/O error: \(err.description)"
         case .API(let err):
-            return "(\(err.statusCode ?? 0)/\(err.code)) \(err.message)"
+            return "(\(err.statusCode ?? 0)/\(err.code ?? "unknown")) \(err.message ?? "unknown error")"
         }
     }
 }
