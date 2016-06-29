@@ -154,15 +154,6 @@ func createRefundOnCharge(charge: Charge, amount: Int64) {
     params.amount = amount
     params.void = false
     
-    Refund.create(params: params) { (result) in
-        switch result {
-        case let .Success(refund):
-            print("created refund: \(refund.id)")
-        case let .Fail(err):
-            print("error: \(err)")
-        }
-    }
-    
     Refund.create(parent: charge, params: params) { (result) in
         switch result {
         case let .Success(result):

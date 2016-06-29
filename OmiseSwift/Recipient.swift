@@ -82,7 +82,7 @@ public class RecipientParams: Params {
 }
 
 extension Recipient: Listable { }
-extension Recipient: InstanceRetrievable { }
+extension Recipient: Retrievable { }
 
 extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams

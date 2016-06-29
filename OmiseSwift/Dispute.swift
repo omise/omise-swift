@@ -37,7 +37,7 @@ public class DisputeParams: Params {
 }
 
 extension Dispute: Listable { }
-extension Dispute: InstanceRetrievable { }
+extension Dispute: Retrievable { }
 
 extension Dispute: Updatable {
     public typealias UpdateParams = DisputeParams

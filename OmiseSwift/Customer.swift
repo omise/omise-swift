@@ -42,7 +42,7 @@ public class CustomerParams: Params {
 }
 
 extension Customer: Listable { }
-extension Customer: InstanceRetrievable { }
+extension Customer: Retrievable { }
 
 extension Customer: Creatable {
     public typealias CreateParams = CustomerParams

@@ -62,7 +62,7 @@ public class TransferParams: Params {
 }
 
 extension Transfer: Listable { }
-extension Transfer: InstanceRetrievable { }
+extension Transfer: Retrievable { }
 
 extension Transfer: Creatable {
     public typealias CreateParams = TransferParams

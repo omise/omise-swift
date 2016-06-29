@@ -22,4 +22,4 @@ public class Event: ResourceObject {
 }
 
 extension Event: Listable { }
-extension Event: InstanceRetrievable { }
+extension Event: Retrievable { }

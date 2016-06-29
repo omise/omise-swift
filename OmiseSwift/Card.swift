@@ -94,7 +94,7 @@ public class CardParams: Params {
 }
 
 extension Card: Listable { }
-extension Card: InstanceRetrievable { }
+extension Card: Retrievable { }
 extension Card: Destroyable { }
 
 extension Card: Updatable {

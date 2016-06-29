@@ -43,7 +43,7 @@ extension Refund: Creatable {
 }
 
 extension Refund: Listable { }
-extension Refund: InstanceRetrievable { }
+extension Refund: Retrievable { }
 
 func exampleRefund() {
     let charge = Charge()

@@ -132,7 +132,7 @@ public class ChargeParams: Params {
 }
 
 extension Charge: Listable { }
-extension Charge: InstanceRetrievable { }
+extension Charge: Retrievable { }
 
 extension Charge: Creatable {
     public typealias CreateParams = ChargeParams

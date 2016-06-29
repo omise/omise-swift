@@ -20,4 +20,4 @@ public class Transaction: ResourceObject {
 }
 
 extension Transaction: Listable { }
-extension Transaction: InstanceRetrievable { }
+extension Transaction: Retrievable { }
