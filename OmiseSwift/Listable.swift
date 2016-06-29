@@ -1,10 +1,8 @@
 import Foundation
 
 public protocol Listable { }
-public protocol ScopedListable { }
 
 public class ListParams: Params {
-    // from to offset limit order
     public var from: NSDate? {
         get { return get("from", DateConverter.self) }
         set { set("from", DateConverter.self, toValue: newValue) }
@@ -34,27 +32,16 @@ public class ListParams: Params {
 public extension Listable where Self: ResourceObject {
     public typealias ListOperation = DefaultOperation<OmiseList<Self>>
     
-    public static func list(using given: Client? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
-        let operation = ListOperation(
-            endpoint: info.endpoint,
-            method: "GET",
-            paths: [info.path],
-            params: params
-        )
+    public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
+        guard checkParent(self, parent: parent) else {
+            return nil
+        }
         
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
-    }
-}
-
-public extension ScopedListable where Self: ResourceObject {
-    public typealias ListOperation = DefaultOperation<OmiseList<Self>>
-
-    public static func list(using given: Client? = nil, parent: ResourceObject, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
         let operation = ListOperation(
             endpoint: info.endpoint,
             method: "GET",
-            paths: [parent.dynamicType.info.path, parent.id ?? "", info.path]
+            paths: buildResourcePaths(self, parent: parent),
+            params: params
         )
         
         let client = resolveClient(given: given)

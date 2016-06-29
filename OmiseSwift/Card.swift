@@ -93,11 +93,11 @@ public class CardParams: Params {
     }
 }
 
-extension Card: ScopedListable { }
-extension Card: ScopedInstanceRetrievable { }
-extension Card: ScopedDestroyable { }
+extension Card: Listable { }
+extension Card: InstanceRetrievable { }
+extension Card: Destroyable { }
 
-extension Card: ScopedUpdatable {
+extension Card: Updatable {
     public typealias UpdateParams = CardParams
 }
 

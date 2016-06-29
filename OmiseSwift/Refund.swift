@@ -38,12 +38,12 @@ public class RefundParams: Params {
     }
 }
 
-extension Refund: ScopedCreatable {
+extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
 
-extension Refund: ScopedListable { }
-extension Refund: ScopedInstanceRetrievable { }
+extension Refund: Listable { }
+extension Refund: InstanceRetrievable { }
 
 func exampleRefund() {
     let charge = Charge()

@@ -11,13 +11,11 @@ XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
  # Getting Started
  
  Start by making sure you can import the `Omise` module into your codebase. Follow Carthage's [Getting Started](https://github.com/Carthage/Carthage#getting-started) guide to incorporate this library into your application. The Omise-swift module is compatible with both iOS and OSX target.
+ 
+ You will also need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at https://omise.co and click the aforementioned link to obtain your keys.
  */
 import Omise // <-- Make sure this works first.
 
-/*: configuration
- 
- You will need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at https://omise.co and click the aforementioned link to obtain your keys.
- */
 let publicKey = "pkey_test_change_me" // <-- Change to your keys to see result in playground!
 let secretKey = "skey_test_change_me"
 
@@ -46,7 +44,19 @@ let customClient = Client(
  
  ## Calling Omise APIs
  
- Use the API methods on the model classes to invoke our APIs. For example, to retrieve current account and current balance:
+ Use the API methods on the model classes to invoke our APIs. Supply a callback method to receive the API result. Result is an enum with two states, `.Success` and `.Fail` For example, to retrieve current account:
+ 
+ ```
+ Account.retrieve { (result) in
+    switch result {
+    case let .Success(account):
+        // handle account
+ 
+    case let .Fail(err):
+        // handle failure
+    }
+ }
+ ```
  */
 Account.retrieve { (result) in
     switch result {
@@ -78,6 +88,16 @@ Balance.retrieve { (result) in
 
 /*:
  Some APIs require specifying additional parameters, these are usually named after the models with a `Params` suffix and you can supply them to API methods using the `params:` parameter.
+ 
+ ```
+ let params = TokenParams()
+ params.number = "4242424242424242"
+ params.name = "Example"
+ 
+ Token.create(params: params) { (result) in
+    // ...
+ }
+ ```
  */
 func createToken() {
     let params = TokenParams()
@@ -109,6 +129,45 @@ func createChargeWithToken(token: Token) {
         switch result {
         case let .Success(charge):
             print("created charge: \(charge.id)")
+            createRefundOnCharge(charge, amount: 50000)
+            
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+}
+
+/*:
+ Nested APIs require specifying a parent. For example, all Refund APIs require a charge id. You can call them by supplying an instance of the parent object using the `parent` parameter like so:
+ 
+ ```
+ let charge = Charge()
+ charge.id = "chrg_test_123"
+ 
+ Refund.list(parent: charge) { (result) in
+    // ...
+ }
+ ```
+ */
+func createRefundOnCharge(charge: Charge, amount: Int64) {
+    let params = RefundParams()
+    params.amount = amount
+    params.void = false
+    
+    Refund.create(params: params) { (result) in
+        switch result {
+        case let .Success(refund):
+            print("created refund: \(refund.id)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+    
+    Refund.create(parent: charge, params: params) { (result) in
+        switch result {
+        case let .Success(result):
+            print("created refund: \(result.id)")
+            
         case let .Fail(err):
             print("error: \(err)")
         }
