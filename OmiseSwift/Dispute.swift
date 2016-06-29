@@ -47,7 +47,7 @@ extension Dispute {
     public static func list(using given: Client? = nil, state: DisputeStatus, params: ListParams? = nil, callback: Request<Dispute.ListOperation>.Callback) -> Request<Dispute.ListOperation>? {
         let attributes = params?.normalizedAttributes ?? [:]
         let operation = ListOperation(klass: self, attributes: attributes)
-        operation.path += state.rawValue
+        operation.pathComponents += [state.rawValue]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

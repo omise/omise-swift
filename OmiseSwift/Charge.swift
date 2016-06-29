@@ -149,7 +149,7 @@ extension Charge {
     public static func capture(using given: Client? = nil, id: String, callback: Request<CaptureOperation>.Callback) -> Request<CaptureOperation>? {
         let operation = CaptureOperation(klass: self)
         operation.method = "POST"
-        operation.path += "/\(URLEncoder.encodeURLPath(id))/capture"
+        operation.pathComponents += [id, "capture"]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
@@ -158,7 +158,7 @@ extension Charge {
     public static func reverse(using given: Client? = nil, id: String, callback: Request<ReverseOperation>.Callback) -> Request<ReverseOperation>? {
         let operation = ReverseOperation(klass: self)
         operation.method = "POST"
-        operation.path += "/\(URLEncoder.encodeURLPath(id))/reverse"
+        operation.pathComponents += [id, "reverse"]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

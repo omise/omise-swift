@@ -47,7 +47,7 @@ public extension ScopedListable where Self: ResourceObject {
 
     public static func list(using given: Client? = nil, parent: ResourceObject, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
         let operation = ListOperation(klass: parent.dynamicType, attributes: params?.normalizedAttributes ?? [:])
-        operation.path += "/\(parent.id ?? "")\(self.resourcePath)"
+        operation.pathComponents += [parent.id ?? "", self.resourcePath]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

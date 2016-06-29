@@ -1,16 +1,6 @@
 import Foundation
 
 public class URLEncoder {
-    public class func encodeURLPath(path: String) -> String {
-        let charset = NSCharacterSet.URLPathAllowedCharacterSet()
-        guard let result = path.stringByAddingPercentEncodingWithAllowedCharacters(charset) else {
-            omiseWarn("failed to url-escape string: \(path)")
-            return "INVALID"
-        }
-        
-        return result
-    }
-    
     public class func encode(attributes: JSONAttributes) -> [NSURLQueryItem] {
         return encodeDict(attributes, parentKey: nil)
             .sort({ (item1, item2) in item1.name < item2.name })

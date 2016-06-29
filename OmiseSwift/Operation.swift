@@ -17,7 +17,7 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     
     public var endpoint: Endpoint = Endpoint.API
     public var method: String = "GET"
-    public var path: String = "/"
+    public var pathComponents: [String] = []
     
     public var encodedAttributes: [NSURLQueryItem] {
         return URLEncoder.encode(attributes)
@@ -34,7 +34,7 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     public convenience init(klass: ResourceObject.Type, attributes: JSONAttributes = [:]) {
         self.init(attributes: attributes)
         self.endpoint = klass.resourceEndpoint
-        self.path = klass.resourcePath
+        self.pathComponents = [klass.resourcePath]
     }
     
     public required init(attributes: JSONAttributes = [:]) {
@@ -42,7 +42,10 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     }
     
     private func buildUrl() -> NSURL {
-        let url = endpoint.url.URLByAppendingPathComponent(path)
+        let url = pathComponents.reduce(endpoint.url) { (url, segment) -> NSURL in
+            return url.URLByAppendingPathComponent(segment)
+        }
+        
         guard method.uppercaseString == "GET" || method.uppercaseString == "HEAD" else {
             return url
         }

@@ -8,7 +8,7 @@ public extension InstanceRetrievable where Self: ResourceObject {
     
     public static func retrieve(using given: Client? = nil, id: String, callback: Request<InstanceRetrieveOperation>.Callback) -> Request<InstanceRetrieveOperation>? {
         let operation = InstanceRetrieveOperation(klass: self)
-        operation.path += "/\(URLEncoder.encodeURLPath(id))"
+        operation.pathComponents += [id]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
@@ -20,7 +20,7 @@ public extension ScopedInstanceRetrievable where Self: ResourceObject {
     
     public static func retrieve(using given: Client? = nil, parent: ResourceObject, id: String, callback: Request<InstanceRetrieveOperation>.Callback) -> Request<InstanceRetrieveOperation>? {
         let operation = InstanceRetrieveOperation(klass: parent.dynamicType)
-        operation.path += "/\(parent.id ?? "")\(self.resourcePath)"
+        operation.pathComponents += [parent.id ?? "", self.resourcePath, id]
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
