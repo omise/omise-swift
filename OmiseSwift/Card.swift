@@ -1,6 +1,8 @@
 import Foundation
 
 public class Card: ResourceObject {
+    public override class var resourcePath: String { return "/cards" }
+    
     public var country: String? {
         get { return get("country", StringConverter.self) }
         set { set("country", StringConverter.self, toValue: newValue) }

@@ -1,6 +1,8 @@
 import Foundation
 
 public class Customer: ResourceObject {
+    public override class var resourcePath: String { return "/customers" }
+    
     public var defaultCard: String? {
         get { return get("default_card", StringConverter.self) }
         set { set("default_card", StringConverter.self, toValue: newValue) }

@@ -1,8 +1,8 @@
 import Foundation
 
 public class Token: ResourceObject {
-    public override class var resourcePath: String { return "/tokens" }
     public override class var resourceEndpoint: Endpoint { return Endpoint.Vault }
+    public override class var resourcePath: String { return "/tokens" }
     
     public var used: Bool? {
         get { return get("used", BoolConverter.self) }
