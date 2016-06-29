@@ -19,7 +19,7 @@ public class Balance: ResourceObject {
     }
 }
 
-extension Balance: Retrievable { }
+extension Balance: SingletonRetrievable { }
 
 func exampleBalance() {
     Balance.retrieve { (result) in

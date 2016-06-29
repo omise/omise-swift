@@ -9,7 +9,7 @@ public class Account: ResourceObject {
     }
 }
 
-extension Account: Retrievable { }
+extension Account: SingletonRetrievable { }
 
 func exampleAccount() {
     Account.retrieve { (result) in
