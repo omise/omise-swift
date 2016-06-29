@@ -92,6 +92,10 @@ public class Request<TOperation: Operation>: NSObject {
                 
             case 200..<300:
                 let result: TOperation.Result = try OmiseSerializer.deserialize(data)
+                if let resource = result as? ResourceObject {
+                    resource.attachedClient = client
+                }
+                
                 return performCallback(.Success(result: result))
                 
             default:
