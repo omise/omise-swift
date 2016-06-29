@@ -12,7 +12,7 @@ XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
  
  Start by making sure you can import the `Omise` module into your codebase. Follow Carthage's [Getting Started](https://github.com/Carthage/Carthage#getting-started) guide to incorporate this library into your application. The Omise-swift module is compatible with both iOS and OSX target.
  
- You will also need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at https://omise.co and click the aforementioned link to obtain your keys.
+ You will also need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at [https://omise.co](https://omise.co) and check the Keys section to obtain your keys.
  */
 import Omise // <-- Make sure this works first.
 
@@ -44,9 +44,9 @@ let customClient = Client(
  
  ## Calling Omise APIs
  
- Use the API methods on the model classes to invoke our APIs. Supply a callback method to receive the API result. Result is an enum with two states, `.Success` and `.Fail` For example, to retrieve current account:
+ Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.Success` and `.Fail`. For example, to retrieve current account:
  
- ```
+ ````
  Account.retrieve { (result) in
     switch result {
     case let .Success(account):
@@ -56,19 +56,9 @@ let customClient = Client(
         // handle failure
     }
  }
- ```
+ ````
  */
 Account.retrieve { (result) in
-    switch result {
-    case let .Success(account):
-        print("account: \(account.email)")
-    case let .Fail(err):
-        print("error: \(err)")
-    }
-}
-
-// Supply the `using:` parameter to use a custom client:
-Account.retrieve(using: customClient) { (result) in
     switch result {
     case let .Success(account):
         print("account: \(account.email)")
@@ -87,9 +77,21 @@ Balance.retrieve { (result) in
 }
 
 /*:
+ Supply the `using:` parameter to use a custom client:
+ */
+Account.retrieve(using: customClient) { (result) in
+    switch result {
+    case let .Success(account):
+        print("account: \(account.email)")
+    case let .Fail(err):
+        print("error: \(err)")
+    }
+}
+
+/*:
  Some APIs require specifying additional parameters, these are usually named after the models with a `Params` suffix and you can supply them to API methods using the `params:` parameter.
  
- ```
+ ````
  let params = TokenParams()
  params.number = "4242424242424242"
  params.name = "Example"
@@ -97,7 +99,7 @@ Balance.retrieve { (result) in
  Token.create(params: params) { (result) in
     // ...
  }
- ```
+ ````
  */
 func createToken() {
     let params = TokenParams()
@@ -138,21 +140,44 @@ func createChargeWithToken(token: Token) {
 }
 
 /*:
- Nested APIs require specifying a parent. For example, all Refund APIs require a charge id. You can call them by supplying an instance of the parent object using the `parent` parameter like so:
+ ### Nested APIS
  
- ```
+ Some APIs, such as the Refund API, require specifying a charge id. You can call them by supplying an instance of the parent object using the `parent` parameter like so:
+ 
+ ````
  let charge = Charge()
  charge.id = "chrg_test_123"
  
  Refund.list(parent: charge) { (result) in
     // ...
  }
- ```
+ ````
+ 
+ Or alternatively, you can call the related methods on the parent instance directly:
+ 
+ ````
+ let charge = Charge()
+ charge.id = "chrg_test_123"
+ 
+ charge.listRefunds { (result) in
+    // ...
+ }
+ ````
  */
 func createRefundOnCharge(charge: Charge, amount: Int64) {
     let params = RefundParams()
-    params.amount = amount
+    params.amount = amount / 2
     params.void = false
+    
+    charge.createRefund(params: params) { (result) in
+        switch result {
+        case let .Success(refund):
+            print("created refund: \(refund.id)")
+            
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
     
     Refund.create(parent: charge, params: params) { (result) in
         switch result {
