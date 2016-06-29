@@ -60,9 +60,11 @@ extension Token { // can't use Retrievable because this uses the API endpoint in
     public typealias RetrieveOperation = DefaultOperation<Token>
     
     public static func retrieve(using given: Client? = nil, id: String, callback: Request<RetrieveOperation>.Callback) -> Request<RetrieveOperation>? {
-        let operation = RetrieveOperation(klass: self)
-        operation.endpoint = Endpoint.API
-        operation.pathComponents += [id]
+        let operation = RetrieveOperation(
+            endpoint: Endpoint.API,
+            method: "GET",
+            paths: [resourcePath, id]
+        )
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

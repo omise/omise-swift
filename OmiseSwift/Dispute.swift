@@ -45,9 +45,11 @@ extension Dispute: Updatable {
 
 extension Dispute {
     public static func list(using given: Client? = nil, state: DisputeStatus, params: ListParams? = nil, callback: Request<Dispute.ListOperation>.Callback) -> Request<Dispute.ListOperation>? {
-        let attributes = params?.normalizedAttributes ?? [:]
-        let operation = ListOperation(klass: self, attributes: attributes)
-        operation.pathComponents += [state.rawValue]
+        let operation = ListOperation(
+            endpoint: resourceEndpoint,
+            method: "GET",
+            paths: [resourcePath, state.rawValue]
+        )
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

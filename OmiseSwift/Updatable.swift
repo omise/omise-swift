@@ -1,20 +1,23 @@
 import Foundation
 
 public protocol Updatable {
-    associatedtype UpdateParams: AttributesContainer
+    associatedtype UpdateParams: Params
 }
 
 public protocol ScopedUpdatable {
-    associatedtype UpdateParams: AttributesContainer
+    associatedtype UpdateParams: Params
 }
 
 extension Updatable where Self: ResourceObject {
     public typealias UpdateOperation = DefaultOperation<Self>
     
     public static func update(using given: Client? = nil, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
-        let operation = UpdateOperation(klass: self, attributes: params.normalizedAttributes)
-        operation.method = "PATCH"
-        operation.pathComponents += [id]
+        let operation = UpdateOperation(
+            endpoint: resourceEndpoint,
+            method: "PATCH",
+            paths: [resourcePath, id],
+            params: params
+        )
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
@@ -25,9 +28,12 @@ extension ScopedUpdatable where Self: ResourceObject {
     public typealias UpdateOperation = DefaultOperation<Self>
     
     public static func update(using given: Client? = nil, parent: ResourceObject, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
-        let operation = UpdateOperation(klass: parent.dynamicType, attributes: params.normalizedAttributes)
-        operation.method = "PATCH"
-        operation.pathComponents += [parent.id ?? "", self.resourcePath, id]
+        let operation = UpdateOperation(
+            endpoint: resourceEndpoint,
+            method: "PATCH",
+            paths: [parent.dynamicType.resourcePath, parent.id ?? "", resourcePath, id],
+            params: params
+        )
         
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)

@@ -9,19 +9,13 @@ public protocol Operation: class {
     var payload: NSData? { get }
 }
 
-public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContainer {
+public class DefaultOperation<TResult: OmiseObject>: Operation {
     public typealias Result = TResult
     
-    public var attributes: JSONAttributes
-    public var children: [String : AttributesContainer] = [:]
-    
-    public var endpoint: Endpoint = Endpoint.API
-    public var method: String = "GET"
-    public var pathComponents: [String] = []
-    
-    public var encodedAttributes: [NSURLQueryItem] {
-        return URLEncoder.encode(attributes)
-    }
+    public let endpoint: Endpoint
+    public let method: String
+    public let pathComponents: [String]
+    public let params: Params?
     
     public var url: NSURL {
         return buildUrl()
@@ -31,14 +25,11 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
         return buildPayload()
     }
     
-    public convenience init(klass: ResourceObject.Type, attributes: JSONAttributes = [:]) {
-        self.init(attributes: attributes)
-        self.endpoint = klass.resourceEndpoint
-        self.pathComponents = [klass.resourcePath]
-    }
-    
-    public required init(attributes: JSONAttributes = [:]) {
-        self.attributes = attributes
+    public init(endpoint: Endpoint, method: String, paths: [String], params: Params? = nil) {
+        self.endpoint = endpoint
+        self.method = method
+        self.pathComponents = paths
+        self.params = params
     }
     
     private func buildUrl() -> NSURL {
@@ -51,16 +42,16 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
         }
         
         guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
-            NSLog("failed to build url components for url: \(url)")
+            omiseWarn("failed to build url components for url: \(url)")
             return url
         }
         
-        let queries = encodedAttributes
-        guard queries.count > 0 else { return url }
+        if let params = self.params {
+            urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
+        }
         
-        urlComponents.queryItems = URLEncoder.encode(attributes)
         guard let parameterizedUrl = urlComponents.URL else {
-            NSLog("failed to append query items to the url: \(url)")
+            omiseWarn("failed to append query items to the url: \(url)")
             return url
         }
         
@@ -68,15 +59,16 @@ public class DefaultOperation<TResult: OmiseObject>: Operation, AttributesContai
     }
     
     private func buildPayload() -> NSData? {
-        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
-            NSLog("failed to build url components for url: \(url)")
+        guard let params = self.params else {
             return nil
         }
         
-        let queries = encodedAttributes
-        guard queries.count > 0 else { return nil }
+        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+            omiseWarn("failed to build url components for url: \(url)")
+            return nil
+        }
         
-        urlComponents.queryItems = URLEncoder.encode(attributes)
+        urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
         return urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
     }
 }
