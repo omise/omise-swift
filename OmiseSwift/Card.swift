@@ -1,7 +1,9 @@
 import Foundation
 
 public class Card: ResourceObject {
-    public override class var resourcePath: String { return "/cards" }
+    public override class var info: ResourceInfo {
+        return ResourceInfo(parentType: Customer.self, path: "/cards")
+    }
     
     public var country: String? {
         get { return get("country", StringConverter.self) }

@@ -7,9 +7,9 @@ public extension Retrievable where Self: ResourceObject {
     
     public static func retrieve(using given: Client? = nil, callback: Request<RetrieveOperation>.Callback?) -> Request<RetrieveOperation>? {
         let operation = RetrieveOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "GET",
-            paths: [resourcePath]
+            paths: [info.path]
         )
         
         let client = resolveClient(given: given)

@@ -1,7 +1,7 @@
 import Foundation
 
 public class Transaction: ResourceObject {
-    public override class var resourcePath: String { return "/transactions" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/transactions") }
     
     public var type: TransactionType? {
         get { return get("type", EnumConverter<TransactionType>.self) }

@@ -13,9 +13,9 @@ extension Creatable where Self: ResourceObject {
     
     public static func create(using given: Client? = nil, params: CreateParams, callback: Request<CreateOperation>.Callback) -> Request<CreateOperation>? {
         let operation = CreateOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "POST",
-            paths: [resourcePath],
+            paths: [info.path],
             params: params
         )
         
@@ -29,9 +29,9 @@ extension ScopedCreatable where Self: ResourceObject {
     
     public static func create(using given: Client? = nil, parent: ResourceObject, params: CreateParams, callback: Request<CreateOperation>.Callback) -> Request<CreateOperation>? {
         let operation = CreateOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "POST",
-            paths: [parent.dynamicType.resourcePath, parent.id ?? "", resourcePath],
+            paths: [parent.dynamicType.info.path, parent.id ?? "", info.path],
             params: params
         )
         

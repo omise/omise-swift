@@ -36,9 +36,9 @@ public extension Listable where Self: ResourceObject {
     
     public static func list(using given: Client? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
         let operation = ListOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "GET",
-            paths: [resourcePath],
+            paths: [info.path],
             params: params
         )
         
@@ -52,9 +52,9 @@ public extension ScopedListable where Self: ResourceObject {
 
     public static func list(using given: Client? = nil, parent: ResourceObject, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
         let operation = ListOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "GET",
-            paths: [parent.dynamicType.resourcePath, parent.id ?? "", resourcePath]
+            paths: [parent.dynamicType.info.path, parent.id ?? "", info.path]
         )
         
         let client = resolveClient(given: given)

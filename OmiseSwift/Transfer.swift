@@ -1,7 +1,7 @@
 import Foundation
 
 public class Transfer: ResourceObject {
-    public override class var resourcePath: String { return "/transfers" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/transfers") }
     
     public var recipient: String? {
         get { return get("recipient", StringConverter.self) }

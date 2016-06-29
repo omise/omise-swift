@@ -1,7 +1,7 @@
 import Foundation
 
 public class Balance: ResourceObject {
-    public override class var resourcePath: String { return "/balance" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/balance") }
 
     public var available: Int64? {
         get { return get("available", Int64Converter.self) }

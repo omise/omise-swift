@@ -1,7 +1,7 @@
 import Foundation
 
 public class Event: ResourceObject {
-    public override class var resourcePath: String { return "/events" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/events") }
     
     public var key: String? {
         get { return get("key", StringConverter.self) }

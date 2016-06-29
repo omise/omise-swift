@@ -1,7 +1,7 @@
 import Foundation
 
 public class Dispute: ResourceObject {
-    public override class var resourcePath: String { return "/disputes" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/disputes") }
     
     public var amount: Int64? {
         get { return get("amount", Int64Converter.self) }
@@ -46,9 +46,9 @@ extension Dispute: Updatable {
 extension Dispute {
     public static func list(using given: Client? = nil, state: DisputeStatus, params: ListParams? = nil, callback: Request<Dispute.ListOperation>.Callback) -> Request<Dispute.ListOperation>? {
         let operation = ListOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "GET",
-            paths: [resourcePath, state.rawValue]
+            paths: [info.path, state.rawValue]
         )
         
         let client = resolveClient(given: given)

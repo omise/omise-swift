@@ -1,8 +1,9 @@
 import Foundation
 
 public class Token: ResourceObject {
-    public override class var resourceEndpoint: Endpoint { return Endpoint.Vault }
-    public override class var resourcePath: String { return "/tokens" }
+    public override class var info: ResourceInfo {
+        return ResourceInfo(endpoint: .Vault, path: "/tokens")
+    }
     
     public var used: Bool? {
         get { return get("used", BoolConverter.self) }
@@ -63,7 +64,7 @@ extension Token { // can't use Retrievable because this uses the API endpoint in
         let operation = RetrieveOperation(
             endpoint: Endpoint.API,
             method: "GET",
-            paths: [resourcePath, id]
+            paths: [info.path, id]
         )
         
         let client = resolveClient(given: given)

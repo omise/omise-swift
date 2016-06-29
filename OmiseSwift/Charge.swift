@@ -1,7 +1,7 @@
 import Foundation
 
 public class Charge: ResourceObject {
-    public override class var resourcePath: String { return "/charges" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/charges") }
     
     public var status: ChargeStatus? {
         get { return get("status", EnumConverter.self) }
@@ -148,9 +148,9 @@ extension Charge {
     
     public static func capture(using given: Client? = nil, id: String, callback: Request<CaptureOperation>.Callback) -> Request<CaptureOperation>? {
         let operation = CaptureOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "POST",
-            paths: [resourcePath, id, "capture"]
+            paths: [info.path, id, "capture"]
         )
         
         let client = resolveClient(given: given)
@@ -159,9 +159,9 @@ extension Charge {
     
     public static func reverse(using given: Client? = nil, id: String, callback: Request<ReverseOperation>.Callback) -> Request<ReverseOperation>? {
         let operation = ReverseOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "POST",
-            paths: [resourcePath, id, "reverse"]
+            paths: [info.path, id, "reverse"]
         )
         
         let client = resolveClient(given: given)

@@ -1,7 +1,7 @@
 import Foundation
 
 public class Account: ResourceObject {
-    public override class var resourcePath: String { return "/account" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/account") }
     
     public var email: String? {
         get { return get("email", StringConverter.self) }

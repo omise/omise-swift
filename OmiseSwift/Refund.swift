@@ -1,7 +1,9 @@
 import Foundation
 
 public class Refund: ResourceObject {
-    public override class var resourcePath: String { return "/refunds" }
+    public override class var info: ResourceInfo {
+        return ResourceInfo(parentType: Charge.self, path: "/refunds")
+    }
     
     public var amount: Int64? {
         get { return get("amount", Int64Converter.self) }

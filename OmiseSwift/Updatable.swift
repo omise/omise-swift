@@ -13,9 +13,9 @@ extension Updatable where Self: ResourceObject {
     
     public static func update(using given: Client? = nil, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
         let operation = UpdateOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "PATCH",
-            paths: [resourcePath, id],
+            paths: [info.path, id],
             params: params
         )
         
@@ -29,9 +29,9 @@ extension ScopedUpdatable where Self: ResourceObject {
     
     public static func update(using given: Client? = nil, parent: ResourceObject, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
         let operation = UpdateOperation(
-            endpoint: resourceEndpoint,
+            endpoint: info.endpoint,
             method: "PATCH",
-            paths: [parent.dynamicType.resourcePath, parent.id ?? "", resourcePath, id],
+            paths: [parent.dynamicType.info.path, parent.id ?? "", info.path, id],
             params: params
         )
         

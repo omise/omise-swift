@@ -1,7 +1,7 @@
 import Foundation
 
 public class Recipient: ResourceObject {
-    public override class var resourcePath: String { return "/recipients" }
+    public override class var info: ResourceInfo { return ResourceInfo(path: "/recipients") }
     
     public var verified: Bool? {
         get { return get("verified", BoolConverter.self) }

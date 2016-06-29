@@ -1,10 +1,9 @@
 import Foundation
 
 public class ResourceObject: OmiseObject {
-    var attachedClient: Client? = nil
+    class var info: ResourceInfo { return ResourceInfo() }
     
-    public class var resourcePath: String { return "/" }
-    public class var resourceEndpoint: Endpoint { return Endpoint.API }
+    var attachedClient: Client? = nil
 
     public var id: String? {
         get { return get("id", StringConverter.self) }
