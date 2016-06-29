@@ -56,6 +56,19 @@ extension Token: Creatable {
     public typealias CreateParams = TokenParams
 }
 
+extension Token { // can't use Retrievable because this uses the API endpoint instead of the vault :facepalm:
+    public typealias RetrieveOperation = DefaultOperation<Token>
+    
+    public static func retrieve(using given: Client? = nil, id: String, callback: Request<RetrieveOperation>.Callback) -> Request<RetrieveOperation>? {
+        let operation = RetrieveOperation(klass: self)
+        operation.endpoint = Endpoint.API
+        operation.path += "/\(URLEncoder.encodeURLPath(id))"
+        
+        let client = resolveClient(given: given)
+        return client.call(operation, callback: callback)
+    }
+}
+
 func exampleToken() {
     let params = TokenParams()
     params.number = "4242424242424242"

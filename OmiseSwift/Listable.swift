@@ -1,6 +1,7 @@
 import Foundation
 
 public protocol Listable { }
+public protocol ScopedListable { }
 
 public class ListParams: Params {
     // from to offset limit order
@@ -38,5 +39,17 @@ public extension Listable where Self: ResourceObject {
         
         let client = resolveClient(given: given)
         return client.call(ListOperation(klass: self, attributes: attributes), callback: callback)
+    }
+}
+
+public extension ScopedListable where Self: ResourceObject {
+    public typealias ListOperation = DefaultOperation<OmiseList<Self>>
+
+    public static func list(using given: Client? = nil, parent: ResourceObject, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
+        let operation = ListOperation(klass: parent.dynamicType, attributes: params?.normalizedAttributes ?? [:])
+        operation.path += "/\(parent.id ?? "")\(self.resourcePath)"
+        
+        let client = resolveClient(given: given)
+        return client.call(operation, callback: callback)
     }
 }

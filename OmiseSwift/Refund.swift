@@ -1,6 +1,8 @@
 import Foundation
 
 public class Refund: ResourceObject {
+    public override class var resourcePath: String { return "/refunds" }
+    
     public var amount: Int64? {
         get { return get("amount", Int64Converter.self) }
         set { set("amount", Int64Converter.self, toValue: newValue) }
@@ -22,15 +24,39 @@ public class Refund: ResourceObject {
     }
 }
 
-/*package omise
-
-// Refund represents Omise's refund object.
-// See https://www.omise.co/refunds-api for more information.
-type Refund struct {
-    Base
-    Amount      int64  `json:"amount" pretty:""`
-    Currency    string `json:"currency" pretty:""`
-    Charge      string `json:"charge" pretty:""`
-    Transaction string `json:"transaction"`
+public class RefundParams: Params {
+    public var amount: Int64? {
+        get { return get("amount", Int64Converter.self) }
+        set { set("amount", Int64Converter.self, toValue: newValue) }
+    }
+    
+    public var void: Bool? {
+        get { return get("void", BoolConverter.self) }
+        set { set("void", BoolConverter.self, toValue: newValue) }
+    }
 }
-*/
+
+extension Refund: ScopedCreatable {
+    public typealias CreateParams = RefundParams
+}
+
+extension Refund: ScopedListable { }
+extension Refund: ScopedInstanceRetrievable { }
+
+func exampleRefund() {
+    let charge = Charge()
+    charge.id = "chrg_test_123"
+    
+    let params = RefundParams()
+    params.amount = 100000 // 1,000.00 THB
+    params.void = true
+    
+    Refund.create(parent: charge, params: params) { (result) in
+        switch result {
+        case let .Success(refund):
+            print("created refund: \(refund.id)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+}

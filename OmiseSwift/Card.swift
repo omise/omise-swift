@@ -61,3 +61,52 @@ public class Card: ResourceObject {
         set { set("security_code_check", BoolConverter.self, toValue: newValue) }
     }
 }
+
+public class CardParams: Params {
+    public var name: String? {
+        get { return get("name", StringConverter.self) }
+        set { set("name", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var expirationMonth: Int? {
+        get { return get("expiration_month", IntConverter.self) }
+        set { set("expiration_month", IntConverter.self, toValue: newValue) }
+    }
+    
+    public var expirationYear: Int? {
+        get { return get("expiration_year", IntConverter.self) }
+        set { set("expiration_year", IntConverter.self, toValue: newValue) }
+    }
+    
+    public var postalCode: String? {
+        get { return get("postal_code", StringConverter.self) }
+        set { set("postal_code", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var city: String? {
+        get { return get("city", StringConverter.self) }
+        set { set("city", StringConverter.self, toValue: newValue) }
+    }
+}
+
+extension Card: ScopedListable { }
+extension Card: ScopedInstanceRetrievable { }
+extension Card: ScopedDestroyable { }
+
+extension Card: ScopedUpdatable {
+    public typealias UpdateParams = CardParams
+}
+
+func exampleCard() {
+    let customer = Customer()
+    customer.id = "cust_test_123"
+    
+    Card.list(parent: customer) { (result) in
+        switch result {
+        case let .Success(cards):
+            print("cards: \(cards)")
+        case let .Fail(err):
+            print("error: \(err)")
+        }
+    }
+}
