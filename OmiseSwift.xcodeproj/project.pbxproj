@@ -127,6 +127,7 @@
 		98256FED1D22473700F91436 /* Destroyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4E1D22412A00A62F2C /* Destroyable.swift */; };
 		98256FF21D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
 		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
+		98256FF41D24CF4600F91436 /* ResourceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258D8171D23C480006C4149 /* ResourceInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -633,6 +634,7 @@
 				22A0F9911D21610300CA3D35 /* Retrievable.swift in Sources */,
 				220F536B1CD8BB1F00344B06 /* Dispute.swift in Sources */,
 				22112D1C1CC7970500D0DB54 /* Int64Converter.swift in Sources */,
+				98256FF41D24CF4600F91436 /* ResourceInfo.swift in Sources */,
 				2270E39A1CC7640B00F18814 /* Client.swift in Sources */,
 				222139551CE1C50100B6BF43 /* Lookup.swift in Sources */,
 				220F536D1CD8BCD500344B06 /* Recipient.swift in Sources */,
