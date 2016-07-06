@@ -4,7 +4,7 @@ public protocol Updatable {
     associatedtype UpdateParams: Params
 }
 
-extension Updatable where Self: ResourceObject {
+public extension Updatable where Self: ResourceObject {
     public typealias UpdateOperation = DefaultOperation<Self>
     
     public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {

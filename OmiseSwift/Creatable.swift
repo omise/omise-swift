@@ -4,7 +4,7 @@ public protocol Creatable {
     associatedtype CreateParams: Params
 }
 
-extension Creatable where Self: ResourceObject {
+public extension Creatable where Self: ResourceObject {
     public typealias CreateOperation = DefaultOperation<Self>
     
     public static func create(using given: Client? = nil, parent: ResourceObject? = nil, params: CreateParams, callback: Request<CreateOperation>.Callback) -> Request<CreateOperation>? {

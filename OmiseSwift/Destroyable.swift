@@ -2,7 +2,7 @@ import Foundation
 
 public protocol Destroyable { }
 
-extension Destroyable where Self: ResourceObject {
+public extension Destroyable where Self: ResourceObject {
     public typealias DestroyOperation = DefaultOperation<Self>
     
     public static func destroy(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: Request<DestroyOperation>.Callback) -> Request<DestroyOperation>? {
