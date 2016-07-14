@@ -61,7 +61,7 @@ let customClient = Client(
 Account.retrieve { (result) in
     switch result {
     case let .Success(account):
-        print("account: \(account.email)")
+        print("account: \(account.email ?? "(n/a)")")
     case let .Fail(err):
         print("error: \(err)")
     }
@@ -70,7 +70,7 @@ Account.retrieve { (result) in
 Balance.retrieve { (result) in
     switch result {
     case let .Success(balance):
-        print("money: \(balance.available)")
+        print("money: \(balance.available ?? 0)")
     case let .Fail(err):
         print("error: \(err)")
     }
@@ -82,7 +82,7 @@ Balance.retrieve { (result) in
 Account.retrieve(using: customClient) { (result) in
     switch result {
     case let .Success(account):
-        print("account: \(account.email)")
+        print("account: \(account.email ?? "(n/a)")")
     case let .Fail(err):
         print("error: \(err)")
     }
@@ -112,7 +112,7 @@ func createToken() {
     Token.create(params: params) { (result) in
         switch result {
         case let .Success(token):
-            print("created token: \(token.id)")
+            print("created token: \(token.id ?? "(n/a)")")
             createChargeWithToken(token)
             
         case let .Fail(err):
@@ -130,7 +130,7 @@ func createChargeWithToken(token: Token) {
     Charge.create(params: params) { (result) in
         switch result {
         case let .Success(charge):
-            print("created charge: \(charge.id)")
+            print("created charge: \(charge.id ?? "(n/a)")")
             createRefundOnCharge(charge, amount: 50000)
             
         case let .Fail(err):
@@ -172,7 +172,7 @@ func createRefundOnCharge(charge: Charge, amount: Int64) {
     charge.createRefund(params: params) { (result) in
         switch result {
         case let .Success(refund):
-            print("created refund: \(refund.id)")
+            print("created refund: \(refund.id ?? "(n/a)")")
             
         case let .Fail(err):
             print("error: \(err)")
@@ -182,7 +182,7 @@ func createRefundOnCharge(charge: Charge, amount: Int64) {
     Refund.create(parent: charge, params: params) { (result) in
         switch result {
         case let .Success(result):
-            print("created refund: \(result.id)")
+            print("created refund: \(result.id ?? "(n/a)")")
             
         case let .Fail(err):
             print("error: \(err)")

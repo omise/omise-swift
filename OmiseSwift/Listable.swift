@@ -32,18 +32,21 @@ public class ListParams: Params {
 public extension Listable where Self: ResourceObject {
     public typealias ListOperation = DefaultOperation<OmiseList<Self>>
     
-    public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
-        guard checkParent(self, parent: parent) else {
-            return nil
-        }
-        
-        let operation = ListOperation(
+    public static func listOperation(parent: ResourceObject?, params: ListParams?) -> ListOperation {
+        return ListOperation(
             endpoint: info.endpoint,
             method: "GET",
             paths: buildResourcePaths(self, parent: parent),
             params: params
         )
+    }
+    
+    public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
+        guard checkParent(self, parent: parent) else {
+            return nil
+        }
         
+        let operation = self.listOperation(parent, params: params)
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
     }

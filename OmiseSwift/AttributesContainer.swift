@@ -11,25 +11,29 @@ public protocol AttributesContainer: class {
 
 // convenience getters/setters
 public extension AttributesContainer {
-    func get<TConv: Converter>(key: String, _ converter: TConv.Type) -> TConv.Target? {
+    public init(id: String) {
+        self.init(attributes: ["id": id])
+    }
+    
+    public func get<TConv: Converter>(key: String, _ converter: TConv.Type) -> TConv.Target? {
         return TConv.convertFromAttribute(self.attributes[key])
     }
     
-    func set<TConv: Converter>(key: String, _ converter: TConv.Type, toValue value: TConv.Target?) {
+    public func set<TConv: Converter>(key: String, _ converter: TConv.Type, toValue value: TConv.Target?) {
         self.attributes[key] = TConv.convertToAttribute(value)
     }
     
     // TODO: Cache lists
-    func getList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type) -> [TItem] {
+    public func getList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type) -> [TItem] {
         let items = self.attributes[key] as? [JSONAttributes] ?? []
         return items.map({ (attributes) -> TItem in TItem(attributes: attributes) })
     }
     
-    func setList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
+    public func setList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
         attributes[key] = value.map({ (model) -> JSONAttributes in model.attributes })
     }
     
-    func getChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type) -> TChild? {
+    public func getChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type) -> TChild? {
         if let child = children[key] as? TChild {
             return child
         }
@@ -39,14 +43,14 @@ public extension AttributesContainer {
         return child
     }
     
-    func setChild<TChild: OmiseObject>(key: String, _ childType: TChild.Type, toValue child: TChild?) {
+    public func setChild<TChild: OmiseObject>(key: String, _ childType: TChild.Type, toValue child: TChild?) {
         children[key] = child
     }
 }
 
 // attributes normalization
 public extension AttributesContainer {
-    var normalizedAttributes: JSONAttributes {
+    public var normalizedAttributes: JSONAttributes {
         return normalizeAttributesWithPrefix(nil)
     }
     
