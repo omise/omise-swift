@@ -10,7 +10,7 @@ public class OmiseSerializer {
     public class func deserialize<TObject: OmiseObject>(data: NSData) throws -> TObject {
         let attributes = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
         guard let objAttributes = attributes as? JSONAttributes else {
-            throw OmiseError.Unexpected(message: "expected JSON object at top level.")
+            throw OmiseError.Unexpected("expected JSON object at top level.")
         }
         
         return TObject(attributes: objAttributes)

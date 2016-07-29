@@ -25,9 +25,9 @@ public class Client: NSObject {
             return try req.start()
             
         } catch let err as NSError {
-            performCallback() { callback?(.Fail(err: .IO(err: err))) }
+            performCallback() { callback?(.Fail(.IO(err))) }
         } catch let err as OmiseError {
-            performCallback() { callback?(.Fail(err: err)) }
+            performCallback() { callback?(.Fail(err)) }
         }
         
         return nil

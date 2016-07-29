@@ -1,10 +1,10 @@
 import Foundation
 
 public enum OmiseError: ErrorType {
-    case Unexpected(message: String)
-    case Configuration(message: String)
-    case IO(err: NSError)
-    case API(err: APIError)
+    case Unexpected(String)
+    case Configuration(String)
+    case IO(NSError)
+    case API(APIError)
     
     public var message: String {
         switch self {
