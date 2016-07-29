@@ -33,6 +33,10 @@ public class Client: NSObject {
         return nil
     }
     
+    public func cancelAllOperations() {
+        operationQueue.cancelAllOperations()
+    }
+    
     func performCallback(callback: () -> ()) {
         config.callbackQueue.addOperationWithBlock(callback)
     }
