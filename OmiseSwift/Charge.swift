@@ -143,10 +143,10 @@ extension Charge: Updatable {
 }
 
 extension Charge {
-    public typealias CaptureOperation = DefaultOperation<Charge>
-    public typealias ReverseOperation = DefaultOperation<Charge>
+    public typealias CaptureOperation = Operation<Charge>
+    public typealias ReverseOperation = Operation<Charge>
     
-    public static func capture(using given: Client? = nil, id: String, callback: Request<CaptureOperation>.Callback) -> Request<CaptureOperation>? {
+    public static func capture(using given: Client? = nil, id: String, callback: CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
         let operation = CaptureOperation(
             endpoint: info.endpoint,
             method: "POST",
@@ -157,7 +157,7 @@ extension Charge {
         return client.call(operation, callback: callback)
     }
     
-    public static func reverse(using given: Client? = nil, id: String, callback: Request<ReverseOperation>.Callback) -> Request<ReverseOperation>? {
+    public static func reverse(using given: Client? = nil, id: String, callback: ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
         let operation = ReverseOperation(
             endpoint: info.endpoint,
             method: "POST",

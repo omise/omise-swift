@@ -5,7 +5,7 @@ public protocol Updatable {
 }
 
 public extension Updatable where Self: ResourceObject {
-    public typealias UpdateOperation = DefaultOperation<Self>
+    public typealias UpdateOperation = Operation<Self>
     
     public static func updateOperation(parent: ResourceObject?, id: String, params: UpdateParams) -> UpdateOperation {
         return UpdateOperation(
@@ -16,7 +16,7 @@ public extension Updatable where Self: ResourceObject {
         )
     }
     
-    public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: Request<UpdateOperation>.Callback) -> Request<UpdateOperation>? {
+    public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: UpdateOperation.Callback) -> Request<UpdateOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

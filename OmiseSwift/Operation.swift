@@ -1,16 +1,8 @@
 import Foundation
 
-public protocol Operation: class {
-    associatedtype Result: OmiseObject
-    
-    var endpoint: Endpoint { get }
-    var method: String { get }
-    var url: NSURL { get }
-    var payload: NSData? { get }
-}
-
-public class DefaultOperation<TResult: OmiseObject>: Operation {
+public class Operation<TResult: OmiseObject> {
     public typealias Result = TResult
+    public typealias Callback = Failable<TResult> -> ()
     
     public let endpoint: Endpoint
     public let method: String

@@ -1,27 +1,20 @@
 import Foundation
 
-public class Request<TOperation: Operation>: NSObject {
-    public typealias Callback = Failable<TOperation.Result> -> ()
-    
-    private var dataTask: NSURLSessionTask? = nil
-    private var callback: Callback? = nil
+public class Request<TResult: OmiseObject>: NSObject {
+    public typealias Op = Operation<TResult>
     
     public let client: Client
-    public let operation: TOperation
-    public let urlRequest: NSURLRequest
+    public let operation: Op
+    public let callback: Op.Callback?
     
-    public init(client: Client, operation: TOperation, callback: Callback?) throws {
-        self.callback = callback
-        
+    public init(client: Client, operation: Op, callback: Op.Callback?) {
         self.client = client
         self.operation = operation
-        self.urlRequest = try Request.buildURLRequest(client.config, operation: operation)
+        self.callback = callback
         super.init()
-        
-        self.dataTask = client.session.dataTaskWithRequest(urlRequest, completionHandler: didComplete)
     }
     
-    static func buildURLRequest(config: Config, operation: TOperation) throws -> NSURLRequest {
+    static func buildURLRequest(config: Config, operation: Op) throws -> NSURLRequest {
         guard let host = operation.url.host else {
             throw OmiseError.Unexpected(message: "requested operation has invalid url.")
         }
@@ -63,8 +56,10 @@ public class Request<TOperation: Operation>: NSObject {
     }
     
     
-    func start() -> Request<TOperation> {
-        dataTask?.resume()
+    func start() throws -> Self {
+        let urlRequest = try Request.buildURLRequest(client.config, operation: operation)
+        let dataTask = client.session.dataTaskWithRequest(urlRequest, completionHandler: didComplete)
+        dataTask.resume()
         return self
     }
     
@@ -91,7 +86,7 @@ public class Request<TOperation: Operation>: NSObject {
                 return performCallback(.Fail(err: .API(err: err)))
                 
             case 200..<300:
-                let result: TOperation.Result = try OmiseSerializer.deserialize(data)
+                let result: TResult = try OmiseSerializer.deserialize(data)
                 if let resource = result as? ResourceObject {
                     resource.attachedClient = client
                 }
@@ -109,7 +104,7 @@ public class Request<TOperation: Operation>: NSObject {
         }
     }
     
-    private func performCallback(result: Failable<TOperation.Result>) {
+    private func performCallback(result: Failable<TResult>) {
         guard let cb = callback else { return }
         client.performCallback { cb(result) }
     }

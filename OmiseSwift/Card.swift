@@ -102,19 +102,19 @@ extension Card: Updatable {
 }
 
 extension Customer {
-    public func listCards(using given: Client? = nil, params: ListParams? = nil, callback: Request<Card.ListOperation>.Callback) -> Request<Card.ListOperation>? {
+    public func listCards(using given: Client? = nil, params: ListParams? = nil, callback: Card.ListOperation.Callback) -> Request<Card.ListOperation.Result>? {
         return Card.list(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
     
-    public func retrieveCard(using given: Client? = nil, id: String, callback: Request<Card.RetrieveOperation>.Callback) -> Request<Card.RetrieveOperation>? {
+    public func retrieveCard(using given: Client? = nil, id: String, callback: Card.RetrieveOperation.Callback) -> Request<Card.RetrieveOperation.Result>? {
         return Card.retrieve(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
     
-    public func updateCard(using given: Client? = nil, id: String, params: CardParams, callback: Request<Card.UpdateOperation>.Callback) -> Request<Card.UpdateOperation>? {
+    public func updateCard(using given: Client? = nil, id: String, params: CardParams, callback: Card.UpdateOperation.Callback) -> Request<Card.UpdateOperation.Result>? {
         return Card.update(using: given ?? attachedClient, parent: self, id: id, params: params, callback: callback)
     }
     
-    public func destroyCard(using given: Client? = nil, id: String, callback: Request<Card.DestroyOperation>.Callback) -> Request<Card.DestroyOperation>? {
+    public func destroyCard(using given: Client? = nil, id: String, callback: Card.DestroyOperation.Callback) -> Request<Card.DestroyOperation.Result>? {
         return Card.destroy(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
 }

@@ -44,7 +44,7 @@ extension Dispute: Updatable {
 }
 
 extension Dispute {
-    public static func list(using given: Client? = nil, state: DisputeStatus, params: ListParams? = nil, callback: Request<Dispute.ListOperation>.Callback) -> Request<Dispute.ListOperation>? {
+    public static func list(using given: Client? = nil, state: DisputeStatus, params: ListParams? = nil, callback: Dispute.ListOperation.Callback) -> Request<Dispute.ListOperation.Result>? {
         let operation = ListOperation(
             endpoint: info.endpoint,
             method: "GET",

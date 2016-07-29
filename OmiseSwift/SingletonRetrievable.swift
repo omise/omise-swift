@@ -3,7 +3,7 @@ import Foundation
 public protocol SingletonRetrievable { }
 
 public extension SingletonRetrievable where Self: ResourceObject {
-    public typealias SingletonRetrieveOperation = DefaultOperation<Self>
+    public typealias SingletonRetrieveOperation = Operation<Self>
     
     public static func retrieveOperation(parent: ResourceObject?) -> SingletonRetrieveOperation {
         return SingletonRetrieveOperation(
@@ -13,7 +13,7 @@ public extension SingletonRetrievable where Self: ResourceObject {
         )
     }
     
-    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, callback: Request<SingletonRetrieveOperation>.Callback?) -> Request<SingletonRetrieveOperation>? {
+    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, callback: SingletonRetrieveOperation.Callback?) -> Request<SingletonRetrieveOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

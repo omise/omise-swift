@@ -5,7 +5,7 @@ public protocol Creatable {
 }
 
 public extension Creatable where Self: ResourceObject {
-    public typealias CreateOperation = DefaultOperation<Self>
+    public typealias CreateOperation = Operation<Self>
     
     public static func createOperation(parent: ResourceObject?, params: CreateParams) -> CreateOperation {
         return CreateOperation(
@@ -16,7 +16,7 @@ public extension Creatable where Self: ResourceObject {
         )
     }
     
-    public static func create(using given: Client? = nil, parent: ResourceObject? = nil, params: CreateParams, callback: Request<CreateOperation>.Callback) -> Request<CreateOperation>? {
+    public static func create(using given: Client? = nil, parent: ResourceObject? = nil, params: CreateParams, callback: CreateOperation.Callback) -> Request<CreateOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

@@ -30,7 +30,7 @@ public class ListParams: Params {
 }
 
 public extension Listable where Self: ResourceObject {
-    public typealias ListOperation = DefaultOperation<OmiseList<Self>>
+    public typealias ListOperation = Operation<OmiseList<Self>>
     
     public static func listOperation(parent: ResourceObject?, params: ListParams?) -> ListOperation {
         return ListOperation(
@@ -41,7 +41,7 @@ public extension Listable where Self: ResourceObject {
         )
     }
     
-    public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: Request<ListOperation>.Callback?) -> Request<ListOperation>? {
+    public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: ListOperation.Callback?) -> Request<ListOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

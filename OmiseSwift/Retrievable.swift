@@ -3,7 +3,7 @@ import Foundation
 public protocol Retrievable { }
 
 public extension Retrievable where Self: ResourceObject {
-    public typealias RetrieveOperation = DefaultOperation<Self>
+    public typealias RetrieveOperation = Operation<Self>
     
     public static func retrieveOperation(parent: ResourceObject?, id: String) -> RetrieveOperation {
         return RetrieveOperation(
@@ -13,7 +13,7 @@ public extension Retrievable where Self: ResourceObject {
         )
     }
     
-    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: Request<RetrieveOperation>.Callback) -> Request<RetrieveOperation>? {
+    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: RetrieveOperation.Callback) -> Request<RetrieveOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class Client: NSObject {
     public static let sessionIdentifier = "omise.co"
     
@@ -20,10 +19,10 @@ public class Client: NSObject {
         super.init()
     }
     
-    public func call<TOperation: Operation where TOperation.Result: OmiseObject>(operation: TOperation, callback: Request<TOperation>.Callback?) -> Request<TOperation>? {
+    public func call<TResult: OmiseObject>(operation: Operation<TResult>, callback: Operation<TResult>.Callback?) -> Request<TResult>? {
         do {
-            let req: Request<TOperation> = try Request(client: self, operation: operation, callback: callback)
-            return req.start()
+            let req: Request<TResult> = Request(client: self, operation: operation, callback: callback)
+            return try req.start()
             
         } catch let err as NSError {
             performCallback() { callback?(.Fail(err: .IO(err: err))) }

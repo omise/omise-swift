@@ -3,7 +3,7 @@ import Foundation
 public protocol Destroyable { }
 
 public extension Destroyable where Self: ResourceObject {
-    public typealias DestroyOperation = DefaultOperation<Self>
+    public typealias DestroyOperation = Operation<Self>
     
     public static func destroyOperation(parent: ResourceObject?) -> DestroyOperation {
         return DestroyOperation(
@@ -13,7 +13,7 @@ public extension Destroyable where Self: ResourceObject {
         )
     }
     
-    public static func destroy(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: Request<DestroyOperation>.Callback) -> Request<DestroyOperation>? {
+    public static func destroy(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: DestroyOperation.Callback) -> Request<DestroyOperation.Result>? {
         guard checkParent(self, parent: parent) else {
             return nil
         }

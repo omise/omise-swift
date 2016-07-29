@@ -16,8 +16,8 @@ XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
  */
 import Omise // <-- Make sure this works first.
 
-let publicKey = "pkey_test_change_me" // <-- Change to your keys to see result in playground!
-let secretKey = "skey_test_change_me"
+let publicKey = "pkey_test_54n2xnlf7ua73b4tkcp" // <-- Change to your keys to see result in playground!
+let secretKey = "skey_test_54n2xndg1o0sbp461hr"
 
 /*:
  Once you have the API keys, there are two ways to use the `Omise` module.

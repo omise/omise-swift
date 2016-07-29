@@ -46,15 +46,15 @@ extension Refund: Listable { }
 extension Refund: Retrievable { }
 
 extension Charge {
-    public func listRefunds(using given: Client? = nil, params: ListParams? = nil, callback: Request<Refund.ListOperation>.Callback) -> Request<Refund.ListOperation>? {
+    public func listRefunds(using given: Client? = nil, params: ListParams? = nil, callback: Refund.ListOperation.Callback) -> Request<Refund.ListOperation.Result>? {
         return Refund.list(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
     
-    public func retrieveRefund(using given: Client? = nil, id: String, callback: Request<Refund.RetrieveOperation>.Callback) -> Request<Refund.RetrieveOperation>? {
+    public func retrieveRefund(using given: Client? = nil, id: String, callback: Refund.RetrieveOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
         return Refund.retrieve(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
     
-    public func createRefund(using given: Client? = nil, params: RefundParams, callback: Request<Refund.CreateOperation>.Callback) -> Request<Refund.RetrieveOperation>? {
+    public func createRefund(using given: Client? = nil, params: RefundParams, callback: Refund.CreateOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
         return Refund.create(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
 }

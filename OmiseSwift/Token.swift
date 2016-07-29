@@ -58,9 +58,9 @@ extension Token: Creatable {
 }
 
 extension Token { // can't use Retrievable because this uses the API endpoint instead of the vault :facepalm:
-    public typealias RetrieveOperation = DefaultOperation<Token>
+    public typealias RetrieveOperation = Operation<Token>
     
-    public static func retrieve(using given: Client? = nil, id: String, callback: Request<RetrieveOperation>.Callback) -> Request<RetrieveOperation>? {
+    public static func retrieve(using given: Client? = nil, id: String, callback: RetrieveOperation.Callback) -> Request<RetrieveOperation.Result>? {
         let operation = RetrieveOperation(
             endpoint: Endpoint.API,
             method: "GET",
