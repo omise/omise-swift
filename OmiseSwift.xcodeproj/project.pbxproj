@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220C32711CC762330060112E /* OmiseSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* OmiseSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		220C32711CC762330060112E /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		220D1C3C1CC8E226006C7FD6 /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */; };
 		220D1C3D1CC8E313006C7FD6 /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */; };
 		220F53621CD8770100344B06 /* OmiseObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220F53611CD8770100344B06 /* OmiseObjectTest.swift */; };
@@ -121,6 +121,7 @@
 		22BF9BBB1CD2389D00CD3CAD /* RecipientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBA1CD2389D00CD3CAD /* RecipientType.swift */; };
 		22BF9BBD1CD23AB600CD3CAD /* Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBC1CD23AB600CD3CAD /* Refund.swift */; };
 		22BF9BBF1CD23B1400CD3CAD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBE1CD23B1400CD3CAD /* Token.swift */; };
+		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98256FEA1D22444100F91436 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
 		98256FEB1D22445100F91436 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98A1D215ECC00CA3D35 /* Globals.swift */; };
 		98256FEC1D22472900F91436 /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4C1D223FF700A62F2C /* Updatable.swift */; };
@@ -149,7 +150,7 @@
 
 /* Begin PBXFileReference section */
 		220C326D1CC762330060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		220C32701CC762330060112E /* OmiseSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmiseSwift.h; sourceTree = "<group>"; };
+		220C32701CC762330060112E /* Omise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Omise.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
 		220C327D1CC762440060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
@@ -277,7 +278,7 @@
 		220C326F1CC762330060112E /* OmiseSwift */ = {
 			isa = PBXGroup;
 			children = (
-				220C32701CC762330060112E /* OmiseSwift.h */,
+				220C32701CC762330060112E /* Omise.h */,
 				2270E39D1CC7649A00F18814 /* Info-iOS.plist */,
 				220C32721CC762330060112E /* Info-OSX.plist */,
 				2270E3981CC763F700F18814 /* Client.swift */,
@@ -391,7 +392,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				220C32711CC762330060112E /* OmiseSwift.h in Headers */,
+				220C32711CC762330060112E /* Omise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +400,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
