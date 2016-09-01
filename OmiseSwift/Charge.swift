@@ -13,9 +13,9 @@ public class Charge: ResourceObject {
         set { set("amount", Int64Converter.self, toValue: newValue) }
     }
     
-    public var currency: String? {
-        get { return get("currency", StringConverter.self) }
-        set { set("currency", StringConverter.self, toValue: newValue) }
+    public var currency: Currency? {
+        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
+        set { set("currency", StringConverter.self, toValue: newValue?.code) }
     }
     
     public var chargeDescription: String? {
@@ -110,9 +110,9 @@ public class ChargeParams: Params {
         set { set("amount", Int64Converter.self, toValue: newValue) }
     }
     
-    public var currency: String? {
-        get { return get("currency", StringConverter.self) }
-        set { set("currency", StringConverter.self, toValue: newValue) }
+    public var currency: Currency? {
+        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
+        set { set("currency", StringConverter.self, toValue: newValue?.code) }
     }
     
     public var description: String? {

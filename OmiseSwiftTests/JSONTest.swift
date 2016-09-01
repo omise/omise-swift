@@ -17,7 +17,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(balance.live, false)
         XCTAssertEqual(balance.available, 380470)
         XCTAssertEqual(balance.total, 380470)
-        XCTAssertEqual(balance.currency, "thb")
+        XCTAssertEqual(balance.currency?.code, "THB")
     }
     
     func testBankAccount() {
@@ -57,7 +57,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(charge.live, false)
         XCTAssertEqual(charge.location, "/charges/chrg_test_5086xlsx4lghk9bpb75")
         XCTAssertEqual(charge.amount, 100000)
-        XCTAssertEqual(charge.currency, "thb")
+        XCTAssertEqual(charge.currency?.code, "THB")
         XCTAssertEqual(charge.chargeDescription, nil)
         XCTAssertEqual(charge.authorized, true)
         XCTAssertEqual(charge.paid, true)
@@ -103,7 +103,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(dispute.live, false)
         XCTAssertEqual(dispute.location, "/disputes/dspt_test_4zgf15h89w8t775kcm8")
         XCTAssertEqual(dispute.amount, 100000)
-        XCTAssertEqual(dispute.currency, "thb")
+        XCTAssertEqual(dispute.currency?.code, "THB")
         XCTAssertEqual(dispute.status, DisputeStatus.Pending)
         XCTAssertEqual(dispute.message, "This is an unauthorized transaction")
     }
@@ -150,7 +150,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(refund.id, "rfnd_test_5086xm1i7ddm3apeaev")
         XCTAssertEqual(refund.location, "/charges/chrg_test_5086xlsx4lghk9bpb75/refunds/rfnd_test_5086xm1i7ddm3apeaev")
         XCTAssertEqual(refund.amount, 20000)
-        XCTAssertEqual(refund.currency, "thb")
+        XCTAssertEqual(refund.currency?.code, "THB")
         XCTAssertEqual(refund.charge, "chrg_test_5086xlsx4lghk9bpb75")
         XCTAssertEqual(refund.transaction, "trxn_test_5086xm1mbshmohdhk00")
         XCTAssertEqual(refund.created?.timeIntervalSince1970, 1433223710.0)
@@ -175,7 +175,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(transaction.id, "trxn_test_5086v66oxpujs6nll93")
         XCTAssertEqual(transaction.type, TransactionType.Credit)
         XCTAssertEqual(transaction.amount, 96094)
-        XCTAssertEqual(transaction.currency, "THB")
+        XCTAssertEqual(transaction.currency?.code, "THB")
         XCTAssertEqual(transaction.created?.timeIntervalSince1970, 1433223294.0)
     }
     

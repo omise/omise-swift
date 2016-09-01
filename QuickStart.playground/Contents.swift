@@ -123,15 +123,16 @@ func createToken() {
 
 func createChargeWithToken(token: Token) {
     let params = ChargeParams()
-    params.amount = 100000 // 1,000.00 THB
-    params.currency = "THB"
+    let currency = Currency.THB
+    params.amount = currency.convertToSubunit(1000.00) // 1,000.00 THB
+    params.currency = currency
     params.card = token.id
     
     Charge.create(params: params) { (result) in
         switch result {
         case let .Success(charge):
-            print("created charge: \(charge.id ?? "(n/a)")")
-            createRefundOnCharge(charge, amount: 50000)
+            print("created charge: \(charge.id ?? "(n/a)") - \(charge.amount)")
+            createRefundOnCharge(charge, amount: currency.convertToSubunit(500.00))
             
         case let .Fail(err):
             print("error: \(err)")
