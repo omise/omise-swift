@@ -122,6 +122,12 @@
 		22BF9BBF1CD23B1400CD3CAD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BBE1CD23B1400CD3CAD /* Token.swift */; };
 		8A56D41B1D78172D00F30D88 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56D41A1D78172D00F30D88 /* Currency.swift */; };
 		8A56D41C1D78172D00F30D88 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56D41A1D78172D00F30D88 /* Currency.swift */; };
+		8A82A7071D7942E800A198A3 /* Searchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7061D7942E800A198A3 /* Searchable.swift */; };
+		8A82A7081D79433400A198A3 /* Searchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7061D7942E800A198A3 /* Searchable.swift */; };
+		8A82A70A1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */; };
+		8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */; };
+		8A82A7131D79786100A198A3 /* DateComponentsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */; };
+		8A82A7141D79786100A198A3 /* DateComponentsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */; };
 		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98256FEA1D22444100F91436 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
 		98256FEB1D22445100F91436 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98A1D215ECC00CA3D35 /* Globals.swift */; };
@@ -219,6 +225,9 @@
 		22BF9BBC1CD23AB600CD3CAD /* Refund.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Refund.swift; sourceTree = "<group>"; };
 		22BF9BBE1CD23B1400CD3CAD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
+		8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOperationTest.swift; sourceTree = "<group>"; };
+		8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponentsConverter.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -264,7 +273,9 @@
 				2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */,
 				220C326E1CC762330060112E /* Products */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		220C326E1CC762330060112E /* Products */ = {
 			isa = PBXGroup;
@@ -340,6 +351,7 @@
 				22112D2A1CC79A9F00D0DB54 /* BoolConverter.swift */,
 				229873321CCDF1F900970F8C /* Converter.swift */,
 				220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */,
+				8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */,
 				22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */,
 				22112D191CC796F000D0DB54 /* Int64Converter.swift */,
 				2298738D1CCF675700970F8C /* IntConverter.swift */,
@@ -355,6 +367,7 @@
 				225C4E4E1D22412A00A62F2C /* Destroyable.swift */,
 				22A0F9861D21580400CA3D35 /* Listable.swift */,
 				22A0F9881D215D3700CA3D35 /* Retrievable.swift */,
+				8A82A7061D7942E800A198A3 /* Searchable.swift */,
 				22338DAF1D211D7E00811363 /* SingletonRetrievable.swift */,
 				225C4E4C1D223FF700A62F2C /* Updatable.swift */,
 			);
@@ -373,6 +386,7 @@
 				229873751CCE29D700970F8C /* OperationTest.swift */,
 				229873851CCF565C00970F8C /* RequestTest.swift */,
 				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
+				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
 				229873381CCDF8AA00970F8C /* Models */,
 			);
 			path = OmiseSwiftTests;
@@ -565,6 +579,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873641CCE163E00970F8C /* OmiseObject.swift in Sources */,
+				8A82A7071D7942E800A198A3 /* Searchable.swift in Sources */,
 				22A0F98D1D2160F900CA3D35 /* Creatable.swift in Sources */,
 				22338DB81D21392A00811363 /* Failable.swift in Sources */,
 				225C4E4D1D223FF700A62F2C /* Updatable.swift in Sources */,
@@ -575,6 +590,7 @@
 				2298738E1CCF675700970F8C /* IntConverter.swift in Sources */,
 				2298738B1CCF5D9500970F8C /* OmiseError.swift in Sources */,
 				22112D1D1CC7970600D0DB54 /* Int64Converter.swift in Sources */,
+				8A82A7131D79786100A198A3 /* DateComponentsConverter.swift in Sources */,
 				222139511CE1BC4E00B6BF43 /* TransactionType.swift in Sources */,
 				22BF9BB51CD235DC00CD3CAD /* DisputeStatus.swift in Sources */,
 				22BF9BA31CD2028500CD3CAD /* Card.swift in Sources */,
@@ -622,6 +638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873631CCE163E00970F8C /* OmiseObject.swift in Sources */,
+				8A82A7081D79433400A198A3 /* Searchable.swift in Sources */,
 				2221394C1CE1BB2E00B6BF43 /* Token.swift in Sources */,
 				22BF9BAD1CD22B7900CD3CAD /* EnumConverter.swift in Sources */,
 				98256FEC1D22472900F91436 /* Updatable.swift in Sources */,
@@ -632,6 +649,7 @@
 				98256FEA1D22444100F91436 /* Failable.swift in Sources */,
 				222139591CE1C5BF00B6BF43 /* Transfer.swift in Sources */,
 				2298738F1CCF675700970F8C /* IntConverter.swift in Sources */,
+				8A82A7141D79786100A198A3 /* DateComponentsConverter.swift in Sources */,
 				220F536A1CD8B72A00344B06 /* Customer.swift in Sources */,
 				22BF9BAC1CD22B1B00CD3CAD /* ChargeStatus.swift in Sources */,
 				2298738C1CCF5D9500970F8C /* OmiseError.swift in Sources */,
@@ -679,6 +697,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873831CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
+				8A82A70A1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */,
 				22BF9BA01CD1F76800CD3CAD /* LiveTest.swift in Sources */,
 				220F53621CD8770100344B06 /* OmiseObjectTest.swift in Sources */,
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
@@ -700,6 +719,7 @@
 				2298733C1CCDF99800970F8C /* JSONTest.swift in Sources */,
 				22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
 				229873881CCF566F00970F8C /* RequestTest.swift in Sources */,
+				8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */,
 				98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 			);

@@ -43,7 +43,7 @@ public extension AttributesContainer {
         return child
     }
     
-    public func setChild<TChild: OmiseObject>(key: String, _ childType: TChild.Type, toValue child: TChild?) {
+    public func setChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type, toValue child: TChild?) {
         children[key] = child
     }
 }

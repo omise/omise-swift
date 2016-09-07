@@ -36,11 +36,37 @@ public class DisputeParams: Params {
     }
 }
 
+public class DisputeFilterParams: OmiseFilterParams {
+    public var created: NSDateComponents? {
+        get { return get("created", DateComponentsConverter.self) }
+        set { set("created", DateComponentsConverter.self, toValue: newValue) }
+    }
+    
+    public var cardLastDigits: String? {
+        get { return get("card_last_digits", StringConverter.self) }
+        set { set("card_last_digits", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var reasonCode: String? {
+        get { return get("reason_code", StringConverter.self) }
+        set { set("reason_code", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var status: DisputeStatus? {
+        get { return get("status", EnumConverter.self) }
+        set { set("status", EnumConverter.self, toValue: newValue) }
+    }
+}
+
 extension Dispute: Listable { }
 extension Dispute: Retrievable { }
 
 extension Dispute: Updatable {
     public typealias UpdateParams = DisputeParams
+}
+
+extension Dispute: Searchable {
+    public typealias FilterParams = DisputeFilterParams
 }
 
 extension Dispute {
@@ -58,7 +84,7 @@ extension Dispute {
 
 func exampleDispute() {
     let _: [DisputeStatus] = [.Open, .Pending, .Closed] // valid statuses
-
+    
     Dispute.list(state: .Open) { (result) in
         switch result {
         case let .Success(list):

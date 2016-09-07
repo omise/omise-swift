@@ -131,6 +131,43 @@ public class ChargeParams: Params {
     }
 }
 
+public class ChargeFilterParams: OmiseFilterParams {
+    public var created: NSDateComponents? {
+        get { return get("created", DateComponentsConverter.self) }
+        set { set("created", DateComponentsConverter.self, toValue: newValue) }
+    }
+    public var amount: Int64? {
+        get { return get("amount", Int64Converter.self) }
+        set { set("amount", Int64Converter.self, toValue: newValue) }
+    }
+    
+    public var authorized: Bool? {
+        get { return get("authorized", BoolConverter.self) }
+        set { set("authorized", BoolConverter.self, toValue: newValue) }
+    }
+    
+    public var capture: Bool? {
+        get { return get("captured", BoolConverter.self) }
+        set { set("captured", BoolConverter.self, toValue: newValue) }
+    }
+    
+    public var cardLastDigits: String? {
+        get { return get("card_last_digits", StringConverter.self) }
+        set { set("card_last_digits", StringConverter.self, toValue: newValue) }
+    }
+    
+    public var customerPresent: Bool? {
+        get { return get("customer_present", BoolConverter.self) }
+        set { set("customer_present", BoolConverter.self, toValue: newValue) }
+    }
+    
+    public var failureCode: String? {
+        get { return get("failure_code", StringConverter.self) }
+        set { set("failure_code", StringConverter.self, toValue: newValue) }
+    }
+    
+}
+
 extension Charge: Listable { }
 extension Charge: Retrievable { }
 
@@ -140,6 +177,10 @@ extension Charge: Creatable {
 
 extension Charge: Updatable {
     public typealias UpdateParams = ChargeParams
+}
+
+extension Charge: Searchable {
+    public typealias FilterParams = ChargeFilterParams
 }
 
 extension Charge {

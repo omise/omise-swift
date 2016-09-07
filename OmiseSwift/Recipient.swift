@@ -81,6 +81,13 @@ public class RecipientParams: Params {
     }
 }
 
+public class RecipientFilterParams: OmiseFilterParams {
+    public var type: RecipientType? {
+        get { return get("kind", EnumConverter.self) }
+        set { set("kind", EnumConverter.self, toValue: newValue) }
+    }
+}
+
 extension Recipient: Listable { }
 extension Recipient: Retrievable { }
 
@@ -90,6 +97,10 @@ extension Recipient: Creatable {
 
 extension Recipient: Updatable {
     public typealias UpdateParams = RecipientParams
+}
+
+extension Recipient: Searchable {
+    public typealias FilterParams = RecipientFilterParams
 }
 
 extension Recipient: Destroyable { }

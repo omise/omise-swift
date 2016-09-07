@@ -41,6 +41,13 @@ public class CustomerParams: Params {
     }
 }
 
+public class CustomerFilterParams: OmiseFilterParams {
+    public var created: NSDateComponents? {
+        get { return get("created", DateComponentsConverter.self) }
+        set { set("created", DateComponentsConverter.self, toValue: newValue) }
+    }
+}
+
 extension Customer: Listable { }
 extension Customer: Retrievable { }
 
@@ -50,6 +57,10 @@ extension Customer: Creatable {
 
 extension Customer: Updatable {
     public typealias UpdateParams = CustomerParams
+}
+
+extension Customer: Searchable {
+    public typealias FilterParams = CustomerFilterParams
 }
 
 extension Customer: Destroyable { }
