@@ -5,11 +5,11 @@ public protocol Destroyable { }
 public extension Destroyable where Self: ResourceObject {
     public typealias DestroyOperation = Operation<Self>
     
-    public static func destroyOperation(parent: ResourceObject?) -> DestroyOperation {
+    public static func destroyOperation(parent: ResourceObject?, id: String) -> DestroyOperation {
         return DestroyOperation(
             endpoint: info.endpoint,
             method: "DELETE",
-            paths: buildResourcePaths(self, parent: parent)
+            paths: buildResourcePaths(self, parent: parent, id: id)
         )
     }
     
