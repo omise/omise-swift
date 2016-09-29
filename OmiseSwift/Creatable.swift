@@ -7,17 +7,17 @@ public protocol Creatable {
 public extension Creatable where Self: ResourceObject {
     public typealias CreateOperation = Operation<Self>
     
-    public static func createOperation(parent: ResourceObject?, params: CreateParams) -> CreateOperation {
+    public static func createOperation(_ parent: ResourceObject?, params: CreateParams) -> CreateOperation {
         return CreateOperation(
             endpoint: info.endpoint,
             method: "POST",
-            paths: buildResourcePaths(self, parent: parent),
+            paths: makeResourcePathsWith(context: self, parent: parent),
             params: params
         )
     }
     
-    public static func create(using given: Client? = nil, parent: ResourceObject? = nil, params: CreateParams, callback: CreateOperation.Callback) -> Request<CreateOperation.Result>? {
-        guard checkParent(self, parent: parent) else {
+    public static func create(using given: Client? = nil, parent: ResourceObject? = nil, params: CreateParams, callback: @escaping CreateOperation.Callback) -> Request<CreateOperation.Result>? {
+        guard checkParent(withContext: self, parent: parent) else {
             return nil
         }
         

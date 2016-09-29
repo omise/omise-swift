@@ -1,15 +1,15 @@
 import Foundation
 
-public class EnumConverter<TEnum: RawRepresentable where TEnum.RawValue == String>: Converter {
+public class EnumConverter<TEnum: RawRepresentable>: Converter where TEnum.RawValue == String {
     public typealias Target = TEnum
     
-    public static func convertFromAttribute(value: NSObject?) -> Target? {
+    public static func convert(fromAttribute value: Any?) -> Target? {
         guard let s = value as? String else { return nil }
         return TEnum(rawValue: s)
     }
     
-    public static func convertToAttribute(value: Target?) -> NSObject? {
+    public static func convert(fromValue value: Target?) -> Any? {
         guard let v = value else { return nil }
-        return v.rawValue as NSString
+        return v.rawValue
     }
 }

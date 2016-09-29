@@ -42,7 +42,7 @@ public enum Currency {
   }
   
   public init?(code: String) {
-    switch code.uppercaseString {
+    switch code.uppercased() {
     case "THB":
       self = .THB
     case "JPY":

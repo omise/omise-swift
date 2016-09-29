@@ -7,17 +7,17 @@ public protocol Updatable {
 public extension Updatable where Self: ResourceObject {
     public typealias UpdateOperation = Operation<Self>
     
-    public static func updateOperation(parent: ResourceObject?, id: String, params: UpdateParams) -> UpdateOperation {
+    public static func updateOperation(_ parent: ResourceObject?, id: String, params: UpdateParams) -> UpdateOperation {
         return UpdateOperation(
             endpoint: info.endpoint,
             method: "PATCH",
-            paths: buildResourcePaths(self, parent: parent, id: id),
+            paths: makeResourcePathsWith(context: self, parent: parent, id: id),
             params: params
         )
     }
     
-    public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: UpdateOperation.Callback) -> Request<UpdateOperation.Result>? {
-        guard checkParent(self, parent: parent) else {
+    public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: @escaping UpdateOperation.Callback) -> Request<UpdateOperation.Result>? {
+        guard checkParent(withContext: self, parent: parent) else {
             return nil
         }
         

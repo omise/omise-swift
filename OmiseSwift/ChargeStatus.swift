@@ -1,9 +1,9 @@
 import Foundation
 
 public enum ChargeStatus: String {
-    case Failed = "failed"
-    case Pending = "pending"
-    case Successful = "successful"
+    case failed
+    case pending
+    case successful
 }
 
 /*

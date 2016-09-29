@@ -17,5 +17,5 @@ public class APIError: OmiseObject {
     }
 }
 
-extension APIError: ErrorType {
+extension APIError: Error {
 }

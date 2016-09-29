@@ -1,7 +1,7 @@
 import Foundation
 
-public class Refund: ResourceObject {
-    public override class var info: ResourceInfo {
+open class Refund: ResourceObject {
+    open override class var info: ResourceInfo {
         return ResourceInfo(parentType: Charge.self, path: "/refunds")
     }
     
@@ -46,15 +46,15 @@ extension Refund: Listable { }
 extension Refund: Retrievable { }
 
 extension Charge {
-    public func listRefunds(using given: Client? = nil, params: ListParams? = nil, callback: Refund.ListOperation.Callback) -> Request<Refund.ListOperation.Result>? {
+    public func listRefunds(using given: Client? = nil, params: ListParams? = nil, callback: @escaping Refund.ListOperation.Callback) -> Request<Refund.ListOperation.Result>? {
         return Refund.list(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
     
-    public func retrieveRefund(using given: Client? = nil, id: String, callback: Refund.RetrieveOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
+    public func retrieveRefund(using given: Client? = nil, id: String, callback: @escaping Refund.RetrieveOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
         return Refund.retrieve(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
     
-    public func createRefund(using given: Client? = nil, params: RefundParams, callback: Refund.CreateOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
+    public func createRefund(using given: Client? = nil, params: RefundParams, callback: @escaping Refund.CreateOperation.Callback) -> Request<Refund.RetrieveOperation.Result>? {
         return Refund.create(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
 }
@@ -64,14 +64,14 @@ func exampleRefund() {
     charge.id = "chrg_test_123"
     
     let params = RefundParams()
-    params.amount = 100000 // 1,000.00 THB
+    params.amount = 1_000_00 // 1,000.00 THB
     params.void = true
     
-    Refund.create(parent: charge, params: params) { (result) in
+    _ = Refund.create(parent: charge, params: params) { (result) in
         switch result {
-        case let .Success(refund):
+        case let .success(refund):
             print("created refund: \(refund.id)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }

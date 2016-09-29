@@ -1,16 +1,16 @@
 import Foundation
 
-public class OmiseSerializer {
-    public class func serialize(object: OmiseObject) throws -> NSData {
-        return try NSJSONSerialization.dataWithJSONObject(
-            object.attributes,
-            options: NSJSONWritingOptions(rawValue: 0))
+open class OmiseSerializer {
+    open class func serialize(_ object: OmiseObject) throws -> Data {
+        return try JSONSerialization.data(
+            withJSONObject: object.attributes,
+            options: JSONSerialization.WritingOptions(rawValue: 0))
     }
     
-    public class func deserialize<TObject: OmiseObject>(data: NSData) throws -> TObject {
-        let attributes = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+    open class func deserialize<TObject: OmiseObject>(_ data: Data) throws -> TObject {
+        let attributes = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
         guard let objAttributes = attributes as? JSONAttributes else {
-            throw OmiseError.Unexpected("expected JSON object at top level.")
+            throw OmiseError.unexpected("expected JSON object at top level.")
         }
         
         return TObject(attributes: objAttributes)

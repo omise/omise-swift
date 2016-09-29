@@ -37,6 +37,14 @@
                BlueprintName = "OmiseSwiftIOSTests"
                ReferencedContainer = "container:OmiseSwift.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LiveTest">
+               </Test>
+               <Test
+                  Identifier = "TransferOperationsTest">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>

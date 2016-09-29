@@ -2,8 +2,9 @@
  
  We will be making background network requests in this QuickStart, so we need to first setup our Playground page to handle that:
  */
-import XCPlayground
-XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
+import PlaygroundSupport
+
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 /*: getting-started
  ---

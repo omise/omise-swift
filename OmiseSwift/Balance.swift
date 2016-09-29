@@ -1,7 +1,7 @@
 import Foundation
 
-public class Balance: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/balance") }
+open class Balance: ResourceObject {
+    open override class var info: ResourceInfo { return ResourceInfo(path: "/balance") }
 
     public var available: Int64? {
         get { return get("available", Int64Converter.self) }
@@ -22,11 +22,11 @@ public class Balance: ResourceObject {
 extension Balance: SingletonRetrievable { }
 
 func exampleBalance() {
-    Balance.retrieve { (result) in
+    _ = Balance.retrieve { (result) in
         switch result {
-        case let .Success(balance):
+        case let .success(balance):
             print("balance: \(balance.available)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }

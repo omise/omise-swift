@@ -1,6 +1,6 @@
 import Foundation
 
-public typealias JSONAttributes = [String: NSObject]
+public typealias JSONAttributes = [String: Any]
 
 public protocol AttributesContainer: class {
     var attributes: JSONAttributes { get set }
@@ -15,25 +15,25 @@ public extension AttributesContainer {
         self.init(attributes: ["id": id])
     }
     
-    public func get<TConv: Converter>(key: String, _ converter: TConv.Type) -> TConv.Target? {
-        return TConv.convertFromAttribute(self.attributes[key])
+    public func get<TConv: Converter>(_ key: String, _ converter: TConv.Type) -> TConv.Target? {
+        return TConv.convert(fromAttribute: self.attributes[key])
     }
     
-    public func set<TConv: Converter>(key: String, _ converter: TConv.Type, toValue value: TConv.Target?) {
-        self.attributes[key] = TConv.convertToAttribute(value)
+    public func set<TConv: Converter>(_ key: String, _ converter: TConv.Type, toValue value: TConv.Target?) {
+        self.attributes[key] = TConv.convert(fromValue: value)
     }
     
     // TODO: Cache lists
-    public func getList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type) -> [TItem] {
+    public func getList<TItem: AttributesContainer>(_ key: String, _ itemType: TItem.Type) -> [TItem] {
         let items = self.attributes[key] as? [JSONAttributes] ?? []
         return items.map({ (attributes) -> TItem in TItem(attributes: attributes) })
     }
     
-    public func setList<TItem: AttributesContainer>(key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
+    public func setList<TItem: AttributesContainer>(_ key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
         attributes[key] = value.map({ (model) -> JSONAttributes in model.attributes })
     }
     
-    public func getChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type) -> TChild? {
+    public func getChild<TChild: AttributesContainer>(_ key: String, _ childType: TChild.Type) -> TChild? {
         if let child = children[key] as? TChild {
             return child
         }
@@ -43,7 +43,7 @@ public extension AttributesContainer {
         return child
     }
     
-    public func setChild<TChild: AttributesContainer>(key: String, _ childType: TChild.Type, toValue child: TChild?) {
+    public func setChild<TChild: AttributesContainer>(_ key: String, _ childType: TChild.Type, toValue child: TChild?) {
         children[key] = child
     }
 }
@@ -54,7 +54,7 @@ public extension AttributesContainer {
         return normalizeAttributesWithPrefix(nil)
     }
     
-    private func normalizeAttributesWithPrefix(parentPrefix: String?) -> JSONAttributes {
+    fileprivate func normalizeAttributesWithPrefix(_ parentPrefix: String?) -> JSONAttributes {
         var result: JSONAttributes = [:]
         for (childPrefix, child) in children {
             let childAttributes = child.normalizeAttributesWithPrefix(stitchKeys(parentPrefix, key: childPrefix))
@@ -70,7 +70,7 @@ public extension AttributesContainer {
         return result
     }
     
-    private func stitchKeys(prefix: String?, key: String) -> String {
+    fileprivate func stitchKeys(_ prefix: String?, key: String) -> String {
         if let p = prefix {
             return "\(p)[\(key)]"
         } else {

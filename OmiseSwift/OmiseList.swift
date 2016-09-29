@@ -1,12 +1,12 @@
 import Foundation
 
 public class OmiseList<TItem: OmiseObject>: OmiseObject {
-    public var from: NSDate? {
+    public var from: Date? {
         get { return get("from", DateConverter.self) }
         set { set("from", DateConverter.self, toValue: newValue) }
     }
     
-    public var to: NSDate? {
+    public var to: Date? {
         get { return get("to", DateConverter.self) }
         set { set("to", DateConverter.self, toValue: newValue) }
     }

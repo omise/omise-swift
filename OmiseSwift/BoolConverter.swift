@@ -3,13 +3,13 @@ import Foundation
 public class BoolConverter: Converter {
     public typealias Target = Bool
     
-    public static func convertFromAttribute(value: NSObject?) -> Target? {
-        guard let n = value as? NSNumber else { return nil }
-        return n.boolValue
+    public static func convert(fromAttribute value: Any?) -> Target? {
+        guard let n = value as? Bool else { return nil }
+        return n
     }
     
-    public static func convertToAttribute(value: Target?) -> NSObject? {
+    public static func convert(fromValue value: Target?) -> Any? {
         guard let b = value else { return nil }
-        return NSNumber(bool: b)
+        return b
     }
 }

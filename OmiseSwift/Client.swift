@@ -1,43 +1,46 @@
 import Foundation
 
-public class Client: NSObject {
-    public static let sessionIdentifier = "omise.co"
+open class Client: NSObject {
+    open static let sessionIdentifier = "omise.co"
     
-    let session: NSURLSession
-    let operationQueue: NSOperationQueue
+    let session: URLSession
+    let operationQueue: OperationQueue
     
-    public let config: Config
+    open let config: Config
     
     public init(config: Config) {
         self.config = config
         
-        self.operationQueue = NSOperationQueue()
-        self.session = NSURLSession(
-            configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration(),
+        self.operationQueue = OperationQueue()
+        self.session = URLSession(
+            configuration: URLSessionConfiguration.ephemeral,
             delegate: nil,
             delegateQueue: operationQueue)
         super.init()
     }
     
-    public func call<TResult: OmiseObject>(operation: Operation<TResult>, callback: Operation<TResult>.Callback?) -> Request<TResult>? {
+    open func call<TResult: OmiseObject>(_ operation: Operation<TResult>, callback: Operation<TResult>.Callback?) -> Request<TResult>? {
         do {
             let req: Request<TResult> = Request(client: self, operation: operation, callback: callback)
             return try req.start()
-            
-        } catch let err as NSError {
-            performCallback() { callback?(.Fail(.IO(err))) }
         } catch let err as OmiseError {
-            performCallback() { callback?(.Fail(err)) }
+            performCallback() {
+                callback?(.fail(err))
+            }
+        } catch let err as NSError {
+            performCallback() {
+                callback?(.fail(.io(err)))
+            }
         }
         
         return nil
     }
     
-    public func cancelAllOperations() {
+    open func cancelAllOperations() {
         operationQueue.cancelAllOperations()
     }
     
-    func performCallback(callback: () -> ()) {
-        config.callbackQueue.addOperationWithBlock(callback)
+    func performCallback(_ callback: @escaping () -> ()) {
+        config.callbackQueue.addOperation(callback)
     }
 }

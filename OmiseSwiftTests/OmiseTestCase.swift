@@ -1,14 +1,14 @@
 import XCTest
 
 class OmiseTestCase: XCTestCase {
-    func fixturesDataFor(filename: String) -> NSData? {
-        let bundle = NSBundle(forClass: OmiseTestCase.self)
-        guard let path = bundle.pathForResource(filename, ofType: "json") else {
+    func fixturesData(for filename: String) -> Data? {
+        let bundle = Bundle(for: OmiseTestCase.self)
+        guard let path = bundle.path(forResource: filename, ofType: "json") else {
             XCTFail("could not load fixtures.")
             return nil
         }
         
-        guard let data = NSData(contentsOfFile: path) else {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
             XCTFail("could not load fixtures at path: \(path)")
             return nil
         }

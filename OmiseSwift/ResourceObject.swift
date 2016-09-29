@@ -1,6 +1,6 @@
 import Foundation
 
-public class ResourceObject: OmiseObject {
+open class ResourceObject: OmiseObject {
     class var info: ResourceInfo { return ResourceInfo() }
     
     var attachedClient: Client? = nil
@@ -15,7 +15,7 @@ public class ResourceObject: OmiseObject {
         set { set("livemode", BoolConverter.self, toValue: newValue) }
     }
     
-    public var created: NSDate? {
+    public var created: Date? {
         get { return get("created", DateConverter.self) }
         set { set("created", DateConverter.self, toValue: newValue) }
     }

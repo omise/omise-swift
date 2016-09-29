@@ -1,20 +1,20 @@
 import Foundation
 
-public enum OmiseError: ErrorType {
-    case Unexpected(String)
-    case Configuration(String)
-    case IO(NSError)
-    case API(APIError)
+public enum OmiseError: Error {
+    case unexpected(String)
+    case configuration(String)
+    case io(NSError)
+    case api(APIError)
     
     public var message: String {
         switch self {
-        case .Unexpected(let message):
+        case .unexpected(let message):
             return "unexpected error: \(message)"
-        case .Configuration(let message):
+        case .configuration(let message):
             return "configuration error: \(message)"
-        case .IO(let err):
+        case .io(let err):
             return "I/O error: \(err.description)"
-        case .API(let err):
+        case .api(let err):
             return "(\(err.statusCode ?? 0)/\(err.code ?? "unknown")) \(err.message ?? "unknown error")"
         }
     }

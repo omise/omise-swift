@@ -14,11 +14,11 @@ class URLEncoderTest: OmiseTestCase {
         let values: JSONAttributes = [
             "0hello": "world",
             "1num": 42,
-            "2number": NSNumber(long: 64),
-            "3long": NSNumber(longLong: 1234123412341234),
+            "2number": 64,
+            "3long": 1234123412341234,
             "4bool": false,
-            "5boolean": NSNumber(bool: true),
-            "6date": NSDate(timeIntervalSince1970: 0)
+            "5boolean": true,
+            "6date": Date(timeIntervalSince1970: 0)
         ]
         
         let result = URLEncoder.encode(values).map({ (query) in query.value ?? "(nil)" })
@@ -37,7 +37,7 @@ class URLEncoderTest: OmiseTestCase {
         let values: JSONAttributes = [
             "0outer": "normal",
             "1nested": ["inside": "inner"] as JSONAttributes,
-            "2deeper": ["nesting": ["also": "works"]]
+            "2deeper": ["nesting": ["also": "works"]  ] 
         ]
         
         let result = URLEncoder.encode(values)

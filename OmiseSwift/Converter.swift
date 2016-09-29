@@ -3,6 +3,6 @@ import Foundation
 public protocol Converter {
     associatedtype Target
     
-    static func convertFromAttribute(value: NSObject?) -> Target?
-    static func convertToAttribute(value: Target?) -> NSObject?
+    static func convert(fromAttribute value: Any?) -> Target?
+    static func convert(fromValue value: Target?) -> Any?
 }

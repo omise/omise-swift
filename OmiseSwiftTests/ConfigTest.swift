@@ -8,15 +8,15 @@ class ConfigTest: OmiseTestCase {
         XCTAssertEqual("789", config.secretKey)
         XCTAssertNil(config.publicKey)
         XCTAssertNil(config.apiVersion)
-        XCTAssertEqual(config.callbackQueue, NSOperationQueue.mainQueue())
+        XCTAssertEqual(config.callbackQueue, OperationQueue.main)
         
         config = Config(publicKey: "123", secretKey: "456")
         XCTAssertEqual(config.publicKey, "123")
         XCTAssertEqual(config.secretKey, "456")
         XCTAssertNil(config.apiVersion)
-        XCTAssertEqual(config.callbackQueue, NSOperationQueue.mainQueue())
+        XCTAssertEqual(config.callbackQueue, OperationQueue.main)
         
-        let queue = NSOperationQueue()
+        let queue = OperationQueue()
         
         config = Config(publicKey: "123", secretKey: "456", apiVersion: "dandy", queue: queue)
         XCTAssertEqual(config.publicKey, "123")

@@ -1,20 +1,20 @@
 import Foundation
 
-public class Operation<TResult: OmiseObject> {
+open class Operation<TResult: OmiseObject> {
     public typealias Result = TResult
-    public typealias Callback = Failable<TResult> -> ()
+    public typealias Callback = (Failable<TResult>) -> ()
     
-    public let endpoint: Endpoint
-    public let method: String
-    public let pathComponents: [String]
-    public let params: Params?
+    open let endpoint: Endpoint
+    open let method: String
+    open let pathComponents: [String]
+    open let params: Params?
     
-    public var url: NSURL {
-        return buildUrl()
+    open var url: URL {
+        return makeURL()
     }
     
-    public var payload: NSData? {
-        return buildPayload()
+    open var payload: Data? {
+        return makePayload()
     }
     
     public init(endpoint: Endpoint, method: String, paths: [String], params: Params? = nil) {
@@ -24,16 +24,16 @@ public class Operation<TResult: OmiseObject> {
         self.params = params
     }
     
-    private func buildUrl() -> NSURL {
-        let url = pathComponents.reduce(endpoint.url) { (url, segment) -> NSURL in
-            return url.URLByAppendingPathComponent(segment)
+    fileprivate func makeURL() -> URL {
+        let url = pathComponents.reduce(endpoint.url as URL) { (url, segment) -> URL in
+            return url.appendingPathComponent(segment)
         }
         
-        guard method.uppercaseString == "GET" || method.uppercaseString == "HEAD" else {
+        guard method.uppercased() == "GET" || method.uppercased() == "HEAD" else {
             return url
         }
         
-        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             omiseWarn("failed to build url components for url: \(url)")
             return url
         }
@@ -42,7 +42,7 @@ public class Operation<TResult: OmiseObject> {
             urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
         }
         
-        guard let parameterizedUrl = urlComponents.URL else {
+        guard let parameterizedUrl = urlComponents.url else {
             omiseWarn("failed to append query items to the url: \(url)")
             return url
         }
@@ -50,17 +50,17 @@ public class Operation<TResult: OmiseObject> {
         return parameterizedUrl
     }
     
-    private func buildPayload() -> NSData? {
+    fileprivate func makePayload() -> Data? {
         guard let params = self.params else {
             return nil
         }
         
-        guard let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true) else {
+        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             omiseWarn("failed to build url components for url: \(url)")
             return nil
         }
         
         urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
-        return urlComponents.percentEncodedQuery?.dataUsingEncoding(NSUTF8StringEncoding)
+        return urlComponents.percentEncodedQuery?.data(using: .utf8)
     }
 }

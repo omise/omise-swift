@@ -41,9 +41,9 @@ class OmiseObjectTest: OmiseTestCase {
         parent.child?.grand?.baz = "three"
         
         let attributes = parent.normalizedAttributes
-        XCTAssertEqual("one", attributes["foo"])
-        XCTAssertEqual("two", attributes["child[bar]"])
-        XCTAssertEqual("three", attributes["child[grand][baz]"])
+        XCTAssertEqual("one", attributes["foo"] as? String)
+        XCTAssertEqual("two", attributes["child[bar]"] as? String)
+        XCTAssertEqual("three", attributes["child[grand][baz]"] as? String)
     }
     
     func testBottomUpNormalizing() {
@@ -59,9 +59,9 @@ class OmiseObjectTest: OmiseTestCase {
         parent.child = child
         
         let attributes = parent.normalizedAttributes
-        XCTAssertEqual("one", attributes["foo"])
-        XCTAssertEqual("two", attributes["child[bar]"])
-        XCTAssertEqual("three", attributes["child[grand][baz]"])
+        XCTAssertEqual("one", attributes["foo"] as? String)
+        XCTAssertEqual("two", attributes["child[bar]"] as? String)
+        XCTAssertEqual("three", attributes["child[grand][baz]"] as? String)
     }
     
     func testNestedObjectDeconstruction() {

@@ -1,7 +1,7 @@
 import Foundation
 
-public class Card: ResourceObject {
-    public override class var info: ResourceInfo {
+open class Card: ResourceObject {
+    open override class var info: ResourceInfo {
         return ResourceInfo(parentType: Customer.self, path: "/cards")
     }
     
@@ -102,19 +102,19 @@ extension Card: Updatable {
 }
 
 extension Customer {
-    public func listCards(using given: Client? = nil, params: ListParams? = nil, callback: Card.ListOperation.Callback) -> Request<Card.ListOperation.Result>? {
+    public func listCards(using given: Client? = nil, params: ListParams? = nil, callback: @escaping Card.ListOperation.Callback) -> Request<Card.ListOperation.Result>? {
         return Card.list(using: given ?? attachedClient, parent: self, params: params, callback: callback)
     }
     
-    public func retrieveCard(using given: Client? = nil, id: String, callback: Card.RetrieveOperation.Callback) -> Request<Card.RetrieveOperation.Result>? {
+    public func retrieveCard(using given: Client? = nil, id: String, callback: @escaping Card.RetrieveOperation.Callback) -> Request<Card.RetrieveOperation.Result>? {
         return Card.retrieve(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
     
-    public func updateCard(using given: Client? = nil, id: String, params: CardParams, callback: Card.UpdateOperation.Callback) -> Request<Card.UpdateOperation.Result>? {
+    public func updateCard(using given: Client? = nil, id: String, params: CardParams, callback: @escaping Card.UpdateOperation.Callback) -> Request<Card.UpdateOperation.Result>? {
         return Card.update(using: given ?? attachedClient, parent: self, id: id, params: params, callback: callback)
     }
     
-    public func destroyCard(using given: Client? = nil, id: String, callback: Card.DestroyOperation.Callback) -> Request<Card.DestroyOperation.Result>? {
+    public func destroyCard(using given: Client? = nil, id: String, callback: @escaping Card.DestroyOperation.Callback) -> Request<Card.DestroyOperation.Result>? {
         return Card.destroy(using: given ?? attachedClient, parent: self, id: id, callback: callback)
     }
 }
@@ -123,11 +123,11 @@ func exampleCard() {
     let customer = Customer()
     customer.id = "cust_test_123"
     
-    Card.list(parent: customer) { (result) in
+    _ = Card.list(parent: customer) { (result) in
         switch result {
-        case let .Success(cards):
+        case let .success(cards):
             print("cards: \(cards)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }

@@ -8,14 +8,14 @@ class SearchOperationTest: OmiseTestCase {
             publicKey: "pkey_test_5570z4yt4wybjb03ag8",
             secretKey: "skey_test_5570z4yvwcr22l3rjnm",
             apiVersion: nil,
-            queue: (NSOperationQueue.currentQueue() ?? NSOperationQueue.mainQueue())
+            queue: (OperationQueue.current ?? OperationQueue.main)
         )
         
         return Client(config: config)
     }
     
     func testSearchChargeByLastDigits() {
-        let expectation = expectationWithDescription("transfer result")
+        let expectation = self.expectation(description: "transfer result")
         
         let searchParams = SearchParams<ChargeFilterParams>()
         searchParams.scope = Charge.scopeName
@@ -27,28 +27,28 @@ class SearchOperationTest: OmiseTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .Success(charges):
+            case let .success(charges):
                 XCTAssertEqual(charges.data.count, 1)
                 let samplingCharge = charges.data.first
                 XCTAssertEqual(samplingCharge?.amount, 100000)
-            case let .Fail(error):
+            case let .fail(error):
                 XCTFail("\(error)")
             }
         })
         
         XCTAssertNotNil(request)
-        waitForExpectationsWithTimeout(15.0, handler: nil)
+        waitForExpectations(timeout: 15.0, handler: nil)
     }
     
     
     func testSearchChargeByCreatedDate() {
-        let expectation = expectationWithDescription("transfer result")
+        let expectation = self.expectation(description: "transfer result")
         
         let searchParams = SearchParams<ChargeFilterParams>()
         searchParams.scope = Charge.scopeName
         var searchFilter = ChargeFilterParams()
-        let dateComponents = NSDateComponents()
-        dateComponents.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        var dateComponents = DateComponents()
+        dateComponents.calendar = Calendar(identifier: .gregorian)
         dateComponents.year = 2016
         dateComponents.month = 9
         dateComponents.day = 2
@@ -59,27 +59,27 @@ class SearchOperationTest: OmiseTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .Success(charges):
+            case let .success(charges):
                 XCTAssertEqual(charges.data.count, 3)
                 let samplingCharge = charges.data.first
                 XCTAssertEqual(samplingCharge?.amount, 100000)
-            case let .Fail(error):
+            case let .fail(error):
                 XCTFail("\(error)")
             }
         })
         
         XCTAssertNotNil(request)
-        waitForExpectationsWithTimeout(15.0, handler: nil)
+        waitForExpectations(timeout: 15.0, handler: nil)
     }
     
     func testSearchCustomerByEmail() {
-        let expectation = expectationWithDescription("transfer result")
+        let expectation = self.expectation(description: "transfer result")
         
         let searchParams = SearchParams<CustomerFilterParams>()
         searchParams.scope = Customer.scopeName
         var searchFilter = CustomerFilterParams()
-        let dateComponents = NSDateComponents()
-        dateComponents.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        var dateComponents = DateComponents()
+        dateComponents.calendar = Calendar(identifier: .gregorian)
         dateComponents.year = 2016
         dateComponents.month = 9
         dateComponents.day = 2
@@ -91,26 +91,26 @@ class SearchOperationTest: OmiseTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .Success(customer):
+            case let .success(customer):
                 XCTAssertEqual(customer.data.count, 1)
                 let samplingCustomer = customer.data.first
                 XCTAssertEqual(samplingCustomer?.email, "john.doe@example.com")
-            case let .Fail(error):
+            case let .fail(error):
                 XCTFail("\(error)")
             }
         })
         
         XCTAssertNotNil(request)
-        waitForExpectationsWithTimeout(15.0, handler: nil)
+        waitForExpectations(timeout: 15.0, handler: nil)
     }
     
     func testSearchRecipientByKind() {
-        let expectation = expectationWithDescription("transfer result")
+        let expectation = self.expectation(description: "transfer result")
         
         let searchParams = SearchParams<RecipientFilterParams>()
         searchParams.scope = Recipient.scopeName
         var searchFilter = RecipientFilterParams()
-        searchFilter.type = .Some(.Individual)
+        searchFilter.type = .some(.individual)
         
         searchParams.filter = searchFilter
         
@@ -118,17 +118,17 @@ class SearchOperationTest: OmiseTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .Success(customer):
+            case let .success(customer):
                 XCTAssertEqual(customer.data.count, 1)
                 let samplingCustomer = customer.data.first
                 XCTAssertEqual(samplingCustomer?.email, "pitiphong@omise.co")
-            case let .Fail(error):
+            case let .fail(error):
                 XCTFail("\(error)")
             }
         })
         
         XCTAssertNotNil(request)
-        waitForExpectationsWithTimeout(15.0, handler: nil)
+        waitForExpectations(timeout: 15.0, handler: nil)
     }
     
 }

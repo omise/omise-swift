@@ -4,7 +4,7 @@ import Omise
 
 class RequestTest: OmiseTestCase {
     let config = Config(publicKey: "pkey_test_123", secretKey: "skey_test_123")
-    let session = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+    let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     
 //    func testCtor() {
 //        guard let request: Request<Account> = Request(

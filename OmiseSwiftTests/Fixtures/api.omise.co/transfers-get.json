@@ -44,7 +44,7 @@
         "name": "JOHN DOE",
         "created": "2015-06-02T09:26:59Z"
       },
-      "created": "2015-01-15T10:04:47Z"
+      "created": "2015-01-15T10:04:47Z",
       "sent": false,
       "paid": false,
       "amount": 32100,

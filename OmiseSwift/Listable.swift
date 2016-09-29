@@ -3,12 +3,12 @@ import Foundation
 public protocol Listable { }
 
 public class ListParams: Params {
-    public var from: NSDate? {
+    public var from: Date? {
         get { return get("from", DateConverter.self) }
         set { set("from", DateConverter.self, toValue: newValue) }
     }
     
-    public var to: NSDate? {
+    public var to: Date? {
         get { return get("to", DateConverter.self) }
         set { set("to", DateConverter.self, toValue: newValue) }
     }
@@ -32,17 +32,17 @@ public class ListParams: Params {
 public extension Listable where Self: ResourceObject {
     public typealias ListOperation = Operation<OmiseList<Self>>
     
-    public static func listOperation(parent: ResourceObject?, params: ListParams?) -> ListOperation {
+    public static func listOperation(_ parent: ResourceObject?, params: ListParams?) -> ListOperation {
         return ListOperation(
             endpoint: info.endpoint,
             method: "GET",
-            paths: buildResourcePaths(self, parent: parent),
+            paths: makeResourcePathsWith(context: self, parent: parent),
             params: params
         )
     }
     
     public static func list(using given: Client? = nil, parent: ResourceObject? = nil, params: ListParams? = nil, callback: ListOperation.Callback?) -> Request<ListOperation.Result>? {
-        guard checkParent(self, parent: parent) else {
+        guard checkParent(withContext: self, parent: parent) else {
             return nil
         }
         

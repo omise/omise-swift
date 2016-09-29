@@ -1,8 +1,8 @@
 import Foundation
 
-public class OmiseObject: NSObject, AttributesContainer {
-    public var attributes: JSONAttributes = [:]
-    public var children: [String: AttributesContainer] = [:]
+open class OmiseObject: NSObject, AttributesContainer {
+    open var attributes: JSONAttributes = [:]
+    open var children: [String: AttributesContainer] = [:]
     
     public var object: String? {
         get { return get("object", StringConverter.self) }

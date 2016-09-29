@@ -132,7 +132,7 @@ public class ChargeParams: Params {
 }
 
 public class ChargeFilterParams: OmiseFilterParams {
-    public var created: NSDateComponents? {
+    public var created: DateComponents? {
         get { return get("created", DateComponentsConverter.self) }
         set { set("created", DateComponentsConverter.self, toValue: newValue) }
     }
@@ -187,7 +187,7 @@ extension Charge {
     public typealias CaptureOperation = Operation<Charge>
     public typealias ReverseOperation = Operation<Charge>
     
-    public static func capture(using given: Client? = nil, id: String, callback: CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
+    public static func capture(using given: Client? = nil, id: String, callback: @escaping CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
         let operation = CaptureOperation(
             endpoint: info.endpoint,
             method: "POST",
@@ -198,7 +198,7 @@ extension Charge {
         return client.call(operation, callback: callback)
     }
     
-    public static func reverse(using given: Client? = nil, id: String, callback: ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
+    public static func reverse(using given: Client? = nil, id: String, callback: @escaping ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
         let operation = ReverseOperation(
             endpoint: info.endpoint,
             method: "POST",
@@ -211,29 +211,29 @@ extension Charge {
 }
 
 func exampleCharge() {
-    Charge.list { (result) in
+    _ = Charge.list { (result) in
         switch result {
-        case let .Success(charges):
+        case let .success(charges):
             print("charges: \(charges.data[0].id)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
     
-    Charge.retrieve(id: "chrg_test_123") { (result) in
+    _ = Charge.retrieve(id: "chrg_test_123") { (result) in
         switch result {
-        case let .Success(charge):
+        case let .success(charge):
             print("charge: \(charge.id) \(charge.amount)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
     
-    Charge.reverse(id: "chrg_test_123") { (result) in
+    _ = Charge.reverse(id: "chrg_test_123") { (result) in
         switch result {
-        case let .Success(charge):
+        case let .success(charge):
             print("reversed charge: \(charge.id)")
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }

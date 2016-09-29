@@ -5,16 +5,16 @@ public protocol SingletonRetrievable { }
 public extension SingletonRetrievable where Self: ResourceObject {
     public typealias SingletonRetrieveOperation = Operation<Self>
     
-    public static func retrieveOperation(parent: ResourceObject?) -> SingletonRetrieveOperation {
+    public static func retrieveOperation(_ parent: ResourceObject?) -> SingletonRetrieveOperation {
         return SingletonRetrieveOperation(
             endpoint: info.endpoint,
             method: "GET",
-            paths: buildResourcePaths(self, parent: parent)
+            paths: makeResourcePathsWith(context: self, parent: parent)
         )
     }
     
     public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, callback: SingletonRetrieveOperation.Callback?) -> Request<SingletonRetrieveOperation.Result>? {
-        guard checkParent(self, parent: parent) else {
+        guard checkParent(withContext: self, parent: parent) else {
             return nil
         }
         
