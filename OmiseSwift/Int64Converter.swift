@@ -10,6 +10,6 @@ public class Int64Converter: Converter {
     
     public static func convert(fromValue value: Target?) -> Any? {
         guard let n = value else { return nil }
-        return n
+        return NSNumber(value: n)
     }
 }
