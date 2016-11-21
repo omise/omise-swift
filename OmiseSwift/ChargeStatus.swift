@@ -2,6 +2,7 @@ import Foundation
 
 public enum ChargeStatus: String {
     case failed
+    case reversed
     case pending
     case successful
 }
@@ -15,6 +16,7 @@ type ChargeStatus string
 
 const (
     ChargeFailed     ChargeStatus = "failed"
+    ChargeReversed   ChargeStatus = "reversed"
     ChargePending    ChargeStatus = "pending"
     ChargeSuccessful ChargeStatus = "successful"
 )
