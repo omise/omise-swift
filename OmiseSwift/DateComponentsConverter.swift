@@ -52,7 +52,8 @@ public class DateComponentsConverter: Converter {
     
     public static func convert(fromValue value: Target?) -> Any? {
         guard let dateComponents = value,
-            (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian else { return nil }
-        return "\(dateComponents.year)-\(dateComponents.month)-\(dateComponents.day)" as NSString
+            (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian,
+        let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day else { return nil }
+        return "\(year)-\(month)-\(day)"
     }
 }

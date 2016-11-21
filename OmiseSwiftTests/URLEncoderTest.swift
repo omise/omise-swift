@@ -48,4 +48,20 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("2deeper[nesting][also]", result[2].name)
         XCTAssertEqual("works", result[2].value)
     }
+    
+    func testConverter() {
+        let searchFilterParams = ChargeFilterParams()
+        searchFilterParams.amount = 1000
+        searchFilterParams.cardLastDigits = "4242"
+        searchFilterParams.capture = true
+        searchFilterParams.created = DateComponents(year: 2016, month: 8, day: 1)
+        
+        let result = Set(URLEncoder.encode(searchFilterParams.normalizedAttributes).map({ (query) in query.value ?? "(nil)" }))
+        XCTAssertEqual(result, [
+            "1000",
+            "4242",
+            "true",
+            "2016-8-1"
+            ])
+    }
 }
