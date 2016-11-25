@@ -140,6 +140,8 @@
 		8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */; };
 		8A82A7131D79786100A198A3 /* DateComponentsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */; };
 		8A82A7141D79786100A198A3 /* DateComponentsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */; };
+		8A9680761DE6F63F0028B9FD /* CardBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9680751DE6F63F0028B9FD /* CardBrand.swift */; };
+		8A9680781DE6FB310028B9FD /* CardBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9680751DE6F63F0028B9FD /* CardBrand.swift */; };
 		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AB1DC9E1D6ACD140055A325 /* Int64Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */; };
 		98256FEA1D22444100F91436 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
@@ -247,6 +249,7 @@
 		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
 		8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOperationTest.swift; sourceTree = "<group>"; };
 		8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponentsConverter.swift; sourceTree = "<group>"; };
+		8A9680751DE6F63F0028B9FD /* CardBrand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardBrand.swift; sourceTree = "<group>"; };
 		8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int64Converter.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -339,6 +342,7 @@
 				22112D121CC7954F00D0DB54 /* Balance.swift */,
 				220F536F1CD8C19400344B06 /* BankAccount.swift */,
 				22BF9BA21CD2028500CD3CAD /* Card.swift */,
+				8A9680751DE6F63F0028B9FD /* CardBrand.swift */,
 				22BF9BA51CD227B200CD3CAD /* Charge.swift */,
 				22BF9BA81CD228BB00CD3CAD /* ChargeStatus.swift */,
 				8A56D41A1D78172D00F30D88 /* Currency.swift */,
@@ -671,6 +675,7 @@
 				22112D2B1CC79A9F00D0DB54 /* BoolConverter.swift in Sources */,
 				22BF9BBD1CD23AB600CD3CAD /* Refund.swift in Sources */,
 				225C4E4F1D22412A00A62F2C /* Destroyable.swift in Sources */,
+				8A9680761DE6F63F0028B9FD /* CardBrand.swift in Sources */,
 				220F53691CD89FDE00344B06 /* OmiseList.swift in Sources */,
 				22BF9BA61CD227B200CD3CAD /* Charge.swift in Sources */,
 				229873371CCDF3EE00970F8C /* Converter.swift in Sources */,
@@ -699,6 +704,7 @@
 				2298738C1CCF5D9500970F8C /* OmiseError.swift in Sources */,
 				220F53721CD8C1F900344B06 /* BankAccount.swift in Sources */,
 				220F536E1CD8BEF100344B06 /* RecipientType.swift in Sources */,
+				8A9680781DE6FB310028B9FD /* CardBrand.swift in Sources */,
 				222139521CE1BC4E00B6BF43 /* TransactionType.swift in Sources */,
 				22A0F9911D21610300CA3D35 /* Retrievable.swift in Sources */,
 				220F536B1CD8BB1F00344B06 /* Dispute.swift in Sources */,

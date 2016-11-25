@@ -35,9 +35,9 @@ open class Card: ResourceObject {
         set { set("last_digits", StringConverter.self, toValue: newValue) }
     }
     
-    public var brand: String? {
-        get { return get("brand", StringConverter.self) }
-        set { set("brand", StringConverter.self, toValue: newValue) }
+    public var brand: CardBrand? {
+        get { return get("brand", EnumConverter.self) }
+        set { set("brand", EnumConverter.self, toValue: newValue) }
     }
     
     public var expirationMonth: Int? {

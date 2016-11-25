@@ -40,7 +40,7 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(card.postalCode, "10320")
         XCTAssertEqual(card.financing, "")
         XCTAssertEqual(card.lastDigits, "4242")
-        XCTAssertEqual(card.brand, "Visa")
+        XCTAssertEqual(card.brand?.rawValue, "Visa")
         XCTAssertEqual(card.expirationMonth, 10)
         XCTAssertEqual(card.expirationYear, 2018)
         XCTAssertEqual(card.fingerprint, "mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=")
