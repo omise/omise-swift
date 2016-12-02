@@ -48,6 +48,21 @@ public class Charge: ResourceObject {
         set { setChild("card", Card.self, toValue: newValue) }
     }
     
+    public var offsite: OffsitePayment? {
+        get { return get("offsite", OffsitePaymentConverter.self) }
+        set { set("offsite", OffsitePaymentConverter.self, toValue: newValue) }
+    }
+    
+    public var payment: Payment? {
+        switch get("source_of_fund", StringConverter.self) {
+        case "offsite"?:
+            return offsite.map(Payment.offsite)
+        case "card"?, nil /* nil for backward compatability */ :
+            return card.map(Payment.card)
+        default: return nil
+        }
+    }
+    
     public var refunded: Int64? {
         get { return get("refunded", Int64Converter.self) }
         set { set("refunded", Int64Converter.self, toValue: newValue) }
@@ -92,6 +107,8 @@ public class Charge: ResourceObject {
         get { return get("authorize_uri", StringConverter.self) }
         set { set("authorize_uri", StringConverter.self, toValue: newValue) }
     }
+    
+    
 }
 
 public class ChargeParams: Params {
