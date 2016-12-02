@@ -136,9 +136,9 @@ public class ChargeFilterParams: OmiseFilterParams {
         get { return get("created", DateComponentsConverter.self) }
         set { set("created", DateComponentsConverter.self, toValue: newValue) }
     }
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
+    public var amount: Double? {
+        get { return get("amount", DoubleConverter.self) }
+        set { set("amount", DoubleConverter.self, toValue: newValue) }
     }
     
     public var authorized: Bool? {
@@ -165,8 +165,8 @@ public class ChargeFilterParams: OmiseFilterParams {
         get { return get("failure_code", StringConverter.self) }
         set { set("failure_code", StringConverter.self, toValue: newValue) }
     }
-    
 }
+
 
 extension Charge: Listable { }
 extension Charge: Retrievable { }

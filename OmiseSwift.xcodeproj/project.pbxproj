@@ -153,8 +153,10 @@
 		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AB1DC9E1D6ACD140055A325 /* Int64Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */; };
 		8AD3F2CF1DEBFBC100F68FB4 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */; };
+		8AD3F2D81DEC3EC400F68FB4 /* DoubleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D71DEC3EC400F68FB4 /* DoubleConverter.swift */; };
 		8AEDE7D51DDC701600DD9DF1 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 229873591CCE0B5A00970F8C /* Fixtures */; };
 		8AD3F2D01DEBFBC100F68FB4 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */; };
+		8AD3F2D91DEC3EF400F68FB4 /* DoubleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D71DEC3EC400F68FB4 /* DoubleConverter.swift */; };
 		8AD3F2D21DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
 		8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
 		8AD3F2D51DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
@@ -272,6 +274,7 @@
 		8A9680751DE6F63F0028B9FD /* CardBrand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardBrand.swift; sourceTree = "<group>"; };
 		8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int64Converter.swift; sourceTree = "<group>"; };
 		8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		8AD3F2D71DEC3EC400F68FB4 /* DoubleConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleConverter.swift; sourceTree = "<group>"; };
 		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
@@ -403,6 +406,7 @@
 				229873321CCDF1F900970F8C /* Converter.swift */,
 				8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */,
 				220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */,
+				8AD3F2D71DEC3EC400F68FB4 /* DoubleConverter.swift */,
 				22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */,
 				8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */,
 				2298738D1CCF675700970F8C /* IntConverter.swift */,
@@ -715,6 +719,7 @@
 				229873371CCDF3EE00970F8C /* Converter.swift in Sources */,
 				22BF9BB31CD2356200CD3CAD /* Dispute.swift in Sources */,
 				2270E3A31CC7751600F18814 /* Config.swift in Sources */,
+				8AD3F2D81DEC3EC400F68FB4 /* DoubleConverter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +729,7 @@
 			files = (
 				229873631CCE163E00970F8C /* OmiseObject.swift in Sources */,
 				2221394C1CE1BB2E00B6BF43 /* Token.swift in Sources */,
+				8AD3F2D91DEC3EF400F68FB4 /* DoubleConverter.swift in Sources */,
 				22BF9BAD1CD22B7900CD3CAD /* EnumConverter.swift in Sources */,
 				98256FEC1D22472900F91436 /* Updatable.swift in Sources */,
 				22BF9BA71CD227B800CD3CAD /* Charge.swift in Sources */,
