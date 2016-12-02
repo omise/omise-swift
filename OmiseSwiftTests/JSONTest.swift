@@ -39,8 +39,9 @@ class JSONTest: OmiseTestCase {
         XCTAssertEqual(card.city, "Bangkok")
         XCTAssertEqual(card.postalCode, "10320")
         XCTAssertEqual(card.financing, "")
-        XCTAssertEqual(card.lastDigits, "4242")
+        XCTAssertEqual(card.lastDigits?.lastDigits, "4242")
         XCTAssertEqual(card.brand?.rawValue, "Visa")
+
         XCTAssertEqual(card.expirationMonth, 10)
         XCTAssertEqual(card.expirationYear, 2018)
         XCTAssertEqual(card.fingerprint, "mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=")
@@ -141,7 +142,7 @@ class JSONTest: OmiseTestCase {
         guard let bankAccount = recipient.bankAccount else { return XCTFail("bank_account not deserialized") }
         XCTAssertEqual(bankAccount.object, "bank_account")
         XCTAssertEqual(bankAccount.brand, "bbl")
-        XCTAssertEqual(bankAccount.lastDigits, "7890")
+        XCTAssertEqual(bankAccount.lastDigits?.lastDigits, "7890")
     }
     
     func testRefund() {
@@ -197,7 +198,7 @@ class JSONTest: OmiseTestCase {
         guard let bankAccount = transfer.bankAccount else { return XCTFail("bank_account not deserialized") }
         XCTAssertEqual(bankAccount.object, "bank_account")
         XCTAssertEqual(bankAccount.brand, "test")
-        XCTAssertEqual(bankAccount.lastDigits, "6789")
+        XCTAssertEqual(bankAccount.lastDigits?.lastDigits, "6789")
         XCTAssertEqual(bankAccount.name, "DEFAULT BANK ACCOUNT")
     }
     

@@ -6,9 +6,9 @@ public class BankAccount: ResourceObject {
         set { set("brand", StringConverter.self, toValue: newValue) }
     }
     
-    public var lastDigits: String? {
-        get { return get("last_digits", StringConverter.self) }
-        set { set("last_digits", StringConverter.self, toValue: newValue) }
+    public var lastDigits: LastDigits? {
+        get { return get("last_digits", LastDigitsConverter.self) }
+        set { set("last_digits", LastDigitsConverter.self, toValue: newValue) }
     }
     
     public var number: String? {
