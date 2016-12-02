@@ -152,7 +152,13 @@
 		8A9680781DE6FB310028B9FD /* CardBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9680751DE6F63F0028B9FD /* CardBrand.swift */; };
 		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AB1DC9E1D6ACD140055A325 /* Int64Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */; };
+		8AD3F2CF1DEBFBC100F68FB4 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */; };
 		8AEDE7D51DDC701600DD9DF1 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 229873591CCE0B5A00970F8C /* Fixtures */; };
+		8AD3F2D01DEBFBC100F68FB4 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */; };
+		8AD3F2D21DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
+		8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
+		8AD3F2D51DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
+		8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
 		98256FEA1D22444100F91436 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
 		98256FEB1D22445100F91436 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98A1D215ECC00CA3D35 /* Globals.swift */; };
 		98256FEC1D22472900F91436 /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4C1D223FF700A62F2C /* Updatable.swift */; };
@@ -265,6 +271,9 @@
 		8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponentsConverter.swift; sourceTree = "<group>"; };
 		8A9680751DE6F63F0028B9FD /* CardBrand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardBrand.swift; sourceTree = "<group>"; };
 		8AB1DC9C1D6ACD140055A325 /* Int64Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int64Converter.swift; sourceTree = "<group>"; };
+		8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
+		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -365,6 +374,7 @@
 				22BF9BB41CD235DC00CD3CAD /* DisputeStatus.swift */,
 				22BF9BB61CD2378C00CD3CAD /* Event.swift */,
 				8A7CBA481DE59A4700F83D21 /* LastDigits.swift */,
+				8AD3F2CE1DEBFBC100F68FB4 /* Link.swift */,
 				222139531CE1C50100B6BF43 /* Lookup.swift */,
 				220F53651CD89FAD00344B06 /* OmiseList.swift */,
 				8A3938E51D8174C9007750AA /* List.swift */,
@@ -428,9 +438,6 @@
 				22112D091CC7910700D0DB54 /* OmiseTestCase.swift */,
 				229873751CCE29D700970F8C /* OperationTest.swift */,
 				229873851CCF565C00970F8C /* RequestTest.swift */,
-				8A712EE01D82B14D00324D83 /* ChargeOperationsTest.swift */,
-				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
-				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
 				8A07D2FC1D742B4F0030B68D /* Fixture Tests */,
 				8A07D2FD1D742B580030B68D /* Live Tests */,
 				229873381CCDF8AA00970F8C /* Models */,
@@ -457,6 +464,7 @@
 				8A2698A41D74417800515A0A /* DisputeOperationFixtureTests.swift */,
 				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
 				8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */,
+				8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */,
 			);
 			name = "Fixture Tests";
 			sourceTree = "<group>";
@@ -464,6 +472,9 @@
 		8A07D2FD1D742B580030B68D /* Live Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
+				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
+				8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */,
 			);
 			name = "Live Tests";
 			sourceTree = "<group>";
@@ -652,6 +663,7 @@
 				8A82A7071D7942E800A198A3 /* Searchable.swift in Sources */,
 				22A0F98D1D2160F900CA3D35 /* Creatable.swift in Sources */,
 				22338DB81D21392A00811363 /* Failable.swift in Sources */,
+				8AD3F2CF1DEBFBC100F68FB4 /* Link.swift in Sources */,
 				225C4E4D1D223FF700A62F2C /* Updatable.swift in Sources */,
 				222139541CE1C50100B6BF43 /* Lookup.swift in Sources */,
 				22BF9BBF1CD23B1400CD3CAD /* Token.swift in Sources */,
@@ -754,6 +766,7 @@
 				2221394F1CE1BC2B00B6BF43 /* Transaction.swift in Sources */,
 				8A7CBA4D1DE59C2000F83D21 /* LastDigitsConverter.swift in Sources */,
 				229873A11CD09C4A00970F8C /* AttributesContainer.swift in Sources */,
+				8AD3F2D01DEBFBC100F68FB4 /* Link.swift in Sources */,
 				22112D291CC79A0500D0DB54 /* Account.swift in Sources */,
 				2270E3A41CC7798B00F18814 /* Request.swift in Sources */,
 				22A0F98F1D2160FE00CA3D35 /* SingletonRetrievable.swift in Sources */,
@@ -786,11 +799,13 @@
 				8A7CBA4F1DE59F0200F83D21 /* LastDigitsTest.swift in Sources */,
 				229873761CCE29D700970F8C /* OperationTest.swift in Sources */,
 				22112D0A1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
+				8AD3F2D21DEC077000F68FB4 /* LinkOperationTest.swift in Sources */,
 				8A07D2F41D73F5040030B68D /* FixtureClient.swift in Sources */,
 				229873891CCF566F00970F8C /* RequestTest.swift in Sources */,
 				98256FF21D225E3000F91436 /* TransferOperationsTest.swift in Sources */,
 				8A712EE21D82B14D00324D83 /* ChargeOperationsTest.swift in Sources */,
 				22112D0C1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
+				8AD3F2D51DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,7 +814,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				229873841CCF3B1E00970F8C /* URLEncoderTest.swift in Sources */,
+				8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */,
 				8A07D2FB1D741F430030B68D /* TransferOperationFixtureTests.swift in Sources */,
+				8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */,
 				8A2698A61D74417800515A0A /* DisputeOperationFixtureTests.swift in Sources */,
 				8A712EE11D82B14D00324D83 /* ChargeOperationsTest.swift in Sources */,
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,

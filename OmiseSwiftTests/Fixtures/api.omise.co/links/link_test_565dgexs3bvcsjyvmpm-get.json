@@ -1,0 +1,25 @@
+{
+  "object": "link",
+  "id": "link_test_565dgexs3bvcsjyvmpm",
+  "livemode": false,
+  "location": "/links/link_test_565dgexs3bvcsjyvmpm",
+  "amount": 1490000,
+  "currency": "thb",
+  "used": false,
+  "multiple": false,
+  "title": "B&W P7 Wireless",
+  "description": "Buying Bowers & Wilkins P7 wireless from us",
+  "charges": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00+00:00",
+    "to": "2016-11-28T06:40:30+00:00",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": null,
+    "location": "/links/link_test_565dgexs3bvcsjyvmpm/charges",
+    "data": []
+  },
+  "payment_uri": "https://link.omise.co/A99C513F",
+  "created": "2016-11-28T06:33:59Z"
+}
