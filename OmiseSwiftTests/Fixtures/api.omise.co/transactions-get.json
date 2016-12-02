@@ -16,6 +16,8 @@
       "amount": 96094,
       "currency": "THB",
       "created": "2015-01-15T05:00:29Z",
+      "sent_at": "2016-11-28T07:28:29Z",
+      "paid_at": null,
       "transferable": "2016-01-28T05:58:28Z",
       "source": "chrg_test_52u2h7igf601x172g23"
     },
@@ -26,6 +28,8 @@
       "amount": 192188,
       "currency": "THB",
       "created": "2015-01-15T10:12:25Z",
+      "sent_at": null,
+      "paid_at": null,
       "location": "/transactions/trxn_test_52u2h7rxsbg06m2nyqb",
       "transferable": "2016-01-28T05:58:30Z",
       "source": "chrg_test_52u2h7q6a1fz4msrqdk"

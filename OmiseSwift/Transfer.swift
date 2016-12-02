@@ -23,6 +23,16 @@ public class Transfer: ResourceObject {
         set { set("paid", BoolConverter.self, toValue: newValue) }
     }
     
+    public var sentDate: Date? {
+        get { return get("sent_at", DateConverter.self) }
+        set { set("sent_at", DateConverter.self, toValue: newValue) }
+    }
+    
+    public var paidDate: Date? {
+        get { return get("paid_at", DateConverter.self) }
+        set { set("paid_at", DateConverter.self, toValue: newValue) }
+    }
+
     public var amount: Int64? {
         get { return get("amount", Int64Converter.self) }
         set { set("amount", Int64Converter.self, toValue: newValue) }

@@ -17,12 +17,13 @@ class TransferOperationsTest: OmiseTestCase {
     func testTransferRetrieve() {
         let expectation = self.expectation(description: "transfer result")
         
-        let request = Transfer.retrieve(using: testClient, id: "trsf_test_54h7uzmwu5v79mgri6d") { (result) in
+        let request = Transfer.retrieve(using: testClient, id: "trsf_test_565dzj6wol8aqzw8aya") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.amount, 96094)
+                XCTAssertEqual(transfer.amount, 1_000_00)
+                XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
             case let .fail(error):
                 XCTFail("\(error)")
             }
