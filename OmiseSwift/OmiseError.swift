@@ -24,3 +24,9 @@ extension OmiseError: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String { return self.message }
     public var debugDescription: String { return self.message }
 }
+
+extension OmiseError: LocalizedError {
+    public var errorDescription: String {
+        return self.message
+    }
+}

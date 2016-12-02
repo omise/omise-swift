@@ -12,4 +12,10 @@ public enum Endpoint: String {
         
         return url
     }
+    
+    func url(withComponents components: [String]) -> URL {
+        return components.reduce(url, { (url, segment) -> URL in
+            return url.appendingPathComponent(segment)
+        })
+    }
 }

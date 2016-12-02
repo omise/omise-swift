@@ -30,6 +30,7 @@ open class Client: NSObject {
             delegateQueue: operationQueue)
     }
     
+    @discardableResult
     open func call<TResult: OmiseObject>(_ operation: Operation<TResult>, callback: Operation<TResult>.Callback?) -> Request<TResult>? {
         do {
             let req: Request<TResult> = Request(client: self, operation: operation, callback: callback)

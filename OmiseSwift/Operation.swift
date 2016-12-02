@@ -25,9 +25,7 @@ open class Operation<TResult: OmiseObject> {
     }
     
     fileprivate func makeURL() -> URL {
-        let url = pathComponents.reduce(endpoint.url as URL) { (url, segment) -> URL in
-            return url.appendingPathComponent(segment)
-        }
+        let url = endpoint.url(withComponents: pathComponents)
         
         guard method.uppercased() == "GET" || method.uppercased() == "HEAD" else {
             return url

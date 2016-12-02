@@ -39,7 +39,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ChargeOperationsTest">
+               </Test>
+               <Test
                   Identifier = "LiveTest">
+               </Test>
+               <Test
+                  Identifier = "SearchOperationTest">
                </Test>
                <Test
                   Identifier = "TransferOperationsTest">

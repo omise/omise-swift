@@ -21,6 +21,11 @@ public class OmiseList<TItem: OmiseObject>: OmiseObject {
         set { set("total", IntConverter.self, toValue: newValue) }
     }
     
+    public var offset: Int? {
+        get { return get("offset", IntConverter.self) }
+        set { set("offset", IntConverter.self, toValue: newValue) }
+    }
+    
     public var data: [TItem] {
         get { return getList("data", TItem.self) }
         set { setList("data", TItem.self, toValue: newValue) }

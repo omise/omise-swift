@@ -26,7 +26,7 @@ public extension AttributesContainer {
     // TODO: Cache lists
     public func getList<TItem: AttributesContainer>(_ key: String, _ itemType: TItem.Type) -> [TItem] {
         let items = self.attributes[key] as? [JSONAttributes] ?? []
-        return items.map({ (attributes) -> TItem in TItem(attributes: attributes) })
+        return items.map(TItem.init(attributes:))
     }
     
     public func setList<TItem: AttributesContainer>(_ key: String, _ itemType: TItem.Type, toValue value: [TItem]) {
