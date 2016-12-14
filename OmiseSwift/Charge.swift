@@ -218,7 +218,7 @@ extension Charge {
         return client.call(operation, callback: callback)
     }
     
-    public static func reverse(id: String) -> CaptureOperation {
+    public static func reverse(id: String) -> ReverseOperation {
         return ReverseOperation(
             endpoint: info.endpoint,
             method: "POST",
