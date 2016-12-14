@@ -204,24 +204,30 @@ extension Charge {
     public typealias CaptureOperation = Operation<Charge>
     public typealias ReverseOperation = Operation<Charge>
     
-    public static func capture(using given: Client? = nil, id: String, callback: @escaping CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
-        let operation = CaptureOperation(
+    public static func captureOperation(id: String) -> CaptureOperation {
+        return CaptureOperation(
             endpoint: info.endpoint,
             method: "POST",
             paths: [info.path, id, "capture"]
         )
-        
+    }
+    
+    public static func capture(using given: Client? = nil, id: String, callback: @escaping CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
+        let operation = captureOperation(id: id)
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
     }
     
-    public static func reverse(using given: Client? = nil, id: String, callback: @escaping ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
-        let operation = ReverseOperation(
+    public static func reverse(id: String) -> ReverseOperation {
+        return ReverseOperation(
             endpoint: info.endpoint,
             method: "POST",
             paths: [info.path, id, "reverse"]
         )
-        
+    }
+    
+    public static func reverse(using given: Client? = nil, id: String, callback: @escaping ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
+        let operation = reverse(id: id)
         let client = resolveClient(given: given)
         return client.call(operation, callback: callback)
     }
