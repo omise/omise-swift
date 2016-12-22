@@ -88,8 +88,8 @@ public class TransferFilterParams: OmiseFilterParams {
     }
     
     public var currency: Currency? {
-        get { return get("currency", CurrencyDataConverter.self) }
-        set { set("currency", CurrencyDataConverter.self, toValue: newValue) }
+        get { return get("currency", CurrencyFieldConverter.self) }
+        set { set("currency", CurrencyFieldConverter.self, toValue: newValue) }
     }
     
     public var bankLastDigits: String? {

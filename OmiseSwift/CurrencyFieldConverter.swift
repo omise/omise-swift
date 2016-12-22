@@ -1,7 +1,7 @@
 import Foundation
 
 
-public class CurrencyDataConverter: Converter {
+public class CurrencyFieldConverter: Converter {
     public typealias Target = Currency
     
     public static func convert(fromAttribute value: Any?) -> Target? {
