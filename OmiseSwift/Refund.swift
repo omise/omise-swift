@@ -21,7 +21,7 @@ open class Refund: ResourceObject {
     }
     
     public var transaction: String? {
-        get { return get("transaction", StringConverter.self) }
+        get { return get("transaction", StringConverter.self) ?? getChild("transaction", Transaction.self)?.id }
         set { set("transaction", StringConverter.self, toValue: newValue) }
     }
 }

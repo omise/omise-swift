@@ -4,7 +4,7 @@ public class Customer: ResourceObject {
     public override class var info: ResourceInfo { return ResourceInfo(path: "/customers") }
     
     public var defaultCard: String? {
-        get { return get("default_card", StringConverter.self) }
+        get { return get("default_card", StringConverter.self) ?? getChild("default_card", Card.self)?.id }
         set { set("default_card", StringConverter.self, toValue: newValue) }
     }
     

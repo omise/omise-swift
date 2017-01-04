@@ -15,7 +15,7 @@ class ChargeOperationsTest: OmiseTestCase {
     }
     
     func testChargeList() {
-        let expectation = self.expectation(description: "transfer list")
+        let expectation = self.expectation(description: "charge list")
         
         let request = Charge.list(using: testClient, params: nil) { (result) in
             defer { expectation.fulfill() }
@@ -30,10 +30,28 @@ class ChargeOperationsTest: OmiseTestCase {
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
+     
+    
+    func testChargeRetrieve() {
+        let expectation = self.expectation(description: "charge retrieve")
+        
+        let request = Charge.retrieve(using: testClient, parent: nil, id: "chrg_test_54phpsikwx0q7sv8h4g", callback: { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.id, "chrg_test_54phpsikwx0q7sv8h4g")                
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        })
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
     
     func testChargeInfiniteListWithAfter() {
-        let firstExpectation = self.expectation(description: "transfer list")
-        let secondExpectation = self.expectation(description: "Load more of transfer list")
+        let firstExpectation = self.expectation(description: "charge list")
+        let secondExpectation = self.expectation(description: "Load more of charge list")
         
         Charge.list(using: testClient) { (result) in
             defer { firstExpectation.fulfill() }

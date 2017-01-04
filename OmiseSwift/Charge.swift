@@ -28,6 +28,12 @@ public class Charge: ResourceObject {
         set { set("capture", BoolConverter.self, toValue: newValue) }
     }
     
+    public var captureDate: Date? {
+        get {
+            return getChild("transaction", Transaction.self)?.created
+        }
+    }
+    
     public var authorized: Bool? {
         get { return get("authorized", BoolConverter.self) }
         set { set("authorized", BoolConverter.self, toValue: newValue) }
@@ -39,7 +45,7 @@ public class Charge: ResourceObject {
     }
     
     public var transaction: String? {
-        get { return get("transaction", StringConverter.self) }
+        get { return get("transaction", StringConverter.self) ?? getChild("transaction", Transaction.self)?.id }
         set { set("transaction", StringConverter.self, toValue: newValue) }
     }
     
@@ -84,7 +90,7 @@ public class Charge: ResourceObject {
     }
     
     public var customer: String? {
-        get { return get("customer", StringConverter.self) }
+        get { return get("customer", StringConverter.self) ?? getChild("customer", Customer.self)?.id }
         set { set("customer", StringConverter.self, toValue: newValue) }
     }
     
