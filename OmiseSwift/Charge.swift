@@ -49,6 +49,11 @@ public class Charge: ResourceObject {
         set { set("transaction", StringConverter.self, toValue: newValue) }
     }
     
+    public var transactionDetail: Transaction? {
+        get { return getChild("transaction", Transaction.self) }
+        set { setChild("transaction", Transaction.self, toValue: newValue) }
+    }
+    
     public var card: Card? {
         get { return getChild("card", Card.self) }
         set { setChild("card", Card.self, toValue: newValue) }

@@ -17,6 +17,11 @@ public class Transaction: ResourceObject {
         get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
         set { set("currency", StringConverter.self, toValue: newValue?.code) }
     }
+    
+    public var transferableDate: Date? {
+        get { return get("transferable", DateConverter.self) }
+        set { set("transferable", DateConverter.self, toValue: newValue) }
+    }
 }
 
 extension Transaction: Listable { }
