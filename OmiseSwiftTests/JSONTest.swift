@@ -24,7 +24,6 @@ class JSONTest: OmiseTestCase {
         let bankAccount: BankAccount = makeObject(fromFixturesWithName: "bank_account")
         XCTAssertEqual(bankAccount.object, "bank_account")
         XCTAssertEqual(bankAccount.brand, "bbl")
-        XCTAssertEqual(bankAccount.number, "1234567890")
         XCTAssertEqual(bankAccount.name, "SOMCHAI PRASERT")
         XCTAssertEqual(bankAccount.created?.timeIntervalSince1970, 1424944575.0)
     }

@@ -1,6 +1,8 @@
 import Foundation
 
 
+extension Card: Equatable {}
+
 public enum Payment {
     case card(Card)
     case offsite(OffsitePayment)

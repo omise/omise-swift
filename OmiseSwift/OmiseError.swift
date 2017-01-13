@@ -3,8 +3,8 @@ import Foundation
 public enum OmiseError: Error {
     case unexpected(String)
     case configuration(String)
-    case io(NSError)
     case api(APIError)
+    case other(Error)
     
     public var message: String {
         switch self {
@@ -12,10 +12,10 @@ public enum OmiseError: Error {
             return "unexpected error: \(message)"
         case .configuration(let message):
             return "configuration error: \(message)"
-        case .io(let err):
-            return "I/O error: \(err.description)"
+        case .other(let err):
+            return "I/O error: \(err.localizedDescription)"
         case .api(let err):
-            return "(\(err.statusCode ?? 0)/\(err.code ?? "unknown")) \(err.message ?? "unknown error")"
+            return "(\(err.statusCode)/\(err.code)) \(err.message)"
         }
     }
 }

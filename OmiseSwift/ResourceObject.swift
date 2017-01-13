@@ -1,7 +1,7 @@
 import Foundation
 
 open class ResourceObject: OmiseObject {
-    class var info: ResourceInfo { return ResourceInfo() }
+    class var info: ResourceInfo { return ResourceInfo(path: "/") }
     
     var attachedClient: Client? = nil
 

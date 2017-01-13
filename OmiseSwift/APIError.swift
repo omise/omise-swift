@@ -1,19 +1,27 @@
 import Foundation
 
-public class APIError: OmiseObject {
-    public var statusCode: Int? {
-        get { return get("status_code", IntConverter.self) }
-        set { set("status_code", IntConverter.self, toValue: newValue) }
-    }
+public struct APIError: OmiseObject {
+    public let object: String
     
-    public var code: String? {
-        get { return get("code", StringConverter.self) }
-        set { set("code", StringConverter.self, toValue: newValue) }
-    }
+    public let statusCode: Int
+    public let code: String
+    public let message: String
     
-    public var message: String? {
-        get { return get("message", StringConverter.self) }
-        set { set("message", StringConverter.self, toValue: newValue) }
+    
+    public init?(JSON json : Any) {
+        guard let json = json as? [String: Any],
+            let object = APIError.parseObject(JSON: json),
+            let statusCode = json["status_code"] as? Int,
+            let code = json["code"] as? String,
+            let message = json["message"] as? String else {
+                return nil
+        }
+        
+        self.object = object
+        self.code = code
+        self.statusCode = statusCode
+        self.message = message
+        
     }
 }
 
