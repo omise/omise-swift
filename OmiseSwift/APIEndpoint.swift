@@ -1,28 +1,14 @@
 import Foundation
 
-open class Operation<TResult: OmiseObject> {
-    public typealias Result = TResult
-    public typealias Callback = (Failable<TResult>) -> ()
+public struct APIEndpoint<DataType: OmiseObject> {
     
-    open let endpoint: Endpoint
-    open let method: String
-    open let pathComponents: [String]
-    open let params: Params?
+    public typealias Result = DataType
     
-    open var url: URL {
-        return makeURL()
-    }
+    public let endpoint: ServerEndpoint
+    public let method: String
+    public let pathComponents: [String]
+    public let params: APIDataSerializable?
     
-    open var payload: Data? {
-        return makePayload()
-    }
-    
-    public init(endpoint: Endpoint, method: String, paths: [String], params: Params? = nil) {
-        self.endpoint = endpoint
-        self.method = method
-        self.pathComponents = paths
-        self.params = params
-    }
     
     func makeURL() -> URL {
         let url = endpoint.url(withComponents: pathComponents)
@@ -37,7 +23,7 @@ open class Operation<TResult: OmiseObject> {
         }
         
         if let params = self.params {
-            urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
+            urlComponents.queryItems = encode(params)
         }
         
         guard let parameterizedUrl = urlComponents.url else {
@@ -53,12 +39,21 @@ open class Operation<TResult: OmiseObject> {
             return nil
         }
         
-        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            omiseWarn("failed to build url components for url: \(url)")
+        guard var urlComponents = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true) else {
+            omiseWarn("failed to build url components for url: \(makeURL())")
             return nil
         }
         
-        urlComponents.queryItems = URLEncoder.encode(params.normalizedAttributes)
+        urlComponents.queryItems = encode(params)
         return urlComponents.percentEncodedQuery?.data(using: .utf8)
     }
+    
+    func serializePayload() throws -> Data? {
+        return try params.map({ try JSONSerialization.data(withJSONObject: $0.json, options: []) })
+    }
+    
+    func deserialize(_ data: Data) throws -> DataType {
+        return try deserialize(data)
+    }
 }
+

@@ -15,7 +15,7 @@ public class List<TItem: OmiseObject> {
         }
     }
     
-    let endpoint: Endpoint
+    let endpoint: ServerEndpoint
     let paths: [String]
     
     public var dataUpdatedHandler: (([TItem]) -> Void)?
@@ -24,7 +24,7 @@ public class List<TItem: OmiseObject> {
         return loadedIndices.first ?? loadedIndices.lowerBound
     }
     
-    public init(endpoint: Endpoint, paths: [String], order: Ordering?, list: OmiseList<TItem>? = nil) {
+    public init(endpoint: ServerEndpoint, paths: [String], order: Ordering?, list: ListProperty<TItem>? = nil) {
         self.endpoint = endpoint
         self.paths = paths
         
@@ -46,14 +46,14 @@ public class List<TItem: OmiseObject> {
         loadedIndices = range(fromOffset: offset, limit: list?.data.count ?? 0)
     }
     
-    public func insert(from value: OmiseList<TItem>) -> [TItem] {
+    public func insert(from value: ListProperty<TItem>) -> [TItem] {
         guard let offset = value.offset, let limit = value.limit else {
             dataUpdatedHandler?(data)
             return []
         }
-        if let total = value.total {
-            self.total = total
-        }
+        let total = value.total
+        self.total = total
+        
         let valuesRange = range(fromOffset: offset, limit: min(limit, value.data.count))
         self.limit = limit
         

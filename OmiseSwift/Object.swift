@@ -29,6 +29,33 @@ extension OmiseObject {
 }
 
 extension OmiseResourceObject {
+    static func makeResourcePathsWithParent(_ parent: OmiseResourceObject? = nil, id: String? = nil) -> [String] {
+        var paths = [String]()
+        
+        if let parent = parent {
+            paths = [type(of: parent).resourceInfo.path, parent.id]
+        }
+        
+        paths.append(self.resourceInfo.path)
+        if let id = id {
+            paths.append(id)
+        }
+        
+        return paths
+    }
+    
+    static func verifyParent(_ parent: OmiseResourceObject?) -> Bool {
+        if let parentType = resourceInfo.parentType {
+            guard let parent = parent, parentType == type(of: parent) else {
+                return false
+            }
+        }
+        
+        return true
+    }
+}
+
+extension OmiseResourceObject {
     static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date, isDeleted: Bool)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
