@@ -58,7 +58,7 @@ extension Recipient {
 }
 
 
-public struct RecipientParams: APIDataSerializable {
+public struct RecipientParams: APIParams {
     public var name: String?
     public var email: String?
     public var recipientDescription: String?
@@ -85,4 +85,9 @@ extension RecipientParams {
         self.bankAccount = BankAccountParams(createNewBankAccountWithBrand: bankAccountBrand, accountNumber: bankAccountNumber, name: bankAccountName)
     }
 }
+
+extension Recipient: Creatable {
+    public typealias CreateParams = RecipientParams
+}
+
 

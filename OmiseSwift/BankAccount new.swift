@@ -28,7 +28,7 @@ extension BankAccount {
     }
 }
 
-public struct BankAccountParams: APIDataSerializable {
+public struct BankAccountParams: APIParams {
     public let brand: String?
     public let accountNumber: String?
     public let name: String?

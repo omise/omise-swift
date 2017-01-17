@@ -2,34 +2,36 @@ import Foundation
 
 public protocol Retrievable { }
 
-public class RetrieveParams: Params {
-    public var isExpanded: Bool? {
-        get { return get("expand", BoolConverter.self) }
-        set { set("expand", BoolConverter.self, toValue: newValue) }
+public struct RetrieveParams: APIParams {
+    public var isExpanded: Bool = false
+    
+    public var json: JSONAttributes {
+        return [
+            "expand": isExpanded,
+        ]
     }
 }
 
-public extension Retrievable where Self: ResourceObject {
-    public typealias RetrieveOperation = Operation<Self>
+public extension Retrievable where Self: OmiseResourceObject {
+    public typealias RetrieveEndpoint = APIEndpoint<Self>
+    public typealias RetrieveRequest = Request<Self>
     
-    public static func retrieveOperation(_ parent: ResourceObject?, id: String) -> RetrieveOperation {
-        let retrieveParams = RetrieveParams()
-        retrieveParams.isExpanded = true
-        return RetrieveOperation(
-            endpoint: info.endpoint,
+    public static func retrieveEndpoint(_ parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
+        let retrieveParams = RetrieveParams(isExpanded: true)
+        return RetrieveEndpoint(
+            endpoint: resourceInfo.endpoint,
             method: "GET",
-            paths: makeResourcePathsWith(context: self, parent: parent, id: id),
+            pathComponents: makeResourcePathsWithParent(parent, id: id),
             params: retrieveParams
         )
     }
     
-    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: @escaping RetrieveOperation.Callback) -> Request<RetrieveOperation.Result>? {
-        guard checkParent(withContext: self, parent: parent) else {
+    public static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+        guard verifyParent(parent) else {
             return nil
         }
         
-        let operation = self.retrieveOperation(parent, id: id)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
+        let endpoint = self.retrieveEndpoint(parent, id: id)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

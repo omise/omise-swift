@@ -1,5 +1,7 @@
 import Foundation
 
+public protocol APIParams: APIDataSerializable {}
+
 public struct APIEndpoint<DataType: OmiseObject> {
     
     public typealias Result = DataType
@@ -7,7 +9,7 @@ public struct APIEndpoint<DataType: OmiseObject> {
     public let endpoint: ServerEndpoint
     public let method: String
     public let pathComponents: [String]
-    public let params: APIDataSerializable?
+    public let params: APIParams?
     
     
     func makeURL() -> URL {

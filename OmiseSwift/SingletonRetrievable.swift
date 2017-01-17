@@ -1,25 +1,26 @@
 import Foundation
 
-public protocol SingletonRetrievable { }
+public protocol SingletonRetrievable {}
 
-public extension SingletonRetrievable where Self: ResourceObject {
-    public typealias SingletonRetrieveOperation = Operation<Self>
+public extension SingletonRetrievable where Self: OmiseResourceObject {
+    public typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
+    public typealias RetrieveRequest = Request<Self>
     
-    public static func retrieveOperation(_ parent: ResourceObject?) -> SingletonRetrieveOperation {
-        return SingletonRetrieveOperation(
-            endpoint: info.endpoint,
+    public static func retrieveEndpoint(_ parent: OmiseResourceObject?) -> SingletonRetrieveEndpoint {
+        return SingletonRetrieveEndpoint(
+            endpoint: resourceInfo.endpoint,
             method: "GET",
-            paths: makeResourcePathsWith(context: self, parent: parent)
+            pathComponents: makeResourcePathsWithParent(parent),
+            params: nil
         )
     }
     
-    public static func retrieve(using given: Client? = nil, parent: ResourceObject? = nil, callback: SingletonRetrieveOperation.Callback?) -> Request<SingletonRetrieveOperation.Result>? {
-        guard checkParent(withContext: self, parent: parent) else {
+    public static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, callback: RetrieveRequest.Callback?) -> RetrieveRequest? {
+        guard verifyParent(parent) else {
             return nil
         }
         
-        let operation = self.retrieveOperation(parent)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
+        let endpoint = self.retrieveEndpoint(parent)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

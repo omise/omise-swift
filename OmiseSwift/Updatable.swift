@@ -1,28 +1,28 @@
 import Foundation
 
 public protocol Updatable {
-    associatedtype UpdateParams: Params
+    associatedtype UpdateParams: APIParams
 }
 
-public extension Updatable where Self: ResourceObject {
-    public typealias UpdateOperation = Operation<Self>
+public extension Updatable where Self: OmiseResourceObject {
+    public typealias UpdateEndpoint = APIEndpoint<Self>
+    public typealias UpdateRequest = Request<Self>
     
-    public static func updateOperation(_ parent: ResourceObject?, id: String, params: UpdateParams) -> UpdateOperation {
-        return UpdateOperation(
-            endpoint: info.endpoint,
+    public static func updateEndpoint(_ parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
+        return UpdateEndpoint(
+            endpoint: resourceInfo.endpoint,
             method: "PATCH",
-            paths: makeResourcePathsWith(context: self, parent: parent, id: id),
+            pathComponents: makeResourcePathsWithParent(parent, id: id),
             params: params
         )
     }
     
-    public static func update(using given: Client? = nil, parent: ResourceObject? = nil, id: String, params: UpdateParams, callback: @escaping UpdateOperation.Callback) -> Request<UpdateOperation.Result>? {
-        guard checkParent(withContext: self, parent: parent) else {
+    public static func update(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, params: UpdateParams, callback: @escaping UpdateRequest.Callback) -> UpdateRequest? {
+        guard verifyParent(parent) else {
             return nil
         }
         
-        let operation = self.updateOperation(parent, id: id, params: params)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
+        let endpoint = self.updateEndpoint(parent, id: id, params: params)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
