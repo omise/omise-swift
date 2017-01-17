@@ -1,197 +1,184 @@
 import Foundation
 
-public class Charge: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/charges") }
-    
-    public var status: ChargeStatus? {
-        get { return get("status", EnumConverter.self) }
-        set { set("status", EnumConverter.self, toValue: newValue) }
-    }
-    
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
-    
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
-    
-    public var chargeDescription: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var capture: Bool? {
-        get { return get("capture", BoolConverter.self) }
-        set { set("capture", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var captureDate: Date? {
-        get {
-            return getChild("transaction", Transaction.self)?.created
+
+public enum ChargeStatus {
+    case failed(ChargeFailure)
+    case reversed
+    case pending
+    case successful
+}
+
+extension ChargeStatus {
+    init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let status = json["status"] as? String else {
+                return nil
+        }
+         
+        let failureCode = ChargeFailure(JSON: json)
+        
+        switch (status, failureCode) {
+        case ("failed", let failureCode?):
+            self = .failed(failureCode)
+        case ("successful", nil):
+            self = .successful
+        case ("pending", nil):
+            self = .pending
+        case ("reversed", nil):
+            self = .reversed
+        default:
+            return nil
         }
     }
+}
+
+
+public struct Charge: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
     
-    public var authorized: Bool? {
-        get { return get("authorized", BoolConverter.self) }
-        set { set("authorized", BoolConverter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
     
-    public var paid: Bool? {
-        get { return get("paid", BoolConverter.self) }
-        set { set("paid", BoolConverter.self, toValue: newValue) }
-    }
+    public let id: String
+    public let isLive: Bool
+    public let createdDate: Date
+    public let isDeleted: Bool
     
-    public var transaction: String? {
-        get { return get("transaction", StringConverter.self) ?? getChild("transaction", Transaction.self)?.id }
-        set { set("transaction", StringConverter.self, toValue: newValue) }
-    }
+    public var chargeStatus: ChargeStatus
+    public let value: Value
     
-    public var transactionDetail: Transaction? {
-        get { return getChild("transaction", Transaction.self) }
-        set { setChild("transaction", Transaction.self, toValue: newValue) }
-    }
+    public var chargeDescription: String?
     
-    public var card: Card? {
-        get { return getChild("card", Card.self) }
-        set { setChild("card", Card.self, toValue: newValue) }
-    }
+    public let isAutoCapture: Bool
     
-    public var offsite: OffsitePayment? {
-        get { return get("offsite", OffsitePaymentConverter.self) }
-        set { set("offsite", OffsitePaymentConverter.self, toValue: newValue) }
-    }
+    public let isAuthorized: Bool
+    public let isPaid: Bool
     
-    public var payment: Payment? {
-        switch get("source_of_fund", StringConverter.self) {
+    public var transaction: DetailProperty<Transaction>?
+    
+    public var card: Card?
+    public var offsite: OffsitePayment?
+    public var payment: Payment
+
+    public var refunded: Int64?
+    public var refunds: ListProperty<Refund>?
+
+    
+    public var customer: DetailProperty<Customer>?
+    
+    public var ipAddress: String?
+    public var dispute: Dispute?
+    
+    public let returnURL: URL?
+    public let authorizedURL: URL?
+}
+
+extension Charge {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+            return nil
+        }
+        
+        guard let value = Value(JSON: json), let isAutoCapture = json["capture"] as? Bool,
+            let isAuthorized = json["authorized"] as? Bool, let isPaid = json["paid"] as? Bool,
+            let status = ChargeStatus(JSON: json) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        self.chargeStatus = status
+        self.value = value
+        self.isAuthorized = isAuthorized
+        self.isAutoCapture = isAutoCapture
+        self.isPaid = isPaid
+        
+        self.customer = json["customer"].flatMap(DetailProperty<Customer>.init(JSON:))
+        self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
+        
+        self.ipAddress = json["ip"] as? String
+        self.returnURL = (json["return_uri"] as? String).flatMap(URL.init(string:))
+        self.authorizedURL = (json["authorized_uri"] as? String).flatMap(URL.init(string:))
+        
+        let payment: Payment?
+        let card: Card?
+        let offsite: OffsitePayment?
+        
+        switch json["source_of_fund"] as? String {
         case "offsite"?:
-            return offsite.map(Payment.offsite)
-        case "card"?, nil /* nil for backward compatability */ :
-            return card.map(Payment.card)
-        default: return nil
+            card = nil
+            offsite = OffsitePaymentConverter.convert(fromAttribute: json["offsite"])
+            payment = offsite.map(Payment.offsite)
+        case "card"?, nil:
+            offsite = nil
+            card = json["card"].flatMap(Card.init(JSON:))
+            payment = card.map(Payment.card)
+        default:
+            return nil
+        }
+        
+        if let payment = payment {
+            self.payment = payment
+            self.card = card
+            self.offsite = offsite
+        } else {
+            return nil
         }
     }
-    
-    public var refunded: Int64? {
-        get { return get("refunded", Int64Converter.self) }
-        set { set("refunded", Int64Converter.self, toValue: newValue) }
-    }
-    
-    public var refunds: OmiseList<Refund>? {
-        get { return getChild("refunds", OmiseList<Refund>.self) }
-        set { setChild("refunds", OmiseList<Refund>.self, toValue: newValue) }
-    }
-    
-    public var failureCode: String? {
-        get { return get("failure_code", StringConverter.self) }
-        set { set("failure_code", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var failureMessage: String? {
-        get { return get("failure_message", StringConverter.self) }
-        set { set("failure_message", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var customer: String? {
-        get { return get("customer", StringConverter.self) ?? getChild("customer", Customer.self)?.id }
-        set { set("customer", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var ip: String? {
-        get { return get("ip", StringConverter.self) }
-        set { set("ip", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var dispute: Dispute? {
-        get { return getChild("dispute", Dispute.self) }
-        set { setChild("dispute", Dispute.self, toValue: newValue) }
-    }
-    
-    public var returnUri: String? {
-        get { return get("return_uri", StringConverter.self) }
-        set { set("return_uri", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var authorizeUri: String? {
-        get { return get("authorize_uri", StringConverter.self) }
-        set { set("authorize_uri", StringConverter.self, toValue: newValue) }
-    }
-    
-    
 }
 
-public class ChargeParams: Params {
-    public var customer: String? {
-        get { return get("customer", StringConverter.self) }
-        set { set("customer", StringConverter.self, toValue: newValue) }
-    }
+
+public struct ChargeParams: APIParams {
+    public var customerID: String?
+    public var cardID: String?
+    public var amount: Int64
+    public var currency: Currency
+    public var chargeDescription: String?
+    public var isCapture: Bool?
+    public var returnURL: URL?
     
-    public var card: String? {
-        get { return get("card", StringConverter.self) }
-        set { set("card", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
-    
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
-    
-    public var description: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var capture: Bool? {
-        get { return get("capture", BoolConverter.self) }
-        set { set("capture", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var returnUri: String? {
-        get { return get("return_uri", StringConverter.self) }
-        set { set("return_uri", StringConverter.self, toValue: newValue) }
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "customer": customerID,
+            "card": cardID,
+            "amount": amount,
+            "currency": currency.code,
+            "description": chargeDescription,
+            "capture": isCapture,
+            "return_uri": returnURL?.absoluteString,
+                ])
     }
 }
 
-public class ChargeFilterParams: OmiseFilterParams {
-    public var created: DateComponents? {
-        get { return get("created", DateComponentsConverter.self) }
-        set { set("created", DateComponentsConverter.self, toValue: newValue) }
-    }
-    public var amount: Double? {
-        get { return get("amount", DoubleConverter.self) }
-        set { set("amount", DoubleConverter.self, toValue: newValue) }
-    }
+public struct UpdateChargeParams: APIParams {
+    public var chargeDescription: String?
     
-    public var authorized: Bool? {
-        get { return get("authorized", BoolConverter.self) }
-        set { set("authorized", BoolConverter.self, toValue: newValue) }
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "description": chargeDescription,
+            ])
     }
+}
+
+public struct ChargeFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var amount: Double?
+    public var isAuthorized: Bool?
+    public var isCaptured: Bool?
+    public var cardLastDigits: LastDigits?
+    public var isCustomerPresent: Bool?
+    public var failureCode: ChargeFailure?
     
-    public var capture: Bool? {
-        get { return get("captured", BoolConverter.self) }
-        set { set("captured", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var cardLastDigits: String? {
-        get { return get("card_last_digits", StringConverter.self) }
-        set { set("card_last_digits", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var customerPresent: Bool? {
-        get { return get("customer_present", BoolConverter.self) }
-        set { set("customer_present", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var failureCode: String? {
-        get { return get("failure_code", StringConverter.self) }
-        set { set("failure_code", StringConverter.self, toValue: newValue) }
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "amount": amount,
+            "captured": isCaptured,
+            "authorized": isAuthorized,
+            "card_last_digits": cardLastDigits?.lastDigits,
+            "customer_present": isCustomerPresent,
+            "failure_code": failureCode?.code,
+            ])
     }
 }
 
@@ -204,71 +191,12 @@ extension Charge: Creatable {
 }
 
 extension Charge: Updatable {
-    public typealias UpdateParams = ChargeParams
+    public typealias UpdateParams = UpdateChargeParams
 }
 
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
 
-extension Charge {
-    public typealias CaptureOperation = Operation<Charge>
-    public typealias ReverseOperation = Operation<Charge>
-    
-    public static func captureOperation(id: String) -> CaptureOperation {
-        return CaptureOperation(
-            endpoint: info.endpoint,
-            method: "POST",
-            paths: [info.path, id, "capture"]
-        )
-    }
-    
-    public static func capture(using given: Client? = nil, id: String, callback: @escaping CaptureOperation.Callback) -> Request<CaptureOperation.Result>? {
-        let operation = captureOperation(id: id)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
-    }
-    
-    public static func reverse(id: String) -> ReverseOperation {
-        return ReverseOperation(
-            endpoint: info.endpoint,
-            method: "POST",
-            paths: [info.path, id, "reverse"]
-        )
-    }
-    
-    public static func reverse(using given: Client? = nil, id: String, callback: @escaping ReverseOperation.Callback) -> Request<ReverseOperation.Result>? {
-        let operation = reverse(id: id)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
-    }
-}
 
-func exampleCharge() {
-    _ = Charge.list { (result) in
-        switch result {
-        case let .success(charges):
-            print("charges: \(charges.data[0].id)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-    
-    _ = Charge.retrieve(id: "chrg_test_123") { (result) in
-        switch result {
-        case let .success(charge):
-            print("charge: \(charge.id) \(charge.amount)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-    
-    _ = Charge.reverse(id: "chrg_test_123") { (result) in
-        switch result {
-        case let .success(charge):
-            print("reversed charge: \(charge.id)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-}
+

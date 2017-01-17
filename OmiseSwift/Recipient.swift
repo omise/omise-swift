@@ -1,106 +1,93 @@
 import Foundation
 
-public class Recipient: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/recipients") }
+
+public enum RecipientType: String {
+    case individual
+    case corporation
+}
+
+
+public struct Recipient: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/recipients")
     
-    public var verified: Bool? {
-        get { return get("verified", BoolConverter.self) }
-        set { set("verified", BoolConverter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
+
+    public let id: String
+    public let isLive: Bool
+    public var createdDate: Date
+    public let isDeleted: Bool
     
-    public var active: Bool? {
-        get { return get("active", BoolConverter.self) }
-        set { set("active", BoolConverter.self, toValue: newValue) }
-    }
+    public let isVerified: Bool
+    public let isActive: Bool
     
-    public var name: String? {
-        get { return get("name", StringConverter.self) }
-        set { set("name", StringConverter.self, toValue: newValue) }
-    }
+    public let name: String
+    public let email: String?
+    public let recipientDescription: String?
     
-    public var email: String? {
-        get { return get("email", StringConverter.self) }
-        set { set("email", StringConverter.self, toValue: newValue) }
-    }
+    public let type: RecipientType
     
-    public var recipientDescription: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var type: RecipientType? {
-        get { return get("type", EnumConverter.self) }
-        set { set("type", EnumConverter.self, toValue: newValue) }
-    }
-    
-    public var taxId: String? {
-        get { return get("tax_id", StringConverter.self) }
-        set { set("tax_id", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var bankAccount: BankAccount? {
-        get { return getChild("bank_account", BankAccount.self) }
-        set { setChild("bank_account", BankAccount.self, toValue: newValue) }
-    }
-    
-    public var failureCode: String? {
-        get { return get("failure_code", StringConverter.self) }
-        set { set("failure_code", StringConverter.self, toValue: newValue) }
+    public let taxID: String?
+    public let bankAccount: BankAccount
+}
+
+
+extension Recipient {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+                return nil
+        }
+        
+        guard let name = json["name"] as? String, let type = EnumConverter<RecipientType>.convert(fromAttribute: json["type"]),
+            let account = json["bank_account"].flatMap(BankAccount.init(JSON:)),
+            let isActive = json["active"] as? Bool, let isVerified = json["verified"] as? Bool else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        self.name = name
+        self.type = type
+        self.bankAccount = account
+        self.isActive = isActive
+        self.isVerified = isVerified
+        self.email = json["email"] as? String
+        self.recipientDescription = json["description"] as? String
+        self.taxID = json["tax_id"] as? String
     }
 }
 
-public class RecipientParams: Params {
-    public var name: String? {
-        get { return get("name", StringConverter.self) }
-        set { set("name", StringConverter.self, toValue: newValue) }
-    }
+
+public struct RecipientParams: APIParams {
+    public var name: String?
+    public var email: String?
+    public var recipientDescription: String?
+    public var type: RecipientType?
+    public var taxID: String?
+    public var bankAccount: BankAccountParams?
     
-    public var email: String? {
-        get { return get("email", StringConverter.self) }
-        set { set("email", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var description: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var type: RecipientType? {
-        get { return get("type", EnumConverter.self) }
-        set { set("type", EnumConverter.self, toValue: newValue) }
-    }
-    
-    public var taxId: String? {
-        get { return get("tax_id", StringConverter.self) }
-        set { set("tax_id", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var bankAccount: BankAccount? {
-        get { return getChild("bank_account", BankAccount.self) }
-        set { setChild("bank_account", BankAccount.self, toValue: newValue) }
+    public var json: JSONAttributes {
+        return Dictionary<String, Any>.makeFlattenDictionaryFrom([
+            "name": name,
+            "email": email,
+            "description": recipientDescription,
+            "type": type?.rawValue,
+            "tax_id": taxID,
+            "bank_account": bankAccount
+        ])
     }
 }
 
-public class RecipientFilterParams: OmiseFilterParams {
-    public var type: RecipientType? {
-        get { return get("kind", EnumConverter.self) }
-        set { set("kind", EnumConverter.self, toValue: newValue) }
+extension RecipientParams {
+    public init(createRecipientParamsWithName name: String, type: RecipientType, bankAccountName: String, bankAccountNumber: String, bankAccountBrand: String) {
+        self.name = name
+        self.type = type
+        self.bankAccount = BankAccountParams(createNewBankAccountWithBrand: bankAccountBrand, accountNumber: bankAccountNumber, name: bankAccountName)
     }
 }
-
-extension Recipient: Listable { }
-extension Recipient: Retrievable { }
 
 extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
-extension Recipient: Updatable {
-    public typealias UpdateParams = RecipientParams
-}
 
-extension Recipient: Searchable {
-    public typealias FilterParams = RecipientFilterParams
-}
-
-extension Recipient: Destroyable { }
