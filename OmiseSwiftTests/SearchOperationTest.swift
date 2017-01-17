@@ -3,24 +3,23 @@ import XCTest
 
 class SearchOperationTest: OmiseTestCase {
     
-    var testClient: Client {
-        let config = Config(
+    var testClient: APIClient {
+        let config = APIConfiguration(
+            apiVersion: "2015-11-17",
             publicKey: "pkey_test_5570z4yt4wybjb03ag8",
-            secretKey: "skey_test_5570z4yvwcr22l3rjnm",
-            apiVersion: nil,
-            queue: (OperationQueue.current ?? OperationQueue.main)
+            secretKey: "skey_test_5570z4yvwcr22l3rjnm"
         )
         
-        return Client(config: config)
+        return APIClient(config: config)
     }
     
     func testSearchChargeByLastDigits() {
         let expectation = self.expectation(description: "transfer result")
         
-        let searchParams = SearchParams<ChargeFilterParams>()
+        var searchParams = SearchParams<ChargeFilterParams>()
         searchParams.scope = Charge.scopeName
-        let searchFilter = ChargeFilterParams()
-        searchFilter.cardLastDigits = "1111"
+        var searchFilter = ChargeFilterParams()
+        searchFilter.cardLastDigits = LastDigits(lastDigitsString: "1111")!
         searchParams.filter = searchFilter
         
         let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
@@ -30,7 +29,7 @@ class SearchOperationTest: OmiseTestCase {
             case let .success(charges):
                 XCTAssertEqual(charges.data.count, 1)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.amount, 100000)
+                XCTAssertEqual(samplingCharge?.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -44,7 +43,7 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchChargeByCreatedDate() {
         let expectation = self.expectation(description: "transfer result")
         
-        let searchParams = SearchParams<ChargeFilterParams>()
+        var searchParams = SearchParams<ChargeFilterParams>()
         searchParams.scope = Charge.scopeName
         var searchFilter = ChargeFilterParams()
         var dateComponents = DateComponents()
@@ -62,7 +61,7 @@ class SearchOperationTest: OmiseTestCase {
             case let .success(charges):
                 XCTAssertEqual(charges.data.count, 3)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.amount, 100000)
+                XCTAssertEqual(samplingCharge?.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -75,15 +74,14 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchCustomerByEmail() {
         let expectation = self.expectation(description: "transfer result")
         
-        let searchParams = SearchParams<CustomerFilterParams>()
+        var searchParams = SearchParams<CustomerFilterParams>()
         searchParams.scope = Customer.scopeName
-        var searchFilter = CustomerFilterParams()
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar(identifier: .gregorian)
         dateComponents.year = 2016
         dateComponents.month = 9
         dateComponents.day = 2
-        searchFilter.created = dateComponents
+        var searchFilter = CustomerFilterParams(created: dateComponents)
         searchParams.filter = searchFilter
         searchParams.query = "john"
         
@@ -107,10 +105,9 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchRecipientByKind() {
         let expectation = self.expectation(description: "transfer result")
         
-        let searchParams = SearchParams<RecipientFilterParams>()
+        var searchParams = SearchParams<RecipientFilterParams>()
         searchParams.scope = Recipient.scopeName
-        var searchFilter = RecipientFilterParams()
-        searchFilter.type = .some(.individual)
+        var searchFilter = RecipientFilterParams(type: .individual)
         
         searchParams.filter = searchFilter
         

@@ -3,15 +3,14 @@ import XCTest
 import Omise
 
 class LiveTest: OmiseTestCase {
-    var testClient: Client {
-        let config = Config(
+    var testClient: APIClient {
+        let config = APIConfiguration(
+            apiVersion: "2015-11-17",
             publicKey: "pkey_test_52d6po3fvio2w6tefpb",
-            secretKey: "skey_test_52d6ppdms4p1jhnkigq",
-            apiVersion: nil,
-            queue: (OperationQueue.current ?? OperationQueue.main)
+            secretKey: "skey_test_52d6ppdms4p1jhnkigq"
         )
         
-        return Client(config: config)
+        return APIClient(config: config)
     }
     
     func testAccountRetrieve() throws {
@@ -38,7 +37,7 @@ class LiveTest: OmiseTestCase {
             
             switch result {
             case let .success(balance):
-                XCTAssertEqual(balance.available, 22118104)
+                XCTAssertEqual(balance.available.amount, 22118104)
             case let .fail(err):
                 XCTFail("\(err)")
             }

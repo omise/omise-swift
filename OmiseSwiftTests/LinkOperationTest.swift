@@ -3,15 +3,14 @@ import Omise
 
 
 class LinkOperationTest: OmiseTestCase {
-    var testClient: Client {
-        let config = Config(
-            publicKey: "pkey_test_5570z4yt4wybjb03ag8",
-            secretKey: "skey_test_5570z4yvwcr22l3rjnm",
-            apiVersion: nil,
-            queue: (OperationQueue.current ?? OperationQueue.main)
+    var testClient: APIClient {
+        let config = APIConfiguration(
+            apiVersion: "2015-11-17",
+            publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
+            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
         )
-        
-        return Client(config: config)
+    
+        return APIClient(config: config)
     }
     
     func testLinkRetrieve() {
@@ -22,7 +21,7 @@ class LinkOperationTest: OmiseTestCase {
             
             switch result {
             case let .success(link):
-                XCTAssertEqual(link.amount, 1490000)
+                XCTAssertEqual(link.value.amount, 1490000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -52,11 +51,11 @@ class LinkOperationTest: OmiseTestCase {
     func testCreateLink() {
         let expectation = self.expectation(description: "link update")
         
-        let createParams = LinkParams()
-        createParams.amount = 100000
-        createParams.currency = .thb
-        createParams.title = "Link for testing"
-        createParams.linkDescription = "Testing create link from Omise Swift SDK"
+        let createParams = LinkParams(
+            value: Value(amount: 1_000_00, currency: .thb),
+            title: "Link for testing",
+            linkDescription: "Testing create link from Omise Swift SDK"
+        )
         
         let request = Link.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }

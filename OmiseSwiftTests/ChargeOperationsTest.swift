@@ -3,15 +3,14 @@ import XCTest
 @testable import Omise
 
 class ChargeOperationsTest: OmiseTestCase {
-    var testClient: Client {
-        let config = Config(
+    var testClient: APIClient {
+        let config = APIConfiguration(
+            apiVersion: "2015-11-17",
             publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
-            secretKey: "skey_test_54oojsyhuzzr51wa5hc",
-            apiVersion: nil,
-            queue: (OperationQueue.current ?? OperationQueue.main)
+            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
         )
         
-        return Client(config: config)
+        return APIClient(config: config)
     }
     
     func testChargeList() {
@@ -87,7 +86,7 @@ class ChargeOperationsTest: OmiseTestCase {
         let firstExpectation = self.expectation(description: "transfer list")
         let secondExpectation = self.expectation(description: "Load more of transfer list")
         
-        let listParams = ListParams()
+        var listParams = ListParams()
         
         listParams.limit = 20
         listParams.offset = 30
@@ -98,7 +97,7 @@ class ChargeOperationsTest: OmiseTestCase {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-                let list = List<Charge>(endpoint: Endpoint.api, paths: [Charge.info.path], order: .chronological, list: transfersList)
+                let list = List<Charge>(endpoint: .api, paths: [Charge.resourceInfo.path], order: .chronological, list: transfersList)
                 XCTAssertEqual(list.loadedIndices, 30..<30)
 
                 list.loadPreviousPage(using: self.testClient, callback: { (firstLoadResult) in

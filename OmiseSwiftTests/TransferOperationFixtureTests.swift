@@ -14,7 +14,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.amount, 192188)
+                XCTAssertEqual(transfer.value.amount, 192188)
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
                 XCTAssertEqual(transfer.paidDate, Date(timeIntervalSinceReferenceDate: 502046909.0))
             case let .fail(error):
@@ -47,8 +47,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams()
-        createParams.amount = 96094
+        let createParams = TransferParams(amount: 96094)
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -67,15 +66,14 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferUpdate() {
         let expectation = self.expectation(description: "transfer update")
         
-        let updateParams = TransferParams()
-        updateParams.amount = 100000
+        let updateParams = UpdateTransferParams(amount: 1_000_00)
         
         let request = Transfer.update(using: testClient, id: tranferTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.amount, 192189)
+                XCTAssertEqual(transfer.value.amount, 192189)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -92,7 +90,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.deleted, true)
+                XCTAssertEqual(transfer.isDeleted, true)
             case let .fail(error):
                 XCTFail("\(error)")
             }

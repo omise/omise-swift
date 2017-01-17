@@ -3,7 +3,7 @@ import Omise
 
 
 private let refundTestingID = "rfnd_test_4yqmv79ahghsiz23y3c"
-private let charge = Charge(id: "chrg_test_4yq7duw15p9hdrjp8oq")
+private let charge = Charge(JSON: "chrg_test_4yq7duw15p9hdrjp8oq")
 
 class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundRetrieve() {
@@ -14,7 +14,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(refund):
-                XCTAssertEqual(refund.amount, 10000)
+                XCTAssertEqual(refund.value.amount, 10000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -45,8 +45,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
         
-        let createParams = RefundParams()
-        createParams.amount = 100000
+        let createParams = RefundParams(amount: 100000)
         
         let request = Refund.create(using: testClient, parent: charge, params: createParams) { (result) in
             defer { expectation.fulfill() }
