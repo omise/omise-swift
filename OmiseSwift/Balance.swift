@@ -1,33 +1,36 @@
 import Foundation
 
-open class Balance: ResourceObject {
-    open override class var info: ResourceInfo { return ResourceInfo(path: "/balance") }
 
-    public var available: Int64? {
-        get { return get("available", Int64Converter.self) }
-        set { set("available", Int64Converter.self, toValue: newValue) }
-    }
+public struct Balance: OmiseLocatableObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/balance")
     
-    public var total: Int64? {
-        get { return get("total", Int64Converter.self) }
-        set { set("total", Int64Converter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
+    public let isLive: Bool
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
+    public var available: Value
+    public var total: Value
+}
+
+extension Balance {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseLocationObject = Balance.parseLocationResource(JSON: json),
+            let isLive = json["livemode"] as? Bool,
+            let available = json["available"] as? Int64,
+            let total = json["total"] as? Int64,
+            let currencyCode = json["currency"] as? String,
+            let currency = Currency(code: currencyCode) else {
+                return nil
+        }
+        
+        (self.object, self.location) = omiseLocationObject
+        self.isLive = isLive
+        self.available = Value(currency: currency, amount: available)
+        self.total = Value(currency: currency, amount: total)
     }
 }
 
 extension Balance: SingletonRetrievable { }
 
-func exampleBalance() {
-    _ = Balance.retrieve { (result) in
-        switch result {
-        case let .success(balance):
-            print("balance: \(balance.available)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-}
+

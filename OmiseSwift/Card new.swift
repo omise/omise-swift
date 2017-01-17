@@ -79,3 +79,48 @@ extension Card {
     }
 }
 
+public struct CardParams: APIParams {
+    public var name: String?
+    public var expirationMonth: Int?
+    public var expirationYear: Int?
+    public var postalCode: String?
+    public var city: String?
+
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "name": name,
+            "expiration_month": expirationMonth,
+            "expiration_year": expirationYear,
+            "postal_code": postalCode,
+            "city": city,
+        ])
+    }
+}
+
+
+extension Card: Listable { }
+extension Card: Retrievable { }
+extension Card: Destroyable { }
+extension Card: Updatable {
+    public typealias UpdateParams = CardParams
+}
+
+
+extension Customer {
+    public func listCards(using client: APIClient, params: ListParams? = nil, callback: @escaping Card.ListRequest.Callback) -> Card.ListRequest? {
+        return Card.list(using: client, parent: self, params: params, callback: callback)
+    }
+    
+    public func retrieveCard(using client: APIClient, id: String, callback: @escaping Card.RetrieveRequest.Callback) -> Card.RetrieveRequest? {
+        return Card.retrieve(using: client, parent: self, id: id, callback: callback)
+    }
+    
+    public func updateCard(using client: APIClient, id: String, params: CardParams, callback: @escaping Card.UpdateRequest.Callback) -> Card.UpdateRequest? {
+        return Card.update(using: client, parent: self, id: id, params: params, callback: callback)
+    }
+    
+    public func destroyCard(using client: APIClient, id: String, callback: @escaping Card.DestroyRequest.Callback) -> Card.DestroyRequest? {
+        return Card.destroy(using: client, parent: self, id: id, callback: callback)
+    }
+}
+

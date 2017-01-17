@@ -52,3 +52,76 @@ extension Transfer {
     }
 }
 
+
+public struct TransferParams: APIParams {
+    public var amount: Int64
+    
+    public var recipientID: String
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            "recipient": recipientID,
+            ])
+    }
+}
+
+public struct UpdateTransferParams: APIParams {
+    public var amount: Int64
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            ])
+    }
+}
+
+
+public struct TransferFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var amount: Double?
+    public var currency: Currency?
+    public var bankLastDigits: LastDigits?
+    public var fee: Double?
+    public var isPaid: Bool?
+    public var paidDate: DateComponents?
+    public var isSent: Bool?
+    public var sentDate: DateComponents?
+    public var failureCode: String?
+    public var failureMessage: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "amount": amount,
+            "currency": currency?.code,
+            "bank_last_digits": bankLastDigits?.lastDigits,
+            "fee": fee,
+            "paid": isPaid,
+            "paid_at": DateComponentsConverter.convert(fromValue: paidDate),
+            "sent": isSent,
+            "sent_at": DateComponentsConverter.convert(fromValue: sentDate),
+            "failure_code": failureCode,
+            "failure_message": failureMessage,
+            ])
+    }
+}
+
+
+extension Transfer: Listable { }
+extension Transfer: Retrievable { }
+
+extension Transfer: Creatable {
+    public typealias CreateParams = TransferParams
+}
+
+extension Transfer: Updatable {
+    public typealias UpdateParams = UpdateTransferParams
+}
+
+extension Transfer: Destroyable { }
+
+extension Transfer: Searchable {
+    public typealias FilterParams = TransferFilterParams
+}
+

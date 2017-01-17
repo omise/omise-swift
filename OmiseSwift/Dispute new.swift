@@ -48,3 +48,61 @@ extension Dispute {
     }
 }
 
+
+public enum DisputeStatusQuery: String {
+    case open
+    case pending
+    case closed
+}
+
+
+public struct DisputeParams: APIParams {
+    public var message: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "message": message,
+            ])
+    }
+}
+
+public struct DisputeFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var cardLastDigits: LastDigits?
+    public var reasonCode: String?
+    public var status: DisputeStatus?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "card_last_digits": cardLastDigits?.lastDigits,
+            "reason_code": reasonCode,
+            "status": status?.rawValue
+            ])
+    }
+}
+
+extension Dispute: Listable { }
+extension Dispute: Retrievable { }
+
+extension Dispute: Updatable {
+    public typealias UpdateParams = DisputeParams
+}
+
+extension Dispute: Searchable {
+    public typealias FilterParams = DisputeFilterParams
+}
+
+
+extension Dispute {
+    public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListRequest.Callback) -> Dispute.ListRequest? {
+        let endpoint = ListEndpoint(
+            endpoint: resourceInfo.endpoint,
+            method: "GET",
+            pathComponents: [resourceInfo.path, state.rawValue],
+            params: nil
+        )
+        
+        return client.requestToEndpoint(endpoint, callback: callback)
+    }
+}

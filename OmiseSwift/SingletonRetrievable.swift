@@ -2,7 +2,7 @@ import Foundation
 
 public protocol SingletonRetrievable {}
 
-public extension SingletonRetrievable where Self: OmiseResourceObject {
+public extension SingletonRetrievable where Self: OmiseLocatableObject {
     public typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
     public typealias RetrieveRequest = Request<Self>
     

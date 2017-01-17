@@ -7,11 +7,15 @@ public protocol OmiseObject {
     init?(JSON: Any)
 }
 
-public protocol OmiseResourceObject: OmiseObject {
+public protocol OmiseLocatableObject: OmiseObject {
     static var resourceInfo: ResourceInfo { get }
     
-    var id: String { get }
     var location: String { get }
+}
+
+public protocol OmiseResourceObject: OmiseLocatableObject {
+    
+    var id: String { get }
     var isLive: Bool { get }
     var createdDate: Date { get }
     var isDeleted: Bool { get }
@@ -28,7 +32,20 @@ extension OmiseObject {
     }
 }
 
-extension OmiseResourceObject {
+extension OmiseLocatableObject {
+    static func parseLocationResource(JSON json: Any) -> (object: String, location: String)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let location = json["location"] as? String else {
+                return nil
+        }
+        
+        return (object: object, location: location)
+    }
+
+}
+
+extension OmiseLocatableObject {
     static func makeResourcePathsWithParent(_ parent: OmiseResourceObject? = nil, id: String? = nil) -> [String] {
         var paths = [String]()
         

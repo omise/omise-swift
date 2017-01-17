@@ -35,3 +35,39 @@ extension Refund {
         self.transaction = transaction
     }
 }
+
+
+public struct RefundParams: APIParams {
+    public var amount: Int64
+    public var void: Bool?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            "void": void,
+            ])
+    }
+}
+
+extension Refund: Creatable {
+    public typealias CreateParams = RefundParams
+}
+
+extension Refund: Listable { }
+extension Refund: Retrievable { }
+
+
+extension Charge {
+    public func listRefunds(using client: APIClient, params: ListParams? = nil, callback: @escaping Refund.ListRequest.Callback) -> Refund.ListRequest? {
+        return Refund.list(using: client, parent: self, params: params, callback: callback)
+    }
+    
+    public func retrieveRefund(using client: APIClient, id: String, callback: @escaping Refund.RetrieveRequest.Callback) -> Refund.RetrieveRequest? {
+        return Refund.retrieve(using: client, parent: self, id: id, callback: callback)
+    }
+    
+    public func createRefund(using client: APIClient, params: RefundParams, callback: @escaping Refund.CreateRequest.Callback) -> Refund.CreateRequest? {
+        return Refund.create(using: client, parent: self, params: params, callback: callback)
+    }
+}
+

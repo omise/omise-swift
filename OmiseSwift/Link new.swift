@@ -48,3 +48,29 @@ extension Link {
     }
 }
 
+public struct LinkParams: APIParams {
+    public var amount: Int64
+    public var currency: Currency
+    public var title: String
+    public var linkDescription: String
+    public var isMultiple: Bool?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            "currency": currency.code,
+            "title": title,
+            "description": linkDescription,
+            "multiple": isMultiple,
+            ])
+    }
+}
+
+extension Link: Listable {}
+
+extension Link: Retrievable {}
+
+extension Link: Creatable {
+    public typealias CreateParams = LinkParams
+}
+

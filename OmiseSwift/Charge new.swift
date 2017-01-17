@@ -127,3 +127,76 @@ extension Charge {
     }
 }
 
+
+public struct ChargeParams: APIParams {
+    public var customerID: String?
+    public var cardID: String?
+    public var amount: Int64
+    public var currency: Currency
+    public var chargeDescription: String?
+    public var isCapture: Bool?
+    public var returnURL: URL?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "customer": customerID,
+            "card": cardID,
+            "amount": amount,
+            "currency": currency.code,
+            "description": chargeDescription,
+            "capture": isCapture,
+            "return_uri": returnURL?.absoluteString,
+                ])
+    }
+}
+
+public struct UpdateChargeParams: APIParams {
+    public var chargeDescription: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "description": chargeDescription,
+            ])
+    }
+}
+
+public struct ChargeFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var amount: Double?
+    public var isAuthorized: Bool?
+    public var isCaptured: Bool?
+    public var cardLastDigits: LastDigits?
+    public var isCustomerPresent: Bool?
+    public var failureCode: ChargeFailure?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "amount": amount,
+            "captured": isCaptured,
+            "authorized": isAuthorized,
+            "card_last_digits": cardLastDigits?.lastDigits,
+            "customer_present": isCustomerPresent,
+            "failure_code": failureCode?.code,
+            ])
+    }
+}
+
+
+extension Charge: Listable { }
+extension Charge: Retrievable { }
+
+extension Charge: Creatable {
+    public typealias CreateParams = ChargeParams
+}
+
+extension Charge: Updatable {
+    public typealias UpdateParams = UpdateChargeParams
+}
+
+extension Charge: Searchable {
+    public typealias FilterParams = ChargeFilterParams
+}
+
+
+

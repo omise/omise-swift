@@ -1,23 +1,28 @@
 import Foundation
 
-open class Account: ResourceObject {
-    open override class var info: ResourceInfo { return ResourceInfo(path: "/account") }
+public struct Account: OmiseLocatableObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/account")
     
-    open var email: String? {
-        get { return get("email", StringConverter.self) }
-        set { set("email", StringConverter.self, toValue: newValue) }
+    public let object: String
+    public let location: String
+    public let id: String
+    
+    public let email: String
+}
+
+extension Account {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseLocatoinProperties = Account.parseLocationResource(JSON: json),
+            let id = json["id"] as? String,
+            let email = json["email"] as? String else {
+                return nil
+        }
+        (self.object, self.location) = omiseLocatoinProperties
+        self.id = id
+        self.email = email
     }
 }
 
 extension Account: SingletonRetrievable { }
 
-func exampleAccount() {
-    _ = Account.retrieve { (result) in
-        switch result {
-        case let .success(result):
-            print("account: \(result.email)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-}

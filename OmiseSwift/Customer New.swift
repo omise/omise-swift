@@ -39,3 +39,46 @@ extension Customer {
         self.customerDescription = json["description"] as? String
     }
 }
+
+public struct CustomerParams: APIParams {
+    public var email: String?
+    public var customerDescription: String?
+    public var cardID: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "email": email,
+            "description": customerDescription,
+            "card": cardID
+            ])
+    }
+}
+
+public class CustomerFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created)
+            ])
+    }
+}
+
+extension Customer: Listable { }
+extension Customer: Retrievable { }
+
+extension Customer: Creatable {
+    public typealias CreateParams = CustomerParams
+}
+
+extension Customer: Updatable {
+    public typealias UpdateParams = CustomerParams
+}
+
+extension Customer: Searchable {
+    public typealias FilterParams = CustomerFilterParams
+}
+
+extension Customer: Destroyable { }
+
+

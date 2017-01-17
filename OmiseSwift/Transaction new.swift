@@ -43,3 +43,8 @@ extension Transaction {
     }
 }
 
+
+extension Transaction: Listable { }
+extension Transaction: Retrievable { }
+
+

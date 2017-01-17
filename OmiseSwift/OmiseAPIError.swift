@@ -10,6 +10,27 @@ public enum ChargeFailure {
     case invalidAccountNumber
     
     case other(String)
+    
+    var code: String {
+        switch self {
+        case .insufficientFund:
+            return "insufficient_fund"
+        case .stolenOrLostCard:
+            return "stolen_or_lost_card"
+        case .failedProcessing:
+            return "failed_processing"
+        case .paymentRejected:
+            return "payment_rejected"
+        case .invalidSecurityCode:
+            return "invalid_security_code"
+        case .failedFraudCheck:
+            return "failed_fraud_check"
+        case .invalidAccountNumber:
+            return "invalid_account_number"
+        case .other(let code):
+            return code
+        }
+    }
 }
 
 
