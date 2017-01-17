@@ -39,13 +39,18 @@ extension Refund {
 
 public struct RefundParams: APIParams {
     public var amount: Int64
-    public var void: Bool?
+    public var isVoid: Bool?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "amount": amount,
-            "void": void,
+            "void": isVoid,
             ])
+    }
+    
+    public init(amount: Int64, void: Bool? = nil) {
+        self.amount = amount
+        self.isVoid = void
     }
 }
 

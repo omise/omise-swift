@@ -95,6 +95,16 @@ public struct CardParams: APIParams {
             "city": city,
         ])
     }
+    
+    public init(name: String? = nil,
+         expirationMonth: Int? = nil, expirationYear: Int? = nil,
+         postalCode: String? = nil, city: String? = nil) {
+        self.name = name
+        self.expirationMonth = expirationMonth
+        self.expirationYear = expirationYear
+        self.postalCode = postalCode
+        self.city = city
+    }
 }
 
 

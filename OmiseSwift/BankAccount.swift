@@ -29,9 +29,9 @@ extension BankAccount {
 }
 
 public struct BankAccountParams: APIParams {
-    public let brand: String?
-    public let accountNumber: String?
-    public let name: String?
+    public var brand: String?
+    public var accountNumber: String?
+    public var name: String?
 
     public var json: JSONAttributes {
         return Dictionary<String, Any>.makeFlattenDictionaryFrom([
@@ -39,6 +39,12 @@ public struct BankAccountParams: APIParams {
             "number": accountNumber,
             "name": name,
         ])
+    }
+    
+    public init(brand: String? = nil, accountNumber: String? = nil, name: String? = nil) {
+        self.brand = brand
+        self.accountNumber = accountNumber
+        self.name = name
     }
 }
 

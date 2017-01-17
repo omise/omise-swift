@@ -26,8 +26,8 @@ extension Balance {
         
         (self.object, self.location) = omiseLocationObject
         self.isLive = isLive
-        self.available = Value(currency: currency, amount: available)
-        self.total = Value(currency: currency, amount: total)
+        self.available = Value(amount: available, currency: currency)
+        self.total = Value(amount: total, currency: currency)
     }
 }
 

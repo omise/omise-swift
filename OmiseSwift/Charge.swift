@@ -131,22 +131,30 @@ extension Charge {
 public struct ChargeParams: APIParams {
     public var customerID: String?
     public var cardID: String?
-    public var amount: Int64
-    public var currency: Currency
+    public var value: Value
     public var chargeDescription: String?
-    public var isCapture: Bool?
+    public var isAutoCapture: Bool?
     public var returnURL: URL?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "customer": customerID,
             "card": cardID,
-            "amount": amount,
-            "currency": currency.code,
+            "amount": value.amount,
+            "currency": value.currency.code,
             "description": chargeDescription,
-            "capture": isCapture,
+            "capture": isAutoCapture,
             "return_uri": returnURL?.absoluteString,
                 ])
+    }
+    
+    public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil) {
+        self.value = value
+        self.chargeDescription = chargeDescription
+        self.customerID = customerID
+        self.cardID = cardID
+        self.isAutoCapture = isAutoCapture
+        self.returnURL = returnURL
     }
 }
 
@@ -157,6 +165,10 @@ public struct UpdateChargeParams: APIParams {
         return Dictionary.makeFlattenDictionaryFrom([
             "description": chargeDescription,
             ])
+    }
+    
+    public init(chargeDescription: String?) {
+        self.chargeDescription = chargeDescription
     }
 }
 

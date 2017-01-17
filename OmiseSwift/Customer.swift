@@ -52,6 +52,12 @@ public struct CustomerParams: APIParams {
             "card": cardID
             ])
     }
+    
+    public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil) {
+        self.email = email
+        self.customerDescription = customerDescription
+        self.cardID = cardID
+    }
 }
 
 public class CustomerFilterParams: OmiseFilterParams {
@@ -61,6 +67,10 @@ public class CustomerFilterParams: OmiseFilterParams {
         return Dictionary.makeFlattenDictionaryFrom([
             "created": DateComponentsConverter.convert(fromValue: created)
             ])
+    }
+    
+    public init(created: DateComponents?) {
+        self.created = created
     }
 }
 

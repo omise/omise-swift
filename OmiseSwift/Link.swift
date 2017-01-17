@@ -49,20 +49,26 @@ extension Link {
 }
 
 public struct LinkParams: APIParams {
-    public var amount: Int64
-    public var currency: Currency
+    public var value: Value
     public var title: String
     public var linkDescription: String
     public var isMultiple: Bool?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            "currency": currency.code,
+            "amount": value.amount,
+            "currency": value.currency.code,
             "title": title,
             "description": linkDescription,
             "multiple": isMultiple,
             ])
+    }
+    
+    public init(value: Value, title: String, linkDescription: String, isMultiple: Bool? = nil) {
+        self.value = value
+        self.title = title
+        self.linkDescription = linkDescription
+        self.isMultiple = isMultiple
     }
 }
 

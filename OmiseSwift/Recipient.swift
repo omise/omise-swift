@@ -76,6 +76,16 @@ public struct RecipientParams: APIParams {
             "bank_account": bankAccount
         ])
     }
+    
+    public init(name: String? = nil, email: String? = nil, recipientDescription: String? = nil,
+                type: RecipientType? = nil, taxID: String? = nil, bankAccount: BankAccountParams? = nil) {
+        self.name = name
+        self.email = email
+        self.recipientDescription = recipientDescription
+        self.type = type
+        self.taxID = taxID
+        self.bankAccount = bankAccount
+    }
 }
 
 extension RecipientParams {
@@ -90,4 +100,21 @@ extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
+public class RecipientFilterParams: OmiseFilterParams {
+    public var type: RecipientType?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "kind": type?.rawValue
+            ])
+    }
+    
+    public init(type: RecipientType?) {
+        self.type = type
+    }
+}
+
+extension Recipient: Searchable {
+    public typealias FilterParams = RecipientFilterParams
+}
 

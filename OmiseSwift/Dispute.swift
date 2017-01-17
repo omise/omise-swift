@@ -64,6 +64,10 @@ public struct DisputeParams: APIParams {
             "message": message,
             ])
     }
+    
+    public init(message: String?) {
+        self.message = message
+    }
 }
 
 public struct DisputeFilterParams: OmiseFilterParams {
@@ -79,6 +83,14 @@ public struct DisputeFilterParams: OmiseFilterParams {
             "reason_code": reasonCode,
             "status": status?.rawValue
             ])
+    }
+    
+    public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
+                created: DateComponents? = nil, reasonCode: String? = nil) {
+        self.status = status
+        self.cardLastDigits = cardLastDigits
+        self.created = created
+        self.reasonCode = reasonCode
     }
 }
 

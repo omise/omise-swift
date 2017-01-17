@@ -44,7 +44,7 @@ extension Transfer {
         self.isSent = isSent
         self.isPaid = isPaid
         self.value = value
-        self.fee = Value(currency: currency, amount: fee)
+        self.fee = Value(amount: fee, currency: currency)
         
         self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
         self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
