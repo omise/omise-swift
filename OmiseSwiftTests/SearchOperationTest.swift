@@ -6,8 +6,8 @@ class SearchOperationTest: OmiseTestCase {
     var testClient: APIClient {
         let config = APIConfiguration(
             apiVersion: "2015-11-17",
-            publicKey: "pkey_test_5570z4yt4wybjb03ag8",
-            secretKey: "skey_test_5570z4yvwcr22l3rjnm"
+            publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
+            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
         )
         
         return APIClient(config: config)
@@ -19,7 +19,7 @@ class SearchOperationTest: OmiseTestCase {
         var searchParams = SearchParams<ChargeFilterParams>()
         searchParams.scope = Charge.scopeName
         var searchFilter = ChargeFilterParams()
-        searchFilter.cardLastDigits = LastDigits(lastDigitsString: "1111")!
+        searchFilter.cardLastDigits = LastDigits(lastDigitsString: "4242")!
         searchParams.filter = searchFilter
         
         let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
@@ -27,9 +27,9 @@ class SearchOperationTest: OmiseTestCase {
             
             switch result {
             case let .success(charges):
-                XCTAssertEqual(charges.data.count, 1)
+                XCTAssertEqual(charges.data.count, 30)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.value.amount, 100000)
+                XCTAssertEqual(samplingCharge?.value.amount, 1_000_00)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -48,9 +48,9 @@ class SearchOperationTest: OmiseTestCase {
         var searchFilter = ChargeFilterParams()
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar(identifier: .gregorian)
-        dateComponents.year = 2016
-        dateComponents.month = 9
-        dateComponents.day = 2
+        dateComponents.year = 2017
+        dateComponents.month = 1
+        dateComponents.day = 5
         searchFilter.created = dateComponents
         searchParams.filter = searchFilter
         
@@ -59,7 +59,7 @@ class SearchOperationTest: OmiseTestCase {
             
             switch result {
             case let .success(charges):
-                XCTAssertEqual(charges.data.count, 3)
+                XCTAssertEqual(charges.data.count, 2)
                 let samplingCharge = charges.data.first
                 XCTAssertEqual(samplingCharge?.value.amount, 100000)
             case let .fail(error):
