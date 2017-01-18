@@ -105,7 +105,7 @@ public class RecipientFilterParams: OmiseFilterParams {
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
-            "kind": type?.rawValue
+            "type": type?.rawValue
             ])
     }
     
