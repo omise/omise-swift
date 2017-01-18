@@ -4,7 +4,7 @@ public protocol Creatable {
     associatedtype CreateParams: APIParams
 }
 
-public extension Creatable where Self: OmiseResourceObject {
+public extension Creatable where Self: OmiseLocatableObject {
     public typealias CreateEndpoint = APIEndpoint<Self>
     public typealias CreateRequest = Request<Self>
     

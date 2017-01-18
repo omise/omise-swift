@@ -20,7 +20,7 @@ public struct ListParams: APIParams {
     }
 }
 
-public extension Listable where Self: OmiseResourceObject {
+public extension Listable where Self: OmiseLocatableObject {
     public typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
     public typealias ListRequest = Request<ListProperty<Self>>
     

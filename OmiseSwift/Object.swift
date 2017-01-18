@@ -13,36 +13,17 @@ public protocol OmiseLocatableObject: OmiseObject {
     var location: String { get }
 }
 
-public protocol OmiseResourceObject: OmiseLocatableObject {
-    
+public protocol OmiseIdentifiableObject: OmiseObject {
     var id: String { get }
-    var isLive: Bool { get }
     var createdDate: Date { get }
+}
+
+public protocol OmiseLiveModeObject: OmiseObject {
+    var isLive: Bool { get }
+}
+
+public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
     var isDeleted: Bool { get }
-}
-
-extension OmiseObject {
-    static func parseObject(JSON json: Any) -> String? {
-        guard let json = json as? [String: Any],
-            let object = json["object"] as? String else {
-                return nil
-        }
-        
-        return (object: object)
-    }
-}
-
-extension OmiseLocatableObject {
-    static func parseLocationResource(JSON json: Any) -> (object: String, location: String)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let location = json["location"] as? String else {
-                return nil
-        }
-        
-        return (object: object, location: location)
-    }
-
 }
 
 extension OmiseLocatableObject {
@@ -72,6 +53,71 @@ extension OmiseLocatableObject {
     }
 }
 
+
+extension OmiseObject {
+    static func parseObject(JSON json: Any) -> String? {
+        guard let json = json as? [String: Any],
+            let object = json["object"] as? String else {
+                return nil
+        }
+        
+        return (object: object)
+    }
+}
+
+extension OmiseLiveModeObject {
+    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let isLive = json["livemode"] as? Bool else {
+                return nil
+        }
+        
+        return (object: object, isLiveMode: isLive)
+    }
+}
+
+extension OmiseLocatableObject {
+    static func parseLocationResource(JSON json: Any) -> (object: String, location: String)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let location = json["location"] as? String else {
+                return nil
+        }
+        
+        return (object: object, location: location)
+    }
+}
+
+extension OmiseIdentifiableObject {
+    static func parseIdentifiableProperties(JSON json: Any) -> (object: String, id: String, createdDate: Date)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let id = json["id"] as? String,
+            let createdDateString = json["created"] as? String,
+            let created = DateConverter.convert(fromAttribute: createdDateString) else {
+                return nil
+        }
+        
+        return (object: object, id: id, createdDate: created)
+    }
+}
+
+extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
+    static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String, createdDate: Date)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let location = json["location"] as? String,
+            let id = json["id"] as? String,
+            let createdDateString = json["created"] as? String,
+            let created = DateConverter.convert(fromAttribute: createdDateString) else {
+                return nil
+        }
+        
+        return (object: object, location: location, id: id, createdDate: created)
+    }
+}
+
 extension OmiseResourceObject {
     static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date, isDeleted: Bool)? {
         guard let json = json as? [String: Any],
@@ -80,17 +126,17 @@ extension OmiseResourceObject {
             let id = json["id"] as? String,
             let isLive = json["livemode"] as? Bool,
             let createdDateString = json["created"] as? String,
-            let created = DateConverter.convert(fromAttribute: createdDateString),
-            let isDeleted = json["livemode"] as? Bool else {
+            let created = DateConverter.convert(fromAttribute: createdDateString) else {
                 return nil
         }
+        let isDelete = (json["livemode"] as? Bool) ?? false
         
-        return (object: object, location: location, id: id, isLive: isLive, createdDate: created, isDeleted: isDeleted)
+        return (object: object, location: location, id: id, isLive: isLive, createdDate: created, isDeleted: isDelete)
     }
 }
 
 
-extension OmiseResourceObject where Self: Equatable {
+extension OmiseIdentifiableObject where Self: Equatable {
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }

@@ -7,16 +7,14 @@ public enum TransactionType: String {
 }
 
 
-public struct Transaction: OmiseResourceObject {
+public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transactions")
     
     public let object: String
     public let location: String
 
     public let id: String
-    public let isLive: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
     
     public let type: TransactionType
     public let value: Value
@@ -26,7 +24,7 @@ public struct Transaction: OmiseResourceObject {
 
 extension Transaction {
     public init?(JSON json: Any) {
-        guard let omiseObjectProperties = Transaction.parseOmiseResource(JSON: json), let json = json as? [String: Any] else {
+        guard let omiseObjectProperties = Transaction.parseOmiseProperties(JSON: json), let json = json as? [String: Any] else {
             return nil
         }
         
@@ -35,7 +33,7 @@ extension Transaction {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
         
         self.value = value
         self.type = type

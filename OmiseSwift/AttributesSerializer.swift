@@ -87,7 +87,7 @@ func serialize(_ object: APIDataSerializable) throws -> Data {
     return try JSONSerialization.data(withJSONObject: object.json, options: [])
 }
 
-func deserialize<TObject: OmiseObject>(_ data: Data) throws -> TObject {
+func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
     let jsonObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
     guard let object = TObject(JSON: jsonObject) else {
         throw OmiseError.unexpected("expected JSON object at top level.")

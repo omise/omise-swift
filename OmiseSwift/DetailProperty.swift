@@ -1,5 +1,5 @@
 
-public enum DetailProperty<T: OmiseResourceObject> {
+public enum DetailProperty<T: OmiseIdentifiableObject> {
     case notLoaded(String)
     indirect case loaded(T)
 }

@@ -49,7 +49,7 @@ public class Request<Result: OmiseObject> {
         do {
             switch httpResponse.statusCode {
             case 400..<600:
-                let err: APIError = try deserialize(data)
+                let err: APIError = try deserializeData(data)
                 result = .fail(.api(err))
                 
             case 200..<300:

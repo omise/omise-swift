@@ -55,7 +55,7 @@ public struct APIEndpoint<DataType: OmiseObject> {
     }
     
     func deserialize(_ data: Data) throws -> DataType {
-        return try deserialize(data)
+        return try deserializeData(data)
     }
 }
 

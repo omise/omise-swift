@@ -1,7 +1,7 @@
 import Foundation
 
 
-public class List<TItem: OmiseObject> {
+public class List<TItem: OmiseLocatableObject> {
     private(set) public var from: Date?
     private(set) public var to: Date?
     var loadedIndices = 0..<0

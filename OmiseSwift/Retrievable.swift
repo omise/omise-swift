@@ -12,7 +12,7 @@ public struct RetrieveParams: APIParams {
     }
 }
 
-public extension Retrievable where Self: OmiseResourceObject {
+public extension Retrievable where Self: OmiseLocatableObject {
     public typealias RetrieveEndpoint = APIEndpoint<Self>
     public typealias RetrieveRequest = Request<Self>
     
