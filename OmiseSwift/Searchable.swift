@@ -29,7 +29,9 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIParams {
     }
 }
 
-public protocol OmiseFilterParams: APIParams {}
+public protocol OmiseFilterParams: APIParams {
+    init(JSON: [String: Any])
+}
 
 
 public extension Searchable where Self: OmiseResourceObject {

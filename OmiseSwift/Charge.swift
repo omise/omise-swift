@@ -192,6 +192,32 @@ public struct ChargeFilterParams: OmiseFilterParams {
             "failure_code": failureCode?.code,
             ])
     }
+    
+    public init(created: DateComponents? = nil, amount: Double? = nil,
+                isAuthorized: Bool? = nil, isCaptured: Bool? = nil,
+                cardLastDigits: LastDigits? = nil,
+                isCustomerPresent: Bool? = nil,
+                failureCode: ChargeFailure? = nil) {
+        self.created = created
+        self.amount = amount
+        self.isAuthorized = isAuthorized
+        self.isCaptured = isCaptured
+        self.cardLastDigits = cardLastDigits
+        self.isCustomerPresent = isCustomerPresent
+        self.failureCode = failureCode
+    }
+    
+    public init(JSON: [String : Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            amount: (JSON["amount"] as? Double),
+            isAuthorized: (JSON["authorized"] as? Bool),
+            isCaptured: (JSON["captured"] as? Bool),
+            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
+            isCustomerPresent: JSON["customer_present"] as? Bool,
+            failureCode: (JSON["failure_code"] as? String).flatMap(ChargeFailure.init(JSON:))
+        )
+    }
 }
 
 

@@ -113,6 +113,40 @@ public struct TransferFilterParams: OmiseFilterParams {
             "failure_message": failureMessage,
             ])
     }
+    
+    public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency?,
+                bankLastDigits: LastDigits? = nil, fee: Double? = nil,
+                isPaid: Bool? = nil, paidDate: DateComponents? = nil,
+                isSent: Bool? = nil, sentDate: DateComponents? = nil,
+                failureCode: String? = nil, failureMessage: String? = nil) {
+        self.created = created
+        self.amount = amount
+        self.currency = currency
+        self.bankLastDigits = bankLastDigits
+        self.fee = fee
+        self.isPaid = isPaid
+        self.paidDate = paidDate
+        self.isSent = isSent
+        self.sentDate = sentDate
+        self.failureCode = failureCode
+        self.failureMessage = failureMessage
+    }
+    
+    public init(JSON: [String : Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            amount: (JSON["amount"] as? Double),
+            currency: (JSON["currency"] as? String).flatMap(Currency.init(code:)),
+            bankLastDigits: (JSON["bank_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
+            fee: (JSON["fee"] as? Double),
+            isPaid: JSON["paid"] as? Bool,
+            paidDate: JSON["paid_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            isSent: JSON["sent"] as? Bool,
+            sentDate: JSON["sent_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            failureCode: JSON["failure_code"] as? String,
+            failureMessage: JSON["failure_message"] as? String
+        )
+    }
 }
 
 

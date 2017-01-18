@@ -100,7 +100,7 @@ extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
-public class RecipientFilterParams: OmiseFilterParams {
+public struct RecipientFilterParams: OmiseFilterParams {
     public var type: RecipientType?
     
     public var json: JSONAttributes {
@@ -111,6 +111,10 @@ public class RecipientFilterParams: OmiseFilterParams {
     
     public init(type: RecipientType?) {
         self.type = type
+    }
+    
+    public init(JSON: [String : Any]) {
+        self.init(type: (JSON["type"] as? String).flatMap(RecipientType.init(rawValue:)))
     }
 }
 

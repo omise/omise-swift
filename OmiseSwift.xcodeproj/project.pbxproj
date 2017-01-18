@@ -437,10 +437,10 @@
 				8ACB413A1E27A36F001793CD /* Recipient.swift */,
 				8ACB41421E27A51A001793CD /* Refund.swift */,
 				2258D8171D23C480006C4149 /* ResourceInfo.swift */,
+				8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */,
 				8ACB413F1E27A4B6001793CD /* Transaction.swift */,
 				8ACB41381E27A335001793CD /* Transfer.swift */,
 				8ACB41201E277FBB001793CD /* Value.swift */,
-				8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";

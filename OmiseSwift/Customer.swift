@@ -60,7 +60,8 @@ public struct CustomerParams: APIParams {
     }
 }
 
-public class CustomerFilterParams: OmiseFilterParams {
+public struct CustomerFilterParams: OmiseFilterParams {
+
     public var created: DateComponents?
 
     public var json: JSONAttributes {
@@ -71,6 +72,12 @@ public class CustomerFilterParams: OmiseFilterParams {
     
     public init(created: DateComponents?) {
         self.created = created
+    }
+
+    public init(JSON: [String : Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:))
+        )
     }
 }
 

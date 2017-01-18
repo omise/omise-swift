@@ -92,6 +92,15 @@ public struct DisputeFilterParams: OmiseFilterParams {
         self.created = created
         self.reasonCode = reasonCode
     }
+    
+    public init(JSON: [String : Any]) {
+        self.init(
+            status: (JSON["status"] as? String).flatMap(DisputeStatus.init(rawValue:)),
+            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            reasonCode: JSON["reason_code"] as? String
+        )
+    }
 }
 
 extension Dispute: Listable { }
