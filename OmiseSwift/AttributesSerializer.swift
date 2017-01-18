@@ -35,12 +35,12 @@ func stitchKeys(_ prefix: String?, key: String) -> String {
 
 
 func encode(_ attributes: APIDataSerializable) -> [URLQueryItem] {
-    return encodeDict(attributes, parentKey: nil)
+    return encodeDict(attributes.json, parentKey: nil)
         .sorted(by: { (item1, item2) in item1.name < item2.name })
 }
 
-fileprivate func encodeDict(_ dict: APIDataSerializable, parentKey: String?) -> [URLQueryItem] {
-    return dict.json.flatMap(encodePair(parentKey))
+fileprivate func encodeDict(_ dict: JSONAttributes, parentKey: String?) -> [URLQueryItem] {
+    return dict.flatMap(encodePair(parentKey))
 }
 
 fileprivate func encodePair(_ parentKey: String?) -> (String, Any?) -> [URLQueryItem] {
@@ -52,7 +52,7 @@ fileprivate func encodePair(_ parentKey: String?) -> (String, Any?) -> [URLQuery
             nestedKey = key
         }
         
-        if let attributes = value as? APIDataSerializable {
+        if let attributes = value as? JSONAttributes {
             return encodeDict(attributes, parentKey: nestedKey)
         } else {
             return [URLQueryItem(name: nestedKey, value: encodeScalar(value))]
