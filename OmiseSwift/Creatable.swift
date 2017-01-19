@@ -6,7 +6,7 @@ public protocol Creatable {
 
 public extension Creatable where Self: OmiseLocatableObject {
     public typealias CreateEndpoint = APIEndpoint<Self>
-    public typealias CreateRequest = Request<Self>
+    public typealias CreateRequest = APIRequest<Self>
     
     public static func createEndpointWithParent(_ parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(

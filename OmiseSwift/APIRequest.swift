@@ -2,13 +2,13 @@ import Foundation
 
 
 
-public class Request<Result: OmiseObject> {
+public class APIRequest<Result: OmiseObject> {
     public typealias Endpoint = APIEndpoint<Result>
     public typealias Callback = (Failable<Result>) -> Void
     
     let client: APIClient
     let endpoint: APIEndpoint<Result>
-    let callback: Request.Callback?
+    let callback: APIRequest.Callback?
     
     var task: URLSessionDataTask?
     
@@ -54,10 +54,7 @@ public class Request<Result: OmiseObject> {
                 
             case 200..<300:
                 result = .success(try endpoint.deserialize(data))
-//                if let resource = result as? ResourceObject {
-//                    resource.attachedClient = client
-//                }
-                
+
             default:
                 result = .fail(.unexpected("unrecognized HTTP status code: \(httpResponse.statusCode)"))
             }
@@ -80,7 +77,7 @@ public class Request<Result: OmiseObject> {
         let requestURL = endpoint.makeURL()
         
         let apiKey = client.preferredKeyForServerEndpoint(endpoint.endpoint)
-        let auth = try Request.encodeAuthorizationHeader(withAPIKey: apiKey)
+        let auth = try APIRequest.encodeAuthorizationHeader(withAPIKey: apiKey)
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.method

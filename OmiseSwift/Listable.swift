@@ -22,7 +22,7 @@ public struct ListParams: APIParams {
 
 public extension Listable where Self: OmiseLocatableObject {
     public typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
-    public typealias ListRequest = Request<ListProperty<Self>>
+    public typealias ListRequest = APIRequest<ListProperty<Self>>
     
     @discardableResult
     public static func listEndpoint(_ parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
@@ -69,7 +69,7 @@ public extension Listable where Self: OmiseLocatableObject {
     }
     
     @discardableResult
-    static func loadNextPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> Request<ListEndpoint.Result>? {
+    static func loadNextPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<ListEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(list: list, count: count)
         
         let requestCallback: ListRequest.Callback = { result in
@@ -87,7 +87,7 @@ public extension Listable where Self: OmiseLocatableObject {
     }
     
     @discardableResult
-    static func loadPreviousPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> Request<ListEndpoint.Result>? {
+    static func loadPreviousPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<ListEndpoint.Result>? {
         let operation = makeLoadPreviousPageOperation(list: list, count: count)
         
         let requestCallback: ListRequest.Callback = { result in

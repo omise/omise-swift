@@ -42,9 +42,9 @@ public class APIClient: NSObject {
     }
     
     @discardableResult
-    public func requestToEndpoint<TResult: OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: Request<TResult>.Callback?) -> Request<TResult>? {
+    public func requestToEndpoint<TResult: OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
-            let req: Request<TResult> = Request(client: self, endpoint: endpoint, callback: callback)
+            let req: APIRequest<TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as OmiseError {
             performCallback() {

@@ -6,7 +6,7 @@ public protocol Updatable {
 
 public extension Updatable where Self: OmiseResourceObject {
     public typealias UpdateEndpoint = APIEndpoint<Self>
-    public typealias UpdateRequest = Request<Self>
+    public typealias UpdateRequest = APIRequest<Self>
     
     public static func updateEndpoint(_ parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(

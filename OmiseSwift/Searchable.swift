@@ -36,7 +36,7 @@ public protocol OmiseFilterParams: APIParams {
 
 public extension Searchable where Self: OmiseResourceObject {
     public typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
-    public typealias SearchRequest = Request<SearchResult<Self>>
+    public typealias SearchRequest = APIRequest<SearchResult<Self>>
 
     public static func searchEndpoint(parent: OmiseResourceObject?, params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(

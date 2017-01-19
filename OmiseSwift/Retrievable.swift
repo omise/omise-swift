@@ -14,7 +14,7 @@ public struct RetrieveParams: APIParams {
 
 public extension Retrievable where Self: OmiseLocatableObject {
     public typealias RetrieveEndpoint = APIEndpoint<Self>
-    public typealias RetrieveRequest = Request<Self>
+    public typealias RetrieveRequest = APIRequest<Self>
     
     public static func retrieveEndpoint(_ parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)

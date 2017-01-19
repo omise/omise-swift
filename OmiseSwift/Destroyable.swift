@@ -4,7 +4,7 @@ public protocol Destroyable {}
 
 public extension Destroyable where Self: OmiseResourceObject {
     public typealias DestroyEndpoint = APIEndpoint<Self>
-    public typealias DestroyRequest = Request<Self>
+    public typealias DestroyRequest = APIRequest<Self>
     
     public static func destroyEndpointWithParent(_ parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
         return DestroyEndpoint(

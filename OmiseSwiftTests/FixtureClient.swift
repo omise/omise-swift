@@ -13,7 +13,7 @@ class FixtureClient: APIClient {
     }
     
     @discardableResult
-    override func requestToEndpoint<TResult : OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: Request<TResult>.Callback?) -> Request<TResult>? {
+    override func requestToEndpoint<TResult : OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
             let req: FixtureRequest<TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
@@ -28,7 +28,7 @@ class FixtureClient: APIClient {
 }
 
 
-class FixtureRequest<TResult: OmiseObject>: Request<TResult> {
+class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
     var fixtureClient: FixtureClient? {
         return client as? FixtureClient
     }

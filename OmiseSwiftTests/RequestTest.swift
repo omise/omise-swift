@@ -10,7 +10,7 @@ class RequestTest: OmiseTestCase {
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     
 //    func testCtor() {
-//        guard let request: Request<Account> = Request(
+//        guard let request: APIRequest<Account> = APIRequest(
 //            config: config,
 //            session: session,
 //            operation: APIEndpoint(

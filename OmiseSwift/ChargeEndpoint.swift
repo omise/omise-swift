@@ -3,9 +3,9 @@ import Foundation
 
 extension Charge {
     public typealias CaptureEndpoint = APIEndpoint<Charge>
-    public typealias CaptureRequest = Request<Charge>
+    public typealias CaptureRequest = APIRequest<Charge>
     public typealias ReverseEndpoint = APIEndpoint<Charge>
-    public typealias ReverseRequest = Request<Charge>
+    public typealias ReverseRequest = APIRequest<Charge>
     
     public static func captureEndpoint(id: String) -> CaptureEndpoint {
         return CaptureEndpoint(
