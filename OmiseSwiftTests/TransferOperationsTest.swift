@@ -5,7 +5,6 @@ import Omise
 class TransferOperationsTest: OmiseTestCase {
     var testClient: APIClient {
         let config = APIConfiguration(
-            apiVersion: "2015-11-17",
             publicKey: "pkey_test_54flsro0dmplsfg80vm",
             secretKey: "skey_test_54flpy4dc5jpkrmlpp6"
         )

@@ -2,12 +2,11 @@ import Foundation
 
 
 public struct APIConfiguration {
-    let apiVersion: String
-    let publicKey: String
-    let secretKey: String
+    public let apiVersion: String = "2015-11-17"
+    public let publicKey: String
+    public let secretKey: String
     
-    public init(apiVersion: String, publicKey: String, secretKey: String) {
-        self.apiVersion = apiVersion
+    public init(publicKey: String, secretKey: String) {
         self.publicKey = publicKey
         self.secretKey = secretKey
     }

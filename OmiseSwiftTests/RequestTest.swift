@@ -4,7 +4,6 @@ import Omise
 
 class RequestTest: OmiseTestCase {
     let config = APIConfiguration(
-        apiVersion: "2015-11-17",
         publicKey: "pkey_test_123",
         secretKey: "skey_test_123")
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)

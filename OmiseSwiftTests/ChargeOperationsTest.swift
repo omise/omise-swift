@@ -5,7 +5,6 @@ import XCTest
 class ChargeOperationsTest: OmiseTestCase {
     var testClient: APIClient {
         let config = APIConfiguration(
-            apiVersion: "2015-11-17",
             publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
             secretKey: "skey_test_54oojsyhuzzr51wa5hc"
         )

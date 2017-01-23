@@ -5,7 +5,6 @@ import Omise
 class LiveTest: OmiseTestCase {
     var testClient: APIClient {
         let config = APIConfiguration(
-            apiVersion: "2015-11-17",
             publicKey: "pkey_test_52d6po3fvio2w6tefpb",
             secretKey: "skey_test_52d6ppdms4p1jhnkigq"
         )
