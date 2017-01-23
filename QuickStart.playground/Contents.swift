@@ -1,5 +1,4 @@
 /*: playground-setup
- 
  We will be making background network requests in this QuickStart, so we need to first setup our Playground page to handle that:
  */
 import PlaygroundSupport
@@ -22,7 +21,9 @@ let secretKey = "<#Your secret key here#>"
 
 
 /*:
- 1. Or by using custom client instance, by creating a new `Omise.Client` directly:
+ ## Create an instance of `APIClient`
+ 
+ An instance of `Omise.APIClient` is required to perform any operations to Omise APIs. You can supply an `Omise.APIConfiguration` to the initializer of `Omise.APIClient`.
  */
 let client = APIClient(
     config: APIConfiguration(
@@ -39,7 +40,7 @@ let client = APIClient(
  Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.success` and `.fail`. For example, to retrieve current account:
  
  ````
- Account.retrieve { (result) in
+ Account.retrieve(using: client) { (result) in
     switch result {
     case let .success(account):
         // handle account
@@ -69,14 +70,14 @@ Balance.retrieve(using: client) { (result) in
 }
 
 /*:
- Some APIs require specifying additional parameters, these are usually named after the models with a `Params` suffix and you can supply them to API methods using the `params:` parameter.
+ Some APIs require specifying additional parameters, these are usually named after the models with a `APIParams` suffix and you can supply them to API methods using the `params:` parameter.
  
  ````
  let params = TokenParams()
  params.number = "4242424242424242"
  params.name = "Example"
  
- Token.create(params: params) { (result) in
+ Token.create(using: client, params: params) { (result) in
     // ...
  }
  ````
@@ -118,10 +119,7 @@ func createChargeWithToken(_ token: Token) {
  Some APIs, such as the Refund API, require specifying a charge id. You can call them by supplying an instance of the parent object using the `parent` parameter like so:
  
  ````
- let charge = Charge()
- charge.id = "chrg_test_123"
- 
- Refund.list(parent: charge) { (result) in
+ Refund.list(using: client, parent: charge) { (result) in
     // ...
  }
  ````
@@ -129,10 +127,7 @@ func createChargeWithToken(_ token: Token) {
  Or alternatively, you can call the related methods on the parent instance directly:
  
  ````
- let charge = Charge()
- charge.id = "chrg_test_123"
- 
- charge.listRefunds { (result) in
+ charge.listRefunds(using: client) { (result) in
     // ...
  }
  ````
