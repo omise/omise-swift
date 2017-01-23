@@ -29,7 +29,8 @@ public class APIClient: NSObject {
         self.session = URLSession(
             configuration: URLSessionConfiguration.ephemeral,
             delegate: self,
-            delegateQueue: operationQueue)
+            delegateQueue: operationQueue
+        )
     }
     
     func preferredKeyForServerEndpoint(_ endpoint: ServerEndpoint) -> String {
@@ -62,6 +63,11 @@ public class APIClient: NSObject {
     
     func performCallback(_ callback: @escaping () -> ()) {
         operationQueue.addOperation(callback)
+    }
+    
+    public func cancelAllOperations() {
+        session.invalidateAndCancel()
+        operationQueue.cancelAllOperations()
     }
 }
 

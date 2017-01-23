@@ -18,6 +18,15 @@ extension Card: Equatable {
 public enum Payment {
     case card(Card)
     case offsite(OffsitePayment)
+    
+    public var sourceOfFunds: String {
+        switch self {
+        case .card:
+            return "card"
+        case .offsite:
+            return "offsite"
+        }
+    }
 }
 
 extension Payment: Equatable {
@@ -44,6 +53,16 @@ extension Payment: Equatable {
 
 public enum OffsitePayment {
     case internetBanking(InternetBanking)
+    
+    public var offsite: String {
+        return OffsitePaymentConverter.convert(fromValue: self) as? String ?? {
+            switch self {
+            case .internetBanking(let bank):
+                return "internet_banking_" + bank.rawValue
+            }
+            }()
+    }
+    
 }
 
 extension OffsitePayment: Equatable {

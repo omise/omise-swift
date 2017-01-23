@@ -1,17 +1,24 @@
 import Foundation
 
 public enum ChargeFailure {
+    /// Insufficient funds in the account or the card has reached the credit limit.
     case insufficientFund
+    /// Card is stolen or lost.
     case stolenOrLostCard
+    /// Card processing has failed, you may retry this transaction.
     case failedProcessing
+    /// The payment was rejected by the issuer or the acquirer with no specific reason.
     case paymentRejected
+    /// The security code was invalid or the card didn't pass preauth.
     case invalidSecurityCode
+    /// Card was marked as fraudulent.
     case failedFraudCheck
+    /// This number is not attributed or has been deactivated.
     case invalidAccountNumber
     
     case other(String)
     
-    var code: String {
+    public var code: String {
         switch self {
         case .insufficientFund:
             return "insufficient_fund"
@@ -31,14 +38,8 @@ public enum ChargeFailure {
             return code
         }
     }
-}
-
-
-extension ChargeFailure {
-    init?(JSON json: Any) {
-        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String else {
-            return nil
-        }
+    
+    public init(code: String) {
         switch code {
         case "insufficient_fund":
             self = .insufficientFund
@@ -61,13 +62,19 @@ extension ChargeFailure {
 }
 
 
-/*
- insufficient_fund	Insufficient funds in the account or the card has reached the credit limit.
- stolen_or_lost_card	Card is stolen or lost.
- failed_processing	Card processing has failed, you may retry this transaction.
- payment_rejected	The payment was rejected by the issuer or the acquirer with no specific reason.
- invalid_security_code	The security code was invalid or the card didn't pass preauth.
- failed_fraud_check	Card was marked as fraudulent.
- invalid_account_number	This number is not attributed or has been deactivated.
- */
+extension ChargeFailure {
+    init?(JSON json: Any) {
+        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String else {
+            return nil
+        }
+        self = ChargeFailure.init(code: code)
+    }
+}
+
+
+public struct Failure {
+    public let code: String
+    public let message: String?
+}
+
 

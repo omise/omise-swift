@@ -20,8 +20,11 @@ public struct Transfer: OmiseResourceObject {
     
     public let value: Value
     public let fee: Value
-
+    
+    public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
+    
+    public let failure: Failure?
 }
 
 
@@ -31,24 +34,33 @@ extension Transfer {
             let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
                 return nil
         }
-
+        
         guard let bankAccount = json["bank_account"].flatMap(BankAccount.init(JSON:)),
             let value = Value(JSON: json),
             let fee = json["fee"] as? Int64, let currency = json["currency"].flatMap(CurrencyFieldConverter.convert(fromAttribute:)),
-            let isSent = json["sent"] as? Bool, let isPaid = json["paid"] as? Bool else {
+            let isSent = json["sent"] as? Bool, let isPaid = json["paid"] as? Bool,
+            let recipient = json["recipient"].flatMap(DetailProperty<Recipient>.init(JSON:)) else {
                 return nil
         }
-            
+        
         (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
         self.bankAccount = bankAccount
         self.isSent = isSent
         self.isPaid = isPaid
         self.value = value
         self.fee = Value(amount: fee, currency: currency)
+        self.recipient = recipient
         
         self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
         self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
         self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
+        
+        if let failureCode = json["failure_code"] as? String {
+            let failure = Failure(code: failureCode, message: json["failure_message"] as? String)
+            self.failure = failure
+        } else {
+            self.failure = nil
+        }
     }
 }
 
@@ -114,7 +126,7 @@ public struct TransferFilterParams: OmiseFilterParams {
             ])
     }
     
-    public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency?,
+    public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
                 bankLastDigits: LastDigits? = nil, fee: Double? = nil,
                 isPaid: Bool? = nil, paidDate: DateComponents? = nil,
                 isSent: Bool? = nil, sentDate: DateComponents? = nil,

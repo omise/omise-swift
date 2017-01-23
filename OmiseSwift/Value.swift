@@ -8,6 +8,10 @@ public struct Value {
         self.amount = amount
         self.currency = currency
     }
+    
+    public var amountInUnit: Double {
+        return currency.convert(fromSubunit: amount)
+    }
 }
 
 

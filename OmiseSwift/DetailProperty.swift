@@ -2,6 +2,15 @@
 public enum DetailProperty<T: OmiseIdentifiableObject> {
     case notLoaded(String)
     indirect case loaded(T)
+    
+    public var dataID: String {
+        switch self {
+        case .notLoaded(let dataID):
+            return dataID
+        case .loaded(let data):
+            return data.id
+        }
+    }
 }
 
 

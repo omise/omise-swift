@@ -18,6 +18,15 @@ public struct ListParams: APIParams {
             "order": order?.rawValue
         ])
     }
+    
+    
+    public init(from: Date? = nil, to: Date? = nil, offset: Int? = nil, limit: Int? = nil, order: Ordering? = nil) {
+        self.from = from
+        self.to = to
+        self.offset = offset
+        self.limit = limit
+        self.order = order
+    }
 }
 
 public extension Listable where Self: OmiseLocatableObject {
