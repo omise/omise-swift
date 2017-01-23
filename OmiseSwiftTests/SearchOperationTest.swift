@@ -15,8 +15,7 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchChargeByLastDigits() {
         let expectation = self.expectation(description: "transfer result")
         
-        var searchParams = SearchParams<ChargeFilterParams>()
-        searchParams.scope = Charge.scopeName
+        var searchParams = SearchParams(searhScopeType: Charge.self)
         var searchFilter = ChargeFilterParams()
         searchFilter.cardLastDigits = LastDigits(lastDigitsString: "4242")!
         searchParams.filter = searchFilter
@@ -42,8 +41,7 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchChargeByCreatedDate() {
         let expectation = self.expectation(description: "transfer result")
         
-        var searchParams = SearchParams<ChargeFilterParams>()
-        searchParams.scope = Charge.scopeName
+        var searchParams = SearchParams(searhScopeType: Charge.self)
         var searchFilter = ChargeFilterParams()
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar(identifier: .gregorian)
@@ -73,7 +71,7 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchCustomerByEmail() {
         let expectation = self.expectation(description: "transfer result")
         
-        var searchParams = SearchParams<CustomerFilterParams>()
+        var searchParams = SearchParams(searhScopeType: Customer.self)
         searchParams.scope = Customer.scopeName
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar(identifier: .gregorian)
@@ -104,7 +102,7 @@ class SearchOperationTest: OmiseTestCase {
     func testSearchRecipientByKind() {
         let expectation = self.expectation(description: "transfer result")
         
-        var searchParams = SearchParams<RecipientFilterParams>()
+        var searchParams = SearchParams(searhScopeType: Recipient.self)
         searchParams.scope = Recipient.scopeName
         var searchFilter = RecipientFilterParams(type: .individual)
         

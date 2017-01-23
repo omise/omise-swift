@@ -5,15 +5,15 @@ public struct SearchResult<Item: Searchable & OmiseObject>: OmiseLocatableObject
         return ResourceInfo(path: "/search")
     }
     
-    public var object: String
-    public var location: String
+    public let object: String
+    public let location: String
     public let scope: String
     public let query: String
     public let page: Int
     public let totalPage: Int
     
     public let filters: Item.FilterParams
-    public let data: [Item]
+    public var data: [Item]
 }
 
 
