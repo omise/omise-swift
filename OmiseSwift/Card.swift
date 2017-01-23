@@ -311,9 +311,9 @@ public struct CardParams: APIParams {
 }
 
 
-extension CustomerCard: Listable { }
-extension CustomerCard: Retrievable { }
-extension CustomerCard: Destroyable { }
+extension CustomerCard: Listable {}
+extension CustomerCard: Retrievable {}
+extension CustomerCard: Destroyable {}
 extension CustomerCard: Updatable {
     public typealias UpdateParams = CardParams
 }

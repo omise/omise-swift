@@ -8,7 +8,7 @@ public extension Updatable where Self: OmiseResourceObject {
     public typealias UpdateEndpoint = APIEndpoint<Self>
     public typealias UpdateRequest = APIRequest<Self>
     
-    public static func updateEndpoint(_ parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
+    public static func updateEndpointWith(parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "PATCH",
@@ -22,7 +22,7 @@ public extension Updatable where Self: OmiseResourceObject {
             return nil
         }
         
-        let endpoint = self.updateEndpoint(parent, id: id, params: params)
+        let endpoint = self.updateEndpointWith(parent: parent, id: id, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

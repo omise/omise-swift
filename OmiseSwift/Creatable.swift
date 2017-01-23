@@ -8,7 +8,7 @@ public extension Creatable where Self: OmiseLocatableObject {
     public typealias CreateEndpoint = APIEndpoint<Self>
     public typealias CreateRequest = APIRequest<Self>
     
-    public static func createEndpointWithParent(_ parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
+    public static func createEndpointWith(parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "POST",
@@ -22,7 +22,7 @@ public extension Creatable where Self: OmiseLocatableObject {
             return nil
         }
         
-        let endpoint = self.createEndpointWithParent(parent, params: params)
+        let endpoint = self.createEndpointWith(parent: parent, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

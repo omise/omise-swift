@@ -81,8 +81,8 @@ public struct CustomerFilterParams: OmiseFilterParams {
     }
 }
 
-extension Customer: Listable { }
-extension Customer: Retrievable { }
+extension Customer: Listable {}
+extension Customer: Retrievable {}
 
 extension Customer: Creatable {
     public typealias CreateParams = CustomerParams
@@ -96,6 +96,6 @@ extension Customer: Searchable {
     public typealias FilterParams = CustomerFilterParams
 }
 
-extension Customer: Destroyable { }
+extension Customer: Destroyable {}
 
 

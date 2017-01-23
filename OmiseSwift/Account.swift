@@ -23,5 +23,5 @@ extension Account {
     }
 }
 
-extension Account: SingletonRetrievable { }
+extension Account: SingletonRetrievable {}
 

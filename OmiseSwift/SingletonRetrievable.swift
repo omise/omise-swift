@@ -6,7 +6,7 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
     public typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
     public typealias RetrieveRequest = APIRequest<Self>
     
-    public static func retrieveEndpoint(_ parent: OmiseResourceObject?) -> SingletonRetrieveEndpoint {
+    public static func retrieveEndpointWithParent(_ parent: OmiseResourceObject?) -> SingletonRetrieveEndpoint {
         return SingletonRetrieveEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "GET",
@@ -20,7 +20,7 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
             return nil
         }
         
-        let endpoint = self.retrieveEndpoint(parent)
+        let endpoint = self.retrieveEndpointWithParent(parent)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

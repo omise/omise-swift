@@ -42,7 +42,7 @@ extension Transaction {
 }
 
 
-extension Transaction: Listable { }
-extension Transaction: Retrievable { }
+extension Transaction: Listable {}
+extension Transaction: Retrievable {}
 
 

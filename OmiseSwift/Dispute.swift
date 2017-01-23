@@ -103,8 +103,8 @@ public struct DisputeFilterParams: OmiseFilterParams {
     }
 }
 
-extension Dispute: Listable { }
-extension Dispute: Retrievable { }
+extension Dispute: Listable {}
+extension Dispute: Retrievable {}
 
 extension Dispute: Updatable {
     public typealias UpdateParams = DisputeParams

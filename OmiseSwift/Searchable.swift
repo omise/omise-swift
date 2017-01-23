@@ -52,7 +52,7 @@ public extension Searchable where Self: OmiseResourceObject {
     public typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
     public typealias SearchRequest = APIRequest<SearchResult<Self>>
 
-    public static func searchEndpoint(parent: OmiseResourceObject?, params: SearchParams<FilterParams>?) -> SearchEndpoint {
+    public static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
             method: "GET",
@@ -66,7 +66,7 @@ public extension Searchable where Self: OmiseResourceObject {
             return nil
         }
         
-        let endpoint = self.searchEndpoint(parent: parent, params: params)
+        let endpoint = self.searchEndpointWithParams(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

@@ -7,7 +7,7 @@ extension Charge {
     public typealias ReverseEndpoint = APIEndpoint<Charge>
     public typealias ReverseRequest = APIRequest<Charge>
     
-    public static func captureEndpoint(id: String) -> CaptureEndpoint {
+    public static func captureEndpointWithID(_ id: String) -> CaptureEndpoint {
         return CaptureEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "POST",
@@ -17,11 +17,11 @@ extension Charge {
     }
     
     public static func capture(using client: APIClient, id: String, callback: @escaping CaptureRequest.Callback) -> CaptureRequest? {
-        let endpoint = captureEndpoint(id: id)
+        let endpoint = captureEndpointWithID(id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
     
-    public static func reverseEndpoint(id: String) -> ReverseEndpoint {
+    public static func reverseEndpointWithID(_ id: String) -> ReverseEndpoint {
         return ReverseEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "POST",
@@ -31,7 +31,7 @@ extension Charge {
     }
     
     public static func reverse(using client: APIClient, id: String, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = reverseEndpoint(id: id)
+        let endpoint = reverseEndpointWithID(id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

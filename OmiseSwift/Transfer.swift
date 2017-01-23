@@ -162,8 +162,8 @@ public struct TransferFilterParams: OmiseFilterParams {
 }
 
 
-extension Transfer: Listable { }
-extension Transfer: Retrievable { }
+extension Transfer: Listable {}
+extension Transfer: Retrievable {}
 
 extension Transfer: Creatable {
     public typealias CreateParams = TransferParams
@@ -173,7 +173,7 @@ extension Transfer: Updatable {
     public typealias UpdateParams = UpdateTransferParams
 }
 
-extension Transfer: Destroyable { }
+extension Transfer: Destroyable {}
 
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams

@@ -31,6 +31,6 @@ extension Balance {
     }
 }
 
-extension Balance: SingletonRetrievable { }
+extension Balance: SingletonRetrievable {}
 
 

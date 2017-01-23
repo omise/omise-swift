@@ -221,8 +221,8 @@ public struct ChargeFilterParams: OmiseFilterParams {
 }
 
 
-extension Charge: Listable { }
-extension Charge: Retrievable { }
+extension Charge: Listable {}
+extension Charge: Retrievable {}
 
 extension Charge: Creatable {
     public typealias CreateParams = ChargeParams

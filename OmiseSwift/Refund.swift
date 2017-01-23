@@ -56,8 +56,8 @@ extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
 
-extension Refund: Listable { }
-extension Refund: Retrievable { }
+extension Refund: Listable {}
+extension Refund: Retrievable {}
 
 
 extension Charge {

@@ -6,7 +6,7 @@ public extension Destroyable where Self: OmiseResourceObject {
     public typealias DestroyEndpoint = APIEndpoint<Self>
     public typealias DestroyRequest = APIRequest<Self>
     
-    public static func destroyEndpointWithParent(_ parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
+    public static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
         return DestroyEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "DELETE",
@@ -20,7 +20,7 @@ public extension Destroyable where Self: OmiseResourceObject {
             return nil
         }
         
-        let endpoint = self.destroyEndpointWithParent(parent, id: id)
+        let endpoint = self.destroyEndpointWith(parent: parent, id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

@@ -100,6 +100,8 @@ extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
+extension Recipient: Listable {}
+
 public struct RecipientFilterParams: OmiseFilterParams {
     public var type: RecipientType?
     

@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Retrievable { }
+public protocol Retrievable {}
 
 public struct RetrieveParams: APIParams {
     public var isExpanded: Bool = false
@@ -16,7 +16,7 @@ public extension Retrievable where Self: OmiseLocatableObject {
     public typealias RetrieveEndpoint = APIEndpoint<Self>
     public typealias RetrieveRequest = APIRequest<Self>
     
-    public static func retrieveEndpoint(_ parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
+    public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             endpoint: resourceInfo.endpoint,
@@ -31,7 +31,7 @@ public extension Retrievable where Self: OmiseLocatableObject {
             return nil
         }
         
-        let endpoint = self.retrieveEndpoint(parent, id: id)
+        let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

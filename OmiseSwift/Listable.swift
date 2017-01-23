@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Listable { }
+public protocol Listable {}
 
 public struct ListParams: APIParams {
     public var from: Date?
@@ -34,7 +34,7 @@ public extension Listable where Self: OmiseLocatableObject {
     public typealias ListRequest = APIRequest<ListProperty<Self>>
     
     @discardableResult
-    public static func listEndpoint(_ parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
+    public static func listEndpointWith(parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             endpoint: resourceInfo.endpoint,
             method: "GET",
@@ -49,7 +49,7 @@ public extension Listable where Self: OmiseLocatableObject {
             return nil
         }
         
-        let endpoint = self.listEndpoint(parent, params: params)
+        let endpoint = self.listEndpointWith(parent: parent, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
     
@@ -59,7 +59,7 @@ public extension Listable where Self: OmiseLocatableObject {
             return nil
         }
         
-        let endpoint = self.listEndpoint(parent, params: listParams)
+        let endpoint = self.listEndpointWith(parent: parent, params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
             let callbackResult = result.map({
