@@ -17,8 +17,8 @@ PlaygroundPage.current.needsIndefiniteExecution = true
  */
 import Omise // <-- Make sure this works first.
 
-let publicKey = "pkey_test_54n2xnlf7ua73b4tkcp" // <-- Change to your keys to see result in playground!
-let secretKey = "skey_test_54n2xndg1o0sbp461hr"
+let publicKey = "<#Your public key here#>" // <-- Change to your keys to see result in playground!
+let secretKey = "<#Your secret key here#>"
 
 
 /*:
@@ -68,7 +68,6 @@ Balance.retrieve(using: client) { (result) in
     }
 }
 
-/*
 /*:
  Some APIs require specifying additional parameters, these are usually named after the models with a `Params` suffix and you can supply them to API methods using the `params:` parameter.
  
@@ -83,17 +82,12 @@ Balance.retrieve(using: client) { (result) in
  ````
  */
 func createToken() {
-    let params = TokenParams()
-    params.number = "4242424242424242"
-    params.name = "Omise Appleseed"
-    params.expirationMonth = 10
-    params.expirationYear = 2020
-    params.securityCode = "123"
+    let params = TokenParams(number: "4242424242424242", name: "Omise Appleseed", expiration: (10, 2020), securityCode: "123")
     
-    Token.create(params: params) { (result) in
+    Token.create(using: client, params: params) { (result) in
         switch result {
         case let .success(token):
-            print("created token: \(token.id ?? "(n/a)")")
+            print("created token: \(token.id)")
             createChargeWithToken(token)
             
         case let .fail(err):
@@ -102,25 +96,21 @@ func createToken() {
     }
 }
 
-func createChargeWithToken(token: Token) {
-    let params = ChargeParams()
+func createChargeWithToken(_ token: Token) {
     let currency = Currency.thb
-    params.amount = currency.convertToSubunit(1000.00) // 1,000.00 THB
-    params.currency = currency
-    params.card = token.id
+    let params = ChargeParams(value: Value(amount: currency.convert(toSubunit: 1000.00), currency: currency), cardID: token.id)
     
-    Charge.create(params: params) { (result) in
+    Charge.create(using: client, params: params) { (result) in
         switch result {
         case let .success(charge):
-            print("created charge: \(charge.id ?? "(n/a)") - \(charge.amount)")
-            createRefundOnCharge(charge, amount: currency.convertToSubunit(500.00))
+            print("created charge: \(charge.id) - \(charge.value.amount)")
+            createRefundOnCharge(charge, amount: currency.convert(toSubunit: 500.00))
             
         case let .fail(err):
             print("error: \(err)")
         }
     }
 }
-*/
 
 /*:
  ### Nested APIS
@@ -147,8 +137,8 @@ func createChargeWithToken(token: Token) {
  }
  ````
  */
-func createRefundOnCharge(charge: Charge, amount: Int64) {
-    let params = RefundParams(amount: amount / 2, void: false)
+func createRefundOnCharge(_ charge: Charge, amount: Int64) {
+    let params = RefundParams(amount: amount, void: false)
     
     charge.createRefund(using: client, params: params) { (result) in
         switch result {
@@ -171,4 +161,4 @@ func createRefundOnCharge(charge: Charge, amount: Int64) {
     }
 }
 
-//createToken()
+createToken()
