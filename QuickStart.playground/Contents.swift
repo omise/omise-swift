@@ -20,21 +20,12 @@ import Omise // <-- Make sure this works first.
 let publicKey = "pkey_test_54n2xnlf7ua73b4tkcp" // <-- Change to your keys to see result in playground!
 let secretKey = "skey_test_54n2xndg1o0sbp461hr"
 
-/*:
- Once you have the API keys, there are two ways to use the `Omise` module.
- 
- 1. Using the default client, by configuring the `Omise.Default` class, like so:
- */
-Default.config = Config(
-    publicKey: publicKey,
-    secretKey: secretKey
-)
 
 /*:
- 2. Or by using custom client instance, by creating a new `Omise.Client` directly:
+ 1. Or by using custom client instance, by creating a new `Omise.Client` directly:
  */
-let customClient = Client(
-    config: Config(
+let client = APIClient(
+    config: APIConfiguration(
         publicKey: publicKey,
         secretKey: secretKey
     )
@@ -45,50 +36,39 @@ let customClient = Client(
  
  ## Calling Omise APIs
  
- Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.Success` and `.Fail`. For example, to retrieve current account:
+ Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.success` and `.fail`. For example, to retrieve current account:
  
  ````
  Account.retrieve { (result) in
     switch result {
-    case let .Success(account):
+    case let .success(account):
         // handle account
  
-    case let .Fail(err):
+    case let .fail(err):
         // handle failure
     }
  }
  ````
  */
-Account.retrieve { (result) in
+Account.retrieve(using: client) { (result) in
     switch result {
-    case let .Success(account):
-        print("account: \(account.email ?? "(n/a)")")
-    case let .Fail(err):
+    case let .success(account):
+        print("account: \(account.email)")
+    case let .fail(err):
         print("error: \(err)")
     }
 }
 
-Balance.retrieve { (result) in
+Balance.retrieve(using: client) { (result) in
     switch result {
-    case let .Success(balance):
-        print("money: \(balance.available ?? 0)")
-    case let .Fail(err):
+    case let .success(balance):
+        print("money: \(balance.available.amount)")
+    case let .fail(err):
         print("error: \(err)")
     }
 }
 
-/*:
- Supply the `using:` parameter to use a custom client:
- */
-Account.retrieve(using: customClient) { (result) in
-    switch result {
-    case let .Success(account):
-        print("account: \(account.email ?? "(n/a)")")
-    case let .Fail(err):
-        print("error: \(err)")
-    }
-}
-
+/*
 /*:
  Some APIs require specifying additional parameters, these are usually named after the models with a `Params` suffix and you can supply them to API methods using the `params:` parameter.
  
@@ -112,11 +92,11 @@ func createToken() {
     
     Token.create(params: params) { (result) in
         switch result {
-        case let .Success(token):
+        case let .success(token):
             print("created token: \(token.id ?? "(n/a)")")
             createChargeWithToken(token)
             
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
@@ -124,22 +104,23 @@ func createToken() {
 
 func createChargeWithToken(token: Token) {
     let params = ChargeParams()
-    let currency = Currency.THB
+    let currency = Currency.thb
     params.amount = currency.convertToSubunit(1000.00) // 1,000.00 THB
     params.currency = currency
     params.card = token.id
     
     Charge.create(params: params) { (result) in
         switch result {
-        case let .Success(charge):
+        case let .success(charge):
             print("created charge: \(charge.id ?? "(n/a)") - \(charge.amount)")
             createRefundOnCharge(charge, amount: currency.convertToSubunit(500.00))
             
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
 }
+*/
 
 /*:
  ### Nested APIS
@@ -167,29 +148,27 @@ func createChargeWithToken(token: Token) {
  ````
  */
 func createRefundOnCharge(charge: Charge, amount: Int64) {
-    let params = RefundParams()
-    params.amount = amount / 2
-    params.void = false
+    let params = RefundParams(amount: amount / 2, void: false)
     
-    charge.createRefund(params: params) { (result) in
+    charge.createRefund(using: client, params: params) { (result) in
         switch result {
-        case let .Success(refund):
-            print("created refund: \(refund.id ?? "(n/a)")")
+        case let .success(refund):
+            print("created refund: \(refund.id)")
             
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
     
-    Refund.create(parent: charge, params: params) { (result) in
+    Refund.create(using: client, parent: charge, params: params) { (result) in
         switch result {
-        case let .Success(result):
-            print("created refund: \(result.id ?? "(n/a)")")
+        case let .success(result):
+            print("created refund: \(result.id)")
             
-        case let .Fail(err):
+        case let .fail(err):
             print("error: \(err)")
         }
     }
 }
 
-createToken()
+//createToken()
