@@ -47,7 +47,10 @@ public class List<TItem: OmiseObject> {
     }
     
     public func insert(from value: OmiseList<TItem>) -> [TItem] {
-        guard let offset = value.offset, let limit = value.limit else { return [] }
+        guard let offset = value.offset, let limit = value.limit else {
+            dataUpdatedHandler?(data)
+            return []
+        }
         if let total = value.total {
             self.total = total
         }
