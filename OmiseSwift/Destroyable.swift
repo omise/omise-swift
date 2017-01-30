@@ -1,25 +1,26 @@
 import Foundation
 
-public protocol Destroyable { }
+public protocol Destroyable {}
 
-public extension Destroyable where Self: ResourceObject {
-    public typealias DestroyOperation = Operation<Self>
+public extension Destroyable where Self: OmiseResourceObject {
+    public typealias DestroyEndpoint = APIEndpoint<Self>
+    public typealias DestroyRequest = APIRequest<Self>
     
-    public static func destroyOperation(_ parent: ResourceObject?, id: String) -> DestroyOperation {
-        return DestroyOperation(
-            endpoint: info.endpoint,
+    public static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
+        return DestroyEndpoint(
+            endpoint: resourceInfo.endpoint,
             method: "DELETE",
-            paths: makeResourcePathsWith(context: self, parent: parent, id: id)
+            pathComponents: Self.makeResourcePathsWithParent(parent, id: id),
+            params: nil
         )
     }
     
-    public static func destroy(using given: Client? = nil, parent: ResourceObject? = nil, id: String, callback: @escaping DestroyOperation.Callback) -> Request<DestroyOperation.Result>? {
-        guard checkParent(withContext: self, parent: parent) else {
+    public static func destroy(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
+        guard Self.verifyParent(parent) else {
             return nil
         }
         
-        let operation = self.destroyOperation(parent, id: id)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
+        let endpoint = self.destroyEndpointWith(parent: parent, id: id)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

@@ -12,8 +12,8 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .success(Dispute):
-                XCTAssertEqual(Dispute.amount, 100000)
+            case let .success(dispute):
+                XCTAssertEqual(dispute.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -44,8 +44,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Dispute update")
         
         let expectedMessage = "Your dispute message"
-        let updateParams = DisputeParams()
-        updateParams.message = expectedMessage
+        let updateParams = DisputeParams(message: expectedMessage)
         
         let request = Dispute.update(using: testClient, id: disputeTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }

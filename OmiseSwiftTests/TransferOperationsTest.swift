@@ -3,15 +3,13 @@ import XCTest
 import Omise
 
 class TransferOperationsTest: OmiseTestCase {
-    var testClient: Client {
-        let config = Config(
+    var testClient: APIClient {
+        let config = APIConfiguration(
             publicKey: "pkey_test_54flsro0dmplsfg80vm",
-            secretKey: "skey_test_54flpy4dc5jpkrmlpp6",
-            apiVersion: nil,
-            queue: (OperationQueue.current ?? OperationQueue.main)
+            secretKey: "skey_test_54flpy4dc5jpkrmlpp6"
         )
         
-        return Client(config: config)
+        return APIClient(config: config)
     }
     
     func testTransferRetrieve() {
@@ -22,7 +20,7 @@ class TransferOperationsTest: OmiseTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.amount, 1_000_00)
+                XCTAssertEqual(transfer.value.amount, 1_000_00)
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
             case let .fail(error):
                 XCTFail("\(error)")
@@ -53,8 +51,7 @@ class TransferOperationsTest: OmiseTestCase {
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams()
-        createParams.amount = 96094
+        let createParams = TransferParams(amount: 96094)
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -73,15 +70,14 @@ class TransferOperationsTest: OmiseTestCase {
     func testTransferUpdate() {
         let expectation = self.expectation(description: "transfer update")
         
-        let updateParams = TransferParams()
-        updateParams.amount = 100000
+        let updateParams = UpdateTransferParams(amount: 96094)
         
         let request = Transfer.update(using: testClient, id: "trsf_test_54h7uzmwu5v79mgri6d", params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.amount, 96094)
+                XCTAssertEqual(transfer.value.amount, 96094)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -98,7 +94,7 @@ class TransferOperationsTest: OmiseTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.deleted, true)
+                XCTAssertEqual(transfer.isDeleted, true)
             case let .fail(error):
                 XCTFail("\(error)")
             }

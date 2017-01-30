@@ -1,25 +1,24 @@
 import Foundation
-import Omise
+@testable import Omise
 
 
-class FixtureClient: Client {
-    let operationQueue: OperationQueue = OperationQueue()
-    
+class FixtureClient: APIClient {    
     let fixturesDirectoryURL: URL
     
-    public override init(config: Config) {
+    public override init(config: APIConfiguration) {
         let bundle = Bundle(for: FixtureClient.self)
         self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
         
         super.init(config: config)
     }
-
-    override func call<TResult: OmiseObject>(_ operation: Omise.Operation<TResult>, callback: Omise.Operation<TResult>.Callback?) -> Request<TResult>? {
+    
+    @discardableResult
+    override func requestToEndpoint<TResult : OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
-            let req: FixtureRequest<TResult> = FixtureRequest(client: self, operation: operation, callback: callback)
+            let req: FixtureRequest<TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as NSError {
-            operationQueue.addOperation() { callback?(.fail(.io(err))) }
+            operationQueue.addOperation() { callback?(.fail(.other(err))) }
         } catch let err as OmiseError {
             operationQueue.addOperation() { callback?(.fail(err)) }
         }
@@ -29,13 +28,13 @@ class FixtureClient: Client {
 }
 
 
-class FixtureRequest<TResult: OmiseObject>: Request<TResult> {
+class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
     var fixtureClient: FixtureClient? {
         return client as? FixtureClient
     }
     
-    func start() throws -> Self {
-        let fixtureFilePath = operation.fixtureFilePath
+    override func start() throws -> Self {
+        let fixtureFilePath = endpoint.fixtureFilePath
         let fixtureFileURL = (client as! FixtureClient).fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
         DispatchQueue.global().async {
             let data: Data?
@@ -60,7 +59,7 @@ class FixtureRequest<TResult: OmiseObject>: Request<TResult> {
         guard callback != nil else { return }
         
         if let err = error {
-            return performCallback(.fail(.io(err as NSError)))
+            return performCallback(.fail(.other(err)))
         }
         
         guard let data = data else {
@@ -68,10 +67,10 @@ class FixtureRequest<TResult: OmiseObject>: Request<TResult> {
         }
         
         do {
-            let result: TResult = try OmiseSerializer.deserialize(data)            
+            let result: TResult = try deserializeData(data)
             return performCallback(.success(result))
         } catch let err as NSError {
-            return performCallback(.fail(.io(err)))
+            return performCallback(.fail(.other(err)))
         } catch let err as OmiseError {
             return performCallback(.fail(err))
         }
@@ -79,13 +78,13 @@ class FixtureRequest<TResult: OmiseObject>: Request<TResult> {
     
     fileprivate func performCallback(_ result: Failable<TResult>) {
         guard let cb = callback else { return }
-        client.config.callbackQueue.addOperation { cb(result) }
+        client.operationQueue.addOperation { cb(result) }
     }
 }
 
-extension Omise.Operation {
+extension Omise.APIEndpoint {
     var fixtureFilePath: String {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true), let hostname = components.host else {
+        guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true), let hostname = components.host else {
             preconditionFailure("Invalid URL")
         }
         

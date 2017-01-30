@@ -1,55 +1,74 @@
 import Foundation
 
-open class Token: ResourceObject {
-    open override class var info: ResourceInfo {
-        return ResourceInfo(endpoint: .vault, path: "/tokens")
-    }
+public struct Token: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(endpoint: .vault, path: "/tokens")
     
-    public var used: Bool? {
-        get { return get("used", BoolConverter.self) }
-        set { set("used", BoolConverter.self, toValue: newValue) }
-    }
+    public var object: String
+    public var location: String
     
-    public var card: Card? {
-        get { return getChild("card", Card.self) }
-        set { setChild("card", Card.self, toValue: newValue) }
+    public var id: String
+    public var createdDate: Date
+    public var isLive: Bool
+    
+    public var isUsed: Bool
+    
+    public var card: Card
+}
+
+extension Token {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties: (String, String, String, Date) = Token.parseOmiseProperties(JSON: json),
+            let isLive = json["livemode"] as? Bool else {
+                return nil
+        }
+        
+        guard let isUsed = json["used"] as? Bool,
+            let card = json["card"].flatMap(Card.init(JSON:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
+        self.isLive = isLive
+        self.isUsed = isUsed
+        self.card = card
     }
 }
 
-public class TokenParams: Params {
-    public var name: String? {
-        get { return get("card[name]", StringConverter.self) }
-        set { set("card[name]", StringConverter.self, toValue: newValue) }
+public struct TokenParams: APIParams {
+    public var name: String?
+    
+    public var number: String
+    
+    public var expiration: (month: Int, year: Int)?
+    
+    public var securityCode: String?
+    
+    public var city: String?
+    
+    public var postalCode: String?
+    
+    public var json: JSONAttributes {
+        return [
+            "card": Dictionary.makeFlattenDictionaryFrom([
+                "name": name,
+                "number": number,
+                "expiration_month": expiration?.month,
+                "expiration_year": expiration?.year,
+                "security_code": securityCode,
+                "city": city as Any,
+                "postal_code": postalCode,
+            ])
+        ]
     }
     
-    public var number: String? {
-        get { return get("card[number]", StringConverter.self) }
-        set { set("card[number]", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var expirationMonth: Int? {
-        get { return get("card[expiration_month]", IntConverter.self) }
-        set { set("card[expiration_month]", IntConverter.self, toValue: newValue) }
-    }
-    
-    public var expirationYear: Int? {
-        get { return get("card[expiration_year]", IntConverter.self) }
-        set { set("card[expiration_year]", IntConverter.self, toValue: newValue) }
-    }
-    
-    public var securityCode: String? {
-        get { return get("card[security_code]", StringConverter.self) }
-        set { set("card[security_code]", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var city: String? {
-        get { return get("card[city]", StringConverter.self) }
-        set { set("card[city]", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var postalCode: String? {
-        get { return get("card[postal_code]", StringConverter.self) }
-        set { set("card[postal_code]", StringConverter.self, toValue: newValue) }
+    public init(number: String, name: String?, expiration: (month: Int, year: Int)?, securityCode: String?, city: String? = nil, postalCode: String? = nil) {
+        self.number = number
+        self.name = name
+        self.expiration = expiration
+        self.securityCode = securityCode
+        self.city = city
+        self.postalCode = postalCode
     }
 }
 
@@ -57,35 +76,25 @@ extension Token: Creatable {
     public typealias CreateParams = TokenParams
 }
 
-extension Token { // can't use Retrievable because this uses the API endpoint instead of the vault :facepalm:
-    public typealias RetrieveOperation = Operation<Token>
+extension Token: Retrievable {
+    public typealias RetrieveEndpoint = APIEndpoint<Token>
+    public typealias RetrieveRequest = APIRequest<Token>
     
-    public static func retrieve(using given: Client? = nil, id: String, callback: @escaping RetrieveOperation.Callback) -> Request<RetrieveOperation.Result>? {
-        let operation = RetrieveOperation(
+    public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
+        return RetrieveEndpoint(
             endpoint: .api,
             method: "GET",
-            paths: [info.path, id]
+            pathComponents: [resourceInfo.path, id],
+            params: nil
         )
-        
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
     }
-}
-
-func exampleToken() {
-    let params = TokenParams()
-    params.number = "4242_4242_4242_4242"
-    params.name = "JOHN SMITH"
-    params.expirationMonth = 10
-    params.expirationYear = 2020
-    params.securityCode = "123"
     
-    _ = Token.create(params: params) { (result) in
-        switch result {
-        case let .success(token):
-            print("token: \(token.id)")
-        case let .fail(err):
-            print("error: \(err)")
+    public static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+        guard verifyParent(parent) else {
+            return nil
         }
+        
+        let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

@@ -1,21 +1,29 @@
 import Foundation
 
-public class APIError: OmiseObject {
-    public var statusCode: Int? {
-        get { return get("status_code", IntConverter.self) }
-        set { set("status_code", IntConverter.self, toValue: newValue) }
-    }
+public struct APIError: OmiseLocatableObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/api-errors")
     
-    public var code: String? {
-        get { return get("code", StringConverter.self) }
-        set { set("code", StringConverter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
     
-    public var message: String? {
-        get { return get("message", StringConverter.self) }
-        set { set("message", StringConverter.self, toValue: newValue) }
+    public let statusCode: Int?
+    public let code: String
+    public let message: String
+    
+    
+    public init?(JSON json : Any) {
+        guard let json = json as? [String: Any],
+            let properties = APIError.parseLocationResource(JSON: json),
+            let code = json["code"] as? String,
+            let message = json["message"] as? String else {
+                return nil
+        }
+        
+        (self.object, self.location) = properties
+        self.code = code
+        self.statusCode = json["status_code"] as? Int
+        self.message = message
     }
 }
 
-extension APIError: Error {
-}
+extension APIError: Error {}

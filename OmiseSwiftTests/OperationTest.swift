@@ -24,7 +24,7 @@ class OperationTest: OmiseTestCase {
         let operation: DefaultOperation<Account> = DefaultOperation()
         
         let expectedUrl = "https://api.omise.co/"
-        XCTAssertEqual(operation.endpoint, Endpoint.API)
+        XCTAssertEqual(operation.endpoint, APIEndpoint.API)
         XCTAssertEqual(operation.method, "GET") // method upcased
         XCTAssertEqual(operation.url.absoluteString, expectedUrl)
         XCTAssertEqual(operation.payload, nil)

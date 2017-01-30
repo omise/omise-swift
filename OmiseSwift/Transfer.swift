@@ -1,151 +1,179 @@
 import Foundation
 
-public class Transfer: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/transfers") }
+public struct Transfer: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transfers")
     
-    public var recipient: String? {
-        get { return get("recipient", StringConverter.self) ?? getChild("recipient", Recipient.self)?.id }
-        set { set("recipient", StringConverter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
     
-    public var bankAccount: BankAccount? {
-        get { return getChild("bank_account", BankAccount.self) }
-        set { setChild("bank_account", BankAccount.self, toValue: newValue) }
-    }
+    public let id: String
+    public let isLive: Bool
+    public var createdDate: Date
+    public let isDeleted: Bool
     
-    public var sent: Bool? {
-        get { return get("sent", BoolConverter.self) }
-        set { set("sent", BoolConverter.self, toValue: newValue) }
-    }
-
-    public var paid: Bool? {
-        get { return get("paid", BoolConverter.self) }
-        set { set("paid", BoolConverter.self, toValue: newValue) }
-    }
+    public let bankAccount: BankAccount
     
-    public var sentDate: Date? {
-        get { return get("sent_at", DateConverter.self) }
-        set { set("sent_at", DateConverter.self, toValue: newValue) }
-    }
+    public let isSent: Bool
+    public let sentDate: Date?
+    public let isPaid: Bool
+    public let paidDate: Date?
     
-    public var paidDate: Date? {
-        get { return get("paid_at", DateConverter.self) }
-        set { set("paid_at", DateConverter.self, toValue: newValue) }
-    }
-
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
+    public let value: Value
+    public let fee: Value
     
-    public var fee: Int64? {
-        get { return get("fee", Int64Converter.self) }
-        set { set("fee", Int64Converter.self, toValue: newValue) }
-    }
+    public let recipient: DetailProperty<Recipient>
+    public let transaction: DetailProperty<Transaction>?
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
-    
-    public var failureCode: String? {
-        get { return get("failure_code", StringConverter.self) }
-        set { set("failure_code", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var failureMessage: String? {
-        get { return get("failure_message", StringConverter.self) }
-        set { set("failure_message", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var transaction: String? {
-        get { return get("transaction", StringConverter.self) ?? getChild(("transaction"), Transaction.self)?.id }
-        set { set("transaction", StringConverter.self, toValue: newValue) }
-    }
+    public let failure: Failure?
 }
 
-public class TransferParams: Params {
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
-    
-    public var recipient: String? {
-        get { return get("recipient", StringConverter.self) }
-        set { set("recipient", StringConverter.self, toValue: newValue) }
+
+extension Transfer {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+                return nil
+        }
+        
+        guard let bankAccount = json["bank_account"].flatMap(BankAccount.init(JSON:)),
+            let value = Value(JSON: json),
+            let fee = json["fee"] as? Int64, let currency = json["currency"].flatMap(CurrencyFieldConverter.convert(fromAttribute:)),
+            let isSent = json["sent"] as? Bool, let isPaid = json["paid"] as? Bool,
+            let recipient = json["recipient"].flatMap(DetailProperty<Recipient>.init(JSON:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        self.bankAccount = bankAccount
+        self.isSent = isSent
+        self.isPaid = isPaid
+        self.value = value
+        self.fee = Value(amount: fee, currency: currency)
+        self.recipient = recipient
+        
+        self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
+        self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
+        self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
+        
+        if let failureCode = json["failure_code"] as? String {
+            let failure = Failure(code: failureCode, message: json["failure_message"] as? String)
+            self.failure = failure
+        } else {
+            self.failure = nil
+        }
     }
 }
 
 
-public class TransferFilterParams: OmiseFilterParams {
-    public var created: DateComponents? {
-        get { return get("created", DateComponentsConverter.self) }
-        set { set("created", DateComponentsConverter.self, toValue: newValue) }
-    }
-    public var amount: Double? {
-        get { return get("amount", DoubleConverter.self) }
-        set { set("amount", DoubleConverter.self, toValue: newValue) }
+public struct TransferParams: APIParams {
+    public var amount: Int64
+    public var recipientID: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            "recipient": recipientID,
+            ])
     }
     
-    public var currency: Currency? {
-        get { return get("currency", CurrencyFieldConverter.self) }
-        set { set("currency", CurrencyFieldConverter.self, toValue: newValue) }
+    public init(amount: Int64, recipientID: String? = nil) {
+        self.amount = amount
+        self.recipientID = recipientID
+    }
+}
+
+public struct UpdateTransferParams: APIParams {
+    public var amount: Int64
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": amount,
+            ])
     }
     
-    public var bankLastDigits: String? {
-        get { return get("bank_last_digits", StringConverter.self) }
-        set { set("bank_last_digits", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var fee: Double? {
-        get { return get("fee", DoubleConverter.self) }
-        set { set("fee", DoubleConverter.self, toValue: newValue) }
-    }
-    
-    public var paid: Bool? {
-        get { return get("paid", BoolConverter.self) }
-        set { set("paid", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var paidDate: DateComponents? {
-        get { return get("paid_at", DateComponentsConverter.self) }
-        set { set("paid_at", DateComponentsConverter.self, toValue: newValue) }
-    }
-    
-    public var sent: Bool? {
-        get { return get("sent", BoolConverter.self) }
-        set { set("sent", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var sentDate: DateComponents? {
-        get { return get("sent_at", DateComponentsConverter.self) }
-        set { set("sent_at", DateComponentsConverter.self, toValue: newValue) }
-    }
-    
-    public var failureCode: String? {
-        get { return get("failure_code", StringConverter.self) }
-        set { set("failure_code", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var failureMessage: String? {
-        get { return get("failure_message", StringConverter.self) }
-        set { set("failure_message", StringConverter.self, toValue: newValue) }
+    public init(amount: Int64) {
+        self.amount = amount
     }
 }
 
 
-extension Transfer: Listable { }
-extension Transfer: Retrievable { }
+public struct TransferFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var amount: Double?
+    public var currency: Currency?
+    public var bankLastDigits: LastDigits?
+    public var fee: Double?
+    public var isPaid: Bool?
+    public var paidDate: DateComponents?
+    public var isSent: Bool?
+    public var sentDate: DateComponents?
+    public var failureCode: String?
+    public var failureMessage: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "amount": amount,
+            "currency": currency?.code,
+            "bank_last_digits": bankLastDigits?.lastDigits,
+            "fee": fee,
+            "paid": isPaid,
+            "paid_at": DateComponentsConverter.convert(fromValue: paidDate),
+            "sent": isSent,
+            "sent_at": DateComponentsConverter.convert(fromValue: sentDate),
+            "failure_code": failureCode,
+            "failure_message": failureMessage,
+            ])
+    }
+    
+    public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
+                bankLastDigits: LastDigits? = nil, fee: Double? = nil,
+                isPaid: Bool? = nil, paidDate: DateComponents? = nil,
+                isSent: Bool? = nil, sentDate: DateComponents? = nil,
+                failureCode: String? = nil, failureMessage: String? = nil) {
+        self.created = created
+        self.amount = amount
+        self.currency = currency
+        self.bankLastDigits = bankLastDigits
+        self.fee = fee
+        self.isPaid = isPaid
+        self.paidDate = paidDate
+        self.isSent = isSent
+        self.sentDate = sentDate
+        self.failureCode = failureCode
+        self.failureMessage = failureMessage
+    }
+    
+    public init(JSON: [String : Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            amount: (JSON["amount"] as? Double),
+            currency: (JSON["currency"] as? String).flatMap(Currency.init(code:)),
+            bankLastDigits: (JSON["bank_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
+            fee: (JSON["fee"] as? Double),
+            isPaid: JSON["paid"] as? Bool,
+            paidDate: JSON["paid_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            isSent: JSON["sent"] as? Bool,
+            sentDate: JSON["sent_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            failureCode: JSON["failure_code"] as? String,
+            failureMessage: JSON["failure_message"] as? String
+        )
+    }
+}
+
+
+extension Transfer: Listable {}
+extension Transfer: Retrievable {}
 
 extension Transfer: Creatable {
     public typealias CreateParams = TransferParams
 }
 
 extension Transfer: Updatable {
-    public typealias UpdateParams = TransferParams
+    public typealias UpdateParams = UpdateTransferParams
 }
 
-extension Transfer: Destroyable { }
+extension Transfer: Destroyable {}
 
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams

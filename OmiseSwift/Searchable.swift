@@ -11,61 +11,62 @@ extension Searchable {
     }
 }
 
-public class SearchParams<FilterParams: OmiseFilterParams>: Params {
-    public var scope: String? {
-        get { return get("scope", StringConverter.self) }
-        set { set("scope", StringConverter.self, toValue: newValue) }
+public struct SearchParams<FilterParams: OmiseFilterParams>: APIParams {
+    public var scope: String
+    public var page: Int?
+    public var query: String?
+    public var order: Ordering?
+    public var filter: FilterParams?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "scope": scope,
+            "page": page,
+            "query": query,
+            "order": order?.rawValue,
+            "filters": filter?.json,
+        ])
     }
     
-    public var page: Int? {
-        get { return get("page", IntConverter.self) }
-        set { set("page", IntConverter.self, toValue: newValue) }
+    public init(scope: String, page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil) {
+        self.scope = scope
+        self.page = page
+        self.query = query
+        self.order = order
+        self.filter = filter
     }
     
-    public var query: String? {
-        get { return get("query", StringConverter.self) }
-        set { set("query", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var order: Ordering? {
-        get { return get("order", EnumConverter.self) }
-        set { set("order", EnumConverter.self, toValue: newValue) }
-    }
-    
-    public var filter: FilterParams? {
-        get { return getChild("filters", FilterParams.self) }
-        set { setChild("filters", FilterParams.self, toValue: newValue) }
-    }
-    
-    public required init(attributes: JSONAttributes = [:]) {
-        super.init(attributes: attributes)
+    public init<T: Searchable>(searhScopeType: T.Type,
+                page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil)
+        where T.FilterParams == FilterParams {
+            self.init(scope: T.scopeName, page: page, query: query, order: order, filter: filter)
     }
 }
 
-public class OmiseFilterParams: Params {
-    
+public protocol OmiseFilterParams: APIParams {
+    init(JSON: [String: Any])
 }
 
 
-public extension Searchable where Self: ResourceObject {
-    public typealias SearchOperation = Operation<OmiseList<Self>>
-    
-    public static func searchOperation(parent: ResourceObject?, params: SearchParams<FilterParams>?) -> SearchOperation {
-        return SearchOperation(
+public extension Searchable where Self: OmiseResourceObject {
+    public typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
+    public typealias SearchRequest = APIRequest<SearchResult<Self>>
+
+    public static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
+        return SearchEndpoint(
             endpoint: .api,
             method: "GET",
-            paths: ["search"],
+            pathComponents: ["search"],
             params: params
         )
     }
     
-    public static func search(using given: Client? = nil, parent: ResourceObject? = nil, params: SearchParams<FilterParams>? = nil, callback: SearchOperation.Callback?) -> Request<SearchOperation.Result>? {
-        guard checkParent(withContext: self, parent: parent) else {
+    public static func search(using client: APIClient, parent: OmiseResourceObject? = nil, params: SearchParams<FilterParams>? = nil, callback: SearchRequest.Callback?) -> SearchRequest? {
+        guard verifyParent(parent) else {
             return nil
         }
         
-        let operation = self.searchOperation(parent: parent, params: params)
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
+        let endpoint = self.searchEndpointWithParams(params: params)
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

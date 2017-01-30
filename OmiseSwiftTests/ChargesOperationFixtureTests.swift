@@ -13,7 +13,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -34,7 +34,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(chargesList.data)
                 let chargeSampleData = chargesList.data.first
                 XCTAssertNotNil(chargeSampleData)
-                XCTAssertEqual(chargeSampleData?.amount, 100000)
+                XCTAssertEqual(chargeSampleData?.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -46,8 +46,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeCreate() {
         let expectation = self.expectation(description: "Charge create")
         
-        let createParams = ChargeParams()
-        createParams.amount = 100000
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb))
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -55,7 +54,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 100000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -67,15 +66,14 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         
-        let updateParams = ChargeParams()
-        updateParams.amount = 100000
+        let updateParams = UpdateChargeParams(chargeDescription: "Hello")
         
         let request = Charge.update(using: testClient, id: chargeTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.amount, 100000)
+                XCTAssertEqual(charge.chargeDescription, "Hello")
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -92,7 +90,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.amount, 2025)
+                XCTAssertEqual(charge.value.amount, 2025)
                 XCTAssertEqual(charge.payment, Payment.offsite(.internetBanking(.scb)))
             case let .fail(error):
                 XCTFail("\(error)")

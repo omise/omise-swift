@@ -1,55 +1,88 @@
 import Foundation
 
-public class Customer: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/customers") }
+public struct Customer: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/customers")
     
-    public var defaultCard: String? {
-        get { return get("default_card", StringConverter.self) ?? getChild("default_card", Card.self)?.id }
-        set { set("default_card", StringConverter.self, toValue: newValue) }
-    }
+    public let location: String
+    public let object: String
     
-    public var email: String? {
-        get { return get("email", StringConverter.self) }
-        set { set("email", StringConverter.self, toValue: newValue) }
-    }
+    public let id: String
+    public let isLive: Bool
+    public var createdDate: Date
+    public let isDeleted: Bool
     
-    public var customerDescription: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
+    public let defaultCard: DetailProperty<Card>?
+    public let email: String
     
-    public var cards: OmiseList<Card>? {
-        get { return getChild("cards", OmiseList<Card>.self) }
-        set { setChild("cards", OmiseList<Card>.self, toValue: newValue) }
+    public var customerDescription: String?
+    public var cards: ListProperty<Card>
+}
+
+
+extension Customer {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+                return nil
+        }
+        
+        guard let email = json["email"] as? String,
+            let cards = json["cards"].flatMap(ListProperty<Card>.init(JSON:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        
+        self.email = email
+        self.cards = cards
+        self.defaultCard = json["default_card"].flatMap(DetailProperty<Card>.init(JSON:))
+        self.customerDescription = json["description"] as? String
     }
 }
 
-public class CustomerParams: Params {
-    public var email: String? {
-        get { return get("email", StringConverter.self) }
-        set { set("email", StringConverter.self, toValue: newValue) }
+public struct CustomerParams: APIParams {
+    public var email: String?
+    public var customerDescription: String?
+    public var cardID: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "email": email,
+            "description": customerDescription,
+            "card": cardID
+            ])
     }
     
-    public var description: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var card: String? {
-        get { return get("card", StringConverter.self) }
-        set { set("card", StringConverter.self, toValue: newValue) }
+    public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil) {
+        self.email = email
+        self.customerDescription = customerDescription
+        self.cardID = cardID
     }
 }
 
-public class CustomerFilterParams: OmiseFilterParams {
-    public var created: DateComponents? {
-        get { return get("created", DateComponentsConverter.self) }
-        set { set("created", DateComponentsConverter.self, toValue: newValue) }
+public struct CustomerFilterParams: OmiseFilterParams {
+
+    public var created: DateComponents?
+
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created)
+            ])
+    }
+    
+    public init(created: DateComponents?) {
+        self.created = created
+    }
+
+    public init(JSON: [String : Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:))
+        )
     }
 }
 
-extension Customer: Listable { }
-extension Customer: Retrievable { }
+extension Customer: Listable {}
+extension Customer: Retrievable {}
 
 extension Customer: Creatable {
     public typealias CreateParams = CustomerParams
@@ -63,34 +96,6 @@ extension Customer: Searchable {
     public typealias FilterParams = CustomerFilterParams
 }
 
-extension Customer: Destroyable { }
+extension Customer: Destroyable {}
 
-func exampleCustomer() {
-    let today = Date()
-    let yesterday = today.addingTimeInterval(-86400)
-    
-    let listParams = ListParams()
-    listParams.from = yesterday
-    listParams.to = today
-    
-    _ = Customer.list(params: listParams) { (result) in
-        switch result {
-        case let .success(list):
-            print("customers: \(list.data.count)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-    
-    _ = Customer.retrieve(id: "cust_123") { (result) in
-        switch result {
-        case let .success(customer):
-            print("customer: \(customer.email)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
-    }
-    
-    let custParams = CustomerParams()
-    custParams.email = "test@example.com"
-}
+

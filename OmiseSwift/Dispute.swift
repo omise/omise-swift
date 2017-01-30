@@ -1,65 +1,110 @@
 import Foundation
 
-public class Dispute: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/disputes") }
+public enum DisputeStatus: String {
+    case open
+    case pending
+    case won
+    case lost
+    case closed
+}
+
+
+public struct Dispute: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/disputes")
     
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
+    public let id: String
+    public let isLive: Bool
+    public var createdDate: Date
+    public let isDeleted: Bool
     
-    public var status: DisputeStatus? {
-        get { return get("status", EnumConverter.self) }
-        set { set("status", EnumConverter.self, toValue: newValue) }
-    }
-    
-    public var message: String? {
-        get { return get("message", StringConverter.self) }
-        set { set("message", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var charge: String? {
-        get { return get("charge", StringConverter.self) ?? getChild("charge", Charge.self)?.id }
-        set { set("charge", StringConverter.self, toValue: newValue) }
+    public let value: Value
+    public var status: DisputeStatus
+    public let message: String
+    public let charge: DetailProperty<Charge>
+}
+
+
+extension Dispute {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+                return nil
+        }
+        
+        guard let value = Value(JSON: json), let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
+        let message = json["message"] as? String,
+            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        self.value = value
+        self.status = status
+        self.message = message
+        self.charge = charge
     }
 }
 
-public class DisputeParams: Params {
-    public var message: String? {
-        get { return get("message", StringConverter.self) }
-        set { set("message", StringConverter.self, toValue: newValue) }
+
+public enum DisputeStatusQuery: String {
+    case open
+    case pending
+    case closed
+}
+
+
+public struct DisputeParams: APIParams {
+    public var message: String?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "message": message,
+            ])
+    }
+    
+    public init(message: String?) {
+        self.message = message
     }
 }
 
-public class DisputeFilterParams: OmiseFilterParams {
-    public var created: DateComponents? {
-        get { return get("created", DateComponentsConverter.self) }
-        set { set("created", DateComponentsConverter.self, toValue: newValue) }
+public struct DisputeFilterParams: OmiseFilterParams {
+    public var created: DateComponents?
+    public var cardLastDigits: LastDigits?
+    public var reasonCode: String?
+    public var status: DisputeStatus?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "card_last_digits": cardLastDigits?.lastDigits,
+            "reason_code": reasonCode,
+            "status": status?.rawValue
+            ])
     }
     
-    public var cardLastDigits: String? {
-        get { return get("card_last_digits", StringConverter.self) }
-        set { set("card_last_digits", StringConverter.self, toValue: newValue) }
+    public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
+                created: DateComponents? = nil, reasonCode: String? = nil) {
+        self.status = status
+        self.cardLastDigits = cardLastDigits
+        self.created = created
+        self.reasonCode = reasonCode
     }
     
-    public var reasonCode: String? {
-        get { return get("reason_code", StringConverter.self) }
-        set { set("reason_code", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var status: DisputeStatus? {
-        get { return get("status", EnumConverter.self) }
-        set { set("status", EnumConverter.self, toValue: newValue) }
+    public init(JSON: [String : Any]) {
+        self.init(
+            status: (JSON["status"] as? String).flatMap(DisputeStatus.init(rawValue:)),
+            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            reasonCode: JSON["reason_code"] as? String
+        )
     }
 }
 
-extension Dispute: Listable { }
-extension Dispute: Retrievable { }
+extension Dispute: Listable {}
+extension Dispute: Retrievable {}
 
 extension Dispute: Updatable {
     public typealias UpdateParams = DisputeParams
@@ -69,33 +114,16 @@ extension Dispute: Searchable {
     public typealias FilterParams = DisputeFilterParams
 }
 
-public enum DisputeStatusQuery: String {
-    case open
-    case pending
-    case closed
-}
 
 extension Dispute {
-    public static func list(using given: Client? = nil, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListOperation.Callback) -> Request<Dispute.ListOperation.Result>? {
-        let operation = ListOperation(
-            endpoint: info.endpoint,
+    public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListRequest.Callback) -> Dispute.ListRequest? {
+        let endpoint = ListEndpoint(
+            endpoint: resourceInfo.endpoint,
             method: "GET",
-            paths: [info.path, state.rawValue]
+            pathComponents: [resourceInfo.path, state.rawValue],
+            params: nil
         )
         
-        let client = resolveClient(given: given)
-        return client.call(operation, callback: callback)
-    }
-}
-
-func exampleDispute() {
-    let _: [DisputeStatusQuery] = [.open, .pending, .closed] // valid statuses
-    _ = Dispute.list(state: .open) { (result) in
-        switch result {
-        case let .success(list):
-            print("open disputes: \(list.data.count)")
-        case let .fail(err):
-            print("error: \(err)")
-        }
+        return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

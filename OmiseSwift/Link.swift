@@ -1,75 +1,75 @@
 import Foundation
 
 
-public class Link: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/links") }
+public struct Link: OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/links")
     
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
+    public let object: String
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
+    public let location: String
+    public let id: String
+    public let isLive: Bool
+    public let createdDate: Date
+    public let isDeleted: Bool
     
-    public var isUsed: Bool? {
-        get { return get("used", BoolConverter.self) }
-        set { set("used", BoolConverter.self, toValue: newValue) }
-    }
-    
-    public var isMultiple: Bool? {
-        get { return get("multiple", BoolConverter.self) }
-        set { set("multiple", BoolConverter.self, toValue: newValue) }
-    }
+    public let value: Value
+    public let isUsed: Bool
+    public let isMultiple: Bool
+    public let title: String
+    public let linkDescription: String
+    public let charges: ListProperty<Charge>
+    public let paymentURL: URL
+}
 
-    public var title: String? {
-        get { return get("title", StringConverter.self) }
-        set { set("title", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var linkDescription: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var charges: OmiseList<Charge>? {
-        get { return getChild("charges", OmiseList<Charge>.self) }
-        set { setChild("charges", OmiseList<Charge>.self, toValue: newValue) }
-    }
-    public var paymentURL: String? {
-        get { return get("payment_uri", StringConverter.self) }
-        set { set("payment_uri", StringConverter.self, toValue: newValue) }
+
+extension Link {
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+                return nil
+        }
+        
+        guard let value = Value(JSON: json),
+            let isUsed = json["used"] as? Bool, let isMultiple = json["multiple"] as? Bool,
+            let title = json["title"] as? String, let linkDescription = json["description"] as? String,
+            let charges = json["charges"].flatMap(ListProperty<Charge>.init(JSON:)),
+            let paymentURL = (json["payment_uri"] as? String).flatMap(URL.init(string:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        self.value = value
+        self.isUsed = isUsed
+        self.isMultiple = isMultiple
+        self.title = title
+        self.linkDescription = linkDescription
+        self.charges = charges
+        self.paymentURL = paymentURL
     }
 }
 
-public class LinkParams: Params {
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
+public struct LinkParams: APIParams {
+    public var value: Value
+    public var title: String
+    public var linkDescription: String
+    public var isMultiple: Bool?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "amount": value.amount,
+            "currency": value.currency.code,
+            "title": title,
+            "description": linkDescription,
+            "multiple": isMultiple,
+            ])
     }
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
+    public init(value: Value, title: String, linkDescription: String, isMultiple: Bool? = nil) {
+        self.value = value
+        self.title = title
+        self.linkDescription = linkDescription
+        self.isMultiple = isMultiple
     }
-    
-    public var title: String? {
-        get { return get("title", StringConverter.self) }
-        set { set("title", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var linkDescription: String? {
-        get { return get("description", StringConverter.self) }
-        set { set("description", StringConverter.self, toValue: newValue) }
-    }
-    
-    public var isMultiple: Bool? {
-        get { return get("multiple", BoolConverter.self) }
-        set { set("multiple", BoolConverter.self, toValue: newValue) }
-    }
-    
 }
 
 extension Link: Listable {}

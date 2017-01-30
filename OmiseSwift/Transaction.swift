@@ -1,28 +1,48 @@
 import Foundation
 
-public class Transaction: ResourceObject {
-    public override class var info: ResourceInfo { return ResourceInfo(path: "/transactions") }
+
+public enum TransactionType: String {
+    case debit
+    case credit
+}
+
+
+public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transactions")
     
-    public var type: TransactionType? {
-        get { return get("type", EnumConverter<TransactionType>.self) }
-        set { set("type", EnumConverter<TransactionType>.self, toValue: newValue) }
-    }
+    public let object: String
+    public let location: String
+
+    public let id: String
+    public var createdDate: Date
     
-    public var amount: Int64? {
-        get { return get("amount", Int64Converter.self) }
-        set { set("amount", Int64Converter.self, toValue: newValue) }
-    }
+    public let type: TransactionType
+    public let value: Value
     
-    public var currency: Currency? {
-        get { return get("currency", StringConverter.self).flatMap(Currency.init(code:)) }
-        set { set("currency", StringConverter.self, toValue: newValue?.code) }
-    }
-    
-    public var transferableDate: Date? {
-        get { return get("transferable", DateConverter.self) }
-        set { set("transferable", DateConverter.self, toValue: newValue) }
+    public let transferableDate: Date
+}
+
+extension Transaction {
+    public init?(JSON json: Any) {
+        guard let omiseObjectProperties = Transaction.parseOmiseProperties(JSON: json), let json = json as? [String: Any] else {
+            return nil
+        }
+        
+        guard let value = Value(JSON: json), let type: TransactionType = EnumConverter.convert(fromAttribute: json["type"]),
+            let transferableDate = json["transferable"].flatMap(DateConverter.convert(fromAttribute:)) else {
+                return nil
+        }
+        
+        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
+        
+        self.value = value
+        self.type = type
+        self.transferableDate = transferableDate
     }
 }
 
-extension Transaction: Listable { }
-extension Transaction: Retrievable { }
+
+extension Transaction: Listable {}
+extension Transaction: Retrievable {}
+
+

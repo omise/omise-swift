@@ -1,15 +1,16 @@
 import Foundation
 
-open class Client: NSObject {
-    open static let sessionIdentifier = "omise.co"
+
+public class APIClient: NSObject {
+    public static let sessionIdentifier = "omise.co"
     
     var session: URLSession!
     let operationQueue: OperationQueue
     
-    open let config: Config
+    let config: APIConfiguration
     
     fileprivate let pinningSignature: Data? = {
-        let bundle = Bundle(for: Config.self)
+        let bundle = Bundle(for: APIClient.self)
         if let certificateURL = bundle.url(forResource: "cert", withExtension: "der"),
             let certificateData = try? Data(contentsOf: certificateURL) {
             return certificateData
@@ -18,7 +19,8 @@ open class Client: NSObject {
         }
     }()
     
-    public init(config: Config) {
+    
+    public init(config: APIConfiguration) {
         self.config = config
         
         self.operationQueue = OperationQueue()
@@ -27,38 +29,50 @@ open class Client: NSObject {
         self.session = URLSession(
             configuration: URLSessionConfiguration.ephemeral,
             delegate: self,
-            delegateQueue: operationQueue)
+            delegateQueue: operationQueue
+        )
+    }
+    
+    func preferredKeyForServerEndpoint(_ endpoint: ServerEndpoint) -> String {
+        switch endpoint {
+        case .api:
+            return config.secretKey
+        case .vault:
+            return config.publicKey
+        }
     }
     
     @discardableResult
-    open func call<TResult: OmiseObject>(_ operation: Operation<TResult>, callback: Operation<TResult>.Callback?) -> Request<TResult>? {
+    public func requestToEndpoint<TResult: OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
-            let req: Request<TResult> = Request(client: self, operation: operation, callback: callback)
+            let req: APIRequest<TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as OmiseError {
             performCallback() {
                 callback?(.fail(err))
             }
-        } catch let err as NSError {
+        } catch let err {
             performCallback() {
-                callback?(.fail(.io(err)))
+                callback?(.fail(.other(err)))
             }
         }
         
         return nil
     }
     
-    open func cancelAllOperations() {
-        operationQueue.cancelAllOperations()
-    }
     
     func performCallback(_ callback: @escaping () -> ()) {
-        config.callbackQueue.addOperation(callback)
+        operationQueue.addOperation(callback)
+    }
+    
+    public func cancelAllOperations() {
+        session.invalidateAndCancel()
+        operationQueue.cancelAllOperations()
     }
 }
 
 
-extension Client: URLSessionDelegate {
+extension APIClient: URLSessionDelegate {
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         let credential: URLCredential?
         let challengeDisposition: URLSession.AuthChallengeDisposition

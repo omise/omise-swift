@@ -1,11 +1,11 @@
 import Foundation
 
 public struct ResourceInfo {
-    let parentType: ResourceObject.Type?
-    let endpoint: Endpoint
+    let parentType: OmiseResourceObject.Type?
+    let endpoint: ServerEndpoint
     let path: String
     
-    public init(parentType: ResourceObject.Type? = nil, endpoint: Endpoint = .api, path: String = "/") {
+    public init(parentType: OmiseResourceObject.Type? = nil, endpoint: ServerEndpoint = .api, path: String) {
         self.parentType = parentType
         self.endpoint = endpoint
         self.path = path

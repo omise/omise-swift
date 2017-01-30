@@ -1,9 +1,32 @@
 import Foundation
 
 
+extension Card: Equatable {
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 public enum Payment {
     case card(Card)
     case offsite(OffsitePayment)
+    
+    public var sourceOfFunds: String {
+        switch self {
+        case .card:
+            return "card"
+        case .offsite:
+            return "offsite"
+        }
+    }
 }
 
 extension Payment: Equatable {
@@ -30,6 +53,16 @@ extension Payment: Equatable {
 
 public enum OffsitePayment {
     case internetBanking(InternetBanking)
+    
+    public var offsite: String {
+        return OffsitePaymentConverter.convert(fromValue: self) as? String ?? {
+            switch self {
+            case .internetBanking(let bank):
+                return "internet_banking_" + bank.rawValue
+            }
+            }()
+    }
+    
 }
 
 extension OffsitePayment: Equatable {
