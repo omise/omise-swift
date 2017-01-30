@@ -18,7 +18,7 @@ public struct ListProperty<Item: OmiseObject>: OmiseObject {
 extension ListProperty {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any] ,
-            let object = Charge.parseObject(JSON: json) else {
+            let object = ListProperty.parseObject(JSON: json) else {
             return nil
         }
         

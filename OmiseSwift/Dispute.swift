@@ -30,7 +30,7 @@ public struct Dispute: OmiseResourceObject {
 extension Dispute {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+            let omiseObjectProperties = Dispute.parseOmiseResource(JSON: json) else {
                 return nil
         }
         
