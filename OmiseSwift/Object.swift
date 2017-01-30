@@ -61,7 +61,7 @@ extension OmiseObject {
                 return nil
         }
         
-        return (object: object)
+        return object
     }
 }
 
