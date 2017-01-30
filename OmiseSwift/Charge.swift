@@ -14,7 +14,7 @@ extension ChargeStatus {
             let status = json["status"] as? String else {
                 return nil
         }
-         
+        
         let failureCode = ChargeFailure(JSON: json)
         
         switch (status, failureCode) {
@@ -59,10 +59,9 @@ public struct Charge: OmiseResourceObject {
     public var card: Card?
     public var offsite: OffsitePayment?
     public var payment: Payment
-
+    
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?
-
     
     public var customer: DetailProperty<Customer>?
     
@@ -77,7 +76,7 @@ extension Charge {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
             let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
-            return nil
+                return nil
         }
         
         guard let value = Value(JSON: json), let isAutoCapture = json["capture"] as? Bool,
@@ -99,6 +98,9 @@ extension Charge {
         self.ipAddress = json["ip"] as? String
         self.returnURL = (json["return_uri"] as? String).flatMap(URL.init(string:))
         self.authorizedURL = (json["authorized_uri"] as? String).flatMap(URL.init(string:))
+        
+        self.refunded = json["refunded"] as? Int64
+        self.refunds = json["refunds"].flatMap(ListProperty<Refund>.init(JSON:))
         
         let payment: Payment?
         let card: Card?
@@ -145,7 +147,7 @@ public struct ChargeParams: APIParams {
             "description": chargeDescription,
             "capture": isAutoCapture,
             "return_uri": returnURL?.absoluteString,
-                ])
+            ])
     }
     
     public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil) {
