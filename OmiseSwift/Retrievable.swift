@@ -2,14 +2,24 @@ import Foundation
 
 public protocol Retrievable { }
 
+public class RetrieveParams: Params {
+    public var isExpanded: Bool? {
+        get { return get("expand", BoolConverter.self) }
+        set { set("expand", BoolConverter.self, toValue: newValue) }
+    }
+}
+
 public extension Retrievable where Self: ResourceObject {
     public typealias RetrieveOperation = Operation<Self>
     
     public static func retrieveOperation(_ parent: ResourceObject?, id: String) -> RetrieveOperation {
+        let retrieveParams = RetrieveParams()
+        retrieveParams.isExpanded = true
         return RetrieveOperation(
             endpoint: info.endpoint,
             method: "GET",
-            paths: makeResourcePathsWith(context: self, parent: parent, id: id)
+            paths: makeResourcePathsWith(context: self, parent: parent, id: id),
+            params: retrieveParams
         )
     }
     

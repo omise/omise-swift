@@ -24,7 +24,7 @@ public class Dispute: ResourceObject {
     }
     
     public var charge: String? {
-        get { return get("charge", StringConverter.self) }
+        get { return get("charge", StringConverter.self) ?? getChild("charge", Charge.self)?.id }
         set { set("charge", StringConverter.self, toValue: newValue) }
     }
 }
