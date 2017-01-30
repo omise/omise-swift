@@ -47,21 +47,23 @@ public class List<TItem: OmiseLocatableObject> {
     }
     
     public func insert(from value: ListProperty<TItem>) -> [TItem] {
-        guard let offset = value.offset, let limit = value.limit else {
-            dataUpdatedHandler?(data)
-            return []
-        }
+        let offset = value.offset
+        let limit = value.limit
+        
         let total = value.total
         self.total = total
         
         let valuesRange = range(fromOffset: offset, limit: min(limit, value.data.count))
         self.limit = limit
         
-        guard let side = loadedIndices.side(from: valuesRange) else { return [] }
+        guard let side = loadedIndices.side(from: valuesRange) else {
+            dataUpdatedHandler?(data)
+            return []
+        }
         if side == .lower {
             let insertingCount = valuesRange.prefix(upTo: loadedIndices.lowerBound).count
             data.insert(contentsOf: value.data.prefix(insertingCount), at: data.startIndex)
-        } else { 
+        } else {
             data.append(contentsOf: value.data)
         }
         
