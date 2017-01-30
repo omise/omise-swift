@@ -15,7 +15,8 @@ public enum OmiseError: Error {
         case .other(let err):
             return "I/O error: \(err.localizedDescription)"
         case .api(let err):
-            return "(\(err.statusCode)/\(err.code)) \(err.message)"
+            let statusCode = err.statusCode.map({ "\($0)" }) ?? "(N/A)"
+            return "(\(statusCode)/\(err.code)) \(err.message)"
         }
     }
 }
