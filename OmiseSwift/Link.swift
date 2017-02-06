@@ -25,7 +25,7 @@ public struct Link: OmiseResourceObject {
 extension Link {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+            let omiseObjectProperties = Link.parseOmiseResource(JSON: json) else {
                 return nil
         }
         

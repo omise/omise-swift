@@ -35,7 +35,7 @@ public struct Recipient: OmiseResourceObject {
 extension Recipient {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+            let omiseObjectProperties = Recipient.parseOmiseResource(JSON: json) else {
                 return nil
         }
         

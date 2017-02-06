@@ -22,7 +22,7 @@ public struct Customer: OmiseResourceObject {
 extension Customer {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
+            let omiseObjectProperties = Customer.parseOmiseResource(JSON: json) else {
                 return nil
         }
         
