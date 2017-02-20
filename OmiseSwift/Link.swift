@@ -10,7 +10,6 @@ public struct Link: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public let createdDate: Date
-    public let isDeleted: Bool
     
     public let value: Value
     public let isUsed: Bool
@@ -37,7 +36,7 @@ extension Link {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.value = value
         self.isUsed = isUsed
         self.isMultiple = isMultiple
