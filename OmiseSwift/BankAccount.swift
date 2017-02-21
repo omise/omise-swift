@@ -3,7 +3,7 @@ import Foundation
 public struct BankAccount: OmiseObject {
     public let object: String
     
-    public let brand: String
+    public let bank: Bank
     public let accountNumber: String?
     public let lastDigits: LastDigits
     public let name: String
@@ -13,14 +13,14 @@ extension BankAccount {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
             let object = BankAccount.parseObject(JSON: json),
-            let brand = json["brand"] as? String,
+            let bank = (json["brand"] as? String ?? json["bank_code"] as? String).flatMap({Bank(bankID: $0, branchCode: json["branch_code"] as? String) }),
             let name = json["name"] as? String,
             let lastDigits = json["last_digits"].flatMap(LastDigitsConverter.convert(fromAttribute:)) else {
                 return nil
         }
         
         self.object = object
-        self.brand = brand
+        self.bank = bank
         self.name = name
         self.lastDigits = lastDigits
         self.accountNumber = json["number"] as? String
