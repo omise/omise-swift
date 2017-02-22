@@ -43,7 +43,7 @@ public struct Charge: OmiseResourceObject {
     public let isLive: Bool
     public let createdDate: Date
     
-    public var chargeStatus: ChargeStatus
+    public var status: ChargeStatus
     public let value: Value
     
     public var chargeDescription: String?
@@ -85,7 +85,7 @@ extension Charge {
         }
         
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.chargeStatus = status
+        self.status = status
         self.value = value
         self.isAuthorized = isAuthorized
         self.isAutoCapture = isAutoCapture
