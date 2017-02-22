@@ -5,8 +5,7 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
     /**
      An API Error Code enum represent error from Omise API.
      
-     - seealso:
-     [Omise: API Error Codes](https://www.omise.co/api-errors)
+     - seealso: [Omise: API Error Codes](https://www.omise.co/api-errors)
      */
     public enum APIErrorCode: CustomDebugStringConvertible {
         case authenticationFailure
