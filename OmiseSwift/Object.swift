@@ -23,7 +23,6 @@ public protocol OmiseLiveModeObject: OmiseObject {
 }
 
 public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
-    var isDeleted: Bool { get }
 }
 
 extension OmiseLocatableObject {
@@ -89,13 +88,16 @@ extension OmiseLocatableObject {
     }
 }
 
+func parseDate(_ date: Any) -> Date? {
+    return (date as? Date) ?? (date as? String).flatMap(DateConverter.convert(fromAttribute:))
+}
+
 extension OmiseIdentifiableObject {
     static func parseIdentifiableProperties(JSON json: Any) -> (object: String, id: String, createdDate: Date)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
             let id = json["id"] as? String,
-            let createdDateString = json["created"] as? String,
-            let created = DateConverter.convert(fromAttribute: createdDateString) else {
+            let created = json["created"].flatMap(parseDate) else {
                 return nil
         }
         
@@ -109,8 +111,7 @@ extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
             let object = Self.parseObject(JSON: json),
             let location = json["location"] as? String,
             let id = json["id"] as? String,
-            let createdDateString = json["created"] as? String,
-            let created = DateConverter.convert(fromAttribute: createdDateString) else {
+            let created = json["created"].flatMap(parseDate) else {
                 return nil
         }
         
@@ -119,19 +120,17 @@ extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
 }
 
 extension OmiseResourceObject {
-    static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date, isDeleted: Bool)? {
+    static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
             let location = json["location"] as? String,
             let id = json["id"] as? String,
             let isLive = json["livemode"] as? Bool,
-            let createdDateString = json["created"] as? String,
-            let created = DateConverter.convert(fromAttribute: createdDateString) else {
+            let created = json["created"].flatMap(parseDate) else {
                 return nil
         }
-        let isDelete = (json["livemode"] as? Bool) ?? false
         
-        return (object: object, location: location, id: id, isLive: isLive, createdDate: created, isDeleted: isDelete)
+        return (object: object, location: location, id: id, isLive: isLive, createdDate: created)
     }
 }
 

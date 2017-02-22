@@ -9,7 +9,6 @@ public struct Customer: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
     
     public let defaultCard: DetailProperty<Card>?
     public let email: String
@@ -31,7 +30,7 @@ extension Customer {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         
         self.email = email
         self.cards = cards

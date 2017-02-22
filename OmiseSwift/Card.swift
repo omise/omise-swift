@@ -229,7 +229,6 @@ public struct CustomerCard: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
     
     public let countryCode: String?
     public let city: String?
@@ -261,7 +260,7 @@ extension CustomerCard {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.lastDigits = lastDigits
         self.brand = cardBrand
         

@@ -18,6 +18,10 @@ public class APIRequest<Result: OmiseObject> {
         self.callback = callback
     }
     
+    public func cancel() {
+        task?.cancel()
+    }
+    
     func start() throws -> Self {
         let urlRequest = try makeURLRequest()
         let dataTask = client.session.dataTask(with: urlRequest, completionHandler: didComplete)

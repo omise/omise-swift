@@ -18,7 +18,6 @@ public struct Dispute: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
     
     public let value: Value
     public var status: DisputeStatus
@@ -40,7 +39,7 @@ extension Dispute {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.value = value
         self.status = status
         self.message = message

@@ -16,7 +16,6 @@ public struct Recipient: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
     
     public let isVerified: Bool
     public let isActive: Bool
@@ -45,7 +44,7 @@ extension Recipient {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.isLive, self.createdDate, self.isDeleted) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.name = name
         self.type = type
         self.bankAccount = account

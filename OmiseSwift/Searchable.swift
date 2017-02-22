@@ -25,7 +25,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIParams {
             "query": query,
             "order": order?.rawValue,
             "filters": filter?.json,
-        ])
+            ])
     }
     
     public init(scope: String, page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil) {
@@ -51,7 +51,7 @@ public protocol OmiseFilterParams: APIParams {
 public extension Searchable where Self: OmiseResourceObject {
     public typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
     public typealias SearchRequest = APIRequest<SearchResult<Self>>
-
+    
     public static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
@@ -68,5 +68,53 @@ public extension Searchable where Self: OmiseResourceObject {
         
         let endpoint = self.searchEndpointWithParams(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
+    }
+    
+    @discardableResult
+    public static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (Failable<Search<Self>>) -> Void) -> SearchRequest? {
+        let endpoint = self.searchEndpointWithParams(params: searchParams)
+        
+        let requestCallback: SearchRequest.Callback = { result in
+            let callbackResult = result.map({ Search(result: $0, order: searchParams?.order ?? .chronological) })
+            callback(callbackResult)
+        }
+        
+        return client.requestToEndpoint(endpoint, callback: requestCallback)
+    }
+    
+    public static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
+        let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: 1) ?? 1, query: list.query, order: list.order, filter: list.filters)
+        
+        return SearchEndpoint(endpoint: .api, method: "GET", pathComponents: ["search"], params: listParams)
+    }
+    
+    @discardableResult
+    static func loadNextPage(list: Search<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
+        let operation = makeLoadNextPageOperation(list: list)
+        
+        let requestCallback: SearchRequest.Callback = { result in
+            let callbackResult = result.map({ list.insert(from: $0) })
+            callback(callbackResult)
+        }
+        
+        return client.requestToEndpoint(operation, callback: requestCallback)
+    }
+    
+    public static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
+        let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: -1) ?? 1, query: list.query, order: list.order, filter: list.filters)
+        
+        return SearchEndpoint(endpoint: .api, method: "GET", pathComponents: ["search"], params: listParams)
+    }
+    
+    @discardableResult
+    static func loadPreviousPage(list: Search<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
+        let operation = makeLoadNextPageOperation(list: list)
+        
+        let requestCallback: SearchRequest.Callback = { result in
+            let callbackResult = result.map({ list.insert(from: $0) })
+            callback(callbackResult)
+        }
+        
+        return client.requestToEndpoint(operation, callback: requestCallback)
     }
 }

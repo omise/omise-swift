@@ -46,6 +46,28 @@ public class List<TItem: OmiseLocatableObject> {
         loadedIndices = range(fromOffset: offset, limit: list?.data.count ?? 0)
     }
     
+    public func setData(from list: ListProperty<TItem>) -> [TItem] {
+        self.data = list.data
+        self.limit = list.limit
+        self.total = list.total
+        self.from = list.from
+        self.to = list.to
+        
+        let offset = list.offset
+        loadedIndices = range(fromOffset: offset, limit: list.data.count)
+        
+        return list.data
+    }
+    
+    public func clearData() {
+        self.data = []
+        self.limit = 0
+        self.total = 0
+        self.from = nil
+        self.to = nil
+        self.loadedIndices = 0..<0
+    }
+    
     public func insert(from value: ListProperty<TItem>) -> [TItem] {
         let offset = value.offset
         let limit = value.limit

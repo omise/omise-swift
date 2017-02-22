@@ -90,7 +90,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.isDeleted, true)
+                XCTAssertEqual(transfer.id, tranferTestingID)
             case let .fail(error):
                 XCTFail("\(error)")
             }

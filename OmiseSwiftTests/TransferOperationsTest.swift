@@ -5,8 +5,8 @@ import Omise
 class TransferOperationsTest: OmiseTestCase {
     var testClient: APIClient {
         let config = APIConfiguration(
-            publicKey: "pkey_test_54flsro0dmplsfg80vm",
-            secretKey: "skey_test_54flpy4dc5jpkrmlpp6"
+            publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
+            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
         )
         
         return APIClient(config: config)
@@ -94,9 +94,40 @@ class TransferOperationsTest: OmiseTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.isDeleted, true)
+                XCTAssertEqual(transfer.id, "trsf_test_54hktxphv9p7wv1tsed")
             case let .fail(error):
                 XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    
+    func testCreateAndDestroy() {
+        let expectation = self.expectation(description: "transfer create")
+        
+        let createParams = TransferParams(amount: 96094)
+        let deleteExpectaion = self.expectation(description: "transfer delete")
+        
+        let request = Transfer.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(transfer):
+                let destroyRequest = Transfer.destroy(using: self.testClient, id: transfer.id) { (result) in
+                    defer { deleteExpectaion.fulfill() }
+                    
+                    switch result {
+                    case let .success(deletedTransfer):
+                        XCTAssertEqual(transfer.id, deletedTransfer.id)
+                    case let .fail(error):
+                        XCTFail("\(error)")
+                    }
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+                deleteExpectaion.fulfill()
             }
         }
         
