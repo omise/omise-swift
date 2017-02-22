@@ -1,5 +1,14 @@
 import Foundation
 
+
+public enum TransferStatus {
+    case pending
+    case paid
+    case sent
+    case failed(TransferFailure)
+}
+
+
 public struct Transfer: OmiseResourceObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transfers")
     
@@ -9,6 +18,8 @@ public struct Transfer: OmiseResourceObject {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
+    
+    public var status: TransferStatus
     
     public let bankAccount: BankAccount
     
@@ -22,8 +33,6 @@ public struct Transfer: OmiseResourceObject {
     
     public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
-    
-    public let failure: Failure?
 }
 
 
@@ -54,11 +63,16 @@ extension Transfer {
         self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
         self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
         
-        if let failureCode = json["failure_code"] as? String {
-            let failure = Failure(code: failureCode, message: json["failure_message"] as? String)
-            self.failure = failure
-        } else {
-            self.failure = nil
+        let failure = (json["failure_code"] as? String).flatMap(TransferFailure.init(code:))
+        switch (isPaid, isSent, failure) {
+        case (_, _, let failure?):
+            self.status = .failed(failure)
+        case (true, true, nil):
+            self.status = .paid
+        case (false, true, nil):
+            self.status = .sent
+        default:
+            self.status = .pending
         }
     }
 }

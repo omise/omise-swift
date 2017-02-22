@@ -72,9 +72,41 @@ extension ChargeFailure {
 }
 
 
-public struct Failure {
-    public let code: String
-    public let message: String?
+public enum TransferFailure {
+    /// Bank rejected the transfer request
+    case sentFailed
+    /// Bank cannot process request for transferring to bank account
+    case paidFailed
+    
+    public var code: String {
+        switch self {
+        case .sentFailed:
+            return "transfer_send_failure"
+        case .paidFailed:
+            return "transfer_pay_failure"
+        }
+    }
+    
+    public init?(code: String) {
+        switch code {
+        case "transfer_send_failure":
+            self = .sentFailed
+        case "transfer_pay_failure":
+            self = .paidFailed
+        default:
+            return nil
+        }
+    }
+}
+
+
+extension TransferFailure {
+    init?(JSON json: Any) {
+        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String, let failure = TransferFailure.init(code: code) else {
+            return nil
+        }
+        self = failure
+    }
 }
 
 
