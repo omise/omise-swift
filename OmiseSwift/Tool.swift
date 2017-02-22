@@ -12,6 +12,7 @@ func omiseWarn(_ message: String) {
     print("[omise-swift] WARN: \(message)")
 }
 
+public typealias JSONDictionary = [String: Any]
 
 public extension Color {
     convenience init?(hexString: String) {

@@ -7,18 +7,23 @@ import Foundation
 #endif
 
 
-private let banks: [String: [String: [String: Any]]] = {
+// We provide the banks information file in a JSON file format.
+// This JSON's keys are the country code of supported banks and 
+// values are maps from the bank's ID to a JSON dictionary containing bank's information
+// [ "th": [ "test": [ /* bank's information */ ] ] ]
+private let banks: [String: [String: JSONDictionary]] = {
     let bundle = Bundle(for: APIClient.self)
     guard let bankJSONFileURL = bundle.url(forResource: "banks", withExtension: "json"),
         let data = try? Data(contentsOf: bankJSONFileURL),
         let json = try? JSONSerialization.jsonObject(with: data),
-        let bankData = json as? [String: [String: [String: Any]]]  else {
+        let bankData = json as? [String: [String: JSONDictionary]]  else {
             return [:]
     }
     
     return bankData
 }()
 
+// A dictionary where key is a bank's ID and value is the country code where the bank is registered.
 private let bankCountryCodeMap: [String: String] = {
     var countryCodes: [String: String] = [:]
     
@@ -31,8 +36,10 @@ private let bankCountryCodeMap: [String: String] = {
     return countryCodes
 }()
 
-private let bankData: [String: [String: Any]] = {
-    var data: [String: [String: Any]] = [:]
+
+// A dictionary where key is a bank's ID and value is a bank's information
+private let bankData: [String: JSONDictionary] = {
+    var data: [String: JSONDictionary] = [:]
     banks.flatMap({ $0.1 }).forEach({
         data[$0.0] = $0.1
     })
