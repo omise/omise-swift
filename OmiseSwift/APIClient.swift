@@ -11,7 +11,7 @@ public class APIClient: NSObject {
     
     fileprivate let pinningSignature: Data? = {
         let bundle = Bundle(for: APIClient.self)
-        if let certificateURL = bundle.url(forResource: "cert", withExtension: "der"),
+        if let certificateURL = bundle.url(forResource: "OmisePinning", withExtension: "der"),
             let certificateData = try? Data(contentsOf: certificateURL) {
             return certificateData
         } else {
