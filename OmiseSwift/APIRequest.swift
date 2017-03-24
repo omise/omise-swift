@@ -37,16 +37,18 @@ public class APIRequest<Result: OmiseObject> {
         
         
         if let err = error {
-            return performCallback(.fail(.other(err)))
-            
+            performCallback(.fail(.other(err)))
+            return
         }
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            return performCallback(.fail(.unexpected("no error and no response.")))
+            performCallback(.fail(.unexpected("no error and no response.")))
+            return
         }
         
         guard let data = data else {
-            return performCallback(.fail(.unexpected("empty response.")))
+            performCallback(.fail(.unexpected("empty response.")))
+            return
         }
         
         let result: Failable<Result>
