@@ -71,11 +71,56 @@ public struct LinkParams: APIParams {
     }
 }
 
+public struct LinkFilterParams: OmiseFilterParams {
+    
+    public var created: DateComponents?
+    public var amount: Double?
+    
+    public var isMultiple: Bool?
+    public var isUsed: Bool?
+    
+    public var usedDate: DateComponents?
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "created": DateComponentsConverter.convert(fromValue: created),
+            "amount": amount,
+            "multiple": isMultiple,
+            "used": isUsed,
+            "used_at": DateComponentsConverter.convert(fromValue: usedDate),
+            ])
+    }
+    
+    public init(created: DateComponents? = nil, amount: Double? = nil,
+                isMultiple: Bool? = nil, isUsed: Bool? = nil,
+                usedDate: DateComponents? = nil) {
+        self.created = created
+        self.amount = amount
+        self.isMultiple = isMultiple
+        self.isUsed = isUsed
+        self.usedDate = usedDate
+    }
+    
+    public init(JSON: [String: Any]) {
+        self.init(
+            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
+            amount: (JSON["amount"] as? Double),
+            isMultiple: JSON["multiple"] as? Bool,
+            isUsed: JSON["used"] as? Bool,
+            usedDate: JSON["used_at"].flatMap(DateComponentsConverter.convert(fromAttribute:))
+        )
+    }
+}
+
 extension Link: Listable {}
 
 extension Link: Retrievable {}
 
 extension Link: Creatable {
     public typealias CreateParams = LinkParams
+}
+
+extension Link: Searchable {
+    public typealias FilterParams = LinkFilterParams
 }
 
