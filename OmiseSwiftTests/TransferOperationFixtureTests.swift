@@ -98,5 +98,31 @@ class TransferOperationFixtureTests: FixtureTestCase {
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
+    
+    
+    func testTransferOtherFailureCode() {
+        let expectation = self.expectation(description: "transfer result")
+        
+        let request = Transfer.retrieve(using: testClient, id: "trsf_test_4yqacz8t3cbipcj272c") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(transfer):
+                XCTAssertEqual(transfer.value.amount, 300)
+                XCTAssertNotNil(transfer.sentDate)
+                XCTAssertNil(transfer.paidDate)
+                if case TransferStatus.failed(.other(let code)) = transfer.status {
+                    XCTAssertEqual(code, "other")
+                } else {
+                    XCTFail()
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
 }
 

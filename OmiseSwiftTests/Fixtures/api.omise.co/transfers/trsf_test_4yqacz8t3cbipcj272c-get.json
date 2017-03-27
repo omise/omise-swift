@@ -1,0 +1,25 @@
+{
+  "object": "transfer",
+  "id": "trsf_test_4yqacz8t3cbipcj766u",
+  "livemode": false,
+  "location": "/transfers/trsf_test_4yqacz8t3cbipcj766u",
+  "sent": true,
+  "paid": false,
+  "amount": 300,
+  "currency": "jpy",
+  "fee": 30,
+  "failure_code": "other",
+  "failure_message": "test2",
+  "transaction": "trxn_57b8asbxsvfwmlq27qg",
+  "recipient": "recp_test_50894vc13y8z4v51iuc",
+  "bank_account": {
+    "object": "bank_account",
+    "brand": "test",
+    "last_digits": "6789",
+    "name": "JOHN DOE",
+    "created": "2015-06-02T09:26:59Z"
+  },
+  "created": "2017-03-15T05:40:11Z",
+  "sent_at": "2017-03-15T06:54:42Z",
+  "paid_at": null
+}
