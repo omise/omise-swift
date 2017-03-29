@@ -101,6 +101,8 @@ extension Charge {
         self.refunded = json["refunded"] as? Int64
         self.refunds = json["refunds"].flatMap(ListProperty<Refund>.init(JSON:))
         
+        self.chargeDescription = json["description"] as? String
+        
         let payment: Payment?
         let card: Card?
         let offsite: OffsitePayment?

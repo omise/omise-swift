@@ -1,5 +1,5 @@
 import XCTest
-import Omise
+@testable import Omise
 
 
 private let chargeTestingID = "chrg_test_4yq7duw15p9hdrjp8oq"
@@ -14,6 +14,16 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.currency.code, "THB")
+                XCTAssertEqual(charge.chargeDescription, "Charge for order 3947")
+                XCTAssertEqual(charge.id, chargeTestingID)
+                XCTAssertEqual(charge.location, "/charges/chrg_test_4yq7duw15p9hdrjp8oq")
+                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.refunded, 10000)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_4yq7duwb9jts1vxgqua")
+                XCTAssertEqual(charge.customer?.dataID, "cust_test_4yq6txdpfadhbaqnwp3")
+                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2015-01-15T05:00:29Z"))
+                XCTAssertEqual(charge.card?.id, "card_test_4yq6tuucl9h4erukfl0")
             case let .fail(error):
                 XCTFail("\(error)")
             }
