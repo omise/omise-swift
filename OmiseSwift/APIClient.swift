@@ -36,10 +36,20 @@ public class APIClient: NSObject {
     func preferredKeyForServerEndpoint(_ endpoint: ServerEndpoint) -> String {
         switch endpoint {
         case .api:
-            return config.secretKey
+            return config.secretKey + ":X"
         case .vault:
             return config.publicKey
         }
+    }
+    
+    func preferredEncodedKeyForServerEndpoint(_ endpoint: ServerEndpoint) throws -> String {
+        let data = preferredKeyForServerEndpoint(endpoint).data(using: .utf8, allowLossyConversion: false)
+        
+        guard let encodedKey = data?.base64EncodedString(options: .lineLength64Characters) else {
+            throw OmiseError.configuration("bad API key (encoding failed.)")
+        }
+        
+        return "Basic \(encodedKey)"
     }
     
     @discardableResult
