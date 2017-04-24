@@ -82,8 +82,7 @@ public class APIRequest<Result: OmiseObject> {
     func makeURLRequest() throws -> URLRequest {
         let requestURL = endpoint.makeURL()
         
-        let apiKey = client.preferredKeyForServerEndpoint(endpoint.endpoint)
-        let auth = try APIRequest.encodeAuthorizationHeader(withAPIKey: apiKey)
+        let auth = try client.preferredEncodedKeyForServerEndpoint(endpoint.endpoint)
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.method
@@ -100,15 +99,5 @@ public class APIRequest<Result: OmiseObject> {
         request.httpBody = payload
         return request as URLRequest
     }
-    
-    static func encodeAuthorizationHeader(withAPIKey apiKey: String) throws -> String {
-        let data = "\(apiKey):X".data(using: String.Encoding.utf8)
-        guard let md5 = data?.base64EncodedString(options: .lineLength64Characters) else {
-            throw OmiseError.configuration("bad API key (encoding failed.)")
-        }
-        
-        return "Basic \(md5)"
-    }
-    
 }
 

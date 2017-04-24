@@ -135,6 +135,8 @@
 		8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
 		8AE84C471E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
 		8AE84C481E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
+		8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
+		8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
 		8AEDE7D51DDC701600DD9DF1 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 229873591CCE0B5A00970F8C /* Fixtures */; };
 		8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */; };
 		8AF9D8011E2C8E7000F10869 /* PaymentConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A075A391DF01AA7009143A9 /* PaymentConverter.swift */; };
@@ -244,6 +246,7 @@
 		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
 		8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFieldConverter.swift; sourceTree = "<group>"; };
 		8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargeOperationsTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
@@ -354,12 +357,12 @@
 		2270E3AB1CC78D4200F18814 /* OmiseSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				8A028B3F1E2CCD2D0008E010 /* New Tests */,
 				2270E3C41CC78DDB00F18814 /* Info-iOS.plist */,
 				2270E3AE1CC78D4200F18814 /* Info-OSX.plist */,
 				22112D081CC7910700D0DB54 /* ConfigTest.swift */,
 				8A07D2F31D73F5040030B68D /* FixtureClient.swift */,
 				8A07D2F61D73F8370030B68D /* FixtureTestCase.swift */,
+				229873391CCDF8B200970F8C /* JSONTest.swift */,
 				22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */,
 				22112D091CC7910700D0DB54 /* OmiseTestCase.swift */,
 				229873751CCE29D700970F8C /* OperationTest.swift */,
@@ -397,14 +400,6 @@
 			name = API;
 			sourceTree = "<group>";
 		};
-		8A028B3F1E2CCD2D0008E010 /* New Tests */ = {
-			isa = PBXGroup;
-			children = (
-				229873391CCDF8B200970F8C /* JSONTest.swift */,
-			);
-			name = "New Tests";
-			sourceTree = "<group>";
-		};
 		8A07D2FC1D742B4F0030B68D /* Fixture Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,10 +417,11 @@
 			isa = PBXGroup;
 			children = (
 				8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */,
-				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
-				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
 				8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */,
 				8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */,
+				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
+				8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */,
+				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
 			);
 			name = "Live Tests";
 			sourceTree = "<group>";
@@ -766,6 +762,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
+				8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 			);
@@ -782,6 +779,7 @@
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,
+				8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
 				8A7CBA501DE59F0200F83D21 /* LastDigitsTest.swift in Sources */,
 				22112D0B1CC7910700D0DB54 /* ConfigTest.swift in Sources */,
 				229873881CCF566F00970F8C /* RequestTest.swift in Sources */,
