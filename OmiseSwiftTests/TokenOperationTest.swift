@@ -2,17 +2,7 @@ import Foundation
 import XCTest
 import Omise
 
-class TokenOperationTest: OmiseTestCase {
-    
-    var testClient: APIClient {
-        let config = APIConfiguration(
-            publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
-            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
-        )
-        
-        return APIClient(config: config)
-    }
-    
+class TokenOperationTest: LiveTest {
     
     func testTransferCreate() {
         let expectation = self.expectation(description: "token create")
@@ -33,5 +23,5 @@ class TokenOperationTest: OmiseTestCase {
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-
 }
+

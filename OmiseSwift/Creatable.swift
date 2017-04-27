@@ -10,7 +10,6 @@ public extension Creatable where Self: OmiseLocatableObject {
     
     public static func createEndpointWith(parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
-            endpoint: resourceInfo.endpoint,
             method: "POST",
             pathComponents: Self.makeResourcePathsWithParent(parent),
             params: params

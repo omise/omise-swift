@@ -105,6 +105,21 @@ extension OmiseIdentifiableObject {
     }
 }
 
+extension OmiseLiveModeObject where Self: OmiseIdentifiableObject {
+    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool, id: String, createdDate: Date)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let isLiveMode = json["livemode"] as? Bool,
+            let id = json["id"] as? String,
+            let created = json["created"].flatMap(parseDate) else {
+                return nil
+        }
+        
+        return (object: object, isLiveMode: isLiveMode, id: id, createdDate: created)
+    }
+}
+
+
 extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
     static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String, createdDate: Date)? {
         guard let json = json as? [String: Any],

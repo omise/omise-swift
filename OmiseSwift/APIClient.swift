@@ -36,9 +36,9 @@ public class APIClient: NSObject {
     func preferredKeyForServerEndpoint(_ endpoint: ServerEndpoint) -> String {
         switch endpoint {
         case .api:
-            return config.secretKey
-        case .vault:
-            return config.publicKey
+            return config.applicationKey.key
+        case .vault(let publicKey):
+            return publicKey.key
         }
     }
     

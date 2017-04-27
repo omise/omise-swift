@@ -36,7 +36,6 @@ public extension Listable where Self: OmiseLocatableObject {
     @discardableResult
     public static func listEndpointWith(parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
-            endpoint: resourceInfo.endpoint,
             method: "GET",
             pathComponents: makeResourcePathsWithParent(parent),
             params: params

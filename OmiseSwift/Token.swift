@@ -1,7 +1,7 @@
 import Foundation
 
 public struct Token: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(endpoint: .vault, path: "/tokens")
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/tokens")
     
     public var object: String
     public var location: String
@@ -58,7 +58,7 @@ public struct TokenParams: APIParams {
                 "security_code": securityCode,
                 "city": city as Any,
                 "postal_code": postalCode,
-            ])
+                ])
         ]
     }
     
@@ -74,6 +74,25 @@ public struct TokenParams: APIParams {
 
 extension Token: Creatable {
     public typealias CreateParams = TokenParams
+    
+    public static func createEndpointWith(parent: OmiseResourceObject?, usingKey key: Key<PublicKey>, params: CreateParams) -> CreateEndpoint {
+        return CreateEndpoint(
+            endpoint: .vault(key),
+            method: "POST",
+            pathComponents: Token.makeResourcePathsWithParent(parent),
+            params: params
+        )
+    }
+    
+    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, usingKey key: Key<PublicKey>, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+        guard Token.verifyParent(parent) else {
+            return nil
+        }
+        
+        let endpoint = self.createEndpointWith(parent: parent, usingKey: key, params: params)
+        return client.requestToEndpoint(endpoint, callback: callback)
+    }
+    
 }
 
 extension Token: Retrievable {

@@ -2,15 +2,7 @@ import Foundation
 import XCTest
 @testable import Omise
 
-class ChargeOperationsTest: OmiseTestCase {
-    var testClient: APIClient {
-        let config = APIConfiguration(
-            publicKey: "pkey_test_54oojsyhv5uq1kzf4g4",
-            secretKey: "skey_test_54oojsyhuzzr51wa5hc"
-        )
-        
-        return APIClient(config: config)
-    }
+class ChargeOperationsTest: LiveTest {
     
     func testChargeList() {
         let expectation = self.expectation(description: "charge list")
