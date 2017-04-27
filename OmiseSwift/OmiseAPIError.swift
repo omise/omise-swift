@@ -150,12 +150,16 @@ public enum TransferFailure {
     /// Bank cannot process request for transferring to bank account
     case paidFailed
     
+    case other(String)
+    
     public var code: String {
         switch self {
         case .sentFailed:
             return "transfer_send_failure"
         case .paidFailed:
             return "transfer_pay_failure"
+        case .other(let code):
+            return code
         }
     }
     
@@ -165,8 +169,8 @@ public enum TransferFailure {
             self = .sentFailed
         case "transfer_pay_failure":
             self = .paidFailed
-        default:
-            return nil
+        case let code:
+            self = .other(code)
         }
     }
 }
