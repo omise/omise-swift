@@ -26,7 +26,6 @@ public extension Destroyable where Self: OmiseResourceObject {
     
     public static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
         return DestroyEndpoint(
-            endpoint: resourceInfo.endpoint,
             method: "DELETE",
             pathComponents: Self.makeResourcePathsWithParent(parent, id: id),
             params: nil

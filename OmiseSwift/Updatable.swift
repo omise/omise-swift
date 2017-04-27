@@ -10,7 +10,6 @@ public extension Updatable where Self: OmiseResourceObject {
     
     public static func updateEndpointWith(parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
-            endpoint: resourceInfo.endpoint,
             method: "PATCH",
             pathComponents: makeResourcePathsWithParent(parent, id: id),
             params: params

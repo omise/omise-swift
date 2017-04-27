@@ -1,11 +1,21 @@
 import Foundation
 
-public enum ServerEndpoint: String {
-    case vault = "https://vault.omise.co"
-    case api = "https://api.omise.co"
+let stagingURLSuffix = "-staging.omise.co"
+let productionURLSuffix = ".omise.co"
+
+public enum ServerEndpoint {
+    case vault(Key<PublicKey>)
+    case api
     
     var url: URL {
-        return URL(string: rawValue)!
+        let urlString: String
+        switch self {
+        case .vault:
+            urlString = "https://vault" + productionURLSuffix
+        case .api:
+            urlString = "https://api" + productionURLSuffix
+        }
+        return URL(string: urlString)!
     }
     
     func url(withComponents components: [String]) -> URL {

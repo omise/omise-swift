@@ -19,7 +19,6 @@ public extension Retrievable where Self: OmiseLocatableObject {
     public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
-            endpoint: resourceInfo.endpoint,
             method: "GET",
             pathComponents: makeResourcePathsWithParent(parent, id: id),
             params: retrieveParams

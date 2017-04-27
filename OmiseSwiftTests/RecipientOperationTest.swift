@@ -2,15 +2,7 @@ import Foundation
 import XCTest
 @testable import Omise
 
-class RecipientOperationTest: OmiseTestCase {
-    var testClient: APIClient = {
-        let config = APIConfiguration(
-            publicKey: "<#Public Key#>",
-            secretKey: "<#Secret Key#>"
-        )
-        
-        return APIClient(config: config)
-    }()
+class RecipientOperationTest: LiveTest {
     
     func testRecipientList() {
         let expectation = self.expectation(description: "recipient list")

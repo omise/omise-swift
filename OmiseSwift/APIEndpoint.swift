@@ -11,6 +11,12 @@ public struct APIEndpoint<DataType: OmiseObject> {
     public let pathComponents: [String]
     public let params: APIParams?
     
+    init(endpoint: ServerEndpoint = .api, method: String, pathComponents: [String], params: APIParams?) {
+        self.endpoint = endpoint
+        self.method = method
+        self.pathComponents = pathComponents
+        self.params = params
+    }
     
     func makeURL() -> URL {
         let url = endpoint.url(withComponents: pathComponents)
