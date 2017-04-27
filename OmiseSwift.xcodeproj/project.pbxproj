@@ -58,6 +58,8 @@
 		8A50C50A1E2E250800EC9407 /* SingletonRetrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DAF1D211D7E00811363 /* SingletonRetrievable.swift */; };
 		8A50C50B1E2E250800EC9407 /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4C1D223FF700A62F2C /* Updatable.swift */; };
 		8A50C50D1E2E259600EC9407 /* Ordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9951D22372400CA3D35 /* Ordering.swift */; };
+		8A6079301EB1E395005684CC /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* Key.swift */; };
+		8A6079311EB1E395005684CC /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* Key.swift */; };
 		8A634A0D1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
 		8A634A0E1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
 		8A7CBA501DE59F0200F83D21 /* LastDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA4E1DE59F0200F83D21 /* LastDigitsTest.swift */; };
@@ -221,6 +223,7 @@
 		8A3B90141E360AD30074D6CD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		8A4224AA1E4C8F8E00B11AF2 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		8A60792F1EB1E395005684CC /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
 		8A7CBA481DE59A4700F83D21 /* LastDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigits.swift; sourceTree = "<group>"; };
 		8A7CBA4B1DE59C2000F83D21 /* LastDigitsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigitsConverter.swift; sourceTree = "<group>"; };
@@ -431,8 +434,8 @@
 			children = (
 				8ACD57391E2E563800FEE5A0 /* Account.swift */,
 				8ACD573C1E2E570600FEE5A0 /* Balance.swift */,
-				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
 				8A2BCABD1E5C039B0069577B /* Bank.swift */,
+				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
 				8ACB412C1E2793D4001793CD /* Card.swift */,
 				8ACB41141E277B60001793CD /* Charge.swift */,
 				8A56D41A1D78172D00F30D88 /* Currency.swift */,
@@ -440,6 +443,7 @@
 				8ACB41241E278837001793CD /* DetailProperty.swift */,
 				8ACB41361E279CED001793CD /* Dispute.swift */,
 				22338DB71D21392A00811363 /* Failable.swift */,
+				8A60792F1EB1E395005684CC /* Key.swift */,
 				8A7CBA481DE59A4700F83D21 /* LastDigits.swift */,
 				8A028B371E2CBABF0008E010 /* Link.swift */,
 				8A3938E51D8174C9007750AA /* List.swift */,
@@ -662,6 +666,7 @@
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
 				8A28BB411E28DCE200EEBD55 /* Payment.swift in Sources */,
+				8A6079311EB1E395005684CC /* Key.swift in Sources */,
 				8ACB41641E28A403001793CD /* Endpoint.swift in Sources */,
 				8A028B391E2CC3920008E010 /* Card.swift in Sources */,
 				8A4224AC1E4C8F8E00B11AF2 /* Search.swift in Sources */,
@@ -721,6 +726,7 @@
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,
+				8A6079301EB1E395005684CC /* Key.swift in Sources */,
 				8ACD570B1E2E3A9600FEE5A0 /* ListProperty.swift in Sources */,
 				8ACD57381E2E3A9600FEE5A0 /* ChargeEndpoint.swift in Sources */,
 				8A4224AB1E4C8F8E00B11AF2 /* Search.swift in Sources */,
