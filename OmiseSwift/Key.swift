@@ -32,7 +32,6 @@ public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject {
             let kind = json["kind"] as? String,
             Kind.kind == kind, key.hasPrefix(Kind.prefix) else {
                 return nil
-                
         }
         
         (self.object, self.isLive, self.id, self.createdDate) = omiseProperties
