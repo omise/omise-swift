@@ -4,13 +4,17 @@ import Foundation
 class OffsitePaymentConverter: Converter {
     public typealias Target = OffsitePayment
     
-    private static let internetBankingPrefix = "internet_banking_"
+    static let internetBankingPrefix = "internet_banking_"
+    static let alipayValue = "alipay"
+    
     public static func convert(fromAttribute value: Any?) -> Target? {
         guard let value = value as? String else { return nil }
         
         if value.hasPrefix(OffsitePaymentConverter.internetBankingPrefix), let prefixRange = value.range(of: OffsitePaymentConverter.internetBankingPrefix) {
             let bankBrand = value[prefixRange.upperBound..<value.endIndex]
             return InternetBanking(rawValue: bankBrand).map(OffsitePayment.internetBanking)
+        } else if value == OffsitePaymentConverter.alipayValue {
+            return .alipay
         } else {
             return nil
         }
@@ -20,6 +24,8 @@ class OffsitePaymentConverter: Converter {
         switch value {
         case .internetBanking(let bank)?:
             return OffsitePaymentConverter.internetBankingPrefix + bank.rawValue
+        case .alipay?:
+            return OffsitePaymentConverter.alipayValue
         default:
             return nil
         }

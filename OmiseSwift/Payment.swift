@@ -53,12 +53,15 @@ extension Payment: Equatable {
 
 public enum OffsitePayment {
     case internetBanking(InternetBanking)
+    case alipay
     
     public var offsite: String {
         return OffsitePaymentConverter.convert(fromValue: self) as? String ?? {
             switch self {
             case .internetBanking(let bank):
-                return "internet_banking_" + bank.rawValue
+                return OffsitePaymentConverter.internetBankingPrefix + bank.rawValue
+            case .alipay:
+                return OffsitePaymentConverter.alipayValue
             }
             }()
     }
@@ -78,6 +81,10 @@ extension OffsitePayment: Equatable {
         switch (lhs, rhs) {
         case (.internetBanking(let lhsBank), .internetBanking(let rhsBank)):
             return lhsBank == rhsBank
+        case (.alipay, .alipay):
+            return true
+        case (.internetBanking, .alipay), (.alipay, .internetBanking):
+            return false
         }
     }
 }
