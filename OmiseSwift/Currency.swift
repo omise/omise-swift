@@ -55,3 +55,11 @@ public enum Currency {
         }
     }
 }
+
+
+extension Currency: Equatable {
+    public static func ==(lhs: Currency, rhs: Currency) -> Bool {
+        return lhs.code == rhs.code
+    }
+}
+

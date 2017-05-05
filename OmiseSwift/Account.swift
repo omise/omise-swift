@@ -9,17 +9,21 @@ public struct Account: OmiseLocatableObject, OmiseIdentifiableObject {
     public let createdDate: Date
     
     public let email: String
+    
+    public let currency: Currency
 }
 
 extension Account {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
             let omiseProperties = Account.parseOmiseProperties(JSON: json),
-            let email = json["email"] as? String else {
+            let email = json["email"] as? String,
+            let currency = (json["currency"] as? String).flatMap(Currency.init(code:)) else {
                 return nil
         }
         (self.object, self.location, self.id, self.createdDate) = omiseProperties
         self.email = email
+        self.currency = currency
     }
 }
 
