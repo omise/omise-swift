@@ -79,7 +79,7 @@ extension Charge {
         }
         
         guard let value = Value(JSON: json), let isAutoCapture = json["capture"] as? Bool,
-            let isAuthorized = json["authorized"] as? Bool, let isPaid = json["paid"] as? Bool,
+            let isAuthorized = json["authorized"] as? Bool, let isPaid = json["paid"] as? Bool ?? json["captured"] as? Bool,
             let status = ChargeStatus(JSON: json) else {
                 return nil
         }

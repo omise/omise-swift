@@ -33,6 +33,34 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testCharge2014APIRetrieve() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_57v787rzs4vr0dj1xc0") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.currency.code, "THB")
+                XCTAssertEqual(charge.chargeDescription, "Test API Version 2014-07-27")
+                XCTAssertEqual(charge.id, "chrg_test_57v787rzs4vr0dj1xc0")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_57v787rzs4vr0dj1xc0")
+                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.isPaid, true)
+                XCTAssertEqual(charge.refunded, 0)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_57v787szdbe4b2ala5p")
+                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2017-05-05T08:17:33Z"))
+                XCTAssertEqual(charge.card?.id, "card_test_57v7856t6viu321t7h4")
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testChargeList() {
         let expectation = self.expectation(description: "Charge list")
         
