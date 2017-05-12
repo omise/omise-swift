@@ -112,6 +112,39 @@ public extension Listable where Self: OmiseLocatableObject {
     }
 }
 
+public extension Listable where Self: OmiseLocatableObject & OmiseIdentifiableObject {
+    public static func makeRefreshCurrentDataOperation(list: List<Self>) -> ListEndpoint {
+        let listParams: ListParams
+        
+        if let from = list.data.last?.createdDate, list.total > 0, list.order == .reverseChronological {
+            listParams = ListParams(from: from, to: nil, offset: nil, limit: 100, order: list.order)
+        } else if let to = list.data.first?.createdDate, list.total > 0, list.order == .chronological {
+            listParams = ListParams(from: nil, to: to, offset: nil, limit: 100, order: list.order)
+        } else {
+            listParams = ListParams(from: nil, to: nil, offset: nil, limit: nil, order: list.order)
+        }
+        
+        return ListEndpoint(endpoint: list.endpoint, method: "GET", pathComponents: list.paths, params: listParams)
+    }
+    
+    @discardableResult
+    static func refreshData(list: List<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> ListRequest? {
+        let operation = makeRefreshCurrentDataOperation(list: list)
+        
+        let requestCallback: ListRequest.Callback = { result in
+            switch result {
+            case .success(let result):
+                let refreshedData = list.setList(from: result)
+                callback(.success(refreshedData))
+            case .fail(let error):
+                callback(.fail(error))
+            }
+        }
+        
+        return client.requestToEndpoint(operation, callback: requestCallback)
+    }
+}
+
 extension List where TItem: OmiseResourceObject, TItem: Listable {
     public func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
         TItem.loadNextPage(list: self, using: client, count: count) { (result) in
