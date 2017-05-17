@@ -31,9 +31,9 @@ public class List<TItem: OmiseLocatableObject> {
         self.data = list?.data ?? []
         self.limit = list?.limit ?? 0
         self.total = list?.total ?? 0
-      
+        
         if let order = order {
-          self.order = order
+            self.order = order
         } else if let from = list?.from, let to = list?.to {
             self.order = from.compare(to) == .orderedDescending ? .reverseChronological : .chronological
         } else {
@@ -46,7 +46,7 @@ public class List<TItem: OmiseLocatableObject> {
         loadedIndices = range(fromOffset: offset, limit: list?.data.count ?? 0)
     }
     
-    public func setData(from list: ListProperty<TItem>) -> [TItem] {
+    public func setList(from list: ListProperty<TItem>) -> [TItem] {
         self.data = list.data
         self.limit = list.limit
         self.total = list.total
@@ -57,6 +57,30 @@ public class List<TItem: OmiseLocatableObject> {
         loadedIndices = range(fromOffset: offset, limit: list.data.count)
         
         return list.data
+    }
+    
+    public func setData(from list: ListProperty<TItem>) -> [TItem] {
+        guard limit > 0 && total > 0 else {
+            return setList(from: list)
+        }
+        
+        let updatedData = list.data
+        
+        guard let firstUpdatedItem = updatedData.first, let lastUpdatedItem = updatedData.last else {
+            return []
+        }
+        
+        var indexOfFirstUpdatedItem = self.data.index(where: { $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
+        var indexOfLastUpdatedItem = self.data.index(where: { $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
+        
+        if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
+            swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
+        }
+        
+        let replacingRange = indexOfFirstUpdatedItem..<indexOfLastUpdatedItem
+        self.data[replacingRange] = ArraySlice(list.data)
+        
+        return updatedData
     }
     
     public func clearData() {
@@ -93,8 +117,54 @@ public class List<TItem: OmiseLocatableObject> {
         
         return value.data
     }
+    
+    public func merge(with list: ListProperty<TItem>) -> [TItem] {
+        guard limit > 0 && total > 0 else {
+            return setList(from: list)
+        }
+        
+        let updatedData = list.data
+        
+        guard let firstUpdatedItem = updatedData.first, let lastUpdatedItem = updatedData.last else {
+            return []
+        }
+        
+        var indexOfFirstUpdatedItem = self.data.index(where: { $0.location == firstUpdatedItem.location })
+        var indexOfLastUpdatedItem = self.data.index(where: { $0.location == lastUpdatedItem.location })
+        
+        if let indexOfFirst = indexOfFirstUpdatedItem,
+            let indexOfLast = indexOfLastUpdatedItem,
+            indexOfFirst.distance(to: indexOfLast) < 0 {
+            swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
+        }
+        
+        switch (indexOfFirstUpdatedItem, indexOfLastUpdatedItem) {
+        case (nil, nil):
+            return self.insert(from: list)
+        case (nil, let indexOfLastItem?):
+            // `list` is at the front of the merging list
+            let replacingRange = data.startIndex...indexOfLastItem
+            let newItemsCount = list.data.count - replacingRange.count
+            data[replacingRange] = ArraySlice(list.data)
+            loadedIndices = expand(range: loadedIndices, on: .upper, for: newItemsCount)
+        case (let indexOfFirstItem?, nil):
+            // `list` is at the back of the merging list
+            let replacingRange = indexOfFirstItem..<data.endIndex
+            let newItemsCount = list.data.count - replacingRange.count
+            data[replacingRange] = ArraySlice(list.data)
+            loadedIndices = expand(range: loadedIndices, on: .lower, for: newItemsCount)
+        case (let indexOfFirstItem?, let indexOfLastItem?):
+            // `list` is at the middle of the merging list
+            let replacingRange = indexOfFirstItem...indexOfLastItem
+            let newItemsCount = list.data.count - replacingRange.count
+            data[replacingRange] = ArraySlice(list.data)
+            loadedIndices = expand(range: loadedIndices, on: .upper, for: newItemsCount)
+        }
+        
+        return list.data
+    }
 }
- 
+
 
 func range(fromOffset offset: Int, limit: Int) -> CountableRange<Int> {
     return offset..<(offset + limit)
@@ -135,4 +205,15 @@ extension CountableRange where Bound: Strideable {
         }
     }
 }
+
+
+func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> CountableRange<Int> {
+    switch side {
+    case .lower:
+        return range.lowerBound.advanced(by: -length)..<range.upperBound
+    case .upper:
+        return range.lowerBound..<range.upperBound.advanced(by: length)
+    }
+}
+
 
