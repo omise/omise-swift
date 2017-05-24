@@ -1,13 +1,9 @@
 import Foundation
+import EventKit
 
-
-public enum WeekDay {
-    case sunday
-    case monday
-}
 
 public struct Schedule<Data: Schedulable>: OmiseResourceObject {
-    public enum Status {
+    public enum Status: Equatable {
         case active
         case expiring
         case expired
@@ -15,11 +11,6 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
         case suspended
     }
     
-    public enum Period {
-        case daily
-        case weekly
-        case monthly
-    }
     
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/schedules")
@@ -38,11 +29,11 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
     public let every: Int
     public let period: Period
     
-    public let startDate: Date
-    public let endDate: Date
+    public let startDate: DateComponents
+    public let endDate: DateComponents
     
     public let occurrences: ListProperty<Occurrence<Data>>
-    public let nextOccurrenceDates: [Date]
+    public let nextOccurrenceDates: [DateComponents]
     
     public let parameter: Data.Parameter
 }
@@ -56,6 +47,11 @@ public protocol Schedulable: OmiseIdentifiableObject {
     static var parameterKey: String { get }
 }
 
+extension Schedulable {
+    public static var parameterKey: String {
+        return String(describing: self).lowercased()
+    }
+}
 
 extension Schedule {
     public init?(JSON json: Any) {
@@ -68,13 +64,13 @@ extension Schedule {
         
         guard
             let status = json["status"].flatMap(Schedule.Status.init(JSON:)),
-            let period = json["period"].flatMap(Schedule.Period.init(JSON:)),
+            let period = Period(JSON: json),
             let isDeleted = json["deleted"] as? Bool,
             let every = json["every"] as? Int,
-            let startDate = json["start_date"].flatMap(DateConverter.convert),
-            let endDate = json["end_date"].flatMap(DateConverter.convert),
+            let startDate = json["start_date"].flatMap(DateComponentsConverter.convert),
+            let endDate = json["end_date"].flatMap(DateComponentsConverter.convert),
             let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence<Data>>.init(JSON:)),
-            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateConverter.convert) }),
+            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
             let parameter = json[Data.parameterKey].flatMap(Data.Parameter.init(JSON:)) else {
                 return nil
         }
@@ -112,20 +108,7 @@ extension Schedule.Status {
 }
 
 
-extension Schedule.Period {
-    init?(JSON json: Any) {
-        let status = (json as? String) ?? (json as? [String: Any])?["period"] as? String
-        switch status {
-        case "day"?:
-            self = .daily
-        case "week"?:
-            self = .weekly
-        case "month"?:
-            self = .monthly
-        default:
-            return nil
-        }
-    }
-}
+extension Schedule: Listable {}
+extension Schedule: Retrievable {}
 
 

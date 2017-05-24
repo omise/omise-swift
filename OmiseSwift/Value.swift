@@ -27,3 +27,9 @@ extension Value {
     }
 }
 
+extension Value: Equatable {
+    public static func ==(lhs: Value, rhs: Value) -> Bool {
+        return lhs.currency == rhs.currency && lhs.amount == rhs.amount
+    }
+}
+

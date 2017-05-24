@@ -223,6 +223,24 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
+public struct ChargeSchedulingParameter: SchedulingParameter {
+    public let value: Value
+    public let customerID: String
+    public let cardID: String?
+    
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let value = Value(JSON: json),
+            let customerID = json["customer"] as? String else {
+                return nil
+        }
+        
+        self.value = value
+        self.customerID = customerID
+        self.cardID = json["card"] as? String
+    }
+}
+
 
 extension Charge: Listable {}
 extension Charge: Retrievable {}
@@ -238,6 +256,12 @@ extension Charge: Updatable {
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
+
+extension Charge: Schedulable {
+    public typealias Parameter = ChargeSchedulingParameter
+}
+
+
 
 
 

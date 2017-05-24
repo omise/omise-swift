@@ -24,8 +24,7 @@ public class DateComponentsConverter: Converter {
             scanner.scanString("-", into: nil) &&
             scanner.scanInt(&secondInt) &&
             scanner.scanString("-", into: nil) &&
-            scanner.scanInt(&lastInt) &&
-            scanner.scanString("-", into: nil)
+            scanner.scanInt(&lastInt)
             else {
                 return nil
         }
