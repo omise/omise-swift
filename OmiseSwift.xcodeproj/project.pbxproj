@@ -459,20 +459,20 @@
 				8A3938E51D8174C9007750AA /* List.swift */,
 				8ACB41321E279730001793CD /* ListProperty.swift */,
 				8ACB41121E277607001793CD /* Object.swift */,
+				8ADE88B21ED4619A00239263 /* Occurrence.swift */,
 				8A28BB421E28FDAE00EEBD55 /* OmiseAPIError.swift */,
 				22A0F9951D22372400CA3D35 /* Ordering.swift */,
 				8A075A361DF016C9009143A9 /* Payment.swift */,
 				8ACB413A1E27A36F001793CD /* Recipient.swift */,
 				8ACB41421E27A51A001793CD /* Refund.swift */,
 				2258D8171D23C480006C4149 /* ResourceInfo.swift */,
+				8ADE88AF1ED4459100239263 /* Schedule.swift */,
 				8A4224AA1E4C8F8E00B11AF2 /* Search.swift */,
 				8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */,
 				8A3B90141E360AD30074D6CD /* Token.swift */,
 				8ACB413F1E27A4B6001793CD /* Transaction.swift */,
 				8ACB41381E27A335001793CD /* Transfer.swift */,
 				8ACB41201E277FBB001793CD /* Value.swift */,
-				8ADE88AF1ED4459100239263 /* Schedule.swift */,
-				8ADE88B21ED4619A00239263 /* Occurrence.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";

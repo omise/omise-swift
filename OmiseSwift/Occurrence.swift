@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Occurrence: OmiseResourceObject {
+public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
     
     public enum Status {
         case skipped(String)
@@ -9,7 +9,9 @@ public struct Occurrence: OmiseResourceObject {
         case successful
     }
     
-    public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: Schedule.self, path: "/occurrences")
+    public static var resourceInfo: ResourceInfo {
+        return ResourceInfo(parentType: Schedule<Data>.self, path: "/occurrences")
+    }
     
     public let object: String
     public let location: String
@@ -19,14 +21,14 @@ public struct Occurrence: OmiseResourceObject {
     public let createdDate: Date
     
     
-    public let schedule: DetailProperty<Schedule>
+    public let schedule: DetailProperty<Schedule<Data>>
     public let scheduleDate: Date
     
     public let retryDate: Date
     public let processedDate: Date
     
     public let status: Status
-    
+    public let result: DetailProperty<Data>
     
 }
 
@@ -34,18 +36,19 @@ public struct Occurrence: OmiseResourceObject {
 extension Occurrence {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Occurrence.parseOmiseResource(JSON: json) else {
+            let omiseObjectProperties = Occurrence<Data>.parseOmiseResource(JSON: json) else {
                 return nil
         }
         
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         
         guard
-        let status = Occurrence.Status(JSON: json),
-        let schedule = json["schedule"].flatMap(DetailProperty<Schedule>.init(JSON:)),
-        let scheduleDate = json["schedule_date"].flatMap(DateConverter.convert(fromAttribute:)),
-        let retryDate = json["schedule_date"].flatMap(DateConverter.convert(fromAttribute:)),
-            let processedDate = json["processed_at"].flatMap(DateConverter.convert(fromAttribute:)) else {
+            let status = Occurrence.Status(JSON: json),
+            let schedule = json["schedule"].flatMap(DetailProperty<Schedule<Data>>.init(JSON:)),
+            let scheduleDate = json["schedule_date"].flatMap(DateConverter.convert(fromAttribute:)),
+            let retryDate = json["schedule_date"].flatMap(DateConverter.convert(fromAttribute:)),
+            let processedDate = json["processed_at"].flatMap(DateConverter.convert(fromAttribute:)),
+            let result = json["result"].flatMap(DetailProperty<Data>.init(JSON:)) else {
                 return nil
         }
         
@@ -54,6 +57,7 @@ extension Occurrence {
         self.scheduleDate = scheduleDate
         self.retryDate = retryDate
         self.processedDate = processedDate
+        self.result = result
     }
 }
 

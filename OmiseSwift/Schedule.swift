@@ -6,7 +6,7 @@ public enum WeekDay {
     case monday
 }
 
-public struct Schedule: OmiseResourceObject {
+public struct Schedule<Data: Schedulable>: OmiseResourceObject {
     public enum Status {
         case active
         case expiring
@@ -21,7 +21,9 @@ public struct Schedule: OmiseResourceObject {
         case monthly
     }
     
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/schedules")
+    public static var resourceInfo: ResourceInfo {
+        return ResourceInfo(path: "/schedules")
+    }
     
     public let object: String
     public let location: String
@@ -39,9 +41,19 @@ public struct Schedule: OmiseResourceObject {
     public let startDate: Date
     public let endDate: Date
     
-    public let occurrences: ListProperty<Occurrence>
-    public let nextOccurrences: [Date]
+    public let occurrences: ListProperty<Occurrence<Data>>
+    public let nextOccurrenceDates: [Date]
     
+    public let parameter: Data.Parameter
+}
+
+public protocol SchedulingParameter {
+    init?(JSON: Any)
+}
+
+public protocol Schedulable: OmiseIdentifiableObject {
+    associatedtype Parameter: SchedulingParameter
+    static var parameterKey: String { get }
 }
 
 
@@ -61,10 +73,12 @@ extension Schedule {
             let every = json["every"] as? Int,
             let startDate = json["start_date"].flatMap(DateConverter.convert),
             let endDate = json["end_date"].flatMap(DateConverter.convert),
-            let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence>.init(JSON:)),
-            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateConverter.convert) }) else {
+            let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence<Data>>.init(JSON:)),
+            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateConverter.convert) }),
+            let parameter = json[Data.parameterKey].flatMap(Data.Parameter.init(JSON:)) else {
                 return nil
         }
+        
         self.status = status
         self.isDeleted = isDeleted
         self.period = period
@@ -72,7 +86,8 @@ extension Schedule {
         self.startDate = startDate
         self.endDate = endDate
         self.occurrences = occurrences
-        self.nextOccurrences = nextOccurrences
+        self.nextOccurrenceDates = nextOccurrences
+        self.parameter = parameter
     }
 }
 
