@@ -11,7 +11,6 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
         case suspended
     }
     
-    
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/schedules")
     }
@@ -44,12 +43,20 @@ public protocol SchedulingParameter {
 
 public protocol Schedulable: OmiseIdentifiableObject {
     associatedtype Parameter: SchedulingParameter
+    static func preferredParameterKey(from: [String]) -> String?
     static var parameterKey: String { get }
 }
 
 extension Schedulable {
     public static var parameterKey: String {
         return String(describing: self).lowercased()
+    }
+    
+    public static func preferredParameterKey(from: [String]) -> String? {
+        guard from.contains(self.parameterKey) else {
+            return nil
+        }
+        return parameterKey
     }
 }
 
@@ -71,7 +78,7 @@ extension Schedule {
             let endDate = json["end_date"].flatMap(DateComponentsConverter.convert),
             let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence<Data>>.init(JSON:)),
             let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
-            let parameter = json[Data.parameterKey].flatMap(Data.Parameter.init(JSON:)) else {
+            let parameter = Data.preferredParameterKey(from: Array(json.keys)).flatMap({ json[$0] }).flatMap(Data.Parameter.init(JSON:)) else {
                 return nil
         }
         
@@ -102,6 +109,57 @@ extension Schedule.Status {
         case "suspended"?:
             self = .suspended
         default:
+            return nil
+        }
+    }
+}
+
+
+public struct AnySchedulable: Schedulable, OmiseIdentifiableObject {
+    public enum AnySchedulingParameter: SchedulingParameter {
+        
+        case charge(ChargeSchedulingParameter)
+        case transfer(TransferSchedulingParameter)
+        case other(json: [String: Any])
+        
+        public init?(JSON json: Any) {
+            guard let json = json as? [String: Any] else {
+                return nil
+            }
+            
+            if let chargeParameter = ChargeSchedulingParameter(JSON: json) {
+                self = .charge(chargeParameter)
+            } else if let transferParameter = TransferSchedulingParameter(JSON: json){
+                self = .transfer(transferParameter)
+            } else {
+                self = .other(json: json)
+            }
+        }
+    }
+    
+    public typealias Parameter = AnySchedulingParameter
+    public let id: String
+    public let createdDate: Date
+    public let object: String
+    
+    public let json: [String: Any]
+    
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let omiseProperties = AnySchedulable.parseIdentifiableProperties(JSON: json) else {
+                return nil
+        }
+        
+        (self.object, self.id, self.createdDate) = omiseProperties
+        self.json = json
+    }
+    
+    public static func preferredParameterKey(from: [String]) -> String? {
+        if from.contains(Charge.parameterKey) {
+            return Charge.parameterKey
+        } else if from.contains(Transfer.parameterKey) {
+            return Transfer.parameterKey
+        } else {
             return nil
         }
     }
