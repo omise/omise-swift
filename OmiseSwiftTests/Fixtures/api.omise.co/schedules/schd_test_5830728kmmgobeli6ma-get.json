@@ -1,0 +1,51 @@
+{
+  "object": "schedule",
+  "id": "schd_test_5830728kmmgobeli6ma",
+  "livemode": false,
+  "location": "/schedules/schd_test_5830728kmmgobeli6ma",
+  "status": "active",
+  "deleted": false,
+  "every": 1,
+  "period": "month",
+  "on": {
+    "weekday_of_month": "last_friday"
+  },
+  "in_words": "Every 1 month(s) on the last Friday",
+  "start_date": "2017-05-25",
+  "end_date": "2018-05-25",
+  "charge": {
+    "amount": 8990000,
+    "currency": "thb",
+    "customer": "cust_test_582o6hikunmz90lx0wl",
+    "card": null
+  },
+  "occurrences": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00+00:00",
+    "to": "2017-05-25T07:30:29+00:00",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": null,
+    "location": "/schedules/schd_test_5830728kmmgobeli6ma/occurrences",
+    "data": [
+    
+    ]
+  },
+  "next_occurrences": [
+                       "2017-05-26",
+                       "2017-06-30",
+                       "2017-07-28",
+                       "2017-08-25",
+                       "2017-09-29",
+                       "2017-10-27",
+                       "2017-11-24",
+                       "2017-12-29",
+                       "2018-01-26",
+                       "2018-02-23",
+                       "2018-03-30",
+                       "2018-04-27",
+                       "2018-05-25"
+                       ],
+  "created": "2017-05-25T07:11:21Z"
+}
