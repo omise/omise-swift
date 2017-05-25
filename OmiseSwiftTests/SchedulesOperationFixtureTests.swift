@@ -76,14 +76,17 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 let occurrences = schedule.occurrences
                 XCTAssertEqual(occurrences.total, 2)
-                let firstOccurrence = occurrences.data.first
-                XCTAssertEqual(firstOccurrence?.id, "occu_test_582o6x3smr1taeb7mdg")
-                XCTAssertEqual(firstOccurrence?.schedule.dataID, scheduleTestingID)
-                XCTAssertEqual(firstOccurrence?.scheduleDate, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
-                XCTAssertEqual(firstOccurrence?.status, .successful)
-                XCTAssertEqual(firstOccurrence?.processedDate, DateConverter.convert(fromAttribute: "2017-05-25T01:30:07Z"))
-                XCTAssertEqual(firstOccurrence?.result.dataID, "chrg_test_582wuxps5hp238fh2lb")
-                XCTAssertEqual(firstOccurrence?.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:43:45Z"))
+                if let firstOccurrence = occurrences.data.first {
+                XCTAssertEqual(firstOccurrence.id, "occu_test_582o6x3smr1taeb7mdg")
+                XCTAssertEqual(firstOccurrence.schedule.dataID, scheduleTestingID)
+                XCTAssertEqual(firstOccurrence.scheduleDate, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
+                XCTAssertEqual(firstOccurrence.status, .successful)
+                XCTAssertEqual(firstOccurrence.processedDate, DateConverter.convert(fromAttribute: "2017-05-25T01:30:07Z"))
+                XCTAssertEqual(firstOccurrence.result.dataID, "chrg_test_582wuxps5hp238fh2lb")
+                XCTAssertEqual(firstOccurrence.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:43:45Z"))
+                } else {
+                    XCTFail("Failed to parse occurrences")
+                }
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -221,6 +224,54 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    
+    func testListSchedule() {
+        let expectation = self.expectation(description: "List Schedule result")
+        
+        let request = Schedule<AnySchedulable>.list(using: testClient) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(schedules):
+                XCTAssertEqual(schedules.total, 8)
+                XCTAssertEqual(schedules.data.count, 8)
+                
+                guard let schedule = schedules.data.first else {
+                    XCTFail("Cannot parse schedule from the list API")
+                    return
+                }
+                
+                let gregorianCalendar = Calendar(identifier: .gregorian)
+                XCTAssertEqual(schedule.id, "schd_test_582o4mb9rnji2q1pdty")
+                XCTAssertEqual(schedule.location, "/schedules/schd_test_582o4mb9rnji2q1pdty")
+                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:37:13Z"))
+                XCTAssertEqual(schedule.status, Schedule<AnySchedulable>.Status.deleted)
+                XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([1, 27])))
+                XCTAssertEqual(schedule.every, 1)
+                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
+                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
+                
+                guard case .transfer(let parameter) = schedule.parameter else {
+                    XCTFail("Cannot parse schedule parameter")
+                    return
+                }
+                
+                if case .percentageOfBalance(let percentage) = parameter.amount {
+                    XCTAssertEqual(percentage, 50)
+                } else {
+                    XCTFail("Wrong Transfer amount parsed")
+                }
+                XCTAssertEqual(parameter.recipientID, "recp_test_54oojsyzyqdswyjcmsp")
+                
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+ 
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
 
