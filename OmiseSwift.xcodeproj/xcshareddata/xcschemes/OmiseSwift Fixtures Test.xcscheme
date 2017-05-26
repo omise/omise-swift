@@ -45,6 +45,9 @@
                   Identifier = "ConfigTest">
                </Test>
                <Test
+                  Identifier = "FixtureTestCase">
+               </Test>
+               <Test
                   Identifier = "LastDigitsTest">
                </Test>
                <Test
@@ -52,6 +55,9 @@
                </Test>
                <Test
                   Identifier = "LiveTest">
+               </Test>
+               <Test
+                  Identifier = "OmiseTestCase">
                </Test>
                <Test
                   Identifier = "RecipientOperationTest">
@@ -67,6 +73,9 @@
                </Test>
                <Test
                   Identifier = "TransferOperationsTest">
+               </Test>
+               <Test
+                  Identifier = "URLEncoderTest">
                </Test>
             </SkippedTests>
          </TestableReference>
