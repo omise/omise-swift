@@ -48,9 +48,6 @@
                   Identifier = "FixtureTestCase">
                </Test>
                <Test
-                  Identifier = "LastDigitsTest">
-               </Test>
-               <Test
                   Identifier = "LinkOperationTest">
                </Test>
                <Test
@@ -73,9 +70,6 @@
                </Test>
                <Test
                   Identifier = "TransferOperationsTest">
-               </Test>
-               <Test
-                  Identifier = "URLEncoderTest">
                </Test>
             </SkippedTests>
          </TestableReference>
