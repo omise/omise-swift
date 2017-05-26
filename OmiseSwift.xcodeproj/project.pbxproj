@@ -145,6 +145,7 @@
 		8ADE88B11ED4459100239263 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88AF1ED4459100239263 /* Schedule.swift */; };
 		8ADE88B31ED4619A00239263 /* Occurrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88B21ED4619A00239263 /* Occurrence.swift */; };
 		8ADE88B41ED4619A00239263 /* Occurrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88B21ED4619A00239263 /* Occurrence.swift */; };
+		8AE11AF81ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE11AF71ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift */; };
 		8AE84C471E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
 		8AE84C481E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
 		8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
@@ -258,6 +259,7 @@
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		8ADE88AF1ED4459100239263 /* Schedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		8ADE88B21ED4619A00239263 /* Occurrence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Occurrence.swift; sourceTree = "<group>"; };
+		8AE11AF71ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountAndBalanceOperationsTest.swift; sourceTree = "<group>"; };
 		8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
 		8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFieldConverter.swift; sourceTree = "<group>"; };
@@ -415,10 +417,10 @@
 				229873591CCE0B5A00970F8C /* Fixtures */,
 				8A07D2FE1D7436830030B68D /* ChargesOperationFixtureTests.swift */,
 				8A2698A41D74417800515A0A /* DisputeOperationFixtureTests.swift */,
-				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
-				8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */,
 				8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */,
+				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
 				8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */,
+				8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */,
 			);
 			name = "Fixture Tests";
 			sourceTree = "<group>";
@@ -426,6 +428,7 @@
 		8A07D2FD1D742B580030B68D /* Live Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8AE11AF71ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift */,
 				8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */,
 				8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */,
 				8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */,
@@ -800,6 +803,7 @@
 			files = (
 				8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */,
 				8A07D2FB1D741F430030B68D /* TransferOperationFixtureTests.swift in Sources */,
+				8AE11AF81ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift in Sources */,
 				8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */,
 				8A2698A61D74417800515A0A /* DisputeOperationFixtureTests.swift in Sources */,
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,

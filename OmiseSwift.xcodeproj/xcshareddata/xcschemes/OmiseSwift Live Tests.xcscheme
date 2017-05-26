@@ -45,6 +45,18 @@
                   Identifier = "DisputeOperationFixtureTests">
                </Test>
                <Test
+                  Identifier = "FixtureTestCase">
+               </Test>
+               <Test
+                  Identifier = "LinkOperationFixtureTest">
+               </Test>
+               <Test
+                  Identifier = "LiveTest">
+               </Test>
+               <Test
+                  Identifier = "OmiseTestCase">
+               </Test>
+               <Test
                   Identifier = "RefundOperationFixtureTests">
                </Test>
                <Test
