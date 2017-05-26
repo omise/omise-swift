@@ -14,6 +14,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(dispute):
                 XCTAssertEqual(dispute.value.amount, 100000)
+                XCTAssertEqual(dispute.message, "A dispute for testing purpose")
             case let .fail(error):
                 XCTFail("\(error)")
             }

@@ -70,9 +70,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(chargesList):
                 XCTAssertNotNil(chargesList.data)
+                XCTAssertEqual(chargesList.data.count, 40)
                 let chargeSampleData = chargesList.data.first
                 XCTAssertNotNil(chargeSampleData)
-                XCTAssertEqual(chargeSampleData?.value.amount, 100000)
+                XCTAssertEqual(chargeSampleData?.value.amount, 8990000)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -104,14 +105,14 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         
-        let updateParams = UpdateChargeParams(chargeDescription: "Hello")
+        let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)")
         
         let request = Charge.update(using: testClient, id: chargeTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.chargeDescription, "Hello")
+                XCTAssertEqual(charge.chargeDescription, "Charge for order 3947 (XXL)")
             case let .fail(error):
                 XCTFail("\(error)")
             }

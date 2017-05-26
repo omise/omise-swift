@@ -14,7 +14,7 @@
       "amount": 100000,
       "currency": "thb",
       "status": "open",
-      "message": null,
+      "message": "A dispute for testing purpose",
       "charge": "chrg_test_5089odjlzg9j7tw4i1q",
       "created": "2015-06-02T10:22:32Z"
     }
