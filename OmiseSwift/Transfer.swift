@@ -174,6 +174,71 @@ public struct TransferFilterParams: OmiseFilterParams {
     }
 }
 
+public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
+    public enum Amount {
+        case value(Value)
+        case percentageOfBalance(Int)
+    }
+    
+    public let recipientID: String
+    public let amount: Amount
+    
+    public init?(JSON json: Any) {
+        guard let json = json as? [String: Any],
+            let recipientID = json["recipient"] as? String else {
+                return nil
+        }
+        
+        let value = Value(JSON: json)
+        let percentageOfBalance = json["percentage_of_balance"] as? Int
+        
+        let amount: Amount
+        switch (percentageOfBalance, value) {
+        case (let percentage?, nil) where 1...100 ~= percentage:
+            amount = .percentageOfBalance(percentage)
+        case (nil, let value?):
+            amount = .value(value)
+        default:
+            return nil
+        }
+        
+        self.amount = amount
+        self.recipientID = recipientID
+    }
+    
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func ==(lhs: TransferSchedulingParameter, rhs: TransferSchedulingParameter) -> Bool {
+        return lhs.amount == rhs.amount && lhs.recipientID == rhs.recipientID
+    }
+}
+
+extension TransferSchedulingParameter.Amount: Equatable {
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func ==(lhs: TransferSchedulingParameter.Amount, rhs: TransferSchedulingParameter.Amount) -> Bool {
+        switch (lhs, rhs) {
+        case (.value(let lhsValue), .value(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.percentageOfBalance(let lhsPercentage), .percentageOfBalance(let rhsPercentage)):
+            return lhsPercentage == rhsPercentage
+        default:
+            return false
+        }
+    }
+}
 
 extension Transfer: Listable {}
 extension Transfer: Retrievable {}
@@ -190,5 +255,9 @@ extension Transfer: Destroyable {}
 
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams
+}
+
+extension Transfer: Schedulable {
+    public typealias Parameter = TransferSchedulingParameter
 }
 

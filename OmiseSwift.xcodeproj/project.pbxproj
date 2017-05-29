@@ -51,6 +51,10 @@
 		8A3B90161E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
 		8A4224AB1E4C8F8E00B11AF2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4224AA1E4C8F8E00B11AF2 /* Search.swift */; };
 		8A4224AC1E4C8F8E00B11AF2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4224AA1E4C8F8E00B11AF2 /* Search.swift */; };
+		8A4469D21ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */; };
+		8A4469D31ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */; };
+		8A4469D51ED5E13D00F07334 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D41ED5E13D00F07334 /* Period.swift */; };
+		8A4469D61ED5E13D00F07334 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D41ED5E13D00F07334 /* Period.swift */; };
 		8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98C1D2160F900CA3D35 /* Creatable.swift */; };
 		8A50C5061E2E250800EC9407 /* Destroyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4E1D22412A00A62F2C /* Destroyable.swift */; };
 		8A50C5081E2E250800EC9407 /* Retrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9881D215D3700CA3D35 /* Retrievable.swift */; };
@@ -137,6 +141,10 @@
 		8ACD573E1E2E570600FEE5A0 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACD573C1E2E570600FEE5A0 /* Balance.swift */; };
 		8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
 		8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
+		8ADE88B01ED4459100239263 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88AF1ED4459100239263 /* Schedule.swift */; };
+		8ADE88B11ED4459100239263 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88AF1ED4459100239263 /* Schedule.swift */; };
+		8ADE88B31ED4619A00239263 /* Occurrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88B21ED4619A00239263 /* Occurrence.swift */; };
+		8ADE88B41ED4619A00239263 /* Occurrence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADE88B21ED4619A00239263 /* Occurrence.swift */; };
 		8AE84C471E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
 		8AE84C481E2F6A1300A3BD56 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */; };
 		8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
@@ -224,6 +232,8 @@
 		8A3938E51D8174C9007750AA /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		8A3B90141E360AD30074D6CD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		8A4224AA1E4C8F8E00B11AF2 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesOperationFixtureTests.swift; sourceTree = "<group>"; };
+		8A4469D41ED5E13D00F07334 /* Period.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		8A60792F1EB1E395005684CC /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		8A6079351EB2033B005684CC /* PublicKeyEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicKeyEndpoint.swift; sourceTree = "<group>"; };
@@ -251,6 +261,8 @@
 		8ACD573C1E2E570600FEE5A0 /* Balance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
 		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
+		8ADE88AF1ED4459100239263 /* Schedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
+		8ADE88B21ED4619A00239263 /* Occurrence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Occurrence.swift; sourceTree = "<group>"; };
 		8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
 		8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFieldConverter.swift; sourceTree = "<group>"; };
@@ -416,6 +428,7 @@
 				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
 				8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */,
 				8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */,
+				8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */,
 			);
 			name = "Fixture Tests";
 			sourceTree = "<group>";
@@ -453,12 +466,15 @@
 				8A3938E51D8174C9007750AA /* List.swift */,
 				8ACB41321E279730001793CD /* ListProperty.swift */,
 				8ACB41121E277607001793CD /* Object.swift */,
+				8ADE88B21ED4619A00239263 /* Occurrence.swift */,
 				8A28BB421E28FDAE00EEBD55 /* OmiseAPIError.swift */,
 				22A0F9951D22372400CA3D35 /* Ordering.swift */,
 				8A075A361DF016C9009143A9 /* Payment.swift */,
+				8A4469D41ED5E13D00F07334 /* Period.swift */,
 				8ACB413A1E27A36F001793CD /* Recipient.swift */,
 				8ACB41421E27A51A001793CD /* Refund.swift */,
 				2258D8171D23C480006C4149 /* ResourceInfo.swift */,
+				8ADE88AF1ED4459100239263 /* Schedule.swift */,
 				8A4224AA1E4C8F8E00B11AF2 /* Search.swift */,
 				8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */,
 				8A3B90141E360AD30074D6CD /* Token.swift */,
@@ -664,6 +680,8 @@
 				8ACB41511E28A3C2001793CD /* Customer.swift in Sources */,
 				8ACB415E1E28A3EC001793CD /* Currency.swift in Sources */,
 				8ACB41561E28A3C2001793CD /* Dispute.swift in Sources */,
+				8A4469D61ED5E13D00F07334 /* Period.swift in Sources */,
+				8ADE88B11ED4459100239263 /* Schedule.swift in Sources */,
 				8A28BB431E28FDAE00EEBD55 /* OmiseAPIError.swift in Sources */,
 				8A028B381E2CBABF0008E010 /* Link.swift in Sources */,
 				8A84EF761E2E27C90041082E /* List.swift in Sources */,
@@ -686,6 +704,7 @@
 				8A061A9F1E2E307D0025EC14 /* DateComponentsConverter.swift in Sources */,
 				8A6079371EB2033B005684CC /* PublicKeyEndpoint.swift in Sources */,
 				8AF9D8031E2C942A00F10869 /* EnumConverter.swift in Sources */,
+				8ADE88B41ED4619A00239263 /* Occurrence.swift in Sources */,
 				8ACB415A1E28A3C2001793CD /* Recipient.swift in Sources */,
 				8A50C5091E2E250800EC9407 /* Searchable.swift in Sources */,
 				8AF9D8021E2C8FBE00F10869 /* LastDigitsConverter.swift in Sources */,
@@ -725,6 +744,8 @@
 				8ACD57111E2E3A9600FEE5A0 /* Tool.swift in Sources */,
 				8ACD57341E2E3A9600FEE5A0 /* SingletonRetrievable.swift in Sources */,
 				8ACD572D1E2E3A9600FEE5A0 /* APIClient.swift in Sources */,
+				8A4469D51ED5E13D00F07334 /* Period.swift in Sources */,
+				8ADE88B01ED4459100239263 /* Schedule.swift in Sources */,
 				8ACD572C1E2E3A9600FEE5A0 /* Object.swift in Sources */,
 				8ACD57161E2E3A9600FEE5A0 /* Dispute.swift in Sources */,
 				8ACD57321E2E3A9600FEE5A0 /* Updatable.swift in Sources */,
@@ -747,6 +768,7 @@
 				8ACD57281E2E3A9600FEE5A0 /* EnumConverter.swift in Sources */,
 				8A6079361EB2033B005684CC /* PublicKeyEndpoint.swift in Sources */,
 				8ACD572A1E2E3A9600FEE5A0 /* Searchable.swift in Sources */,
+				8ADE88B31ED4619A00239263 /* Occurrence.swift in Sources */,
 				8ACD57351E2E3A9600FEE5A0 /* ResourceInfo.swift in Sources */,
 				8ACD570F1E2E3A9600FEE5A0 /* APIError.swift in Sources */,
 				8ACD57121E2E3A9600FEE5A0 /* AttributesSerializer.swift in Sources */,
@@ -775,6 +797,7 @@
 			files = (
 				2298733B1CCDF99700970F8C /* JSONTest.swift in Sources */,
 				8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
+				8A4469D31ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */,
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 			);
@@ -799,6 +822,7 @@
 				98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */,
 				8A07D2F81D73F8370030B68D /* FixtureTestCase.swift in Sources */,
 				8A07D3001D7436830030B68D /* ChargesOperationFixtureTests.swift in Sources */,
+				8A4469D21ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */,
 				8A2BCAC41E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A07D2F51D73F5040030B68D /* FixtureClient.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,

@@ -42,10 +42,28 @@
                   Identifier = "ChargeOperationsTest">
                </Test>
                <Test
+                  Identifier = "ConfigTest">
+               </Test>
+               <Test
+                  Identifier = "LastDigitsTest">
+               </Test>
+               <Test
+                  Identifier = "LinkOperationTest">
+               </Test>
+               <Test
                   Identifier = "LiveTest">
                </Test>
                <Test
+                  Identifier = "RecipientOperationTest">
+               </Test>
+               <Test
+                  Identifier = "RequestTest">
+               </Test>
+               <Test
                   Identifier = "SearchOperationTest">
+               </Test>
+               <Test
+                  Identifier = "TokenOperationTest">
                </Test>
                <Test
                   Identifier = "TransferOperationsTest">
