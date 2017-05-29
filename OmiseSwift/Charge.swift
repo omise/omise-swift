@@ -227,6 +227,7 @@ public struct ChargeSchedulingParameter: SchedulingParameter {
     public let value: Value
     public let customerID: String
     public let cardID: String?
+    public let chargeDescription: String?
     
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
@@ -238,6 +239,7 @@ public struct ChargeSchedulingParameter: SchedulingParameter {
         self.value = value
         self.customerID = customerID
         self.cardID = json["card"] as? String
+        self.chargeDescription = json["description"] as? String
     }
 }
 
