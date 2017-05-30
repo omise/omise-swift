@@ -28,6 +28,8 @@
 		8A07D2F81D73F8370030B68D /* FixtureTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07D2F61D73F8370030B68D /* FixtureTestCase.swift */; };
 		8A07D2FB1D741F430030B68D /* TransferOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */; };
 		8A07D3001D7436830030B68D /* ChargesOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07D2FE1D7436830030B68D /* ChargesOperationFixtureTests.swift */; };
+		8A1039651EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1039641EDD5FD70035B2EF /* ScheduleOperationsTest.swift */; };
+		8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1039641EDD5FD70035B2EF /* ScheduleOperationsTest.swift */; };
 		8A242A4E1E2E0A6A0068BB5D /* OmiseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298738A1CCF5D9500970F8C /* OmiseError.swift */; };
 		8A242A4F1E2E0B020068BB5D /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298735D1CCE15D400970F8C /* APIError.swift */; };
 		8A242A521E2E1BAA0068BB5D /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A242A511E2E1BAA0068BB5D /* APIEndpoint.swift */; };
@@ -218,6 +220,7 @@
 		8A07D2F61D73F8370030B68D /* FixtureTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixtureTestCase.swift; sourceTree = "<group>"; };
 		8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A07D2FE1D7436830030B68D /* ChargesOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargesOperationFixtureTests.swift; sourceTree = "<group>"; };
+		8A1039641EDD5FD70035B2EF /* ScheduleOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleOperationsTest.swift; sourceTree = "<group>"; };
 		8A242A511E2E1BAA0068BB5D /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefundOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A2698A41D74417800515A0A /* DisputeOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisputeOperationFixtureTests.swift; sourceTree = "<group>"; };
@@ -432,6 +435,7 @@
 				8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */,
 				8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */,
 				8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */,
+				8A1039641EDD5FD70035B2EF /* ScheduleOperationsTest.swift */,
 				8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */,
 				8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */,
 				98256FF11D225E3000F91436 /* TransferOperationsTest.swift */,
@@ -793,6 +797,7 @@
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
 				8ACBB54B1ED8274200F1DA36 /* LastDigitsTest.swift in Sources */,
 				8ACBB54D1ED8277300F1DA36 /* URLEncoderTest.swift in Sources */,
+				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -810,6 +815,7 @@
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,
 				8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
+				8A1039651EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				8ACBB54C1ED8277100F1DA36 /* URLEncoderTest.swift in Sources */,
 				8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */,
 				98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */,

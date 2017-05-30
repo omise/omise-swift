@@ -60,6 +60,9 @@
                   Identifier = "RefundOperationFixtureTests">
                </Test>
                <Test
+                  Identifier = "SchedulesOperationFixtureTests">
+               </Test>
+               <Test
                   Identifier = "TransferOperationFixtureTests">
                </Test>
             </SkippedTests>
