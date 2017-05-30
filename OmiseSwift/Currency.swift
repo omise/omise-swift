@@ -7,8 +7,11 @@ public enum Currency {
     case thb
     case jpy
     case idr
+    case sgd
+    case usd
+    case gbp
+    case eur
     case custom(code: String, factor: Int)
-    
     
     public var code: String {
         switch self {
@@ -18,6 +21,14 @@ public enum Currency {
             return "JPY"
         case .idr:
             return "IDR"
+        case .sgd:
+            return "SGD"
+        case .usd:
+            return "USD"
+        case .gbp:
+            return "GBP"
+        case .eur:
+            return "EUR"
         case.custom(code: let code, factor: _):
             return code
         }
@@ -26,7 +37,7 @@ public enum Currency {
     /// A convertion factor represents how much Omise amount equals to 1 unit of this currency. eg. THB's factor is equals to 100.
     public var factor: Int {
         switch self {
-        case .thb, .idr:
+        case .thb, .idr, .sgd, .usd, .gbp, .eur:
             return centBasedCurrencyFactor
         case .jpy:
             return identicalBasedCurrencyFactor
@@ -51,6 +62,14 @@ public enum Currency {
             self = .jpy
         case "IDR":
             self = .idr
+        case "SGD":
+            self = .sgd
+        case "USD":
+            self = .usd
+        case "GBP":
+            self = .gbp
+        case "EUR":
+            self = .eur
         default: return nil
         }
     }
