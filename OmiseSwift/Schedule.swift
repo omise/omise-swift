@@ -77,7 +77,7 @@ extension Schedule {
             let startDate = json["start_date"].flatMap(DateComponentsConverter.convert),
             let endDate = json["end_date"].flatMap(DateComponentsConverter.convert),
             let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence<Data>>.init(JSON:)),
-            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
+            let nextOccurrences = (json["next_occurrence_dates"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
             let parameter = Data.preferredParameterKey(from: Array(json.keys)).flatMap({ json[$0] }).flatMap(Data.Parameter.init(JSON:)) else {
                 return nil
         }
