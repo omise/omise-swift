@@ -49,5 +49,19 @@ extension Charge {
         let endpoint = self.listScheduleEndpointWithParams(params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
+    
+    @discardableResult
+    public static func listSchedule(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (Failable<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+        let endpoint = self.listScheduleEndpointWithParams(listParams)
+        
+        let requestCallback: ScheduleListRequest.Callback = { result in
+            let callbackResult = result.map({
+                List(endpoint: endpoint.endpoint, paths: endpoint.pathComponents, order: listParams?.order, list: $0)
+            })
+            callback(callbackResult)
+        }
+        
+        return client.requestToEndpoint(endpoint, callback: requestCallback)
+    }
 }
 

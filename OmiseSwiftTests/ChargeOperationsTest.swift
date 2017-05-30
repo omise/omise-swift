@@ -50,7 +50,7 @@ class ChargeOperationsTest: LiveTest {
                 XCTAssertNotNil(transfersList.data)
                 XCTAssertEqual(transfersList.loadedIndices, 0..<20)
                 
-                Charge.loadNextPage(list: transfersList, using: self.testClient, callback: { (afterResult) in
+                transfersList.loadNextPage(using: self.testClient, callback: { (afterResult) in
                     defer { secondExpectation.fulfill() }
                     
                     switch afterResult {

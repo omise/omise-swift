@@ -17,6 +17,20 @@ extension Customer {
         let endpoint = self.listScheduleEndpointChargingCustomerWith(customerID: customerID, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
+    
+    @discardableResult
+    public static func listScheduleChargingCustomer(using client: APIClient, customerID: String, listParams: ListParams? = nil, callback: @escaping (Failable<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+        let endpoint = self.listScheduleEndpointChargingCustomerWith(customerID: customerID, params: listParams)
+        
+        let requestCallback: ScheduleListRequest.Callback = { result in
+            let callbackResult = result.map({
+                List(endpoint: endpoint.endpoint, paths: endpoint.pathComponents, order: listParams?.order, list: $0)
+            })
+            callback(callbackResult)
+        }
+        
+        return client.requestToEndpoint(endpoint, callback: requestCallback)
+    }
 }
 
 
