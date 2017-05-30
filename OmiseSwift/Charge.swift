@@ -223,7 +223,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
-public struct ChargeSchedulingParameter: SchedulingParameter {
+public struct ChargeSchedulingParameter: SchedulingParameter, APIParams {
     public let value: Value
     public let customerID: String
     public let cardID: String?
@@ -240,6 +240,23 @@ public struct ChargeSchedulingParameter: SchedulingParameter {
         self.customerID = customerID
         self.cardID = json["card"] as? String
         self.chargeDescription = json["description"] as? String
+    }
+    
+    public init(value: Value, customerID: String, cardID: String?, description: String?) {
+        self.value = value
+        self.customerID = customerID
+        self.cardID = cardID
+        self.chargeDescription = description
+    }
+    
+    public var json: JSONAttributes {
+        return Dictionary.makeFlattenDictionaryFrom([
+            "currency": value.currency.code,
+            "amount": value.amount,
+            "customer": customerID,
+            "card": cardID ?? "",
+            "description": chargeDescription,
+            ])
     }
 }
 
@@ -259,8 +276,9 @@ extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
 
-extension Charge: Schedulable {
+extension Charge: Schedulable, APISchedulable {
     public typealias Parameter = ChargeSchedulingParameter
+    public typealias ScheduleDataParams = ChargeSchedulingParameter
 }
 
 
