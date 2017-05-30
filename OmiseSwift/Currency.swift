@@ -76,9 +76,14 @@ public enum Currency {
 }
 
 
-extension Currency: Equatable {
+extension Currency: Hashable {
     public static func ==(lhs: Currency, rhs: Currency) -> Bool {
         return lhs.code == rhs.code
+    }
+    
+    
+    public var hashValue: Int {
+        return ~code.hashValue
     }
 }
 
