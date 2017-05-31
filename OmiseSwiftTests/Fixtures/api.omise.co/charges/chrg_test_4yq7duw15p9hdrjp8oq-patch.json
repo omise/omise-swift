@@ -8,7 +8,9 @@
   "description": "Charge for order 3947 (XXL)",
   "capture": true,
   "authorized": true,
-  "captured": true,
+  "capture": true,
+  "paid": true,
+  "status": "successful",
   "transaction": "trxn_test_4yq7duwb9jts1vxgqua",
   "refunded": 10000,
   "refunds": {
@@ -19,17 +21,17 @@
     "limit": 20,
     "total": 1,
     "data": [
-      {
-        "object": "refund",
-        "id": "rfnd_test_4yqmv79ahghsiz23y3c",
-        "location": "/charges/chrg_test_4yq7duw15p9hdrjp8oq/refunds/rfnd_test_4yqmv79ahghsiz23y3c",
-        "amount": 10000,
-        "currency": "thb",
-        "charge": "chrg_test_4yq7duw15p9hdrjp8oq",
-        "transaction": "trxn_test_4yqmv79fzpy0gmz5mmq",
-        "created": "2015-01-16T07:23:45Z"
-      }
-    ],
+             {
+             "object": "refund",
+             "id": "rfnd_test_4yqmv79ahghsiz23y3c",
+             "location": "/charges/chrg_test_4yq7duw15p9hdrjp8oq/refunds/rfnd_test_4yqmv79ahghsiz23y3c",
+             "amount": 10000,
+             "currency": "thb",
+             "charge": "chrg_test_4yq7duw15p9hdrjp8oq",
+             "transaction": "trxn_test_4yqmv79fzpy0gmz5mmq",
+             "created": "2015-01-16T07:23:45Z"
+             }
+             ],
     "location": "/charges/chrg_test_4yq7duw15p9hdrjp8oq/refunds"
   },
   "failure_code": null,

@@ -3,7 +3,21 @@ import Omise
 
 
 private let refundTestingID = "rfnd_test_4yqmv79ahghsiz23y3c"
-private let charge = Charge(JSON: "chrg_test_4yq7duw15p9hdrjp8oq")
+private let charge: Charge = {
+    let bundle = Bundle(for: OmiseTestCase.self)
+    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/charges/chrg_test_4yq7duw15p9hdrjp8oq-get", ofType: "json") else {
+        XCTFail("could not load fixtures.")
+        preconditionFailure()
+    }
+    
+    guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
+            XCTFail("could not load fixtures at path: \(path)")
+            preconditionFailure()
+    }
+    
+    let json = try! JSONSerialization.jsonObject(with: data)
+    return Charge(JSON: json)!
+}()
 
 class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundRetrieve() {

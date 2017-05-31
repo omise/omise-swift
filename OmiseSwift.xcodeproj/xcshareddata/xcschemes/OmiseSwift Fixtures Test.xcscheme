@@ -39,19 +39,25 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "AccountAndBalanceOperationsTest">
+               </Test>
+               <Test
                   Identifier = "ChargeOperationsTest">
                </Test>
                <Test
                   Identifier = "ConfigTest">
                </Test>
                <Test
-                  Identifier = "LastDigitsTest">
+                  Identifier = "FixtureTestCase">
                </Test>
                <Test
                   Identifier = "LinkOperationTest">
                </Test>
                <Test
                   Identifier = "LiveTest">
+               </Test>
+               <Test
+                  Identifier = "OmiseTestCase">
                </Test>
                <Test
                   Identifier = "RecipientOperationTest">

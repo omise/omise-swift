@@ -99,7 +99,7 @@ public class List<TItem: OmiseLocatableObject> {
         let total = value.total
         self.total = total
         
-        let valuesRange = range(fromOffset: offset, limit: min(limit, value.data.count))
+        let valuesRange = range(fromOffset: offset, limit: Swift.min(limit, value.data.count))
         self.limit = limit
         
         guard let side = loadedIndices.side(from: valuesRange) else {
@@ -162,6 +162,24 @@ public class List<TItem: OmiseLocatableObject> {
         }
         
         return list.data
+    }
+}
+
+extension List: RandomAccessCollection {
+    public subscript(index: Array<TItem>.Index) -> TItem {
+        return data[index]
+    }
+    
+    public subscript(bounds: Range<Array<TItem>.Index>) -> ArraySlice<TItem> {
+        return data[bounds]
+    }
+    
+    public var startIndex: (Array<TItem>.Index) {
+        return data.startIndex
+    }
+    
+    public var endIndex: (Array<TItem>.Index) {
+        return data.endIndex
     }
 }
 
