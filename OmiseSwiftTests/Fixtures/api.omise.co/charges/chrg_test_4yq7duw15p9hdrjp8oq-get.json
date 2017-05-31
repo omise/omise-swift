@@ -6,6 +6,8 @@
   "amount": 100000,
   "currency": "thb",
   "description": "Charge for order 3947",
+  "metadata": {
+  },
   "capture": true,
   "authorized": true,
   "capture": true,

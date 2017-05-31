@@ -105,7 +105,15 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         
-        let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)")
+        let metadata: [String: Any] = [
+            "user-id": "a-user-id",
+            "user": [
+                "name": "John Appleseed",
+                "tel": "08-xxxx-xxxx",
+            ]
+        ]
+        
+        let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)", metadata: metadata)
         
         let request = Charge.update(using: testClient, id: chargeTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
@@ -113,6 +121,9 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.chargeDescription, "Charge for order 3947 (XXL)")
+                XCTAssertEqual(charge.metadata["user-id"] as? String, "a-user-id")
+                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["name"] as? String, "John Appleseed")
+                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["tel"] as? String, "08-xxxx-xxxx")
             case let .fail(error):
                 XCTFail("\(error)")
             }
