@@ -6,13 +6,6 @@
   "amount": 100000,
   "currency": "thb",
   "description": "Charge for order 3947 (XXL)",
-  "metadata": {
-    "user-id": "a-user-id",
-    "user": {
-      "name": "John Appleseed",
-      "tel": "08-xxxx-xxxx"
-    }
-  },
   "capture": true,
   "authorized": true,
   "capture": true,
