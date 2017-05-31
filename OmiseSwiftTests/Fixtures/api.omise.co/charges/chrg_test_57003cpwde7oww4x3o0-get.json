@@ -6,6 +6,8 @@
   "amount": 100000,
   "currency": "thb",
   "description": null,
+  "metadata": {
+  },
   "status": "pending",
   "capture": true,
   "authorized": false,
