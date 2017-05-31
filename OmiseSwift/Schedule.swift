@@ -37,6 +37,12 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
     public let parameter: Data.Parameter
 }
 
+extension Calendar {
+    public static var scheduleAPICalendar: Calendar {
+        return Calendar(identifier: .gregorian)
+    }
+}
+
 public protocol SchedulingParameter {
     init?(JSON: Any)
 }
@@ -45,6 +51,10 @@ public protocol Schedulable: OmiseIdentifiableObject {
     associatedtype Parameter: SchedulingParameter
     static func preferredParameterKey(from: [String]) -> String?
     static var parameterKey: String { get }
+}
+
+public protocol APISchedulable: Schedulable {
+    associatedtype ScheduleDataParams: APIParams
 }
 
 extension Schedulable {
@@ -77,7 +87,7 @@ extension Schedule {
             let startDate = json["start_date"].flatMap(DateComponentsConverter.convert),
             let endDate = json["end_date"].flatMap(DateComponentsConverter.convert),
             let occurrences = json["occurrences"].flatMap(ListProperty<Occurrence<Data>>.init(JSON:)),
-            let nextOccurrences = (json["next_occurrences"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
+            let nextOccurrences = (json["next_occurrence_dates"] as? [Any]).map({ $0.flatMap(DateComponentsConverter.convert) }),
             let parameter = Data.preferredParameterKey(from: Array(json.keys)).flatMap({ json[$0] }).flatMap(Data.Parameter.init(JSON:)) else {
                 return nil
         }
@@ -117,7 +127,6 @@ extension Schedule.Status {
 
 public struct AnySchedulable: Schedulable, OmiseIdentifiableObject {
     public enum AnySchedulingParameter: SchedulingParameter {
-        
         case charge(ChargeSchedulingParameter)
         case transfer(TransferSchedulingParameter)
         case other(json: [String: Any])
@@ -168,5 +177,61 @@ public struct AnySchedulable: Schedulable, OmiseIdentifiableObject {
 
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
+
+
+public struct ScheduleParams<Data: APISchedulable>: APIParams {
+    public let every: Int
+    public let period: Period
+    public let endDate: DateComponents
+    public let startDate: DateComponents?
+    
+    public let scheduleData: Data.ScheduleDataParams
+    
+    public var json: JSONAttributes {
+        let scheduleJSON = Dictionary.makeFlattenDictionaryFrom([
+            "end_date": DateComponentsConverter.convert(fromValue: endDate),
+            "start_date": startDate.flatMap(DateComponentsConverter.convert(fromValue:)),
+            "every": every,
+            ])
+        let periodJSON = period.json
+        let scheduleDataJSON = ["charge": scheduleData.json] as [String: Any]
+        
+        return scheduleJSON
+            .merging(periodJSON)
+            .merging(scheduleDataJSON)
+    }
+}
+
+/*
+ // Make Schedule conforms to `Creatable` protocol when Conditional Conformances is ready in Swift.
+ // For now we need to make this workaround to avoid the compiler error in Swift
+extension Schedule: Creatable {
+    public typealias CreateParams = ScheduleParams<Data>
+}
+*/
+
+extension Schedule where Data: APISchedulable {
+    public typealias CreateEndpoint = APIEndpoint<Schedule>
+    public typealias CreateRequest = APIRequest<Schedule>
+    
+    public static func createEndpointWith(parent: OmiseResourceObject?, params: ScheduleParams<Data>) -> CreateEndpoint {
+        return CreateEndpoint(
+            method: "POST",
+            pathComponents: Schedule.makeResourcePathsWithParent(parent),
+            params: params
+        )
+    }
+    
+    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: ScheduleParams<Data>, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+        guard Schedule.verifyParent(parent) else {
+            return nil
+        }
+        
+        let endpoint = self.createEndpointWith(parent: parent, params: params)
+        return client.requestToEndpoint(endpoint, callback: callback)
+    }
+}
+
+
 
 

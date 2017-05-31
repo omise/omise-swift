@@ -43,7 +43,7 @@
            "location": "/schedules/schd_test_582o4mb9rnji2q1pdty/occurrences",
            "data": []
            },
-           "next_occurrences": [],
+           "next_occurrence_dates": [],
            "created": "2017-05-24T10:37:13Z"
            },
            {
@@ -103,7 +103,7 @@
                     }
                     ]
            },
-           "next_occurrences": [
+           "next_occurrence_dates": [
                                 "2017-05-26",
                                 "2017-05-27",
                                 "2017-05-28",
@@ -171,7 +171,7 @@
            "location": "/schedules/schd_test_582oau15y3okc3bxy2b/occurrences",
            "data": []
            },
-           "next_occurrences": [],
+           "next_occurrence_dates": [],
            "created": "2017-05-24T10:54:52Z"
            },
            {
@@ -208,7 +208,7 @@
            "location": "/schedules/schd_test_582pszbthdrs2use6mr/occurrences",
            "data": []
            },
-           "next_occurrences": [
+           "next_occurrence_dates": [
                                 "2017-05-26",
                                 "2017-06-02",
                                 "2017-06-09",
@@ -280,7 +280,7 @@
            "location": "/schedules/schd_test_58306a2njevec7qiqfz/occurrences",
            "data": []
            },
-           "next_occurrences": [],
+           "next_occurrence_dates": [],
            "created": "2017-05-25T07:09:08Z"
            },
            {
@@ -321,7 +321,7 @@
            "location": "/schedules/schd_test_58306nhkn5goe12i4sx/occurrences",
            "data": []
            },
-           "next_occurrences": [
+           "next_occurrence_dates": [
                                 "2017-05-25",
                                 "2017-05-26",
                                 "2017-05-29",
@@ -387,7 +387,7 @@
            "location": "/schedules/schd_test_5830728kmmgobeli6ma/occurrences",
            "data": []
            },
-           "next_occurrences": [
+           "next_occurrence_dates": [
                                 "2017-05-26",
                                 "2017-06-30",
                                 "2017-07-28",
@@ -436,7 +436,7 @@
            "location": "/schedules/schd_test_5830784ijsp6ybzh161/occurrences",
            "data": []
            },
-           "next_occurrences": [
+           "next_occurrence_dates": [
                                 "2017-06-05",
                                 "2017-07-03",
                                 "2017-08-07",

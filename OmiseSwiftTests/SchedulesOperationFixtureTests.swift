@@ -274,7 +274,40 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
  
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-
+    }
+    
+    
+    func testCreateChargeSchedule() {
+        let expectation = self.expectation(description: "Create Schedule result")
+        
+        let parameter = ChargeSchedulingParameter(value: Value(amount: 36_900_00, currency: .thb), customerID: "cust_test_582o6hikunmz90lx0wl", cardID: nil, description: nil)
+        let params = ScheduleParams<Charge>(every: 1, period: .monthly(.daysOfMonth([1, 16])), endDate: DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2018, month: 5, day: 29), startDate: nil, scheduleData: parameter)
+        let request = Schedule<Charge>.create(using: testClient, params: params) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(schedule):
+                let gregorianCalendar = Calendar(identifier: .gregorian)
+                
+                XCTAssertEqual(schedule.id, "schd_test_584zfswqzu5m40sycxc")
+                XCTAssertEqual(schedule.location, "/schedules/schd_test_584zfswqzu5m40sycxc")
+                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-30T08:37:10Z"))
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1, 16])))
+                XCTAssertEqual(schedule.every, 1)
+                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 30))
+                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 20))
+                
+                XCTAssertEqual(schedule.parameter.value.amount, 36_900_00)
+                XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
+                XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
     }
 }
 

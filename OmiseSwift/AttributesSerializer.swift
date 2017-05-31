@@ -54,6 +54,8 @@ fileprivate func encodePair(_ parentKey: String?) -> (String, Any?) -> [URLQuery
         
         if let attributes = value as? JSONAttributes {
             return encodeDict(attributes, parentKey: nestedKey)
+        } else if let attributes = value as? [Any] {
+            return attributes.map({ URLQueryItem(name: nestedKey + "[]", value: encodeScalar($0)) })
         } else {
             return [URLQueryItem(name: nestedKey, value: encodeScalar(value))]
         }

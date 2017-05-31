@@ -69,18 +69,22 @@ public extension Listable where Self: OmiseLocatableObject {
         
         return client.requestToEndpoint(endpoint, callback: requestCallback)
     }
-    
-    public static func makeLoadNextPageOperation(list: List<Self>, count: Int?) -> ListEndpoint {
-        let listParams = ListParams(from: nil, to: nil, offset: list.loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? list.limit, order: list.order)
+}
+
+
+public extension List where TItem: OmiseLocatableObject & Listable {
+    public func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
+        let listParams = ListParams(from: nil, to: nil, offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
-        return ListEndpoint(endpoint: list.endpoint, method: "GET", pathComponents: list.paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
     }
     
     @discardableResult
-    static func loadNextPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<ListEndpoint.Result>? {
-        let operation = makeLoadNextPageOperation(list: list, count: count)
+    func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
+        let operation = makeLoadNextPageOperation(count: count)
         
-        let requestCallback: ListRequest.Callback = { result in
+        let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
+            guard let list = self else { return }
             let callbackResult = result.map({ list.insert(from: $0) })
             callback(callbackResult)
         }
@@ -88,17 +92,18 @@ public extension Listable where Self: OmiseLocatableObject {
         return client.requestToEndpoint(operation, callback: requestCallback)
     }
     
-    public static func makeLoadPreviousPageOperation(list: List<Self>, count: Int?) -> ListEndpoint {
-        let listParams = ListParams(from: nil, to: nil, offset: list.loadedFirstIndex.advanced(by: -list.limit), limit: count ?? list.limit, order: list.order)
+    public func makeLoadPreviousPageOperation(count: Int?) -> TItem.ListEndpoint {
+        let listParams = ListParams(from: nil, to: nil, offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
         
-        return ListEndpoint(endpoint: list.endpoint, method: "GET", pathComponents: list.paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
     }
     
     @discardableResult
-    static func loadPreviousPage(list: List<Self>, using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<ListEndpoint.Result>? {
-        let operation = makeLoadPreviousPageOperation(list: list, count: count)
+    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
+        let operation = makeLoadPreviousPageOperation(count: count)
         
-        let requestCallback: ListRequest.Callback = { result in
+        let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
+            guard let list = self else { return }
             switch result {
             case .success(let result):
                 let insertedData = list.insert(from: result)
@@ -112,26 +117,27 @@ public extension Listable where Self: OmiseLocatableObject {
     }
 }
 
-public extension Listable where Self: OmiseLocatableObject & OmiseIdentifiableObject {
-    public static func makeRefreshCurrentDataOperation(list: List<Self>) -> ListEndpoint {
+public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObject & Listable {
+    public func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
         let listParams: ListParams
         
-        if let from = list.data.last?.createdDate, list.total > 0, list.order == .reverseChronological {
-            listParams = ListParams(from: from, to: nil, offset: nil, limit: 100, order: list.order)
-        } else if let to = list.data.first?.createdDate, list.total > 0, list.order == .chronological {
-            listParams = ListParams(from: nil, to: to, offset: nil, limit: 100, order: list.order)
+        if let from = data.last?.createdDate, total > 0, order == .reverseChronological {
+            listParams = ListParams(from: from, to: nil, offset: nil, limit: 100, order: order)
+        } else if let to = data.first?.createdDate, total > 0, order == .chronological {
+            listParams = ListParams(from: nil, to: to, offset: nil, limit: 100, order: order)
         } else {
-            listParams = ListParams(from: nil, to: nil, offset: nil, limit: nil, order: list.order)
+            listParams = ListParams(from: nil, to: nil, offset: nil, limit: nil, order: order)
         }
         
-        return ListEndpoint(endpoint: list.endpoint, method: "GET", pathComponents: list.paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
     }
     
     @discardableResult
-    static func refreshData(list: List<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> ListRequest? {
-        let operation = makeRefreshCurrentDataOperation(list: list)
+    func refreshData(using client: APIClient, callback: @escaping (Failable<[TItem]>) -> Void) -> TItem.ListRequest? {
+        let operation = makeRefreshCurrentDataOperation()
         
-        let requestCallback: ListRequest.Callback = { result in
+        let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
+            guard let list = self else { return }
             switch result {
             case .success(let result):
                 let refreshedData = list.setList(from: result)
@@ -145,9 +151,9 @@ public extension Listable where Self: OmiseLocatableObject & OmiseIdentifiableOb
     }
 }
 
-extension List where TItem: OmiseResourceObject, TItem: Listable {
+public extension List where TItem: OmiseResourceObject & Listable {
     public func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        TItem.loadNextPage(list: self, using: client, count: count) { (result) in
+        loadNextPage(using: client, count: count) { (result) in
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
@@ -158,7 +164,7 @@ extension List where TItem: OmiseResourceObject, TItem: Listable {
     }
     
     public func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        TItem.loadPreviousPage(list: self, using: client, count: count) { (result) in
+        loadPreviousPage(using: client, count: count) { (result) in
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
@@ -168,4 +174,5 @@ extension List where TItem: OmiseResourceObject, TItem: Listable {
         }
     }
 }
+
 
