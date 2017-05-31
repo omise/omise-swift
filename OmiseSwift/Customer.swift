@@ -15,8 +15,6 @@ public struct Customer: OmiseResourceObject {
     
     public var customerDescription: String?
     public var cards: ListProperty<Card>
-    
-    public let metadata: [String: Any]
 }
 
 
@@ -38,8 +36,6 @@ extension Customer {
         self.cards = cards
         self.defaultCard = json["default_card"].flatMap(DetailProperty<Card>.init(JSON:))
         self.customerDescription = json["description"] as? String
-        
-        self.metadata = json["metadata"] as? [String: Any] ?? [:]
     }
 }
 
@@ -47,22 +43,19 @@ public struct CustomerParams: APIParams {
     public var email: String?
     public var customerDescription: String?
     public var cardID: String?
-    public var metadata: [String: Any]?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "email": email,
             "description": customerDescription,
-            "card": cardID,
-            "metadata": metadata
+            "card": cardID
             ])
     }
     
-    public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil, metadata: [String: Any]? = nil) {
+    public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil) {
         self.email = email
         self.customerDescription = customerDescription
         self.cardID = cardID
-        self.metadata = metadata
     }
 }
 

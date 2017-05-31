@@ -69,8 +69,6 @@ public struct Charge: OmiseResourceObject {
     
     public let returnURL: URL?
     public let authorizedURL: URL?
-    
-    public let metadata: [String: Any]
 }
 
 extension Charge {
@@ -104,8 +102,6 @@ extension Charge {
         self.refunds = json["refunds"].flatMap(ListProperty<Refund>.init(JSON:))
         
         self.chargeDescription = json["description"] as? String
-        
-        self.metadata = json["metadata"] as? [String: Any] ?? [:]
         
         let payment: Payment?
         let card: Card?
@@ -143,8 +139,6 @@ public struct ChargeParams: APIParams {
     public var isAutoCapture: Bool?
     public var returnURL: URL?
     
-    public var metadata: [String: Any]?
-    
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "customer": customerID,
@@ -154,35 +148,30 @@ public struct ChargeParams: APIParams {
             "description": chargeDescription,
             "capture": isAutoCapture,
             "return_uri": returnURL?.absoluteString,
-            "metadata": metadata
             ])
     }
     
-    public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil) {
         self.value = value
         self.chargeDescription = chargeDescription
         self.customerID = customerID
         self.cardID = cardID
         self.isAutoCapture = isAutoCapture
         self.returnURL = returnURL
-        self.metadata = metadata
     }
 }
 
 public struct UpdateChargeParams: APIParams {
     public var chargeDescription: String?
-    public var metadata: [String: Any]?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "description": chargeDescription,
-            "metadata": metadata
             ])
     }
     
-    public init(chargeDescription: String? = nil, metadata: [String: Any]? = nil) {
+    public init(chargeDescription: String?) {
         self.chargeDescription = chargeDescription
-        self.metadata = metadata
     }
 }
 

@@ -6,8 +6,6 @@
   "amount": 100000,
   "currency": "thb",
   "description": "Test API Version 2014-07-27",
-  "metadata": {
-  },
   "status": "successful",
   "capture": true,
   "authorized": true,
