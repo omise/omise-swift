@@ -17,6 +17,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(transfer.value.amount, 192188)
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
                 XCTAssertEqual(transfer.paidDate, Date(timeIntervalSinceReferenceDate: 502046909.0))
+                XCTAssertFalse(transfer.failFast)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -47,7 +48,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams(amount: 96094)
+        let createParams = TransferParams(amount: 96094, failFast: true)
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -55,6 +56,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfer):
                 XCTAssertNotNil(transfer)
+                XCTAssertTrue(transfer.failFast)
             case let .fail(error):
                 XCTFail("\(error)")
             }
