@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Occurrence<Data: Schedulable>: OmiseLocatableObject, OmiseIdentifiableObject {
+public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
     
     public enum Status {
         case skipped(String)
@@ -17,6 +17,7 @@ public struct Occurrence<Data: Schedulable>: OmiseLocatableObject, OmiseIdentifi
     public let location: String
     
     public let id: String
+    public let isLive: Bool
     public let createdDate: Date
     
     public let schedule: DetailProperty<Schedule<Data>>
@@ -26,19 +27,18 @@ public struct Occurrence<Data: Schedulable>: OmiseLocatableObject, OmiseIdentifi
     public let processedDate: Date
     
     public let status: Status
-    public let result: DetailProperty<Data>
-    
+    public let result: DetailProperty<Data>    
 }
 
 
 extension Occurrence {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties = Occurrence<Data>.parseOmiseProperties(JSON: json) else {
+            let omiseObjectProperties = Occurrence<Data>.parseOmiseResource(JSON: json) else {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         
         guard
             let status = Occurrence.Status(JSON: json),
