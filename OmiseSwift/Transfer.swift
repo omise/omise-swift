@@ -20,7 +20,7 @@ public struct Transfer: OmiseResourceObject {
     public var createdDate: Date
     
     public var status: TransferStatus
-    public let failFast: Bool
+    public let shouldFailFast: Bool
     
     public let bankAccount: BankAccount
     
@@ -76,7 +76,7 @@ extension Transfer {
             self.status = .pending
         }
         
-        self.failFast = json["fail_fast"] as? Bool ?? false
+        self.shouldFailFast = json["fail_fast"] as? Bool ?? false
     }
 }
 

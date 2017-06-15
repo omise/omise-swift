@@ -17,7 +17,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(transfer.value.amount, 192188)
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
                 XCTAssertEqual(transfer.paidDate, Date(timeIntervalSinceReferenceDate: 502046909.0))
-                XCTAssertFalse(transfer.failFast)
+                XCTAssertFalse(transfer.shouldFailFast)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -56,7 +56,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfer):
                 XCTAssertNotNil(transfer)
-                XCTAssertTrue(transfer.failFast)
+                XCTAssertTrue(transfer.shouldFailFast)
             case let .fail(error):
                 XCTFail("\(error)")
             }
