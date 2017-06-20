@@ -1,7 +1,7 @@
 import Foundation
 
 
-public protocol OmiseObject {
+public protocol OmiseObject: Decodable {
     var object: String { get }
     
     init?(JSON: Any)

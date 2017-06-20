@@ -10,7 +10,12 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     public let id: String
     public var createdDate: Date
     
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let currency: Currency
     
     public let charge: DetailProperty<Charge>
     public let transaction: DetailProperty<Transaction>
@@ -23,13 +28,15 @@ extension Refund {
                 return nil
         }
         
-        guard let value = Value(JSON: json), let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
+        guard let amount = json["amount"] as? Int64, let currency = (json["currency"] as? String).flatMap(Currency.init(code:)),
+            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
             let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)) else {
                 return nil
         }
         (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
         
-        self.value = value
+        self.amount = amount
+        self.currency = currency
         self.charge = charge
         self.transaction = transaction
     }

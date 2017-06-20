@@ -16,7 +16,7 @@ public struct Customer: OmiseResourceObject {
     public var customerDescription: String?
     public var cards: ListProperty<Card>
     
-    public let metadata: [String: Any]
+    public let metadata: Dictionary<String, Any>
 }
 
 
@@ -39,7 +39,34 @@ extension Customer {
         self.defaultCard = json["default_card"].flatMap(DetailProperty<Card>.init(JSON:))
         self.customerDescription = json["description"] as? String
         
-        self.metadata = json["metadata"] as? [String: Any] ?? [:]
+        self.metadata = json["metadata"] as? [String: Decodable & Any] ?? [:]
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created_date"
+        case defaultCard = "default_card"
+        case email
+        case customerDescription = "description"
+        case cards
+        case metadata
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        defaultCard = try container.decodeIfPresent(DetailProperty<Card>.self, forKey: .defaultCard)
+        email = try container.decode(String.self, forKey: .email)
+        customerDescription = try container.decode(String.self, forKey: .customerDescription)
+        cards = try container.decode(ListProperty<Card>.self, forKey: .cards)
+        metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
     }
 }
 

@@ -6,7 +6,7 @@ public enum Period {
     case weekly(Set<Weekday>)
     case monthly(MonthlyPeriodRule)
     
-    public enum Weekday: Equatable {
+    public enum Weekday: String, Equatable, Decodable {
         case monday
         case tuesday
         case wednesday
@@ -66,6 +66,98 @@ extension Period: Equatable {
         }
     }
 }
+
+extension Period: Decodable {
+    private enum CodingKeys: String, CodingKey {
+        case period
+        case on
+        enum RuleCodingKeys: String, CodingKey {
+            case weekdays
+            case daysOfMonth = "days_of_month"
+            case weekdayOfMonth = "weekday_of_month"
+        }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let period = try container.decode(String.self, forKey: .period)
+        
+        let rules = try container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+        let onWeekdays = try rules.decodeIfPresent(Array<Weekday>.self, forKey: .weekdays)
+        let onMonthDays = try rules.decodeIfPresent(Array<MonthlyPeriodRule.DayOfMonth>.self, forKey: .daysOfMonth)
+        let onWeekdayOfMonth: (MonthlyPeriodRule.Ordinal, Weekday)?
+        
+        do {
+            if let onWeekdaysOfMonthValue = try rules.decodeIfPresent(String.self, forKey: .weekdayOfMonth) {
+                let splitted = onWeekdaysOfMonthValue.components(separatedBy: "_")
+                if splitted.count == 2,
+                    let ordinal = splitted.first.flatMap(MonthlyPeriodRule.Ordinal.init(ordinalString:)),
+                    let weekday = splitted.last.flatMap(Weekday.init(weekdayString:)) {
+                    onWeekdayOfMonth = (ordinal, weekday)
+                } else {
+                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+                }
+            } else {
+                onWeekdayOfMonth = nil
+            }
+        }
+        
+        let monthlyRule: MonthlyPeriodRule?
+        switch (onMonthDays, onWeekdayOfMonth) {
+        case (let onMonthDays?, nil):
+            monthlyRule = MonthlyPeriodRule.daysOfMonth(Set(onMonthDays))
+        case (nil, let onWeekdayOfMonth?):
+            monthlyRule = MonthlyPeriodRule.weekdayOfMonth(ordinal: onWeekdayOfMonth.0, weekday: onWeekdayOfMonth.1)
+        default:
+            monthlyRule = nil
+        }
+        
+        switch (period, onWeekdays, monthlyRule) {
+        case ("day", nil, nil):
+            self = .daily
+        case ("week", let onWeekdays?, nil):
+            self = .weekly(Set(onWeekdays))
+        case ("month", nil, let monthlyRule?):
+            self = .monthly(monthlyRule)
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+        }
+    }
+}
+
+extension Period.MonthlyPeriodRule.DayOfMonth: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(Int.self)
+        guard 1...28 ~= value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+        }
+        self.day = value
+    }
+}
+
+extension Period.MonthlyPeriodRule.Ordinal: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        switch value.lowercased() {
+        case "1st":
+            self = .first
+        case "2nd":
+            self = .second
+        case "3rd":
+            self = .third
+        case "4th":
+            self = .fourth
+        case "last":
+            self = .last
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+        }
+    }
+}
+
 
 extension Period {
     init?(JSON json: Any) {

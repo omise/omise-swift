@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum RecipientType: String {
+public enum RecipientType: String, Decodable {
     case individual
     case corporation
 }

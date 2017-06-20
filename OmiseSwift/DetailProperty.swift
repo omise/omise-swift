@@ -13,6 +13,17 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
     }
 }
 
+extension DetailProperty: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = .loaded(try container.decode(T.self))
+        } catch DecodingError.typeMismatch {
+            self = .notLoaded(try container.decode(String.self))
+        }
+    }
+}
+
 
 extension DetailProperty {
     public init?(JSON json: Any) {

@@ -29,8 +29,17 @@ public struct Transfer: OmiseResourceObject {
     public let isPaid: Bool
     public let paidDate: Date?
     
-    public let value: Value
-    public let fee: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public var feeValue: Value {
+        return Value(amount: fee, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let fee: Int64
+    public let currency: Currency
     
     public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
@@ -56,15 +65,16 @@ extension Transfer {
         self.bankAccount = bankAccount
         self.isSent = isSent
         self.isPaid = isPaid
-        self.value = value
-        self.fee = Value(amount: fee, currency: currency)
+        self.amount = value.amount
+        self.currency = currency
+        self.fee = fee
         self.recipient = recipient
         
         self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
         self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
         self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
         
-        let failure = (json["failure_code"] as? String).flatMap(TransferFailure.init(code:))
+        let failure = (json["failure_code"] as? String).map(TransferFailure.init(code:))
         switch (isPaid, isSent, failure) {
         case (_, _, let failure?):
             self.status = .failed(failure)
@@ -77,6 +87,58 @@ extension Transfer {
         }
         
         self.shouldFailFast = json["fail_fast"] as? Bool ?? false
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case bankAccount = "bank_account"
+        case shouldFailFast = "fail_fast"
+        case fee
+        case amount
+        case currency
+        case isSent = "sent"
+        case isPaid = "paid"
+        case sentDate = "sent_at"
+        case paidDate = "paid_at"
+        case recipient
+        case transaction
+        case failureCode = "failure_code"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        bankAccount = try container.decode(BankAccount.self, forKey: .bankAccount)
+        shouldFailFast = try container.decode(Bool.self, forKey: .shouldFailFast)
+        fee = try container.decode(Int64.self, forKey: .fee)
+        amount = try container.decode(Int64.self, forKey: .amount)
+        currency = try container.decode(Currency.self, forKey: .currency)
+        isSent = try container.decode(Bool.self, forKey: .isSent)
+        isPaid = try container.decode(Bool.self, forKey: .isPaid)
+        sentDate = try container.decode(Date.self, forKey: .sentDate)
+        paidDate = try container.decode(Date.self, forKey: .paidDate)
+        recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
+        transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
+        
+        let failureCode = try container.decodeIfPresent(TransferFailure.self, forKey: .failureCode)
+        switch (isPaid, isSent, failureCode) {
+        case (_, _, let failure?):
+            self.status = .failed(failure)
+        case (true, true, nil):
+            self.status = .paid
+        case (false, true, nil):
+            self.status = .sent
+        default:
+            self.status = .pending
+        }
     }
 }
 
@@ -183,7 +245,7 @@ public struct TransferFilterParams: OmiseFilterParams {
 public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
     public enum Amount {
         case value(Value)
-        case percentageOfBalance(Int)
+        case percentageOfBalance(Double)
     }
     
     public let recipientID: String
@@ -196,7 +258,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
         }
         
         let value = Value(JSON: json)
-        let percentageOfBalance = json["percentage_of_balance"] as? Int
+        let percentageOfBalance = json["percentage_of_balance"] as? Double
         
         let amount: Amount
         switch (percentageOfBalance, value) {
@@ -210,6 +272,30 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
         
         self.amount = amount
         self.recipientID = recipientID
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case recipientID = "recipient"
+        case percentageOfBalance = "percentage_of_balance"
+        case amount
+        case currency
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        recipientID = try container.decode(String.self, forKey: .recipientID)
+        let percentageOfBalance = try container.decodeIfPresent(Double.self, forKey: .percentageOfBalance)
+        let amount = try container.decodeIfPresent(Int64.self, forKey: .amount)
+        let currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
+        
+        switch (percentageOfBalance, amount, currency) {
+        case (let percentageOfBalance?, nil, _) where 0.0...100 ~= percentageOfBalance:
+            self.amount = .percentageOfBalance(percentageOfBalance)
+        case (nil, let amount?, let currency?):
+            self.amount = .value(Value(amount: amount, currency: currency))
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid requesting transfer amount"))
+        }
     }
     
     /// Returns a Boolean value indicating whether two values are equal.

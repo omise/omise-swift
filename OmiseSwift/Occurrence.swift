@@ -56,6 +56,52 @@ extension Occurrence {
         self.result = result
         self.retryDate = json["retry_date"].flatMap(DateComponentsConverter.convert(fromAttribute:))
     }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created_date"
+        case isLive = "livemode"
+        case schedule
+        case status
+        case message
+        case scheduleDate = "schedule_at"
+        case processedDate = "processed_at"
+        case result
+        case retryDate = "retry_date"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)
+        scheduleDate = try container.decode(DateComponents.self, forKey: .scheduleDate)
+        processedDate = try container.decode(Date.self, forKey: .processedDate)
+        result = try container.decode(DetailProperty<Data>.self, forKey: .result)
+        
+        retryDate = try container.decodeIfPresent(DateComponents.self, forKey: .retryDate)
+        
+        let status = try container.decode(String.self, forKey: .status)
+        let message = try container.decodeIfPresent(String.self, forKey: .message)
+        
+        switch (status, message) {
+        case ("successful", nil):
+            self.status = .successful
+        case ("failed", let message?):
+            self.status = .failed(message)
+        case ("skipped", let message?):
+            self.status = .skipped(message)
+        default:
+            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid Occurrence status")
+            throw DecodingError.dataCorrupted(context)
+        }
+    }
 }
 
 

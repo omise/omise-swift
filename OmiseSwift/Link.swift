@@ -11,7 +11,11 @@ public struct Link: OmiseResourceObject {
     public let isLive: Bool
     public let createdDate: Date
     
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    public let amount: Int64
+    public let currency: Currency
     public let isUsed: Bool
     public let isMultiple: Bool
     public let title: String
@@ -37,7 +41,8 @@ extension Link {
         }
         
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.value = value
+        self.amount = value.amount
+        self.currency = value.currency
         self.isUsed = isUsed
         self.isMultiple = isMultiple
         self.title = title

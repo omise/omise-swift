@@ -71,22 +71,5 @@ extension Dictionary {
         }
         return dictionary
     }
-    
-    mutating func merge<S: Sequence>(_ other: S) where S.Iterator.Element == (key: Key, value: Value) {
-        for (key, value) in other {
-            self[key] = value
-        }
-    }
-    
-    
-    func merging<S: Sequence>(_ other: S) -> [Key: Value]
-        where S.Iterator.Element == (key: Key, value: Value) {
-            var merging = self
-            for (key, value) in other {
-                merging[key] = value
-            }
-            return merging
-    }
-    
 }
 

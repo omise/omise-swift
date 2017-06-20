@@ -44,7 +44,12 @@ public struct Charge: OmiseResourceObject {
     public let createdDate: Date
     
     public var status: ChargeStatus
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let currency: Currency
     
     public var chargeDescription: String?
     
@@ -88,7 +93,8 @@ extension Charge {
         
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.status = status
-        self.value = value
+        self.amount = value.amount
+        self.currency = value.currency
         self.isAuthorized = isAuthorized
         self.isAutoCapture = isAutoCapture
         self.isPaid = isPaid
@@ -132,6 +138,110 @@ extension Charge {
         } else {
             return nil
         }
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case status
+        case failureCode = "failure_code"
+        case amount
+        case currency
+        case chargeDescription = "description"
+        case isAutoCapture = "capture"
+        case isAuthorized = "authrozed"
+        case isPaid = "paid"
+        case isCaptured = "captured"
+        case transaction
+        case card
+        case offsite
+        case refunded
+        case refunds
+        case customer
+        case ipAddress = "ip"
+        case dispute
+        case returnURL = "return_uri"
+        case authorizedURL = "authorized_uri"
+        case metadata
+        
+        case sourceOfFund = "source_of_fund"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        amount = try container.decode(Int64.self, forKey: .amount)
+        currency = try container.decode(Currency.self, forKey: .currency)
+        chargeDescription = try container.decode(String.self, forKey: .chargeDescription)
+        isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
+        isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
+        isPaid = try container.decode(Bool.self, forKey: .isPaid)
+        transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
+        refunded = try container.decodeIfPresent(Int64.self, forKey: .refunded)
+        refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
+        customer = try container.decodeIfPresent(DetailProperty<Customer>.self, forKey: .customer)
+        ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress)
+        dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
+        returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
+        authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
+        metadata = try container.decode([String: Any].self, forKey: .metadata)
+        
+        let statusValue = try container.decode(String.self, forKey: .status)
+        let failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
+        
+        let status: ChargeStatus
+        switch (statusValue, failureCode) {
+        case ("failed", let failureCode?):
+            status = .failed(failureCode)
+        case ("successful", nil):
+            status = .successful
+        case ("pending", nil):
+            status = .pending
+        case ("reversed", nil):
+            status = .reversed
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge status"))
+        }
+        
+        self.status = status
+        
+        let payment: Payment?
+        let card: Card?
+        let offsite: OffsitePayment?
+        
+        let sourceOfFund = try container.decodeIfPresent(String.self, forKey: .sourceOfFund)
+        
+        switch sourceOfFund {
+        case "offsite"?:
+            card = nil
+            let offsiteValue = try container.decode(String.self, forKey: .offsite)
+            offsite = OffsitePaymentConverter.convert(fromAttribute: offsiteValue)
+            payment = offsite.map(Payment.offsite)
+        case "card"?, nil:
+            offsite = nil
+            card = try container.decode(Card.self, forKey: .card)
+            payment = card.map(Payment.card)
+        default:
+            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
+            throw DecodingError.dataCorrupted(context)
+        }
+        
+        if let payment = payment {
+            self.payment = payment
+            self.card = card
+            self.offsite = offsite
+        } else {
+            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
+            throw DecodingError.dataCorrupted(context)
+        }
+        
     }
 }
 
@@ -259,6 +369,25 @@ public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
         self.customerID = customerID
         self.cardID = cardID
         self.chargeDescription = description
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case customerID = "customer"
+        case amount
+        case currency
+        case cardID = "card"
+        case chargeDescription = "descriptionf"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        cardID = try container.decodeIfPresent(String.self, forKey: .cardID)
+        let amount = try container.decode(Int64.self, forKey: .amount)
+        let currency = try container.decode(Currency.self, forKey: .currency)
+        
+        self.value = Value(amount: amount, currency: currency)
+        customerID = try container.decode(String.self, forKey: .customerID)
+        chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
     }
     
     public var json: JSONAttributes {

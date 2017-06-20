@@ -8,8 +8,17 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
     public let location: String
     public let isLive: Bool
     
-    public var available: Value
-    public var total: Value
+    public let currency: Currency
+    public var available: Int64
+    public var total: Int64
+    
+    public var availableValue: Value {
+        return Value(amount: available, currency: currency)
+    }
+    
+    public var totalValue: Value {
+        return Value(amount: total, currency: currency)
+    }
 }
 
 extension Balance {
@@ -26,8 +35,9 @@ extension Balance {
         
         (self.object, self.location) = omiseLocationObject
         self.isLive = isLive
-        self.available = Value(amount: available, currency: currency)
-        self.total = Value(amount: total, currency: currency)
+        self.available = available
+        self.total = total
+        self.currency = currency
     }
 }
 

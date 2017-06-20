@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum ChargeFailure {
+public enum ChargeFailure: Decodable {
     
     // Credit Card Failure
     /// Insufficient funds in the account or the card has reached the credit limit.
@@ -99,7 +99,6 @@ public enum ChargeFailure {
             self = .failedFraudCheck
         case "invalid_account_number":
             self = .invalidAccountNumber
-            
         case "duplicate_reference_number":
             self = .duplicateReferenceNumber
         case "cannot_connect_to_ibanking":
@@ -131,6 +130,10 @@ public enum ChargeFailure {
             self = .other(code)
         }
     }
+    
+    public init(from decoder: Decoder) throws {
+        self.init(code: try decoder.singleValueContainer().decode(String.self))
+    }
 }
 
 
@@ -144,7 +147,7 @@ extension ChargeFailure {
 }
 
 
-public enum TransferFailure {
+public enum TransferFailure: Decodable {
     /// Bank rejected the transfer request
     case sentFailed
     /// Bank cannot process request for transferring to bank account
@@ -163,7 +166,7 @@ public enum TransferFailure {
         }
     }
     
-    public init?(code: String) {
+    public init(code: String) {
         switch code {
         case "transfer_send_failure":
             self = .sentFailed
@@ -173,15 +176,19 @@ public enum TransferFailure {
             self = .other(code)
         }
     }
+    
+    public init(from decoder: Decoder) throws {
+        self.init(code: try decoder.singleValueContainer().decode(String.self))
+    }
 }
 
 
 extension TransferFailure {
     init?(JSON json: Any) {
-        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String, let failure = TransferFailure.init(code: code) else {
+        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String else {
             return nil
         }
-        self = failure
+        self = TransferFailure.init(code: code)
     }
 }
 

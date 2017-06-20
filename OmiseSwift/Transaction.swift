@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum TransactionType: String {
+public enum TransactionType: String, Codable {
     case debit
     case credit
 }
@@ -17,7 +17,12 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
     public var createdDate: Date
     
     public let type: TransactionType
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let currency: Currency
     
     public let transferableDate: Date
 }
@@ -35,9 +40,21 @@ extension Transaction {
         
         (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
         
-        self.value = value
+        self.currency = value.currency
+        self.amount = value.amount
         self.type = type
         self.transferableDate = transferableDate
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created_date"
+        case type
+        case currency
+        case amount
+        case transferableDate = "transferable_date"
     }
 }
 

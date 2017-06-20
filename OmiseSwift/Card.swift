@@ -1,6 +1,6 @@
 import Foundation
 
-public enum CardBrand: String {
+public enum CardBrand: String, Codable {
     case visa = "Visa"
     case masterCard = "MasterCard"
     case jcb = "JCB"
@@ -11,7 +11,7 @@ public enum CardBrand: String {
 }
 
 
-public enum CardFinancing: String {
+public enum CardFinancing: String, Codable {
     case credit
     case debit
 }
@@ -20,7 +20,6 @@ public enum CardFinancing: String {
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
-    
     
     public var object: String {
         switch self {
@@ -159,6 +158,19 @@ extension Card {
             return nil
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        fatalError()
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = .customer(try container.decode(CustomerCard.self))
+        } catch DecodingError.typeMismatch {
+            self = .tokenized(try container.decode(TokenizedCard.self))
+        }
+    }
 }
 
 public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
@@ -217,6 +229,49 @@ extension TokenizedCard {
         } else {
             self.expiration = nil
         }
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate
+        case lastDigits
+        case brand
+        case name
+        case bankName = "bank"
+        case postalCode = "postal_code"
+        case countryCode = "country"
+        case city
+        case financing
+        case fingerPrint
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        fatalError()
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        brand = try container.decode(CardBrand.self, forKey: .brand)
+        name = try container.decode(String.self, forKey: .name)
+        bankName = try container.decode(String.self, forKey: .bankName)
+        postalCode = try container.decode(String.self, forKey: .postalCode)
+        countryCode = try container.decode(String.self, forKey: .countryCode)
+        city = try container.decode(String.self, forKey: .city)
+        financing = try container.decode(CardFinancing.self, forKey: .financing)
+        fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        let expirationMonth = try container.decode(Int.self, forKey: .expirationMonth)
+        let expirationYear = try container.decode(Int.self, forKey: .expirationYear)
+        self.expiration = (month: expirationMonth, year: expirationYear)
     }
 }
 
@@ -278,6 +333,50 @@ extension CustomerCard {
         } else {
             self.expiration = nil
         }
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate
+        case lastDigits
+        case brand
+        case name
+        case bankName = "bank"
+        case postalCode = "postal_code"
+        case countryCode = "country"
+        case city
+        case financing
+        case fingerPrint
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        brand = try container.decode(CardBrand.self, forKey: .brand)
+        name = try container.decode(String.self, forKey: .name)
+        bankName = try container.decode(String.self, forKey: .bankName)
+        postalCode = try container.decode(String.self, forKey: .postalCode)
+        countryCode = try container.decode(String.self, forKey: .countryCode)
+        city = try container.decode(String.self, forKey: .city)
+        financing = try container.decode(CardFinancing.self, forKey: .financing)
+        fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        let expirationMonth = try container.decode(Int.self, forKey: .expirationMonth)
+        let expirationYear = try container.decode(Int.self, forKey: .expirationYear)
+        self.expiration = (month: expirationMonth, year: expirationYear)
     }
 }
 

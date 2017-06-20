@@ -12,6 +12,24 @@ public struct LastDigits {
     }
 }
 
+extension LastDigits: Codable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(lastDigits)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        guard value.characters.count == 4 && value.rangeOfCharacter(from: CharacterSet.init(charactersIn: "0123456789").inverted) == nil else {
+            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Last Digits value")
+            throw DecodingError.dataCorrupted(context)
+        }
+        
+        self.lastDigits = value
+    }
+}
+
 extension LastDigits: Equatable {
     /// Returns a Boolean value indicating whether two values are equal.
     ///

@@ -42,7 +42,7 @@ extension Calendar {
     }
 }
 
-public protocol SchedulingParameter {
+public protocol SchedulingParameter: Decodable {
     init?(JSON: Any)
 }
 
@@ -101,7 +101,7 @@ extension Schedule {
     }
 }
 
-extension Schedule.Status {
+extension Schedule.Status: Decodable {
     init?(JSON json: Any) {
         let status = (json as? String) ?? (json as? [String: Any])?["status"] as? String
         switch status {
@@ -119,10 +119,30 @@ extension Schedule.Status {
             return nil
         }
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let status = try container.decode(String.self)
+        switch status {
+        case "active":
+            self = .active
+        case "expiring":
+            self = .expiring
+        case "expired":
+            self = .expired
+        case "deleted":
+            self = .deleted
+        case "suspended":
+            self = .suspended
+        default:
+            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unrecognized schedule status")
+            throw DecodingError.dataCorrupted(context)
+        }
+    }
 }
 
 
-public struct AnySchedulable: Schedulable, OmiseIdentifiableObject, OmiseCreatableObject {
+public struct AnySchedulable: Schedulable {
     public enum AnySchedulingParameter: SchedulingParameter {
         case charge(ChargeSchedulingParameter)
         case transfer(TransferSchedulingParameter)
@@ -132,6 +152,19 @@ public struct AnySchedulable: Schedulable, OmiseIdentifiableObject, OmiseCreatab
             guard let json = json as? [String: Any] else {
                 return nil
             }
+            
+            if let chargeParameter = ChargeSchedulingParameter(JSON: json) {
+                self = .charge(chargeParameter)
+            } else if let transferParameter = TransferSchedulingParameter(JSON: json){
+                self = .transfer(transferParameter)
+            } else {
+                self = .other(json: json)
+            }
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let json = try container.decode([String: Any].self)
             
             if let chargeParameter = ChargeSchedulingParameter(JSON: json) {
                 self = .charge(chargeParameter)
@@ -157,6 +190,34 @@ public struct AnySchedulable: Schedulable, OmiseIdentifiableObject, OmiseCreatab
         }
         
         (self.object, self.id, self.createdDate) = omiseProperties
+        self.json = json
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case createdDate = "created_date"
+        case object
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let json = try container.decode([String: Any].self)
+        
+        guard let object = json["object"] as? String else {
+            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+            throw DecodingError.keyNotFound(CodingKeys.object, context)
+        }
+        
+        guard let id = json["id"] as? String else {
+            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+            throw DecodingError.keyNotFound(CodingKeys.id, context)
+        }
+        guard let createdDate = json["createdDate"] as? Date else {
+            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+            throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
+        }
+        
+        (self.object, self.id, self.createdDate) = (object, id, createdDate)
         self.json = json
     }
     
@@ -194,8 +255,8 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
         let scheduleDataJSON = ["charge": scheduleData.json] as [String: Any]
         
         return scheduleJSON
-            .merging(periodJSON)
-            .merging(scheduleDataJSON)
+            .merging(periodJSON, uniquingKeysWith: { first, _ in return first })
+            .merging(scheduleDataJSON, uniquingKeysWith: { first, _ in return first })
     }
 }
 

@@ -7,7 +7,7 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
      
      - seealso: [Omise: API Error Codes](https://www.omise.co/api-errors)
      */
-    public enum APIErrorCode: CustomDebugStringConvertible {
+    public enum APIErrorCode: CustomDebugStringConvertible, Decodable {
         case authenticationFailure
         case notFound
         case usedToken
@@ -61,6 +61,10 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
             case let code:
                 self = .other(code)
             }
+        }
+        
+        public init(from decoder: Decoder) throws {
+            self.init(code: try decoder.singleValueContainer().decode(String.self))
         }
         
         var code: String {
