@@ -20,6 +20,7 @@ public struct Transfer: OmiseResourceObject {
     public var createdDate: Date
     
     public var status: TransferStatus
+    public let shouldFailFast: Bool
     
     public let bankAccount: BankAccount
     
@@ -74,6 +75,8 @@ extension Transfer {
         default:
             self.status = .pending
         }
+        
+        self.shouldFailFast = json["fail_fast"] as? Bool ?? false
     }
 }
 
@@ -81,17 +84,20 @@ extension Transfer {
 public struct TransferParams: APIParams {
     public var amount: Int64
     public var recipientID: String?
+    public var failFast: Bool?
     
     public var json: JSONAttributes {
         return Dictionary.makeFlattenDictionaryFrom([
             "amount": amount,
             "recipient": recipientID,
+            "fail_fast": failFast,
             ])
     }
     
-    public init(amount: Int64, recipientID: String? = nil) {
+    public init(amount: Int64, recipientID: String? = nil, failFast: Bool? = nil) {
         self.amount = amount
         self.recipientID = recipientID
+        self.failFast = failFast
     }
 }
 

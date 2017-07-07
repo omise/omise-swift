@@ -8,6 +8,7 @@
   "amount": 300,
   "currency": "jpy",
   "fee": 30,
+  "fail_fast": false,
   "failure_code": "other",
   "failure_message": "test2",
   "transaction": "trxn_57b8asbxsvfwmlq27qg",
