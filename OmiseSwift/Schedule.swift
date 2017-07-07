@@ -23,7 +23,6 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
     public let createdDate: Date
     
     public let status: Status
-    public let isDeleted: Bool
     
     public let every: Int
     public let period: Period
@@ -82,7 +81,6 @@ extension Schedule {
         guard
             let status = json["status"].flatMap(Schedule.Status.init(JSON:)),
             let period = Period(JSON: json),
-            let isDeleted = json["deleted"] as? Bool,
             let every = json["every"] as? Int,
             let startDate = json["start_date"].flatMap(DateComponentsConverter.convert),
             let endDate = json["end_date"].flatMap(DateComponentsConverter.convert),
@@ -93,7 +91,6 @@ extension Schedule {
         }
         
         self.status = status
-        self.isDeleted = isDeleted
         self.period = period
         self.every = every
         self.startDate = startDate

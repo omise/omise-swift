@@ -4,7 +4,6 @@
   "livemode": false,
   "location": "/schedules/schd_test_5830784ijsp6ybzh161",
   "status": "active",
-  "deleted": false,
   "every": 1,
   "period": "month",
   "on": {
@@ -21,6 +20,7 @@
   },
   "occurrences": {
     "object": "list",
+    "livemode": false,
     "from": "1970-01-01T00:00:00+00:00",
     "to": "2017-05-25T07:33:42+00:00",
     "offset": 0,

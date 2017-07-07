@@ -14,7 +14,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_582o4mb9rnji2q1pdty",
            "status": "deleted",
-           "deleted": true,
            "every": 1,
            "period": "month",
            "on": {
@@ -52,7 +51,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_582o6x3rigzamtpkhpu",
            "status": "active",
-           "deleted": false,
            "every": 1,
            "period": "day",
            "on": {},
@@ -143,7 +141,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_582oau15y3okc3bxy2b",
            "status": "deleted",
-           "deleted": true,
            "every": 1,
            "period": "month",
            "on": {
@@ -180,7 +177,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_582pszbthdrs2use6mr",
            "status": "active",
-           "deleted": false,
            "every": 1,
            "period": "week",
            "on": {
@@ -248,7 +244,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_58306a2njevec7qiqfz",
            "status": "deleted",
-           "deleted": true,
            "every": 1,
            "period": "week",
            "on": {
@@ -289,7 +284,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_58306nhkn5goe12i4sx",
            "status": "active",
-           "deleted": false,
            "every": 1,
            "period": "week",
            "on": {
@@ -361,7 +355,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_5830728kmmgobeli6ma",
            "status": "active",
-           "deleted": false,
            "every": 1,
            "period": "month",
            "on": {
@@ -410,7 +403,6 @@
            "livemode": false,
            "location": "/schedules/schd_test_5830784ijsp6ybzh161",
            "status": "active",
-           "deleted": false,
            "every": 1,
            "period": "month",
            "on": {

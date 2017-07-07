@@ -66,6 +66,9 @@
                   Identifier = "RequestTest">
                </Test>
                <Test
+                  Identifier = "ScheduleOperationsTest">
+               </Test>
+               <Test
                   Identifier = "SearchOperationTest">
                </Test>
                <Test

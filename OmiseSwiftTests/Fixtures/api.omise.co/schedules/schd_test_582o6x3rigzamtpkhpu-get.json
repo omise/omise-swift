@@ -4,7 +4,6 @@
   "livemode": false,
   "location": "/schedules/schd_test_582o6x3rigzamtpkhpu",
   "status": "active",
-  "deleted": false,
   "every": 1,
   "period": "day",
   "on": {
@@ -30,6 +29,7 @@
     "data": [
              {
              "object": "occurrence",
+             "livemode": false,
              "id": "occu_test_582o6x3smr1taeb7mdg",
              "location": "/occurrences/occu_test_582o6x3smr1taeb7mdg",
              "schedule": "schd_test_582o6x3rigzamtpkhpu",
@@ -43,6 +43,7 @@
              },
              {
              "object": "occurrence",
+             "livemode": false,
              "id": "occu_test_582wuxrdnbzrz9mzyr8",
              "location": "/occurrences/occu_test_582wuxrdnbzrz9mzyr8",
              "schedule": "schd_test_582o6x3rigzamtpkhpu",
