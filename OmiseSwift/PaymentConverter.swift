@@ -12,7 +12,7 @@ class OffsitePaymentConverter: Converter {
         
         if value.hasPrefix(OffsitePaymentConverter.internetBankingPrefix), let prefixRange = value.range(of: OffsitePaymentConverter.internetBankingPrefix) {
             let bankBrand = value[prefixRange.upperBound..<value.endIndex]
-            return InternetBanking(rawValue: bankBrand).map(OffsitePayment.internetBanking)
+            return InternetBanking(rawValue: String(bankBrand)).map(OffsitePayment.internetBanking)
         } else if value == OffsitePaymentConverter.alipayValue {
             return .alipay
         } else {
