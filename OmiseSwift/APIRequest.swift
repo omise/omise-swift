@@ -1,7 +1,6 @@
 import Foundation
 
 
-
 public class APIRequest<Result: OmiseObject> {
     public typealias Endpoint = APIEndpoint<Result>
     public typealias Callback = (Failable<Result>) -> Void
@@ -10,7 +9,7 @@ public class APIRequest<Result: OmiseObject> {
     let endpoint: APIEndpoint<Result>
     let callback: APIRequest.Callback?
     
-    var task: URLSessionDataTask?
+    var task: URLSessionTask?
     
     init(client: APIClient, endpoint: APIEndpoint<Result>, callback: Callback?) {
         self.client = client
@@ -85,19 +84,68 @@ public class APIRequest<Result: OmiseObject> {
         let auth = try client.preferredEncodedKeyForServerEndpoint(endpoint.endpoint)
         
         var request = URLRequest(url: requestURL)
-        request.httpMethod = endpoint.method
+        request.httpMethod = endpoint.parameter.method
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 6.0
         request.addValue(auth, forHTTPHeaderField: "Authorization")
         
-        let payload = endpoint.makePayload()
-        guard !(request.httpMethod == "GET" && payload != nil) else {
+        let payloadData: (String, Data)?
+        
+        switch endpoint.parameter {
+        case .delete, .get, .head:
+            payloadData = nil
+        case .post(let query?):
+            payloadData = payload(from: query)
+        case .patch(let query?):
+            payloadData = payload(from: query)
+        default:
+            payloadData = nil
+        }
+        
+        guard !(request.httpMethod == "GET" && payloadData != nil) else {
             omiseWarn("ignoring payloads for HTTP GET operation.")
             return request as URLRequest
         }
         
-        request.httpBody = payload
+        if let (header, payload) = payloadData {
+            request.httpBody = payload
+            request.addValue(header, forHTTPHeaderField: "Content-Type")
+            request.addValue(String(payload.count), forHTTPHeaderField: "Content-Length")
+        }
+        
         return request as URLRequest
     }
+    
+    private func payload(from query: APIQuery) -> (String, Data)? {
+        switch query {
+        case let query as APIURLQuery:
+            return payload(from: query)
+        case let query as APIFileQuery:
+            return payload(from: query)
+        default:
+            return nil
+        }
+    }
+    
+    private func payload(from query: APIURLQuery) -> (String, Data)? {
+        var urlComponents = URLComponents()
+        urlComponents.queryItems = query.queryItems
+        return urlComponents.percentEncodedQuery?.data(using: .utf8).map({ ("application/x-www-form-urlencoded", $0) })
+    }
+    
+    private func payload(from query: APIFileQuery) -> (String, Data)? {
+        let boundary = "------\(UUID().uuidString)"
+        
+        var data = Data()
+        data.append("--\(boundary)\(crlf)".data(using: .utf8, allowLossyConversion: false)!)
+        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(query.filename)\"\(crlf + crlf)".data(using: .utf8, allowLossyConversion: false)!)
+        data.append(query.fileContent)
+        data.append("\(crlf)--\(boundary)--".data(using: .utf8, allowLossyConversion: false)!)
+        
+        return ("multipart/form-data; boundary=\(boundary)", data)
+    }
 }
+
+
+let crlf = "\r\n"
 

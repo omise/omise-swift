@@ -11,7 +11,7 @@ extension Searchable {
     }
 }
 
-public struct SearchParams<FilterParams: OmiseFilterParams>: APIParams {
+public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     public var scope: String
     public var page: Int?
     public var query: String?
@@ -43,7 +43,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIParams {
     }
 }
 
-public protocol OmiseFilterParams: APIParams {
+public protocol OmiseFilterParams: APIJSONQuery {
     init(JSON: [String: Any])
 }
 
@@ -55,9 +55,8 @@ public extension Searchable where Self: OmiseResourceObject {
     public static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
-            method: "GET",
             pathComponents: ["search"],
-            params: params
+            parameter: .get(params)
         )
     }
     
@@ -85,7 +84,7 @@ public extension Searchable where Self: OmiseResourceObject {
     public static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
         let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: 1) ?? 1, query: list.query, order: list.order, filter: list.filters)
         
-        return SearchEndpoint(endpoint: .api, method: "GET", pathComponents: ["search"], params: listParams)
+        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))
     }
     
     @discardableResult
@@ -103,7 +102,7 @@ public extension Searchable where Self: OmiseResourceObject {
     public static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
         let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: -1) ?? 1, query: list.query, order: list.order, filter: list.filters)
         
-        return SearchEndpoint(endpoint: .api, method: "GET", pathComponents: ["search"], params: listParams)
+        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))
     }
     
     @discardableResult

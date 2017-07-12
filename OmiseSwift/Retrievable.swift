@@ -2,7 +2,7 @@ import Foundation
 
 public protocol Retrievable {}
 
-public struct RetrieveParams: APIParams {
+public struct RetrieveParams: APIJSONQuery {
     public var isExpanded: Bool = false
     
     public var json: JSONAttributes {
@@ -19,9 +19,8 @@ public extension Retrievable where Self: OmiseLocatableObject & OmiseIdentifiabl
     public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
-            method: "GET",
             pathComponents: makeResourcePathsWithParent(parent, id: id),
-            params: retrieveParams
+            parameter: .get(retrieveParams)
         )
     }
     

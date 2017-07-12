@@ -12,9 +12,8 @@ extension Charge {
     
     public static func captureEndpointWithID(_ id: String) -> CaptureEndpoint {
         return CaptureEndpoint(
-            method: "POST",
             pathComponents: [resourceInfo.path, id, "capture"],
-            params: nil
+            parameter: .post(nil)
         )
     }
     
@@ -25,9 +24,8 @@ extension Charge {
     
     public static func reverseEndpointWithID(_ id: String) -> ReverseEndpoint {
         return ReverseEndpoint(
-            method: "POST",
             pathComponents: [resourceInfo.path, id, "reverse"],
-            params: nil
+            parameter: .post(nil)
         )
     }
     
@@ -38,9 +36,8 @@ extension Charge {
     
     public static func listScheduleEndpointWithParams(_ params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
-            method: "GET",
             pathComponents: [ Charge.resourceInfo.path, Schedule<Charge>.resourceInfo.path ],
-            params: params
+            parameter: .get(nil)
         )
     }
     

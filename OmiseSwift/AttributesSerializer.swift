@@ -4,16 +4,11 @@ import Foundation
 public typealias JSONAttributes = [String: Any]
 
 
-public protocol APIDataSerializable {
-    var json: JSONAttributes { get }
-}
-
-
-func normalizeAttributes(_ attributes: APIDataSerializable, parentPrefix: String? = nil) -> JSONAttributes {
+func normalizeAttributes(_ attributes: APIJSONQuery, parentPrefix: String? = nil) -> JSONAttributes {
     var result: JSONAttributes = [:]
     
     for (key, value) in attributes.json {
-        if let child = value as? APIDataSerializable {
+        if let child = value as? APIJSONQuery {
             for (childKey, childAttributes) in normalizeAttributes(child, parentPrefix: stitchKeys(parentPrefix, key: key)) {
                 result[childKey] = childAttributes
             }
@@ -33,13 +28,12 @@ func stitchKeys(_ prefix: String?, key: String) -> String {
     }
 }
 
-
-func encode(_ attributes: APIDataSerializable) -> [URLQueryItem] {
+func encode(_ attributes: APIJSONQuery) -> [URLQueryItem] {
     return encodeDict(attributes.json, parentKey: nil)
         .sorted(by: { (item1, item2) in item1.name < item2.name })
 }
 
-fileprivate func encodeDict(_ dict: JSONAttributes, parentKey: String?) -> [URLQueryItem] {
+func encodeDict(_ dict: JSONAttributes, parentKey: String?) -> [URLQueryItem] {
     return dict.flatMap(encodePair(parentKey))
 }
 
@@ -82,11 +76,6 @@ fileprivate func encodeScalar(_ value: Any?) -> String? {
     case nil:
         return nil
     }
-}
-
-
-func serialize(_ object: APIDataSerializable) throws -> Data {
-    return try JSONSerialization.data(withJSONObject: object.json, options: [])
 }
 
 func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {

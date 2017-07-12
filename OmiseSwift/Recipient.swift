@@ -57,7 +57,7 @@ extension Recipient {
 }
 
 
-public struct RecipientParams: APIParams {
+public struct RecipientParams: APIJSONQuery {
     public var name: String?
     public var email: String?
     public var recipientDescription: String?

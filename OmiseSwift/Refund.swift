@@ -35,7 +35,7 @@ extension Refund {
 }
 
 
-public struct RefundParams: APIParams {
+public struct RefundParams: APIJSONQuery {
     public var amount: Int64
     public var isVoid: Bool?
     

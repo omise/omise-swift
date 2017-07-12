@@ -135,7 +135,7 @@ extension Charge {
 }
 
 
-public struct ChargeParams: APIParams {
+public struct ChargeParams: APIJSONQuery {
     public var customerID: String?
     public var cardID: String?
     public var value: Value
@@ -169,7 +169,7 @@ public struct ChargeParams: APIParams {
     }
 }
 
-public struct UpdateChargeParams: APIParams {
+public struct UpdateChargeParams: APIJSONQuery {
     public var chargeDescription: String?
     public var metadata: [String: Any]?
     
@@ -234,7 +234,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
-public struct ChargeSchedulingParameter: SchedulingParameter, APIParams {
+public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
     public let value: Value
     public let customerID: String
     public let cardID: String?

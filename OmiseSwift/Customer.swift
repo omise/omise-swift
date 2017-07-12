@@ -43,7 +43,7 @@ extension Customer {
     }
 }
 
-public struct CustomerParams: APIParams {
+public struct CustomerParams: APIJSONQuery {
     public var email: String?
     public var customerDescription: String?
     public var cardID: String?

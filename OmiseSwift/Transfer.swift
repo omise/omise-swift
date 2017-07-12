@@ -81,7 +81,7 @@ extension Transfer {
 }
 
 
-public struct TransferParams: APIParams {
+public struct TransferParams: APIJSONQuery {
     public var amount: Int64
     public var recipientID: String?
     public var failFast: Bool?
@@ -101,7 +101,7 @@ public struct TransferParams: APIParams {
     }
 }
 
-public struct UpdateTransferParams: APIParams {
+public struct UpdateTransferParams: APIJSONQuery {
     public var amount: Int64
     
     public var json: JSONAttributes {

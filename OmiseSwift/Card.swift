@@ -281,7 +281,7 @@ extension CustomerCard {
     }
 }
 
-public struct CardParams: APIParams {
+public struct CardParams: APIJSONQuery {
     public var name: String?
     public var expirationMonth: Int?
     public var expirationYear: Int?

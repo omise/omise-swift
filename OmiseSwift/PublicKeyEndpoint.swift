@@ -7,7 +7,7 @@ public extension Key where Kind == PublicKey {
     
     public static func retrivePublicKeyEndpoint() -> PublicKeyRetrieveEndpoint {
         return APIEndpoint(
-            method: "GET", pathComponents: ["keys", "public"], params: nil
+            pathComponents: ["keys", "public"], parameter: .get(nil)
         )
     }
     

@@ -27,7 +27,7 @@ extension BankAccount {
     }
 }
 
-public struct BankAccountParams: APIParams {
+public struct BankAccountParams: APIJSONQuery {
     public var brand: String?
     public var accountNumber: String?
     public var name: String?

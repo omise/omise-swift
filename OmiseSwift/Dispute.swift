@@ -21,7 +21,7 @@ public struct Dispute: OmiseResourceObject {
     
     public let value: Value
     public var status: DisputeStatus
-    public let message: String
+    public let message: String?
     public let charge: DetailProperty<Charge>
 }
 
@@ -34,7 +34,6 @@ extension Dispute {
         }
         
         guard let value = Value(JSON: json), let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
-        let message = json["message"] as? String,
             let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)) else {
                 return nil
         }
@@ -42,7 +41,7 @@ extension Dispute {
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.value = value
         self.status = status
-        self.message = message
+        self.message = json["message"] as? String
         self.charge = charge
     }
 }
@@ -55,7 +54,7 @@ public enum DisputeStatusQuery: String {
 }
 
 
-public struct DisputeParams: APIParams {
+public struct DisputeParams: APIJSONQuery {
     public var message: String?
     
     public var json: JSONAttributes {
@@ -117,9 +116,8 @@ extension Dispute: Searchable {
 extension Dispute {
     public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListRequest.Callback) -> Dispute.ListRequest? {
         let endpoint = ListEndpoint(
-            method: "GET",
             pathComponents: [resourceInfo.path, state.rawValue],
-            params: nil
+            parameter: .get(nil)
         )
         
         return client.requestToEndpoint(endpoint, callback: callback)
