@@ -95,9 +95,9 @@ public class APIRequest<Result: OmiseObject> {
         case .delete, .get, .head:
             payloadData = nil
         case .post(let query?):
-            payloadData = payload(from: query)
+            payloadData = makePayload(for: query)
         case .patch(let query?):
-            payloadData = payload(from: query)
+            payloadData = makePayload(for: query)
         default:
             payloadData = nil
         }
@@ -116,24 +116,25 @@ public class APIRequest<Result: OmiseObject> {
         return request as URLRequest
     }
     
-    private func payload(from query: APIQuery) -> (String, Data)? {
+    private func makePayload(for query: APIQuery) -> (String, Data)? {
         switch query {
         case let query as APIURLQuery:
-            return payload(from: query)
+            return makePayload(for: query)
         case let query as APIFileQuery:
-            return payload(from: query)
+            return makePayload(for: query)
         default:
             return nil
         }
     }
     
-    private func payload(from query: APIURLQuery) -> (String, Data)? {
+    private func makePayload(for query: APIURLQuery) -> (String, Data)? {
         var urlComponents = URLComponents()
         urlComponents.queryItems = query.queryItems
         return urlComponents.percentEncodedQuery?.data(using: .utf8).map({ ("application/x-www-form-urlencoded", $0) })
     }
     
-    private func payload(from query: APIFileQuery) -> (String, Data)? {
+    private func makePayload(for query: APIFileQuery) -> (String, Data)? {
+        let crlf = "\r\n"
         let boundary = "------\(UUID().uuidString)"
         
         var data = Data()
@@ -146,6 +147,4 @@ public class APIRequest<Result: OmiseObject> {
     }
 }
 
-
-let crlf = "\r\n"
 
