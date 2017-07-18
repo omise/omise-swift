@@ -34,6 +34,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             case let .success(dispute):
                 XCTAssertEqual(dispute.value.amount, 1200000)
                 XCTAssertNil(dispute.responseMessage)
+                XCTAssertEqual(dispute.reasonCode, Dispute.Reason.goodsOrServicesNotProvided)
                 XCTAssertEqual(dispute.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(dispute.documents.total, 4)
                 guard let recentDocument = dispute.documents.first else {
