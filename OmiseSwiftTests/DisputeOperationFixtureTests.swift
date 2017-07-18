@@ -53,6 +53,39 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testWonDisputeRetrieve() {
+        let expectation = self.expectation(description: "Dispute result")
+        
+        let request = Dispute.retrieve(using: testClient, id: "dspt_test_58h9gj7ygndg2t5xs1n") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(dispute):
+                XCTAssertEqual(dispute.value.amount, 3190000)
+                XCTAssertEqual(dispute.responseMessage, "Test the document")
+                XCTAssertEqual(dispute.reasonCode, Dispute.Reason.goodsOrServicesNotProvided)
+                XCTAssertEqual(dispute.reasonMessage, "Services not provided or Merchandise not received")
+                XCTAssertEqual(dispute.documents.total, 1)
+                XCTAssertEqual(dispute.status, .won)
+                XCTAssertEqual(dispute.transaction.dataID, "trxn_test_58h9gj859q3dpqdx94r")
+                XCTAssertEqual(dispute.closedDate, DateConverter.convert(fromAttribute: "2017-07-18T10:56:28Z"))
+                guard let recentDocument = dispute.documents.first else {
+                    XCTFail("Cannot get the recent document")
+                    return
+                }
+                
+                XCTAssertEqual(recentDocument.filename, "Screen Shot.png")
+                XCTAssertEqual(recentDocument.id, "docu_test_58h9gloyz5iiug4k3xj")
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    
     func testDisputeList() {
         let expectation = self.expectation(description: "Dispute list")
         

@@ -44,9 +44,10 @@ public struct Dispute: OmiseResourceObject {
     public let reasonMessage: String
     public let reasonCode: Reason
     public var responseMessage: String?
+    public let transaction: DetailProperty<Transaction>
     public let charge: DetailProperty<Charge>
-    
     public let documents: ListProperty<Document>
+    public let closedDate: Date?
 }
 
 
@@ -61,6 +62,7 @@ extension Dispute {
             let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
             let reasonCode = json["reason_code"].flatMap(Reason.init(JSON:)),
             let reasonMessage = json["reason_message"] as? String,
+            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)),
             let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
             let documents = json["documents"].flatMap(ListProperty<Document>.init(JSON:)) else {
                 return nil
@@ -72,8 +74,10 @@ extension Dispute {
         self.reasonCode = reasonCode
         self.reasonMessage = reasonMessage
         self.responseMessage = json["message"] as? String
+        self.transaction = transaction
         self.charge = charge
         self.documents = documents
+        self.closedDate = DateConverter.convert(fromAttribute: json["closed_at"])
     }
 }
 
