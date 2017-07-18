@@ -14,7 +14,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(dispute):
                 XCTAssertEqual(dispute.value.amount, 100000)
-                XCTAssertEqual(dispute.message, "A dispute for testing purpose")
+                XCTAssertEqual(dispute.responseMessage, "A dispute for testing purpose")
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -33,7 +33,8 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(dispute):
                 XCTAssertEqual(dispute.value.amount, 1200000)
-                XCTAssertNil(dispute.message)
+                XCTAssertNil(dispute.responseMessage)
+                XCTAssertEqual(dispute.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(dispute.documents.total, 4)
                 guard let recentDocument = dispute.documents.first else {
                     XCTFail("Cannot get the recent document")
@@ -79,7 +80,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(dispute):
-                XCTAssertEqual(dispute.message, expectedMessage)
+                XCTAssertEqual(dispute.responseMessage, expectedMessage)
             case let .fail(error):
                 XCTFail("\(error)")
             }
