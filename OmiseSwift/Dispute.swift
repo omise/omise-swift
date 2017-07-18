@@ -23,6 +23,8 @@ public struct Dispute: OmiseResourceObject {
     public var status: DisputeStatus
     public let message: String?
     public let charge: DetailProperty<Charge>
+    
+    public let documents: ListProperty<Document>
 }
 
 
@@ -34,7 +36,8 @@ extension Dispute {
         }
         
         guard let value = Value(JSON: json), let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
-            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)) else {
+            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
+            let documents = json["documents"].flatMap(ListProperty<Document>.init(JSON:)) else {
                 return nil
         }
         
@@ -43,6 +46,7 @@ extension Dispute {
         self.status = status
         self.message = json["message"] as? String
         self.charge = charge
+        self.documents = documents
     }
 }
 
