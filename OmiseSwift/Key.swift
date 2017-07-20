@@ -16,14 +16,16 @@ public enum PublicKey: KeyKind {
 }
 
 
-public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
+public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject, AccessKey {
     public let id: String
     public let object: String
     public let isLive: Bool
     public let createdDate: Date
     
-    public let key: String
+    public let accessKey: String
     public let name: String?
+    
+    public let key: String
     
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
@@ -35,7 +37,19 @@ public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject, 
         }
         
         (self.object, self.isLive, self.id, self.createdDate) = omiseProperties
-        self.key = key
+        self.accessKey = key
         self.name = json["name"] as? String
+        
+        self.key = self.accessKey + ":X"
     }
 }
+
+public struct SessionKey: AccessKey {
+    public let key: String
+    
+    public init(_ key: String) {
+        self.key = key
+    }
+}
+
+

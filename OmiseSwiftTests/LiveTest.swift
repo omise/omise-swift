@@ -13,7 +13,7 @@ class LiveTest: OmiseTestCase {
             "livemode": false,
             "created": "2017-04-26T12:06:34Z"
             ] as [String : Any]
-        let config = APIConfiguration(applicationKey: Key<ApplicationKey>(JSON: testingApplicationKeyJSON)!)
+        let config = APIConfiguration(key: Key<ApplicationKey>(JSON: testingApplicationKeyJSON)!)
         return APIClient(config: config)
     }
 }
