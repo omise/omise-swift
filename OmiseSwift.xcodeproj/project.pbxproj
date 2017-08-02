@@ -65,10 +65,10 @@
 		8A590B451EDD72EC003C60E0 /* Forex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B431EDD72EC003C60E0 /* Forex.swift */; };
 		8A590B471EDD74F7003C60E0 /* ForexEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B461EDD74F7003C60E0 /* ForexEndpoint.swift */; };
 		8A590B481EDD74F7003C60E0 /* ForexEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B461EDD74F7003C60E0 /* ForexEndpoint.swift */; };
-		8A590B4D1EDD8035003C60E0 /* CustomerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */; };
-		8A590B4E1EDD8035003C60E0 /* CustomerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */; };
 		8A590B4A1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */; };
 		8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */; };
+		8A590B4D1EDD8035003C60E0 /* CustomerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */; };
+		8A590B4E1EDD8035003C60E0 /* CustomerEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */; };
 		8A6079301EB1E395005684CC /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* Key.swift */; };
 		8A6079311EB1E395005684CC /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* Key.swift */; };
 		8A6079361EB2033B005684CC /* PublicKeyEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6079351EB2033B005684CC /* PublicKeyEndpoint.swift */; };
@@ -248,8 +248,8 @@
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		8A590B431EDD72EC003C60E0 /* Forex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forex.swift; sourceTree = "<group>"; };
 		8A590B461EDD74F7003C60E0 /* ForexEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForexEndpoint.swift; sourceTree = "<group>"; };
-		8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerEndpoint.swift; sourceTree = "<group>"; };
 		8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForexOperationFixtureTests.swift; sourceTree = "<group>"; };
+		8A590B4C1EDD8035003C60E0 /* CustomerEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerEndpoint.swift; sourceTree = "<group>"; };
 		8A60792F1EB1E395005684CC /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		8A6079351EB2033B005684CC /* PublicKeyEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicKeyEndpoint.swift; sourceTree = "<group>"; };
 		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
@@ -849,7 +849,6 @@
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,
 				8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
-				8A7CBA501DE59F0200F83D21 /* LastDigitsTest.swift in Sources */,
 				8A1039651EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				8ACBB54C1ED8277100F1DA36 /* URLEncoderTest.swift in Sources */,
 				8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */,

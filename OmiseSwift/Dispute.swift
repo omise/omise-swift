@@ -5,7 +5,6 @@ public enum DisputeStatus: String {
     case pending
     case won
     case lost
-    case closed
 }
 
 
