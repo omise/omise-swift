@@ -9,16 +9,7 @@ public class APIClient: NSObject {
     
     let config: APIConfiguration
     
-    fileprivate let pinningCertificateData: Data? = {
-        let bundle = Bundle(for: APIClient.self)
-        if let certificateURL = bundle.url(forResource: "OmisePinning", withExtension: "der"),
-            let certificateData = try? Data(contentsOf: certificateURL) {
-            return certificateData
-        } else {
-            return nil
-        }
-    }()
-    
+    fileprivate let pinningCertificateData: Data? = Bundle(for: APIClient.self).url(forResource: "OmisePinning", withExtension: "der").flatMap({ try? Data(contentsOf: $0) })
     
     public init(config: APIConfiguration) {
         self.config = config
