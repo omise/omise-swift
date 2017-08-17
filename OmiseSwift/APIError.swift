@@ -22,7 +22,6 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
         case invalidCharge
         case failedCapture
         case expiredCharge
-        case failedFraudCheck
         case failedVoid
         
         case other(String)
@@ -57,8 +56,6 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
                 self = .failedCapture
             case "expired_charge":
                 self = .expiredCharge
-            case "failed_fraud_check":
-                self = .failedFraudCheck
             case "failed_void":
                 self = .failedVoid
             case let code:
@@ -96,8 +93,6 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
                 return "failed_capture"
             case .expiredCharge:
                 return "expired_charge"
-            case .failedFraudCheck:
-                return "failed_fraud_check"
             case .failedVoid:
                 return "failed_void"
             case .other(let code):
@@ -135,8 +130,6 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
                 return "Failed Capture"
             case .expiredCharge:
                 return "Expired Charge"
-            case .failedFraudCheck:
-                return "Failed Fraud Check"
             case .failedVoid:
                 return "Failed Void"
             case .other(let code):
