@@ -8,7 +8,7 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject {
     public let object: String
     
     public let id: String
-    public let createdDate: Date
+    public let date: Date
     
     public let number: String
     
@@ -42,6 +42,12 @@ extension Receipt {
                 return nil
         }
         
+        guard let number = json["number"] as? String,
+            let isCreditNote = json["credit_note"] as? Bool,
+            let date = json["date"].flatMap(DateConverter.convert(fromAttribute:)) else {
+                return nil
+        }
+        
         guard let customerName = json["customer_name"] as? String,
             let customerAddress = json["customer_address"] as? String,
             let customerTaxID = json["customer_tax_id"] as? String,
@@ -67,14 +73,12 @@ extension Receipt {
                 return nil
         }
         
-        guard let number = json["number"] as? String,
-            let isCreditNote = json["credit_note"] as? Bool else {
-                return nil
-        }
+        assert(feeSubtotal == chargeFee - voidedFee + transferFee, "Fee subtotal doesn't match the fee equation")
         
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
+        (self.object, self.location, self.id) = omiseObjectProperties
 
         self.number = number
+        self.date = date
         
         self.customerName = customerName
         self.customerAddress = customerAddress
@@ -94,6 +98,7 @@ extension Receipt {
         self.vat = vat
         self.wht = wht
         self.total = total
+        
         
         self.isCreditNote = isCreditNote
     }
