@@ -116,7 +116,7 @@ public extension List where TItem: OmiseLocatableObject & Listable {
     }
 }
 
-public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObject & Listable {
+public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObject & OmiseCreatableObject & Listable  {
     public func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
         let listParams: ListParams
         

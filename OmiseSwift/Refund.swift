@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject {
+public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/refunds")
     
     public let object: String
@@ -18,8 +18,9 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject {
 
 extension Refund {
     public init?(JSON json: Any) {
-        guard let json = json as? [String: Any], let omiseObjectProperties = Refund.parseOmiseProperties(JSON: json) else {
-            return nil
+        guard let json = json as? [String: Any],
+            let omiseObjectProperties = Refund.parseOmiseProperties(JSON: json) else {
+                return nil
         }
         
         guard let value = Value(JSON: json), let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),

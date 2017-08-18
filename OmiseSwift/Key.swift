@@ -16,7 +16,7 @@ public enum PublicKey: KeyKind {
 }
 
 
-public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject {
+public struct Key<Kind: KeyKind>: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
     public let id: String
     public let object: String
     public let isLive: Bool
