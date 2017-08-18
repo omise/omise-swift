@@ -61,6 +61,8 @@
 		8A50C50A1E2E250800EC9407 /* SingletonRetrievable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DAF1D211D7E00811363 /* SingletonRetrievable.swift */; };
 		8A50C50B1E2E250800EC9407 /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C4E4C1D223FF700A62F2C /* Updatable.swift */; };
 		8A50C50D1E2E259600EC9407 /* Ordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9951D22372400CA3D35 /* Ordering.swift */; };
+		8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5880EB1F46EB4D00647405 /* Receipt.swift */; };
+		8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5880EB1F46EB4D00647405 /* Receipt.swift */; };
 		8A590B441EDD72EC003C60E0 /* Forex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B431EDD72EC003C60E0 /* Forex.swift */; };
 		8A590B451EDD72EC003C60E0 /* Forex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B431EDD72EC003C60E0 /* Forex.swift */; };
 		8A590B471EDD74F7003C60E0 /* ForexEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590B461EDD74F7003C60E0 /* ForexEndpoint.swift */; };
@@ -246,6 +248,7 @@
 		8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A4469D41ED5E13D00F07334 /* Period.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		8A5880EB1F46EB4D00647405 /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		8A590B431EDD72EC003C60E0 /* Forex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forex.swift; sourceTree = "<group>"; };
 		8A590B461EDD74F7003C60E0 /* ForexEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForexEndpoint.swift; sourceTree = "<group>"; };
 		8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForexOperationFixtureTests.swift; sourceTree = "<group>"; };
@@ -474,6 +477,7 @@
 				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
 				8ACB412C1E2793D4001793CD /* Card.swift */,
 				8ACB41141E277B60001793CD /* Charge.swift */,
+				8A5880EB1F46EB4D00647405 /* Receipt.swift */,
 				8A56D41A1D78172D00F30D88 /* Currency.swift */,
 				8ACB41291E2793B3001793CD /* Customer.swift */,
 				8ACB41241E278837001793CD /* DetailProperty.swift */,
@@ -708,6 +712,7 @@
 				8A028B381E2CBABF0008E010 /* Link.swift in Sources */,
 				8A84EF761E2E27C90041082E /* List.swift in Sources */,
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
+				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
 				8A28BB411E28DCE200EEBD55 /* Payment.swift in Sources */,
@@ -776,6 +781,7 @@
 				8ACD57161E2E3A9600FEE5A0 /* Dispute.swift in Sources */,
 				8ACD57321E2E3A9600FEE5A0 /* Updatable.swift in Sources */,
 				8A98759B1F0647050090D56F /* Document.swift in Sources */,
+				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,
