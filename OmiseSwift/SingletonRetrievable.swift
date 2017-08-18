@@ -8,9 +8,8 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
     
     public static func retrieveEndpointWithParent(_ parent: OmiseResourceObject?) -> SingletonRetrieveEndpoint {
         return SingletonRetrieveEndpoint(
-            method: "GET",
             pathComponents: makeResourcePathsWithParent(parent),
-            params: nil
+            parameter: .get(nil)
         )
     }
     

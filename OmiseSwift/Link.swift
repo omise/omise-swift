@@ -47,7 +47,7 @@ extension Link {
     }
 }
 
-public struct LinkParams: APIParams {
+public struct LinkParams: APIJSONQuery {
     public var value: Value
     public var title: String
     public var linkDescription: String

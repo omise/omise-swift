@@ -92,7 +92,7 @@ extension Omise.APIEndpoint {
             return ((path as NSString).appendingPathComponent(segment)) as String
         }
         
-        return (filePath + "-" + method.lowercased() as NSString).appendingPathExtension("json")! as String
+        return (filePath + "-" + parameter.method.lowercased() as NSString).appendingPathExtension("json")! as String
     }
 }
 

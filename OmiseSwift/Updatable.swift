@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Updatable {
-    associatedtype UpdateParams: APIParams
+    associatedtype UpdateParams: APIJSONQuery
 }
 
 public extension Updatable where Self: OmiseResourceObject {
@@ -10,9 +10,8 @@ public extension Updatable where Self: OmiseResourceObject {
     
     public static func updateEndpointWith(parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
-            method: "PATCH",
             pathComponents: makeResourcePathsWithParent(parent, id: id),
-            params: params
+            parameter: .patch(params)
         )
     }
     

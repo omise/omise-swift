@@ -5,11 +5,30 @@ public enum DisputeStatus: String {
     case pending
     case won
     case lost
-    case closed
 }
 
 
 public struct Dispute: OmiseResourceObject {
+    public enum Reason {
+        case cancelledRecurringTransaction
+        case creditNotProcessed
+        case duplicateProcessing
+        case expiredCard
+        case goodsOrServicesNotProvided
+        case incorrectCurrency
+        case incorrectTransactionAmount
+        case latePresentment
+        case notnMatchingAmountNumber
+        case notAsDescribedOrDefectiveMerchandise
+        case notRecorded
+        case paidByOtherMeans
+        case transactionNotRecognized
+        case unauthorizedCharge
+        
+        case notAvailable
+        case other
+    }
+    
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/disputes")
     
     public let object: String
@@ -21,8 +40,13 @@ public struct Dispute: OmiseResourceObject {
     
     public let value: Value
     public var status: DisputeStatus
-    public let message: String
+    public let reasonMessage: String
+    public let reasonCode: Reason
+    public var responseMessage: String?
+    public let transaction: DetailProperty<Transaction>
     public let charge: DetailProperty<Charge>
+    public let documents: ListProperty<Document>
+    public let closedDate: Date?
 }
 
 
@@ -33,17 +57,71 @@ extension Dispute {
                 return nil
         }
         
-        guard let value = Value(JSON: json), let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
-        let message = json["message"] as? String,
-            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)) else {
+        guard let value = Value(JSON: json),
+            let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
+            let reasonCode = json["reason_code"].flatMap(Reason.init(JSON:)),
+            let reasonMessage = json["reason_message"] as? String,
+            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)),
+            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
+            let documents = json["documents"].flatMap(ListProperty<Document>.init(JSON:)) else {
                 return nil
         }
         
         (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.value = value
         self.status = status
-        self.message = message
+        self.reasonCode = reasonCode
+        self.reasonMessage = reasonMessage
+        self.responseMessage = json["message"] as? String
+        self.transaction = transaction
         self.charge = charge
+        self.documents = documents
+        self.closedDate = DateConverter.convert(fromAttribute: json["closed_at"])
+    }
+}
+
+extension Dispute.Reason: Equatable {
+    init?(JSON json: Any) {
+        guard let code = json as? String else {
+            return nil
+        }
+        
+        switch code {
+        case "cancelled_recurring_transaction":
+            self = .cancelledRecurringTransaction
+        case "credit_not_processed":
+            self = .creditNotProcessed
+        case "duplicate_processing":
+            self = .duplicateProcessing
+        case "expired_card":
+            self = .expiredCard
+        case "goods_or_services_not_provided":
+            self = .goodsOrServicesNotProvided
+        case "incorrect_currency":
+            self = .incorrectCurrency
+        case "incorrect_transaction_amount":
+            self = .incorrectTransactionAmount
+        case "late_presentment":
+            self = .latePresentment
+        case "non_matching_account_number":
+            self = .notnMatchingAmountNumber
+        case "not_as_described_or_defective_merchandise":
+            self = .notAsDescribedOrDefectiveMerchandise
+        case "not_recorded":
+            self = .notRecorded
+        case "paid_by_other_means":
+            self = .paidByOtherMeans
+        case "transaction_not_recognised":
+            self = .transactionNotRecognized
+        case "unauthorized_charge_aka_fraud":
+            self = .unauthorizedCharge
+
+        case "not_available":
+            self = .cancelledRecurringTransaction
+        case "other": fallthrough
+        default:
+            self = .other
+        }
     }
 }
 
@@ -55,7 +133,7 @@ public enum DisputeStatusQuery: String {
 }
 
 
-public struct DisputeParams: APIParams {
+public struct DisputeParams: APIJSONQuery {
     public var message: String?
     
     public var json: JSONAttributes {
@@ -117,9 +195,8 @@ extension Dispute: Searchable {
 extension Dispute {
     public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListRequest.Callback) -> Dispute.ListRequest? {
         let endpoint = ListEndpoint(
-            method: "GET",
             pathComponents: [resourceInfo.path, state.rawValue],
-            params: nil
+            parameter: .get(nil)
         )
         
         return client.requestToEndpoint(endpoint, callback: callback)

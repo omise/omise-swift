@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Creatable {
-    associatedtype CreateParams: APIParams
+    associatedtype CreateParams: APIQuery
 }
 
 public extension Creatable where Self: OmiseLocatableObject {
@@ -10,9 +10,8 @@ public extension Creatable where Self: OmiseLocatableObject {
     
     public static func createEndpointWith(parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
-            method: "POST",
             pathComponents: Self.makeResourcePathsWithParent(parent),
-            params: params
+            parameter: .post(params)
         )
     }
     

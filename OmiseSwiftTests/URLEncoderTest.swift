@@ -3,7 +3,7 @@ import Foundation
 import XCTest
 
 
-struct AnyJSONAttributes: APIDataSerializable {
+struct AnyJSONAttributes: APIJSONQuery {
     let json: JSONAttributes
 }
 

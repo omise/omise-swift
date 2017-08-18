@@ -35,7 +35,7 @@ extension Token {
     }
 }
 
-public struct TokenParams: APIParams {
+public struct TokenParams: APIJSONQuery {
     public var name: String?
     
     public var number: String
@@ -78,9 +78,8 @@ extension Token: Creatable {
     public static func createEndpointWith(parent: OmiseResourceObject?, usingKey key: Key<PublicKey>, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
-            method: "POST",
             pathComponents: Token.makeResourcePathsWithParent(parent),
-            params: params
+            parameter: .post(params)
         )
     }
     
@@ -102,9 +101,8 @@ extension Token: Retrievable {
     public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         return RetrieveEndpoint(
             endpoint: .api,
-            method: "GET",
             pathComponents: [resourceInfo.path, id],
-            params: nil
+            parameter: .get(nil)
         )
     }
     

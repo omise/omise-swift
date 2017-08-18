@@ -53,7 +53,7 @@ public protocol Schedulable: OmiseIdentifiableObject {
 }
 
 public protocol APISchedulable: Schedulable {
-    associatedtype ScheduleDataParams: APIParams
+    associatedtype ScheduleDataParams: APIJSONQuery
 }
 
 extension Schedulable {
@@ -176,7 +176,7 @@ extension Schedule: Listable {}
 extension Schedule: Retrievable {}
 
 
-public struct ScheduleParams<Data: APISchedulable>: APIParams {
+public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
     public let every: Int
     public let period: Period
     public let endDate: DateComponents
@@ -213,9 +213,8 @@ extension Schedule where Data: APISchedulable {
     
     public static func createEndpointWith(parent: OmiseResourceObject?, params: ScheduleParams<Data>) -> CreateEndpoint {
         return CreateEndpoint(
-            method: "POST",
             pathComponents: Schedule.makeResourcePathsWithParent(parent),
-            params: params
+            parameter: .post(params)
         )
     }
     

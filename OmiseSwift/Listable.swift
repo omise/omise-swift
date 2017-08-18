@@ -2,7 +2,7 @@ import Foundation
 
 public protocol Listable {}
 
-public struct ListParams: APIParams {
+public struct ListParams: APIJSONQuery {
     public var from: Date?
     public var to: Date?
     public var offset: Int?
@@ -36,9 +36,8 @@ public extension Listable where Self: OmiseLocatableObject {
     @discardableResult
     public static func listEndpointWith(parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
-            method: "GET",
             pathComponents: makeResourcePathsWithParent(parent),
-            params: params
+            parameter: .get(params)
         )
     }
     
@@ -76,7 +75,7 @@ public extension List where TItem: OmiseLocatableObject & Listable {
     public func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
         let listParams = ListParams(from: nil, to: nil, offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
-        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
     }
     
     @discardableResult
@@ -95,7 +94,7 @@ public extension List where TItem: OmiseLocatableObject & Listable {
     public func makeLoadPreviousPageOperation(count: Int?) -> TItem.ListEndpoint {
         let listParams = ListParams(from: nil, to: nil, offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
         
-        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
     }
     
     @discardableResult
@@ -129,7 +128,7 @@ public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObjec
             listParams = ListParams(from: nil, to: nil, offset: nil, limit: nil, order: order)
         }
         
-        return TItem.ListEndpoint(endpoint: endpoint, method: "GET", pathComponents: paths, params: listParams)
+        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
     }
     
     @discardableResult
