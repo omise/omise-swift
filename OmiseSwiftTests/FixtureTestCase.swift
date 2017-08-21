@@ -3,7 +3,7 @@ import XCTest
 
 class FixtureTestCase: OmiseTestCase {
     var testClient: FixtureClient {
-        let config = APIConfiguration(key: AnyKey(""))
+        let config = APIConfiguration(key: AnyAccessKey(""))
         return FixtureClient(config: config)
     }
     
