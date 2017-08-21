@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Token: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
+public struct Token: OmiseResourceObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/tokens")
     
     public var object: String
@@ -18,8 +18,7 @@ public struct Token: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveMod
 extension Token {
     public init?(JSON json: Any) {
         guard let json = json as? [String: Any],
-            let omiseObjectProperties: (String, String, String, Date) = Token.parseOmiseProperties(JSON: json),
-            let isLive = json["livemode"] as? Bool else {
+            let omiseObjectProperties = Token.parseOmiseResource(JSON: json) else {
                 return nil
         }
         
@@ -28,8 +27,7 @@ extension Token {
                 return nil
         }
         
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
-        self.isLive = isLive
+        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
         self.isUsed = isUsed
         self.card = card
     }

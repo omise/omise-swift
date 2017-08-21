@@ -46,7 +46,7 @@ public protocol SchedulingParameter {
     init?(JSON: Any)
 }
 
-public protocol Schedulable: OmiseIdentifiableObject {
+public protocol Schedulable: OmiseIdentifiableObject, OmiseCreatableObject {
     associatedtype Parameter: SchedulingParameter
     static func preferredParameterKey(from: [String]) -> String?
     static var parameterKey: String { get }
@@ -122,7 +122,7 @@ extension Schedule.Status {
 }
 
 
-public struct AnySchedulable: Schedulable, OmiseIdentifiableObject {
+public struct AnySchedulable: Schedulable, OmiseIdentifiableObject, OmiseCreatableObject {
     public enum AnySchedulingParameter: SchedulingParameter {
         case charge(ChargeSchedulingParameter)
         case transfer(TransferSchedulingParameter)

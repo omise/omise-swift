@@ -15,6 +15,9 @@ public protocol OmiseLocatableObject: OmiseObject {
 
 public protocol OmiseIdentifiableObject: OmiseObject {
     var id: String { get }
+}
+
+public protocol OmiseCreatableObject: OmiseObject {
     var createdDate: Date { get }
 }
 
@@ -22,7 +25,7 @@ public protocol OmiseLiveModeObject: OmiseObject {
     var isLive: Bool { get }
 }
 
-public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
+public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
 }
 
 extension OmiseLocatableObject {
@@ -92,7 +95,7 @@ func parseDate(_ date: Any) -> Date? {
     return (date as? Date) ?? (date as? String).flatMap(DateConverter.convert(fromAttribute:))
 }
 
-extension OmiseIdentifiableObject {
+extension OmiseIdentifiableObject where Self: OmiseCreatableObject {
     static func parseIdentifiableProperties(JSON json: Any) -> (object: String, id: String, createdDate: Date)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
@@ -106,6 +109,20 @@ extension OmiseIdentifiableObject {
 }
 
 extension OmiseLiveModeObject where Self: OmiseIdentifiableObject {
+    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool, id: String)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let isLiveMode = json["livemode"] as? Bool,
+            let id = json["id"] as? String else {
+                return nil
+        }
+        
+        return (object: object, isLiveMode: isLiveMode, id: id)
+    }
+}
+
+
+extension OmiseLiveModeObject where Self: OmiseIdentifiableObject & OmiseCreatableObject {
     static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool, id: String, createdDate: Date)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
@@ -121,18 +138,32 @@ extension OmiseLiveModeObject where Self: OmiseIdentifiableObject {
 
 
 extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
+    static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String)? {
+        guard let json = json as? [String: Any],
+            let object = Self.parseObject(JSON: json),
+            let location = json["location"] as? String,
+            let id = json["id"] as? String else {
+                return nil
+        }
+        
+        return (object: object, location: location, id: id)
+    }
+}
+
+extension OmiseLocatableObject where Self: OmiseIdentifiableObject & OmiseCreatableObject {
     static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String, createdDate: Date)? {
         guard let json = json as? [String: Any],
             let object = Self.parseObject(JSON: json),
             let location = json["location"] as? String,
             let id = json["id"] as? String,
-            let created = json["created"].flatMap(parseDate) else {
+            let created = json["created"].flatMap(parseDate) else{
                 return nil
         }
         
         return (object: object, location: location, id: id, createdDate: created)
     }
 }
+
 
 extension OmiseResourceObject {
     static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date)? {
