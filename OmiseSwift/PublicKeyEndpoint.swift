@@ -1,8 +1,8 @@
 import Foundation
 
-public extension Key where Kind == PublicKey {
-    public typealias PublicKeyRetrieveEndpoint = APIEndpoint<Key<PublicKey>>
-    public typealias PublicKeyRetrieveRequest = APIRequest<Key<PublicKey>>
+public extension PublicKey {
+    public typealias PublicKeyRetrieveEndpoint = APIEndpoint<PublicKey>
+    public typealias PublicKeyRetrieveRequest = APIRequest<PublicKey>
     
     
     public static func retrivePublicKeyEndpoint() -> PublicKeyRetrieveEndpoint {

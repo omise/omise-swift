@@ -73,7 +73,7 @@ public struct TokenParams: APIJSONQuery {
 extension Token: Creatable {
     public typealias CreateParams = TokenParams
     
-    public static func createEndpointWith(parent: OmiseResourceObject?, usingKey key: Key<PublicKey>, params: CreateParams) -> CreateEndpoint {
+    public static func createEndpointWith(parent: OmiseResourceObject?, usingKey key: PublicKey, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
             pathComponents: Token.makeResourcePathsWithParent(parent),
@@ -81,7 +81,7 @@ extension Token: Creatable {
         )
     }
     
-    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, usingKey key: Key<PublicKey>, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, usingKey key: PublicKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
         guard Token.verifyParent(parent) else {
             return nil
         }

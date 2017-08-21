@@ -4,7 +4,7 @@ let stagingURLSuffix = "-staging.omise.co"
 let productionURLSuffix = ".omise.co"
 
 public enum ServerEndpoint {
-    case vault(Key<PublicKey>)
+    case vault(PublicKey)
     case api
     
     var url: URL {
