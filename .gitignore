@@ -38,3 +38,4 @@ playground.xcworkspace
 timeline.xctimeline
 xcuserdata/
 *.framework.zip
+*WorkspaceSettings.xcsettings
