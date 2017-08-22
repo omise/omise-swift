@@ -59,13 +59,13 @@ public class APIRequest<Result: OmiseObject> {
                 
             case 200..<300:
                 result = .success(try endpoint.deserialize(data))
-
+                
             default:
                 result = .fail(.unexpected("unrecognized HTTP status code: \(httpResponse.statusCode)"))
             }
         } catch let err as OmiseError {
             result = .fail(err)
-
+            
         } catch let err {
             result = .fail(.other(err))
         }
