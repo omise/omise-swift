@@ -106,6 +106,7 @@ extension Charge {
         self.chargeDescription = json["description"] as? String
         
         self.metadata = json["metadata"] as? [String: Any] ?? [:]
+        self.dispute = json["dispute"].flatMap(Dispute.init(JSON:))
         
         let payment: Payment?
         let card: Card?

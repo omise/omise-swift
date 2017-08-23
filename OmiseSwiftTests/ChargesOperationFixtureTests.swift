@@ -61,6 +61,41 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testDisputedCharge() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_58qdpc54lq6a5enm88m") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.value.amount, 31_900_00)
+                XCTAssertEqual(charge.value.currency.code, "THB")
+                XCTAssertNil(charge.chargeDescription)
+                XCTAssertEqual(charge.id, "chrg_test_58qdpc54lq6a5enm88m")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_58qdpc54lq6a5enm88m")
+                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_58qdpcrr81jsqpoks6l")
+                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2017-07-24T01:30:01Z"))
+                XCTAssertNotNil(charge.dispute)
+                
+                XCTAssertEqual(charge.dispute?.id, "dspt_test_58qhpee050f4qo36rnp")
+                XCTAssertEqual(charge.dispute?.value.amount, 3190000)
+                XCTAssertEqual(charge.dispute?.status, .pending)
+                XCTAssertEqual(charge.dispute?.reasonCode, .goodsOrServicesNotProvided)
+                XCTAssertEqual(charge.dispute?.reasonMessage, "Services not provided or Merchandise not received")
+                XCTAssertEqual(charge.dispute?.responseMessage, "This is a response message")
+                XCTAssertEqual(charge.dispute?.charge.dataID, "chrg_test_58qdpc54lq6a5enm88m")
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+
+    }
+    
     func testChargeList() {
         let expectation = self.expectation(description: "Charge list")
         
