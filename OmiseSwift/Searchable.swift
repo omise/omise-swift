@@ -24,9 +24,11 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
             "page": page,
             "query": query,
             "order": order?.rawValue,
-            "filters": filter?.json,
+//            "filters": filter?.json,
             ])
     }
+    
+    
     
     public init(scope: String, page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil) {
         self.scope = scope

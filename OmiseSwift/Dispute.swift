@@ -1,6 +1,6 @@
 import Foundation
 
-public enum DisputeStatus: String, Decodable {
+public enum DisputeStatus: String, Codable {
     case open
     case pending
     case won

@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum ChargeFailure: Decodable {
+public enum ChargeFailure: Codable {
     
     // Credit Card Failure
     /// Insufficient funds in the account or the card has reached the credit limit.
@@ -129,6 +129,11 @@ public enum ChargeFailure: Decodable {
         case let code:
             self = .other(code)
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(code)
     }
     
     public init(from decoder: Decoder) throws {

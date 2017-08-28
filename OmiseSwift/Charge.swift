@@ -188,6 +188,33 @@ public struct ChargeParams: APIJSONQuery {
             ])
     }
     
+    private enum CodingKeys: String, CodingKey {
+        case customerID = "customer"
+        case cardID = "card"
+        case amount
+        case currency
+        case chargeDescription = "description"
+        case isAutoCapture = "capture"
+        case returnURL = "return_uri"
+        case metadata
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(value.amount, forKey: .amount)
+        try container.encode(value.currency, forKey: .currency)
+        try container.encodeIfPresent(customerID, forKey: .customerID)
+        try container.encodeIfPresent(cardID, forKey: .cardID)
+        try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
+        try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
+        try container.encodeIfPresent(returnURL, forKey: .returnURL)
+        if let metadata = metadata, !metadata.isEmpty {
+            try container.encodeIfPresent(metadata, forKey: .metadata)
+        }
+
+    }
+    
     public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.value = value
         self.chargeDescription = chargeDescription
@@ -203,11 +230,18 @@ public struct UpdateChargeParams: APIJSONQuery {
     public var chargeDescription: String?
     public var metadata: [String: Any]?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "description": chargeDescription,
-            "metadata": metadata
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case chargeDescription = "description"
+        case metadata
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
+        if let metadata = metadata, !metadata.isEmpty {
+            try container.encodeIfPresent(metadata, forKey: .metadata)
+        }
     }
     
     public init(chargeDescription: String? = nil, metadata: [String: Any]? = nil) {
@@ -225,16 +259,14 @@ public struct ChargeFilterParams: OmiseFilterParams {
     public var isCustomerPresent: Bool?
     public var failureCode: ChargeFailure?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "amount": amount,
-            "captured": isCaptured,
-            "authorized": isAuthorized,
-            "card_last_digits": cardLastDigits?.lastDigits,
-            "customer_present": isCustomerPresent,
-            "failure_code": failureCode?.code,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case amount
+        case isAuthorized = "authorized"
+        case isCaptured = "captured"
+        case cardLastDigits = "card_last_digits"
+        case isCustomerPresent = "customer_present"
+        case failureCode = "failure_code"
     }
     
     public init(created: DateComponents? = nil, amount: Double? = nil,
@@ -284,14 +316,13 @@ public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
         chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
     }
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "currency": value.currency.code,
-            "amount": value.amount,
-            "customer": customerID,
-            "card": cardID ?? "",
-            "description": chargeDescription,
-            ])
+    public func encode(to encoder: Encoder) throws {
+        var keyedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try keyedContainer.encode(customerID, forKey: .customerID)
+        try keyedContainer.encode(value.amount, forKey: .amount)
+        try keyedContainer.encode(value.currency, forKey: .currency)
+        try keyedContainer.encodeIfPresent(cardID, forKey: .cardID)
+        try keyedContainer.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
     }
 }
 

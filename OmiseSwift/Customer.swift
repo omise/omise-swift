@@ -55,13 +55,22 @@ public struct CustomerParams: APIJSONQuery {
     public var cardID: String?
     public var metadata: [String: Any]?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "email": email,
-            "description": customerDescription,
-            "card": cardID,
-            "metadata": metadata
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case email
+        case customerDescription = "description"
+        case cardID = "card"
+        case metadata
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encodeIfPresent(email, forKey: .email)
+        try container.encodeIfPresent(customerDescription, forKey: .customerDescription)
+        try container.encodeIfPresent(cardID, forKey: .cardID)
+        if let metadata = metadata, !metadata.isEmpty {
+            try container.encodeIfPresent(metadata, forKey: .metadata)
+        }
     }
     
     public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil, metadata: [String: Any]? = nil) {

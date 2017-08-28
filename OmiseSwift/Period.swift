@@ -67,7 +67,7 @@ extension Period: Equatable {
     }
 }
 
-extension Period: Decodable {
+extension Period: Codable {
     enum CodingKeys: String, CodingKey {
         case period
         case on
@@ -75,6 +75,62 @@ extension Period: Decodable {
             case weekdays
             case daysOfMonth = "days_of_month"
             case weekdayOfMonth = "weekday_of_month"
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        switch self {
+        case .daily:
+            try container.encode("daily", forKey: .period)
+        case .weekly(let weekDays):
+            try container.encode("weekly", forKey: .period)
+            var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+            var weekDaysContainers = ruleContainer.nestedUnkeyedContainer(forKey: .weekdays)
+            try weekDaysContainers.encode(contentsOf:
+                weekDays.sorted(by: { (first, second) -> Bool in
+                    switch (first, second) {
+                    case (.monday, _):
+                        return true
+                    case (.sunday, _):
+                        return false
+                    case (.tuesday, .monday):
+                        return false
+                    case (.tuesday, _):
+                        return true
+                    case (.saturday, .sunday):
+                        return true
+                    case (.saturday, _):
+                        return false
+                        
+                    case (.wednesday, .monday), (.wednesday, .tuesday):
+                        return false
+                    case (.wednesday, _):
+                        return true
+                        
+                    case (.friday, .saturday), (.friday, .sunday):
+                        return true
+                    case (.friday, _):
+                        return false
+                        
+                    case (.thursday, .monday), (.thursday, .tuesday), (.thursday, .wednesday), (.thursday, .thursday):
+                        return true
+                    case (.thursday, .friday), (.thursday, .saturday), (.thursday, .sunday):
+                        return false
+                    }
+                }).map({ $0.apiValue })
+            )
+        case .monthly(let month):
+            try container.encode("weekly", forKey: .period)
+            var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+            switch month {
+            case .daysOfMonth(let daysOfMonth):
+                var daysOfMonthContainers = ruleContainer.nestedUnkeyedContainer(forKey: .daysOfMonth)
+                try daysOfMonthContainers.encode(contentsOf: daysOfMonth.map({ $0.rawValue }).sorted())
+            case .weekdayOfMonth(ordinal: let ordinal, weekday: let weekday):
+                try ruleContainer.encode("\(ordinal.apiValue)_\(weekday.apiValue.lowercased())", forKey: .weekdayOfMonth)
+            }
         }
     }
     
@@ -126,7 +182,7 @@ extension Period: Decodable {
     }
 }
 
-extension Period.MonthlyPeriodRule.DayOfMonth: Decodable {
+extension Period.MonthlyPeriodRule.DayOfMonth: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(Int.self)
@@ -155,72 +211,6 @@ extension Period.MonthlyPeriodRule.Ordinal: Decodable {
         default:
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
         }
-    }
-}
-
-
-extension Period {
-    public var json: JSONAttributes {
-        let periodString: String
-        let ruleJSON: [String: Any]
-        
-        switch self {
-        case .daily:
-            periodString = "day"
-            ruleJSON = [:]
-        case .weekly(let weekdays):
-            periodString = "week"
-            ruleJSON = [
-                "weekdays": weekdays.sorted(by: { (first, second) -> Bool in
-                    switch (first, second) {
-                    case (.monday, _):
-                        return true
-                    case (.sunday, _):
-                        return false
-                    case (.tuesday, .monday):
-                        return false
-                    case (.tuesday, _):
-                        return true
-                    case (.saturday, .sunday):
-                        return true
-                    case (.saturday, _):
-                        return false
-                        
-                    case (.wednesday, .monday), (.wednesday, .tuesday):
-                        return false
-                    case (.wednesday, _):
-                        return true
-                        
-                    case (.friday, .saturday), (.friday, .sunday):
-                        return true
-                    case (.friday, _):
-                        return false
-                        
-                    case (.thursday, .monday), (.thursday, .tuesday), (.thursday, .wednesday), (.thursday, .thursday):
-                        return true
-                    case (.thursday, .friday), (.thursday, .saturday), (.thursday, .sunday):
-                        return false
-                    }
-                }).map({ $0.apiValue })
-            ]
-        case .monthly(let monthlyRule):
-            periodString = "month"
-            switch monthlyRule {
-            case .daysOfMonth(let daysOfMonth):
-                ruleJSON = [
-                    "days_of_month": daysOfMonth.map({ $0.rawValue }).sorted()
-                ]
-            case .weekdayOfMonth(ordinal: let ordinal, weekday: let weekday):
-                ruleJSON = [
-                    "weekday_of_month": "\(ordinal.apiValue)_\(weekday.apiValue.lowercased())"
-                ]
-            }
-        }
-        
-        return Dictionary.makeFlattenDictionaryFrom([
-            "period": periodString,
-            "on": ruleJSON
-            ])
     }
 }
 

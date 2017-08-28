@@ -37,7 +37,7 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
 }
 
 extension Schedule {
-    private enum CodingKeys: CodingKey {
+    fileprivate enum CodingKeys: CodingKey {
         case object
         case location
         case id
@@ -291,18 +291,16 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
     
     public let scheduleData: Data.ScheduleDataParams
     
-    public var json: JSONAttributes {
-        let scheduleJSON = Dictionary.makeFlattenDictionaryFrom([
-            "end_date": DateComponentsConverter.convert(fromValue: endDate),
-            "start_date": startDate.flatMap(DateComponentsConverter.convert(fromValue:)),
-            "every": every,
-            ])
-        let periodJSON = period.json
-        let scheduleDataJSON = ["charge": scheduleData.json] as [String: Any]
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Schedule<Data>.CodingKeys.self)
         
-        return scheduleJSON
-            .merging(periodJSON, uniquingKeysWith: { first, _ in return first })
-            .merging(scheduleDataJSON, uniquingKeysWith: { first, _ in return first })
+        try container.encode(every, forKey: .every)
+        try container.encode(DateComponentsConverter.convert(fromValue: endDate) as? String, forKey: .endDate)
+        try container.encode(DateComponentsConverter.convert(fromValue: startDate) as? String, forKey: .startDate)
+        
+        try period.encode(to: encoder)
+        
+        try container.encode(scheduleData, forKey: .parameter(Data.parameterKey))
     }
 }
 

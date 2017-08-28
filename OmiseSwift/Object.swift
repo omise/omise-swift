@@ -7,7 +7,6 @@ public protocol OmiseObject: Decodable {
 
 public protocol OmiseLocatableObject: OmiseObject {
     static var resourceInfo: ResourceInfo { get }
-    
     var location: String { get }
 }
 

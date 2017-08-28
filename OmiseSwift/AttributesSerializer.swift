@@ -4,22 +4,6 @@ import Foundation
 public typealias JSONAttributes = [String: Any]
 
 
-func normalizeAttributes(_ attributes: APIJSONQuery, parentPrefix: String? = nil) -> JSONAttributes {
-    var result: JSONAttributes = [:]
-    
-    for (key, value) in attributes.json {
-        if let child = value as? APIJSONQuery {
-            for (childKey, childAttributes) in normalizeAttributes(child, parentPrefix: stitchKeys(parentPrefix, key: key)) {
-                result[childKey] = childAttributes
-            }
-        } else {
-            result[stitchKeys(parentPrefix, key: key)] = value
-        }
-    }
-    
-    return result
-}
-
 func stitchKeys(_ prefix: String?, key: String) -> String {
     if let p = prefix {
         return "\(p)[\(key)]"

@@ -61,6 +61,23 @@ public struct LinkParams: APIJSONQuery {
             ])
     }
     
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case currency
+        case title
+        case linkDescription = "description"
+        case isMultiple = "multiple"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var keyedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try keyedContainer.encode(value.amount, forKey: .amount)
+        try keyedContainer.encode(value.currency, forKey: .currency)
+        try keyedContainer.encode(title, forKey: .title)
+        try keyedContainer.encodeIfPresent(linkDescription, forKey: .linkDescription)
+        try keyedContainer.encodeIfPresent(isMultiple, forKey: .isMultiple)
+    }
+    
     public init(value: Value, title: String, linkDescription: String, isMultiple: Bool? = nil) {
         self.value = value
         self.title = title

@@ -1,18 +1,16 @@
 import Foundation
 
-public protocol APIQuery {}
+public protocol APIQuery: Encodable {}
 
 public protocol APIURLQuery: APIQuery {
     var queryItems: [URLQueryItem] { get }
 }
 
 public protocol APIJSONQuery: APIURLQuery {
-    var json: JSONAttributes { get }
+//    var json: JSONAttributes { get }
 }
 
-public protocol APIMultipartFormQuery: APIQuery {
-    
-}
+public protocol APIMultipartFormQuery: APIQuery {}
 
 public protocol APIFileQuery: APIMultipartFormQuery {
     var filename: String { get }
