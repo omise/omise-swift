@@ -15,18 +15,6 @@ public struct Value {
 }
 
 
-extension Value {
-    init?(JSON json: Any) {
-        guard let json = json as? [String: Any], let amount = json["amount"] as? Int64,
-            let currency = json["currency"].flatMap(CurrencyFieldConverter.convert(fromAttribute:)) else {
-            return nil
-        }
-        
-        self.amount = amount
-        self.currency = currency
-    }
-}
-
 extension Value: Equatable {
     public static func ==(lhs: Value, rhs: Value) -> Bool {
         return lhs.currency == rhs.currency && lhs.amount == rhs.amount

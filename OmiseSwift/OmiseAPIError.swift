@@ -137,16 +137,6 @@ public enum ChargeFailure: Decodable {
 }
 
 
-extension ChargeFailure {
-    init?(JSON json: Any) {
-        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String else {
-            return nil
-        }
-        self = ChargeFailure.init(code: code)
-    }
-}
-
-
 public enum TransferFailure: Decodable {
     /// Bank rejected the transfer request
     case sentFailed
@@ -179,16 +169,6 @@ public enum TransferFailure: Decodable {
     
     public init(from decoder: Decoder) throws {
         self.init(code: try decoder.singleValueContainer().decode(String.self))
-    }
-}
-
-
-extension TransferFailure {
-    init?(JSON json: Any) {
-        guard let code = json as? String ?? (json as? [String: Any])?["failure_code"] as? String else {
-            return nil
-        }
-        self = TransferFailure.init(code: code)
     }
 }
 

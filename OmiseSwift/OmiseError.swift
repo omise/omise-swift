@@ -12,6 +12,8 @@ public enum OmiseError: Error {
             return "unexpected error: \(message)"
         case .configuration(let message):
             return "configuration error: \(message)"
+        case .other(let err as DecodingError):
+            return "Decoding Error: \(err.localizedDescription) - \(err.failureReason ?? "")"
         case .other(let err):
             return "I/O error: \(err.localizedDescription)"
         case .api(let err):

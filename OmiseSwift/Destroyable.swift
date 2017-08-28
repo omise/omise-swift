@@ -4,17 +4,13 @@ public struct DeletedObject<DeletedObjectType: Destroyable & OmiseResourceObject
     public let isLive: Bool
     public let object: String
     public let id: String
-    
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = DeletedObject<DeletedObjectType>.parseOmiseProperties(JSON: json),
-            let id = json["id"] as? String,
-            let isDeleted = json["deleted"] as? Bool, isDeleted else {
-                return nil
-        }
-        
-        (self.object, self.isLive) = omiseObjectProperties
-        self.id = id
+}
+
+extension DeletedObject {
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case id
+        case isLive = "livemode"
     }
 }
 

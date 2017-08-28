@@ -68,7 +68,7 @@ extension Period: Equatable {
 }
 
 extension Period: Decodable {
-    private enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case period
         case on
         enum RuleCodingKeys: String, CodingKey {
@@ -160,51 +160,6 @@ extension Period.MonthlyPeriodRule.Ordinal: Decodable {
 
 
 extension Period {
-    init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let period = json["period"] as? String else {
-                return nil
-        }
-        
-        let onValues = json["on"] as? [String: Any]
-        
-        let onWeekdays = (onValues?["weekdays"] as? [String])?.flatMap({ Weekday(weekdayString: $0) })
-        let monthlyRule: MonthlyPeriodRule?
-        
-        let onMonthdays = (onValues?["days_of_month"] as? [Int])?.flatMap({ MonthlyPeriodRule.DayOfMonth(rawValue: $0) })
-        let onWeekdayOfMonth = (onValues?["weekday_of_month"] as? String)
-            .flatMap({ value -> (MonthlyPeriodRule.Ordinal, Weekday)? in
-                let splitted = value.components(separatedBy: "_")
-                guard splitted.count == 2,
-                    let ordinal = splitted.first.flatMap(MonthlyPeriodRule.Ordinal.init(ordinalString:)),
-                    let weekday = splitted.last.flatMap(Weekday.init(weekdayString:)) else {
-                        return nil
-                }
-                
-                return (ordinal, weekday)
-            })
-        
-        switch (onMonthdays, onWeekdayOfMonth) {
-        case (let onMonthdays?, nil):
-            monthlyRule = MonthlyPeriodRule.daysOfMonth(Set(onMonthdays))
-        case (nil, let onWeekdayOfMonth?):
-            monthlyRule = MonthlyPeriodRule.weekdayOfMonth(ordinal: onWeekdayOfMonth.0, weekday: onWeekdayOfMonth.1)
-        default:
-            monthlyRule = nil
-        }
-        
-        switch (period, onWeekdays, monthlyRule) {
-        case ("day", nil, nil):
-            self = .daily
-        case ("week", let onWeekdays?, nil):
-            self = .weekly(Set(onWeekdays))
-        case ("month", nil, let monthlyRule?):
-            self = .monthly(monthlyRule)
-        default:
-            return nil
-        }
-    }
-    
     public var json: JSONAttributes {
         let periodString: String
         let ruleJSON: [String: Any]

@@ -31,32 +31,6 @@ public struct Recipient: OmiseResourceObject {
 }
 
 
-extension Recipient {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Recipient.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let name = json["name"] as? String, let type = EnumConverter<RecipientType>.convert(fromAttribute: json["type"]),
-            let account = json["bank_account"].flatMap(BankAccount.init(JSON:)),
-            let isActive = json["active"] as? Bool, let isVerified = json["verified"] as? Bool else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.name = name
-        self.type = type
-        self.bankAccount = account
-        self.isActive = isActive
-        self.isVerified = isVerified
-        self.email = json["email"] as? String
-        self.recipientDescription = json["description"] as? String
-        self.taxID = json["tax_id"] as? String
-    }
-}
-
-
 public struct RecipientParams: APIJSONQuery {
     public var name: String?
     public var email: String?
@@ -112,10 +86,6 @@ public struct RecipientFilterParams: OmiseFilterParams {
     
     public init(type: RecipientType?) {
         self.type = type
-    }
-    
-    public init(JSON: [String : Any]) {
-        self.init(type: (JSON["type"] as? String).flatMap(RecipientType.init(rawValue:)))
     }
 }
 

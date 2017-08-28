@@ -15,8 +15,9 @@ private let charge: Charge = {
             preconditionFailure()
     }
     
-    let json = try! JSONSerialization.jsonObject(with: data)
-    return Charge(JSON: json)!
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return try! decoder.decode(Charge.self, from: data)
 }()
 
 class RefundOperationFixtureTests: FixtureTestCase {

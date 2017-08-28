@@ -39,7 +39,6 @@
 		8A28BB431E28FDAE00EEBD55 /* OmiseAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A28BB421E28FDAE00EEBD55 /* OmiseAPIError.swift */; };
 		8A28BB441E290A5500EEBD55 /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */; };
 		8A28BB451E290A5A00EEBD55 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229873321CCDF1F900970F8C /* Converter.swift */; };
-		8A28BB461E290B9200EEBD55 /* CurrencyFieldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */; };
 		8A2BCABE1E5C039B0069577B /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2BCABD1E5C039B0069577B /* Bank.swift */; };
 		8A2BCABF1E5C039B0069577B /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2BCABD1E5C039B0069577B /* Bank.swift */; };
 		8A2BCAC11E5C083F0069577B /* banks.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A2BCAC01E5C083F0069577B /* banks.json */; };
@@ -113,7 +112,6 @@
 		8ACD57101E2E3A9600FEE5A0 /* OmiseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298738A1CCF5D9500970F8C /* OmiseError.swift */; };
 		8ACD57111E2E3A9600FEE5A0 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A028B421E2CDB6F0008E010 /* Tool.swift */; };
 		8ACD57121E2E3A9600FEE5A0 /* AttributesSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A028B3D1E2CC9D30008E010 /* AttributesSerializer.swift */; };
-		8ACD57131E2E3A9600FEE5A0 /* CurrencyFieldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */; };
 		8ACD57141E2E3A9600FEE5A0 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB41291E2793B3001793CD /* Customer.swift */; };
 		8ACD57151E2E3A9600FEE5A0 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56D41A1D78172D00F30D88 /* Currency.swift */; };
 		8ACD57161E2E3A9600FEE5A0 /* Dispute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB41361E279CED001793CD /* Dispute.swift */; };
@@ -137,7 +135,6 @@
 		8ACD57281E2E3A9600FEE5A0 /* EnumConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */; };
 		8ACD57291E2E3A9600FEE5A0 /* Recipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB413A1E27A36F001793CD /* Recipient.swift */; };
 		8ACD572A1E2E3A9600FEE5A0 /* Searchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7061D7942E800A198A3 /* Searchable.swift */; };
-		8ACD572B1E2E3A9600FEE5A0 /* LastDigitsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA4B1DE59C2000F83D21 /* LastDigitsConverter.swift */; };
 		8ACD572C1E2E3A9600FEE5A0 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB41121E277607001793CD /* Object.swift */; };
 		8ACD572D1E2E3A9600FEE5A0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A028B461E2CEB8D0008E010 /* APIClient.swift */; };
 		8ACD572E1E2E3A9600FEE5A0 /* Failable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22338DB71D21392A00811363 /* Failable.swift */; };
@@ -169,7 +166,6 @@
 		8AEDE7D51DDC701600DD9DF1 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 229873591CCE0B5A00970F8C /* Fixtures */; };
 		8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */; };
 		8AF9D8011E2C8E7000F10869 /* PaymentConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A075A391DF01AA7009143A9 /* PaymentConverter.swift */; };
-		8AF9D8021E2C8FBE00F10869 /* LastDigitsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA4B1DE59C2000F83D21 /* LastDigitsConverter.swift */; };
 		8AF9D8031E2C942A00F10869 /* EnumConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */; };
 		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
 /* End PBXBuildFile section */
@@ -257,7 +253,6 @@
 		8A60792F1EB1E395005684CC /* AnyAccessKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyAccessKey.swift; sourceTree = "<group>"; };
 		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
 		8A7CBA481DE59A4700F83D21 /* LastDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigits.swift; sourceTree = "<group>"; };
-		8A7CBA4B1DE59C2000F83D21 /* LastDigitsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigitsConverter.swift; sourceTree = "<group>"; };
 		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
 		8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOperationTest.swift; sourceTree = "<group>"; };
 		8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateComponentsConverter.swift; sourceTree = "<group>"; };
@@ -286,7 +281,6 @@
 		8AE11AF71ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountAndBalanceOperationsTest.swift; sourceTree = "<group>"; };
 		8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
-		8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFieldConverter.swift; sourceTree = "<group>"; };
 		8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargeOperationsTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -368,11 +362,9 @@
 			isa = PBXGroup;
 			children = (
 				229873321CCDF1F900970F8C /* Converter.swift */,
-				8AF5843E1E0152DC00D7D647 /* CurrencyFieldConverter.swift */,
 				8A82A7121D79786100A198A3 /* DateComponentsConverter.swift */,
 				220D1C3B1CC8E226006C7FD6 /* DateConverter.swift */,
 				22BF9BAA1CD2299600CD3CAD /* EnumConverter.swift */,
-				8A7CBA4B1DE59C2000F83D21 /* LastDigitsConverter.swift */,
 				8A075A391DF01AA7009143A9 /* PaymentConverter.swift */,
 			);
 			name = Converters;
@@ -472,6 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				8ACD57391E2E563800FEE5A0 /* Account.swift */,
+				8A60792F1EB1E395005684CC /* AnyAccessKey.swift */,
 				8ACD573C1E2E570600FEE5A0 /* Balance.swift */,
 				8A2BCABD1E5C039B0069577B /* Bank.swift */,
 				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
@@ -484,7 +477,6 @@
 				8A98759A1F0647050090D56F /* Document.swift */,
 				22338DB71D21392A00811363 /* Failable.swift */,
 				8A590B431EDD72EC003C60E0 /* Forex.swift */,
-				8A60792F1EB1E395005684CC /* AnyAccessKey.swift */,
 				8A7CBA481DE59A4700F83D21 /* LastDigits.swift */,
 				8A028B371E2CBABF0008E010 /* Link.swift */,
 				8A3938E51D8174C9007750AA /* List.swift */,
@@ -701,7 +693,6 @@
 				8A242A4E1E2E0A6A0068BB5D /* OmiseError.swift in Sources */,
 				8A028B431E2CDB6F0008E010 /* Tool.swift in Sources */,
 				8A028B3E1E2CC9D30008E010 /* AttributesSerializer.swift in Sources */,
-				8A28BB461E290B9200EEBD55 /* CurrencyFieldConverter.swift in Sources */,
 				8ACB41511E28A3C2001793CD /* Customer.swift in Sources */,
 				8A590B481EDD74F7003C60E0 /* ForexEndpoint.swift in Sources */,
 				8ACB415E1E28A3EC001793CD /* Currency.swift in Sources */,
@@ -735,7 +726,6 @@
 				8ACB415A1E28A3C2001793CD /* Recipient.swift in Sources */,
 				8A50C5091E2E250800EC9407 /* Searchable.swift in Sources */,
 				8A590B451EDD72EC003C60E0 /* Forex.swift in Sources */,
-				8AF9D8021E2C8FBE00F10869 /* LastDigitsConverter.swift in Sources */,
 				8ACB41541E28A3C2001793CD /* Object.swift in Sources */,
 				8A2BCABF1E5C039B0069577B /* Bank.swift in Sources */,
 				8A028B471E2CEB8D0008E010 /* APIClient.swift in Sources */,
@@ -790,7 +780,6 @@
 				8A4224AB1E4C8F8E00B11AF2 /* Search.swift in Sources */,
 				8ACD57201E2E3A9600FEE5A0 /* APIConfiguration.swift in Sources */,
 				8ACD57241E2E3A9600FEE5A0 /* Retrievable.swift in Sources */,
-				8ACD57131E2E3A9600FEE5A0 /* CurrencyFieldConverter.swift in Sources */,
 				8ACD57181E2E3A9600FEE5A0 /* Link.swift in Sources */,
 				8ACD571F1E2E3A9600FEE5A0 /* LastDigits.swift in Sources */,
 				8ACD57291E2E3A9600FEE5A0 /* Recipient.swift in Sources */,
@@ -817,7 +806,6 @@
 				8ACD57311E2E3A9600FEE5A0 /* Listable.swift in Sources */,
 				8ACD572E1E2E3A9600FEE5A0 /* Failable.swift in Sources */,
 				8ACD57361E2E3A9600FEE5A0 /* Transfer.swift in Sources */,
-				8ACD572B1E2E3A9600FEE5A0 /* LastDigitsConverter.swift in Sources */,
 				8ACD572F1E2E3A9600FEE5A0 /* Transaction.swift in Sources */,
 				8ACD573D1E2E570600FEE5A0 /* Balance.swift in Sources */,
 				8ACD57261E2E3A9600FEE5A0 /* Charge.swift in Sources */,
@@ -933,7 +921,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -984,7 +973,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1009,7 +999,6 @@
 				INFOPLIST_FILE = "OmiseSwift/Info-OSX.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
 				PRODUCT_NAME = Omise;
 				SKIP_INSTALL = YES;
@@ -1032,7 +1021,6 @@
 				INFOPLIST_FILE = "OmiseSwift/Info-OSX.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
 				PRODUCT_NAME = Omise;
 				SKIP_INSTALL = YES;
@@ -1050,7 +1038,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "OmiseSwift/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
 				PRODUCT_NAME = Omise;
@@ -1073,7 +1060,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "OmiseSwift/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwift;
 				PRODUCT_NAME = Omise;
@@ -1120,7 +1106,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftIOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1138,7 +1123,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "OmiseSwiftTests/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.omise.OmiseSwiftIOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

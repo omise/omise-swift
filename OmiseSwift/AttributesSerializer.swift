@@ -79,12 +79,9 @@ fileprivate func encodeScalar(_ value: Any?) -> String? {
 }
 
 func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
-    let jsonObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-    guard let object = TObject(JSON: jsonObject) else {
-        throw OmiseError.unexpected("expected JSON object at top level.")
-    }
-    
-    return object
+    let jsonDecoder = JSONDecoder()
+    jsonDecoder.dateDecodingStrategy = .iso8601
+    return try jsonDecoder.decode(TObject.self, from: data)
 }
 
 

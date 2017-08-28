@@ -12,5 +12,5 @@ public enum Failable<TResult> {
             return Failable<T>.fail(error)
         }
     }
-    
 }
+

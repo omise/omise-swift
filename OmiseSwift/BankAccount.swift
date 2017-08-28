@@ -10,22 +10,6 @@ public struct BankAccount: OmiseObject {
 }
 
 extension BankAccount {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let object = BankAccount.parseObject(JSON: json),
-            let bank = (json["brand"] as? String ?? json["bank_code"] as? String).flatMap({Bank(bankID: $0, branchCode: json["branch_code"] as? String) }),
-            let name = json["name"] as? String,
-            let lastDigits = json["last_digits"].flatMap(LastDigitsConverter.convert(fromAttribute:)) else {
-                return nil
-        }
-        
-        self.object = object
-        self.bank = bank
-        self.name = name
-        self.lastDigits = lastDigits
-        self.accountNumber = json["number"] as? String
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case object
         case bankCode = "bank_code"
@@ -45,7 +29,7 @@ extension BankAccount {
         
         let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
          container.decode(String.self, forKey: .bankCode)
-        let branchCode = try container.decode(String.self, forKey: .branchCode)
+        let branchCode = try container.decodeIfPresent(String.self, forKey: .branchCode)
         guard let bank = Bank(bankID: bankID, branchCode: branchCode) else {
             let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid Bank data")
             throw DecodingError.dataCorrupted(context)

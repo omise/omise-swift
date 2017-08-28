@@ -8,30 +8,6 @@ public enum ChargeStatus {
     case successful
 }
 
-extension ChargeStatus {
-    init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let status = json["status"] as? String else {
-                return nil
-        }
-        
-        let failureCode = ChargeFailure(JSON: json)
-        
-        switch (status, failureCode) {
-        case ("failed", let failureCode?):
-            self = .failed(failureCode)
-        case ("successful", nil):
-            self = .successful
-        case ("pending", nil):
-            self = .pending
-        case ("reversed", nil):
-            self = .reversed
-        default:
-            return nil
-        }
-    }
-}
-
 
 public struct Charge: OmiseResourceObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
@@ -75,71 +51,10 @@ public struct Charge: OmiseResourceObject {
     public let returnURL: URL?
     public let authorizedURL: URL?
     
-    public let metadata: [String: Any]
+    public let metadata: [String: AnyJSONType]
 }
 
 extension Charge {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Charge.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let value = Value(JSON: json), let isAutoCapture = json["capture"] as? Bool,
-            let isAuthorized = json["authorized"] as? Bool, let isPaid = json["paid"] as? Bool ?? json["captured"] as? Bool,
-            let status = ChargeStatus(JSON: json) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.status = status
-        self.amount = value.amount
-        self.currency = value.currency
-        self.isAuthorized = isAuthorized
-        self.isAutoCapture = isAutoCapture
-        self.isPaid = isPaid
-        
-        self.customer = json["customer"].flatMap(DetailProperty<Customer>.init(JSON:))
-        self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
-        
-        self.ipAddress = json["ip"] as? String
-        self.returnURL = (json["return_uri"] as? String).flatMap(URL.init(string:))
-        self.authorizedURL = (json["authorized_uri"] as? String).flatMap(URL.init(string:))
-        
-        self.refunded = json["refunded"] as? Int64
-        self.refunds = json["refunds"].flatMap(ListProperty<Refund>.init(JSON:))
-        
-        self.chargeDescription = json["description"] as? String
-        
-        self.metadata = json["metadata"] as? [String: Any] ?? [:]
-        self.dispute = json["dispute"].flatMap(Dispute.init(JSON:))
-        
-        let payment: Payment?
-        let card: Card?
-        let offsite: OffsitePayment?
-        
-        switch json["source_of_fund"] as? String {
-        case "offsite"?:
-            card = nil
-            offsite = OffsitePaymentConverter.convert(fromAttribute: json["offsite"])
-            payment = offsite.map(Payment.offsite)
-        case "card"?, nil:
-            offsite = nil
-            card = json["card"].flatMap(Card.init(JSON:))
-            payment = card.map(Payment.card)
-        default:
-            return nil
-        }
-        
-        if let payment = payment {
-            self.payment = payment
-            self.card = card
-            self.offsite = offsite
-        } else {
-            return nil
-        }
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -152,7 +67,7 @@ extension Charge {
         case currency
         case chargeDescription = "description"
         case isAutoCapture = "capture"
-        case isAuthorized = "authrozed"
+        case isAuthorized = "authorized"
         case isPaid = "paid"
         case isCaptured = "captured"
         case transaction
@@ -179,10 +94,14 @@ extension Charge {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
-        chargeDescription = try container.decode(String.self, forKey: .chargeDescription)
+        chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
         isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
         isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
-        isPaid = try container.decode(Bool.self, forKey: .isPaid)
+        do {
+            isPaid = try container.decode(Bool.self, forKey: .isCaptured)
+        } catch DecodingError.keyNotFound {
+            isPaid = try container.decode(Bool.self, forKey: .isPaid)
+        }
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
         refunded = try container.decodeIfPresent(Int64.self, forKey: .refunded)
         refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
@@ -191,7 +110,7 @@ extension Charge {
         dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
         returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
         authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
-        metadata = try container.decode([String: Any].self, forKey: .metadata)
+        metadata = try container.decode([String: AnyJSONType].self, forKey: .metadata)
         
         let statusValue = try container.decode(String.self, forKey: .status)
         let failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
@@ -331,18 +250,6 @@ public struct ChargeFilterParams: OmiseFilterParams {
         self.isCustomerPresent = isCustomerPresent
         self.failureCode = failureCode
     }
-    
-    public init(JSON: [String : Any]) {
-        self.init(
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            amount: (JSON["amount"] as? Double),
-            isAuthorized: (JSON["authorized"] as? Bool),
-            isCaptured: (JSON["captured"] as? Bool),
-            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
-            isCustomerPresent: JSON["customer_present"] as? Bool,
-            failureCode: (JSON["failure_code"] as? String).flatMap(ChargeFailure.init(JSON:))
-        )
-    }
 }
 
 public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
@@ -350,19 +257,6 @@ public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
     public let customerID: String
     public let cardID: String?
     public let chargeDescription: String?
-    
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let value = Value(JSON: json),
-            let customerID = json["customer"] as? String else {
-                return nil
-        }
-        
-        self.value = value
-        self.customerID = customerID
-        self.cardID = json["card"] as? String
-        self.chargeDescription = json["description"] as? String
-    }
     
     public init(value: Value, customerID: String, cardID: String?, description: String?) {
         self.value = value
@@ -376,7 +270,7 @@ public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
         case amount
         case currency
         case cardID = "card"
-        case chargeDescription = "descriptionf"
+        case chargeDescription = "description"
     }
     
     public init(from decoder: Decoder) throws {

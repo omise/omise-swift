@@ -43,9 +43,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     }
 }
 
-public protocol OmiseFilterParams: APIJSONQuery , Decodable {
-    init(JSON: [String: Any])
-}
+public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
 
 
 public extension Searchable where Self: OmiseResourceObject {

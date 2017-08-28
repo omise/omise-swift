@@ -24,33 +24,26 @@ public struct Link: OmiseResourceObject {
     public let paymentURL: URL
 }
 
-
 extension Link {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Link.parseOmiseResource(JSON: json) else {
-                return nil
-        }
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
         
-        guard let value = Value(JSON: json),
-            let isUsed = json["used"] as? Bool, let isMultiple = json["multiple"] as? Bool,
-            let title = json["title"] as? String, let linkDescription = json["description"] as? String,
-            let charges = json["charges"].flatMap(ListProperty<Charge>.init(JSON:)),
-            let paymentURL = (json["payment_uri"] as? String).flatMap(URL.init(string:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.amount = value.amount
-        self.currency = value.currency
-        self.isUsed = isUsed
-        self.isMultiple = isMultiple
-        self.title = title
-        self.linkDescription = linkDescription
-        self.charges = charges
-        self.paymentURL = paymentURL
+        case amount
+        case currency
+        case isUsed = "used"
+        case isMultiple = "multiple"
+        case title
+        case linkDescription = "description"
+        case charges
+        case paymentURL = "payment_uri"
     }
+
 }
+
 
 public struct LinkParams: APIJSONQuery {
     public var value: Value
@@ -104,16 +97,6 @@ public struct LinkFilterParams: OmiseFilterParams {
         self.isMultiple = isMultiple
         self.isUsed = isUsed
         self.usedDate = usedDate
-    }
-    
-    public init(JSON: [String: Any]) {
-        self.init(
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            amount: (JSON["amount"] as? Double),
-            isMultiple: JSON["multiple"] as? Bool,
-            isUsed: JSON["used"] as? Bool,
-            usedDate: JSON["used_at"].flatMap(DateComponentsConverter.convert(fromAttribute:))
-        )
     }
 }
 

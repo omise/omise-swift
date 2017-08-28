@@ -47,48 +47,6 @@ public struct Transfer: OmiseResourceObject {
 
 
 extension Transfer {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Transfer.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let bankAccount = json["bank_account"].flatMap(BankAccount.init(JSON:)),
-            let value = Value(JSON: json),
-            let fee = json["fee"] as? Int64, let currency = json["currency"].flatMap(CurrencyFieldConverter.convert(fromAttribute:)),
-            let isSent = json["sent"] as? Bool, let isPaid = json["paid"] as? Bool,
-            let recipient = json["recipient"].flatMap(DetailProperty<Recipient>.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.bankAccount = bankAccount
-        self.isSent = isSent
-        self.isPaid = isPaid
-        self.amount = value.amount
-        self.currency = currency
-        self.fee = fee
-        self.recipient = recipient
-        
-        self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
-        self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
-        self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
-        
-        let failure = (json["failure_code"] as? String).map(TransferFailure.init(code:))
-        switch (isPaid, isSent, failure) {
-        case (_, _, let failure?):
-            self.status = .failed(failure)
-        case (true, true, nil):
-            self.status = .paid
-        case (false, true, nil):
-            self.status = .sent
-        default:
-            self.status = .pending
-        }
-        
-        self.shouldFailFast = json["fail_fast"] as? Bool ?? false
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -123,8 +81,8 @@ extension Transfer {
         currency = try container.decode(Currency.self, forKey: .currency)
         isSent = try container.decode(Bool.self, forKey: .isSent)
         isPaid = try container.decode(Bool.self, forKey: .isPaid)
-        sentDate = try container.decode(Date.self, forKey: .sentDate)
-        paidDate = try container.decode(Date.self, forKey: .paidDate)
+        sentDate = try container.decodeIfPresent(Date.self, forKey: .sentDate)
+        paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
         recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
         
@@ -224,22 +182,6 @@ public struct TransferFilterParams: OmiseFilterParams {
         self.failureCode = failureCode
         self.failureMessage = failureMessage
     }
-    
-    public init(JSON: [String : Any]) {
-        self.init(
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            amount: (JSON["amount"] as? Double),
-            currency: (JSON["currency"] as? String).flatMap(Currency.init(code:)),
-            bankLastDigits: (JSON["bank_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
-            fee: (JSON["fee"] as? Double),
-            isPaid: JSON["paid"] as? Bool,
-            paidDate: JSON["paid_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            isSent: JSON["sent"] as? Bool,
-            sentDate: JSON["sent_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            failureCode: JSON["failure_code"] as? String,
-            failureMessage: JSON["failure_message"] as? String
-        )
-    }
 }
 
 public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
@@ -250,29 +192,6 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
     
     public let recipientID: String
     public let amount: Amount
-    
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let recipientID = json["recipient"] as? String else {
-                return nil
-        }
-        
-        let value = Value(JSON: json)
-        let percentageOfBalance = json["percentage_of_balance"] as? Double
-        
-        let amount: Amount
-        switch (percentageOfBalance, value) {
-        case (let percentage?, nil) where 1...100 ~= percentage:
-            amount = .percentageOfBalance(percentage)
-        case (nil, let value?):
-            amount = .value(value)
-        default:
-            return nil
-        }
-        
-        self.amount = amount
-        self.recipientID = recipientID
-    }
     
     private enum CodingKeys: String, CodingKey {
         case recipientID = "recipient"

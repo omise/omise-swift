@@ -156,9 +156,9 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.chargeDescription, "Charge for order 3947 (XXL)")
-                XCTAssertEqual(charge.metadata["user-id"] as? String, "a-user-id")
-                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["name"] as? String, "John Appleseed")
-                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["tel"] as? String, "08-xxxx-xxxx")
+                XCTAssertEqual(charge.metadata["user-id"]?.jsonValue as? String, "a-user-id")
+                XCTAssertEqual((charge.metadata["user"]?.jsonValue as? [String: AnyJSONType])?["name"]?.jsonValue as? String, "John Appleseed")
+                XCTAssertEqual((charge.metadata["user"]?.jsonValue as? [String: AnyJSONType])?["tel"]?.jsonValue as? String, "08-xxxx-xxxx")
             case let .fail(error):
                 XCTFail("\(error)")
             }

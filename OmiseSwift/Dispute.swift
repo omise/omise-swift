@@ -53,37 +53,26 @@ public struct Dispute: OmiseResourceObject {
     public let closedDate: Date?
 }
 
-
 extension Dispute {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Dispute.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let value = Value(JSON: json),
-            let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
-            let reasonCode = json["reason_code"].flatMap(Reason.init(JSON:)),
-            let reasonMessage = json["reason_message"] as? String,
-            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)),
-            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
-            let documents = json["documents"].flatMap(ListProperty<Document>.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.amount = value.amount
-        self.currency = value.currency
-        self.status = status
-        self.reasonCode = reasonCode
-        self.reasonMessage = reasonMessage
-        self.responseMessage = json["message"] as? String
-        self.transaction = transaction
-        self.charge = charge
-        self.documents = documents
-        self.closedDate = DateConverter.convert(fromAttribute: json["closed_at"])
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case amount
+        case currency
+        case status
+        case reasonMessage = "reason_message"
+        case reasonCode = "reason_code"
+        case responseMessage = "message"
+        case transaction
+        case charge
+        case documents
+        case closedDate = "closed_at"
     }
 }
+
 
 extension Dispute.Reason: Equatable {
     
@@ -120,49 +109,6 @@ extension Dispute.Reason: Equatable {
         case "unauthorized_charge_aka_fraud":
             self = .unauthorizedCharge
             
-        case "not_available":
-            self = .cancelledRecurringTransaction
-        case "other": fallthrough
-        default:
-            self = .other
-        }
-    }
-    
-    init?(JSON json: Any) {
-        guard let code = json as? String else {
-            return nil
-        }
-        
-        switch code {
-        case "cancelled_recurring_transaction":
-            self = .cancelledRecurringTransaction
-        case "credit_not_processed":
-            self = .creditNotProcessed
-        case "duplicate_processing":
-            self = .duplicateProcessing
-        case "expired_card":
-            self = .expiredCard
-        case "goods_or_services_not_provided":
-            self = .goodsOrServicesNotProvided
-        case "incorrect_currency":
-            self = .incorrectCurrency
-        case "incorrect_transaction_amount":
-            self = .incorrectTransactionAmount
-        case "late_presentment":
-            self = .latePresentment
-        case "non_matching_account_number":
-            self = .notnMatchingAmountNumber
-        case "not_as_described_or_defective_merchandise":
-            self = .notAsDescribedOrDefectiveMerchandise
-        case "not_recorded":
-            self = .notRecorded
-        case "paid_by_other_means":
-            self = .paidByOtherMeans
-        case "transaction_not_recognised":
-            self = .transactionNotRecognized
-        case "unauthorized_charge_aka_fraud":
-            self = .unauthorizedCharge
-
         case "not_available":
             self = .cancelledRecurringTransaction
         case "other": fallthrough
@@ -215,15 +161,6 @@ public struct DisputeFilterParams: OmiseFilterParams {
         self.cardLastDigits = cardLastDigits
         self.created = created
         self.reasonCode = reasonCode
-    }
-    
-    public init(JSON: [String : Any]) {
-        self.init(
-            status: (JSON["status"] as? String).flatMap(DisputeStatus.init(rawValue:)),
-            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            reasonCode: JSON["reason_code"] as? String
-        )
     }
 }
 

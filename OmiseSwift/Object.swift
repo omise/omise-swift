@@ -3,8 +3,6 @@ import Foundation
 
 public protocol OmiseObject: Decodable {
     var object: String { get }
-    
-    init?(JSON: Any)
 }
 
 public protocol OmiseLocatableObject: OmiseObject {
@@ -56,133 +54,48 @@ extension OmiseLocatableObject {
 }
 
 
-extension OmiseObject {
-    static func parseObject(JSON json: Any) -> String? {
-        guard let json = json as? [String: Any],
-            let object = json["object"] as? String else {
-                return nil
-        }
+// This is a special protocol to support decoding metadata type.
+// This situation will be greatly improved when `Conditional Conformance` feature land in Swift
+public protocol JSONType: Decodable {
+    var jsonValue: Any { get }
+}
+
+extension Int: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension String: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension Double: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension Bool: JSONType {
+    public var jsonValue: Any { return self }
+}
+
+public struct AnyJSONType: JSONType {
+    public let jsonValue: Any
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
         
-        return object
-    }
-}
-
-extension OmiseLiveModeObject {
-    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let isLive = json["livemode"] as? Bool else {
-                return nil
+        if let intValue = try? container.decode(Int.self) {
+            jsonValue = intValue
+        } else if let stringValue = try? container.decode(String.self) {
+            jsonValue = stringValue
+        } else if let boolValue = try? container.decode(Bool.self) {
+            jsonValue = boolValue
+        } else if let doubleValue = try? container.decode(Double.self) {
+            jsonValue = doubleValue
+        } else if let doubleValue = try? container.decode(Array<AnyJSONType>.self) {
+            jsonValue = doubleValue
+        } else if let doubleValue = try? container.decode(Dictionary<String, AnyJSONType>.self) {
+            jsonValue = doubleValue
+        } else {
+            throw DecodingError.typeMismatch(JSONType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unsupported JSON tyep"))
         }
-        
-        return (object: object, isLiveMode: isLive)
-    }
-}
-
-extension OmiseLocatableObject {
-    static func parseLocationResource(JSON json: Any) -> (object: String, location: String)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let location = json["location"] as? String else {
-                return nil
-        }
-        
-        return (object: object, location: location)
-    }
-}
-
-func parseDate(_ date: Any) -> Date? {
-    return (date as? Date) ?? (date as? String).flatMap(DateConverter.convert(fromAttribute:))
-}
-
-extension OmiseIdentifiableObject where Self: OmiseCreatableObject {
-    static func parseIdentifiableProperties(JSON json: Any) -> (object: String, id: String, createdDate: Date)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let id = json["id"] as? String,
-            let created = json["created"].flatMap(parseDate) else {
-                return nil
-        }
-        
-        return (object: object, id: id, createdDate: created)
-    }
-}
-
-extension OmiseLiveModeObject where Self: OmiseIdentifiableObject {
-    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool, id: String)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let isLiveMode = json["livemode"] as? Bool,
-            let id = json["id"] as? String else {
-                return nil
-        }
-        
-        return (object: object, isLiveMode: isLiveMode, id: id)
     }
 }
 
 
-extension OmiseLiveModeObject where Self: OmiseIdentifiableObject & OmiseCreatableObject {
-    static func parseOmiseProperties(JSON json: Any) -> (object: String, isLiveMode: Bool, id: String, createdDate: Date)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let isLiveMode = json["livemode"] as? Bool,
-            let id = json["id"] as? String,
-            let created = json["created"].flatMap(parseDate) else {
-                return nil
-        }
-        
-        return (object: object, isLiveMode: isLiveMode, id: id, createdDate: created)
-    }
-}
 
-
-extension OmiseLocatableObject where Self: OmiseIdentifiableObject {
-    static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let location = json["location"] as? String,
-            let id = json["id"] as? String else {
-                return nil
-        }
-        
-        return (object: object, location: location, id: id)
-    }
-}
-
-extension OmiseLocatableObject where Self: OmiseIdentifiableObject & OmiseCreatableObject {
-    static func parseOmiseProperties(JSON json: Any) -> (object: String, location: String, id: String, createdDate: Date)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let location = json["location"] as? String,
-            let id = json["id"] as? String,
-            let created = json["created"].flatMap(parseDate) else{
-                return nil
-        }
-        
-        return (object: object, location: location, id: id, createdDate: created)
-    }
-}
-
-
-extension OmiseResourceObject {
-    static func parseOmiseResource(JSON json: Any) -> (object: String, location: String, id: String, isLive: Bool, createdDate: Date)? {
-        guard let json = json as? [String: Any],
-            let object = Self.parseObject(JSON: json),
-            let location = json["location"] as? String,
-            let id = json["id"] as? String,
-            let isLive = json["livemode"] as? Bool,
-            let created = json["created"].flatMap(parseDate) else {
-                return nil
-        }
-        
-        return (object: object, location: location, id: id, isLive: isLive, createdDate: created)
-    }
-}
-
-
-extension OmiseIdentifiableObject where Self: Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
-    }
-}

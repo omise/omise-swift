@@ -69,10 +69,12 @@ class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
         do {
             let result: TResult = try deserializeData(data)
             return performCallback(.success(result))
-        } catch let err as NSError {
-            return performCallback(.fail(.other(err)))
         } catch let err as OmiseError {
             return performCallback(.fail(err))
+        } catch let err as DecodingError {
+            return performCallback(.fail(.other(err)))
+        } catch let err as NSError {
+            return performCallback(.fail(.other(err)))
         }
     }
     

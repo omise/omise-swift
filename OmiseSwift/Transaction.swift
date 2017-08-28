@@ -28,29 +28,11 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
 }
 
 extension Transaction {
-    public init?(JSON json: Any) {
-        guard let omiseObjectProperties = Transaction.parseOmiseProperties(JSON: json), let json = json as? [String: Any] else {
-            return nil
-        }
-        
-        guard let value = Value(JSON: json), let type: TransactionType = EnumConverter.convert(fromAttribute: json["type"]),
-            let transferableDate = json["transferable"].flatMap(DateConverter.convert(fromAttribute:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
-        
-        self.currency = value.currency
-        self.amount = value.amount
-        self.type = type
-        self.transferableDate = transferableDate
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
         case id
-        case createdDate = "created_date"
+        case createdDate = "created"
         case type
         case currency
         case amount

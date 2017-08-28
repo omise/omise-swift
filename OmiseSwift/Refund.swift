@@ -22,26 +22,17 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
 }
 
 extension Refund {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Refund.parseOmiseProperties(JSON: json) else {
-                return nil
-        }
-        
-        guard let amount = json["amount"] as? Int64, let currency = (json["currency"] as? String).flatMap(Currency.init(code:)),
-            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
-            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)) else {
-                return nil
-        }
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
-        
-        self.amount = amount
-        self.currency = currency
-        self.charge = charge
-        self.transaction = transaction
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created"
+        case amount
+        case currency
+        case charge
+        case transaction
     }
 }
-
 
 public struct RefundParams: APIJSONQuery {
     public var amount: Int64

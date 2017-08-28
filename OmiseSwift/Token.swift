@@ -15,23 +15,6 @@ public struct Token: OmiseResourceObject {
     public var card: Card
 }
 
-extension Token {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Token.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let isUsed = json["used"] as? Bool,
-            let card = json["card"].flatMap(Card.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.isUsed = isUsed
-        self.card = card
-    }
-}
 
 public struct TokenParams: APIJSONQuery {
     public var name: String?

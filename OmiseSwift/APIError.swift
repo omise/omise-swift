@@ -151,21 +151,6 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
     public let code: APIErrorCode
     public let message: String
     
-    
-    public init?(JSON json : Any) {
-        guard let json = json as? [String: Any],
-            let properties = APIError.parseLocationResource(JSON: json),
-            let code = (json["code"] as? String).map(APIErrorCode.init(code:)),
-            let message = json["message"] as? String else {
-                return nil
-        }
-        
-        (self.object, self.location) = properties
-        self.code = code
-        self.statusCode = json["status_code"] as? Int
-        self.message = message
-    }
-    
     public var debugDescription: String {
         return "Error: \(code.debugDescription) - \(message) [\(location)]"
     }

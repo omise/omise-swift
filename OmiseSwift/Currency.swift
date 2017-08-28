@@ -84,13 +84,21 @@ extension Currency {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let code = try container.decode(String.self)
-        switch code {
+        switch code.uppercased() {
         case "THB":
             self = .thb
         case "JPY":
             self = .jpy
         case "IDR":
             self = .idr
+        case "SGD":
+            self = .sgd
+        case "USD":
+            self = .usd
+        case "GBP":
+            self = .gbp
+        case "EUR":
+            self = .eur
         default:
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unknown currency code"))
         }

@@ -14,22 +14,16 @@ public struct Document: OmiseResourceObject {
     public let filename: String
 }
 
-
 extension Document {
-    
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Document.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let filename = json["filename"] as? String else {
-            return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.filename = filename
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case filename
     }
+
 }
 
 

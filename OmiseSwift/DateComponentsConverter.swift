@@ -55,4 +55,25 @@ public class DateComponentsConverter: Converter {
         let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day else { return nil }
         return "\(year)-\(month)-\(day)"
     }
+    
+    public static func decode<K>(using container: KeyedDecodingContainer<K>, forKey key: KeyedDecodingContainer<K>.Key) throws -> Target {
+        let value = try container.decode(String.self, forKey: key)
+        guard let parsedDateComponents = convert(fromAttribute: value) else {
+            throw DecodingError.dataCorruptedError(forKey: key, in: container, debugDescription: "Invalid date component format")
+        }
+        
+        return parsedDateComponents
+    }
+    
+    public static func decodeIfPresent<K>(using container: KeyedDecodingContainer<K>, forKey key: KeyedDecodingContainer<K>.Key) throws -> Target? {
+        guard let value = try container.decodeIfPresent(String.self, forKey: key) else {
+            return nil
+        }
+        
+        guard let parsedDateComponents = convert(fromAttribute: value) else {
+            throw DecodingError.dataCorruptedError(forKey: key, in: container, debugDescription: "Invalid date component format")
+        }
+        
+        return parsedDateComponents
+    }
 }
