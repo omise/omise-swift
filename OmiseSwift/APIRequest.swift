@@ -129,7 +129,8 @@ public class APIRequest<Result: OmiseObject> {
     
     private func makePayload(for query: APIURLQuery) -> (String, Data)? {
         var urlComponents = URLComponents()
-        urlComponents.queryItems = query.queryItems
+        let encoder = URLQueryItemEncoder()
+        urlComponents.queryItems = try? encoder.encode(query)
         return urlComponents.percentEncodedQuery?.data(using: .utf8).map({ ("application/x-www-form-urlencoded", $0) })
     }
     

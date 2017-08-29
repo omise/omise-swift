@@ -65,3 +65,8 @@ extension Dictionary {
     }
 }
 
+func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
+    let jsonDecoder = JSONDecoder()
+    jsonDecoder.dateDecodingStrategy = .iso8601
+    return try jsonDecoder.decode(TObject.self, from: data)
+}
