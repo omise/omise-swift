@@ -175,19 +175,6 @@ public struct ChargeParams: APIJSONQuery {
     
     public var metadata: [String: Any]?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "customer": customerID,
-            "card": cardID,
-            "amount": value.amount,
-            "currency": value.currency.code,
-            "description": chargeDescription,
-            "capture": isAutoCapture,
-            "return_uri": returnURL?.absoluteString,
-            "metadata": metadata
-            ])
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case customerID = "customer"
         case cardID = "card"

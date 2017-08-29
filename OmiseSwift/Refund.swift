@@ -38,13 +38,6 @@ public struct RefundParams: APIJSONQuery {
     public var amount: Int64
     public var isVoid: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            "void": isVoid,
-            ])
-    }
-    
     public init(amount: Int64, void: Bool? = nil) {
         self.amount = amount
         self.isVoid = void

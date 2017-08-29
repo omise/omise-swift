@@ -9,17 +9,6 @@ public struct ListParams: APIJSONQuery {
     public var limit: Int?
     public var order: Ordering?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "from": DateConverter.convert(fromValue: from),
-            "to": DateConverter.convert(fromValue: to),
-            "offset": offset,
-            "limit": limit,
-            "order": order?.rawValue
-        ])
-    }
-    
-    
     public init(from: Date? = nil, to: Date? = nil, offset: Int? = nil, limit: Int? = nil, order: Ordering? = nil) {
         self.from = from
         self.to = to

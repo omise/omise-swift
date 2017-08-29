@@ -84,12 +84,6 @@ public struct CustomerParams: APIJSONQuery {
 public struct CustomerFilterParams: OmiseFilterParams {
 
     public var created: DateComponents?
-
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created)
-            ])
-    }
     
     public init(created: DateComponents?) {
         self.created = created

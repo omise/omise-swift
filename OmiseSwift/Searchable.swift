@@ -18,18 +18,6 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     public var order: Ordering?
     public var filter: FilterParams?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "scope": scope,
-            "page": page,
-            "query": query,
-            "order": order?.rawValue,
-//            "filters": filter?.json,
-            ])
-    }
-    
-    
-    
     public init(scope: String, page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil) {
         self.scope = scope
         self.page = page

@@ -43,14 +43,6 @@ public struct BankAccountParams: APIJSONQuery {
     public var accountNumber: String?
     public var name: String?
     
-    public var json: JSONAttributes {
-        return Dictionary<String, Any>.makeFlattenDictionaryFrom([
-            "brand": brand,
-            "number": accountNumber,
-            "name": name,
-            ])
-    }
-    
     public init(brand: String? = nil, accountNumber: String? = nil, name: String? = nil) {
         self.brand = brand
         self.accountNumber = accountNumber

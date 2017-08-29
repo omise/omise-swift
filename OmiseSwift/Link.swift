@@ -51,16 +51,6 @@ public struct LinkParams: APIJSONQuery {
     public var linkDescription: String
     public var isMultiple: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": value.amount,
-            "currency": value.currency.code,
-            "title": title,
-            "description": linkDescription,
-            "multiple": isMultiple,
-            ])
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case amount
         case currency
@@ -95,16 +85,6 @@ public struct LinkFilterParams: OmiseFilterParams {
     public var isUsed: Bool?
     
     public var usedDate: DateComponents?
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "amount": amount,
-            "multiple": isMultiple,
-            "used": isUsed,
-            "used_at": DateComponentsConverter.convert(fromValue: usedDate),
-            ])
-    }
     
     public init(created: DateComponents? = nil, amount: Double? = nil,
                 isMultiple: Bool? = nil, isUsed: Bool? = nil,

@@ -327,16 +327,6 @@ public struct CardParams: APIJSONQuery {
     public var expirationYear: Int?
     public var postalCode: String?
     public var city: String?
-
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "name": name,
-            "expiration_month": expirationMonth,
-            "expiration_year": expirationYear,
-            "postal_code": postalCode,
-            "city": city,
-        ])
-    }
     
     public init(name: String? = nil,
          expirationMonth: Int? = nil, expirationYear: Int? = nil,

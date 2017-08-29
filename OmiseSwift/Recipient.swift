@@ -39,17 +39,6 @@ public struct RecipientParams: APIJSONQuery {
     public var taxID: String?
     public var bankAccount: BankAccountParams?
     
-    public var json: JSONAttributes {
-        return Dictionary<String, Any>.makeFlattenDictionaryFrom([
-            "name": name,
-            "email": email,
-            "description": recipientDescription,
-            "type": type?.rawValue,
-            "tax_id": taxID,
-            "bank_account": bankAccount
-        ])
-    }
-    
     public init(name: String? = nil, email: String? = nil, recipientDescription: String? = nil,
                 type: RecipientType? = nil, taxID: String? = nil, bankAccount: BankAccountParams? = nil) {
         self.name = name
@@ -77,12 +66,6 @@ extension Recipient: Listable {}
 
 public struct RecipientFilterParams: OmiseFilterParams {
     public var type: RecipientType?
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "type": type?.rawValue
-            ])
-    }
     
     public init(type: RecipientType?) {
         self.type = type

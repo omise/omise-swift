@@ -129,12 +129,6 @@ public enum DisputeStatusQuery: String {
 public struct DisputeParams: APIJSONQuery {
     public var message: String?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "message": message,
-            ])
-    }
-    
     public init(message: String?) {
         self.message = message
     }
@@ -145,15 +139,6 @@ public struct DisputeFilterParams: OmiseFilterParams {
     public var cardLastDigits: LastDigits?
     public var reasonCode: String?
     public var status: DisputeStatus?
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "card_last_digits": cardLastDigits?.lastDigits,
-            "reason_code": reasonCode,
-            "status": status?.rawValue
-            ])
-    }
     
     public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
                 created: DateComponents? = nil, reasonCode: String? = nil) {

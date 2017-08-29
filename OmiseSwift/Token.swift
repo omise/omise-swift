@@ -29,20 +29,6 @@ public struct TokenParams: APIJSONQuery {
     
     public var postalCode: String?
     
-    public var json: JSONAttributes {
-        return [
-            "card": Dictionary.makeFlattenDictionaryFrom([
-                "name": name,
-                "number": number,
-                "expiration_month": expiration?.month,
-                "expiration_year": expiration?.year,
-                "security_code": securityCode,
-                "city": city as Any,
-                "postal_code": postalCode,
-                ])
-        ]
-    }
-    
     private enum TokenCodingKeys: String, CodingKey {
         case card
         

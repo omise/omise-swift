@@ -106,14 +106,6 @@ public struct TransferParams: APIJSONQuery {
     public var recipientID: String?
     public var failFast: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            "recipient": recipientID,
-            "fail_fast": failFast,
-            ])
-    }
-    
     public init(amount: Int64, recipientID: String? = nil, failFast: Bool? = nil) {
         self.amount = amount
         self.recipientID = recipientID
@@ -123,12 +115,6 @@ public struct TransferParams: APIJSONQuery {
 
 public struct UpdateTransferParams: APIJSONQuery {
     public var amount: Int64
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            ])
-    }
     
     public init(amount: Int64) {
         self.amount = amount
@@ -148,22 +134,6 @@ public struct TransferFilterParams: OmiseFilterParams {
     public var sentDate: DateComponents?
     public var failureCode: String?
     public var failureMessage: String?
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "amount": amount,
-            "currency": currency?.code,
-            "bank_last_digits": bankLastDigits?.lastDigits,
-            "fee": fee,
-            "paid": isPaid,
-            "paid_at": DateComponentsConverter.convert(fromValue: paidDate),
-            "sent": isSent,
-            "sent_at": DateComponentsConverter.convert(fromValue: sentDate),
-            "failure_code": failureCode,
-            "failure_message": failureMessage,
-            ])
-    }
     
     public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
                 bankLastDigits: LastDigits? = nil, fee: Double? = nil,
