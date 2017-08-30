@@ -47,6 +47,10 @@ private struct URLQueryItemArrayElementKey: CodingKey {
 
 
 extension URLQueryItemEncoder {
+    private func pushNil(forKey codingPath: [CodingKey]) throws {
+        items.append(URLQueryItem(name: codingPath.queryItemKey, value: nil))
+    }
+    
     private func push(_ value: DateComponents, forKey codingPath: [CodingKey]) throws {
         guard (value.calendar?.identifier ?? Calendar.current.identifier) == .gregorian,
             let year = value.year, let month = value.month, let day = value.day else {
@@ -123,7 +127,7 @@ extension URLQueryItemEncoder {
         items.append(URLQueryItem(name: codingPath.queryItemKey, value: "\(value)"))
     }
     
-    private func push<T: Encodable>(_ value: T, forKey codingPath: [CodingKey]) throws {
+    private func push<T: Encodable>(_ value: T?, forKey codingPath: [CodingKey]) throws {
         switch value {
         case let value as String:
             try push(value, forKey: codingPath)
@@ -161,6 +165,9 @@ extension URLQueryItemEncoder {
         case let value as DateComponents:
             try push(value, forKey: codingPath)
             
+        case nil:
+            try pushNil(forKey: codingPath)
+            
         default:
             try value.encode(to: self)
         }
@@ -196,7 +203,12 @@ extension URLQueryItemEncoder {
             try encoder.push(value, forKey: encoder.codingPath)
         }
         
-        func encodeNil(forKey key: Key) throws {}
+        func encodeNil(forKey key: Key) throws {
+            let codingPath = self.codingPath + [key]
+            encoder.codingPath = codingPath
+            defer { encoder.codingPath.removeAll() }
+            try encoder.pushNil(forKey: codingPath)
+        }
         
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
             return KeyedEncodingContainer(KeyedContainer<NestedKey>(encoder: encoder, codingPath: codingPath + [key]))
@@ -239,7 +251,11 @@ extension URLQueryItemEncoder {
             return encoder
         }
         
-        func encodeNil() throws {}
+        func encodeNil() throws {
+            encoder.codingPath = codingPath
+            defer { encoder.codingPath.removeAll() }
+            try encoder.pushNil(forKey: codingPath)
+        }
         
         mutating func encode<T>(_ value: T) throws where T : Encodable {
             encoder.codingPath = codingPath

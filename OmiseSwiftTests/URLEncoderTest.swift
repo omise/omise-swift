@@ -6,6 +6,9 @@ import XCTest
 extension AnyJSONType: Encodable {
     public func encode(to encoder: Encoder) throws {
         switch jsonValue {
+        case Optional<Any>.none:
+            var container = encoder.singleValueContainer()
+            try container.encodeNil()
         case let value as Int:
             var container = encoder.singleValueContainer()
             try container.encode(value)
@@ -62,12 +65,13 @@ class URLEncoderTest: OmiseTestCase {
             "3long": 1234123412341234,
             "4bool": false,
             "5boolean": true,
-            "6date": Date(timeIntervalSince1970: 0)
-        ])
+            "6date": Date(timeIntervalSince1970: 0),
+            "7nil": String?.none as Optional<String>,
+            ] as [String: Optional<Any>])
         
         let encoder = URLQueryItemEncoder()
-        let result = try encoder.encode(values).map({ (query) in query.value ?? "(nil)" })
-        XCTAssertEqual(7, result.count)
+        let result = try encoder.encode(values).map({ (query) in query.value ?? "$*nil*$" })
+        XCTAssertEqual(8, result.count)
         XCTAssertEqual(result, [
             "world",
             "42",
@@ -75,7 +79,8 @@ class URLEncoderTest: OmiseTestCase {
             "1234123412341234",
             "false",
             "true",
-            "1970-01-01T00:00:00Z"
+            "1970-01-01T00:00:00Z",
+            "$*nil*$",
             ])
     }
 
