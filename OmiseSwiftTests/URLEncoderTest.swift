@@ -48,7 +48,8 @@ class URLEncoderTest: OmiseTestCase {
         let values = AnyJSONType(["hello": "world"])
         let encoder = URLQueryItemEncoder()
         let result = try encoder.encode(values)
-
+        
+        XCTAssertEqual(1, result.count)
         XCTAssertEqual("hello", result[0].name)
         XCTAssertEqual("world", result[0].value)
     }
@@ -66,6 +67,7 @@ class URLEncoderTest: OmiseTestCase {
         
         let encoder = URLQueryItemEncoder()
         let result = try encoder.encode(values).map({ (query) in query.value ?? "(nil)" })
+        XCTAssertEqual(7, result.count)
         XCTAssertEqual(result, [
             "world",
             "42",
@@ -87,6 +89,7 @@ class URLEncoderTest: OmiseTestCase {
 
         let encoder = URLQueryItemEncoder()
         let result = try encoder.encode(values)
+        XCTAssertEqual(7, result.count)
         XCTAssertEqual("0outer", result[0].name)
         XCTAssertEqual("normal", result[0].value)
         XCTAssertEqual("1nested[inside]", result[1].name)
@@ -112,6 +115,8 @@ class URLEncoderTest: OmiseTestCase {
         
         let encoder = URLQueryItemEncoder()
         let items = try encoder.encode(searchFilterParams)
+        
+        XCTAssertEqual(4, items.count)
         let result = Set(items.map({ (query) in query.value ?? "(nil)" }))
         XCTAssertEqual(result, [
             "1000.0",
