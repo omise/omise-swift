@@ -5,11 +5,18 @@ import Foundation
 let iso8601Formatter = ISO8601DateFormatter()
 
 public class URLQueryItemEncoder {
-    public var codingPath: [CodingKey] = []
-    private var items: [URLQueryItem] = []
+    public enum ArrayIndexEncodingStrategy {
+        case emptySquareBrackets
+        case index
+    }
+    
+    fileprivate(set) public var codingPath: [CodingKey] = []
+    fileprivate var items: [URLQueryItem] = []
+    public var arrayIndexEncodingStrategy = ArrayIndexEncodingStrategy.index
     public init() {}
     
     public func encode(_ value: Encodable) throws -> [URLQueryItem] {
+        items = []
         try value.encode(to: self)
         return items
             .sorted(by: { (item1, item2) in item1.name < item2.name })
@@ -17,12 +24,12 @@ public class URLQueryItemEncoder {
 }
 
 extension Array where Element == CodingKey {
-    func queryItemKeyForKey(_ key: CodingKey) -> String {
+    fileprivate func queryItemKeyForKey(_ key: CodingKey) -> String {
         let keysPath = self + [key] 
         return keysPath.queryItemKey
     }
     
-    var queryItemKey: String {
+    fileprivate var queryItemKey: String {
         guard !isEmpty else { return "" }
         var keysPath = self
         let firstKey = keysPath.removeFirst()
@@ -35,14 +42,35 @@ extension Array where Element == CodingKey {
 }
 
 private struct URLQueryItemArrayElementKey: CodingKey {
-    var stringValue: String {
-        return ""
+    let encodingStrategy: URLQueryItemEncoder.ArrayIndexEncodingStrategy
+    
+    fileprivate var stringValue: String {
+        switch encodingStrategy {
+        case .emptySquareBrackets:
+            return ""
+        case .index:
+            return String(index)
+        }
     }
     
-    init() {}
-    init?(stringValue: String) {}
-    var intValue: Int? { return nil }
-    init?(intValue: Int) { return nil }
+    fileprivate init(index: Int, encodingStrategy: URLQueryItemEncoder.ArrayIndexEncodingStrategy) {
+        self.index = index
+        self.encodingStrategy = encodingStrategy
+    }
+    
+    init?(stringValue: String) {
+        guard let index = Int(stringValue) else { return nil }
+        self.index = index
+        encodingStrategy = .index
+    }
+    let index: Int
+    var intValue: Int? {
+        return index
+    }
+    init?(intValue: Int) {
+        self.index = intValue
+        encodingStrategy = .index
+    }
 }
 
 
@@ -189,7 +217,6 @@ extension URLQueryItemEncoder: Encoder {
     public func singleValueContainer() -> SingleValueEncodingContainer {
         return SingleValueContanier(encoder: self, codingPath: codingPath)
     }
-    
 }
 
 extension URLQueryItemEncoder {
@@ -198,15 +225,16 @@ extension URLQueryItemEncoder {
         let codingPath: [CodingKey]
         
         func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
-            encoder.codingPath = codingPath + [key]
-            defer { encoder.codingPath.removeAll() }
-            try encoder.push(value, forKey: encoder.codingPath)
+            let codingPath = self.codingPath + [key]
+            encoder.codingPath = codingPath
+            defer { encoder.codingPath.removeLast() }
+            try encoder.push(value, forKey: codingPath)
         }
         
         func encodeNil(forKey key: Key) throws {
             let codingPath = self.codingPath + [key]
             encoder.codingPath = codingPath
-            defer { encoder.codingPath.removeAll() }
+            defer { encoder.codingPath.removeLast() }
             try encoder.pushNil(forKey: codingPath)
         }
         
@@ -219,60 +247,79 @@ extension URLQueryItemEncoder {
         }
         
         func superEncoder() -> Encoder {
-            return encoder
+            return URLQueryItemReferencingEncoder(encoder: encoder, codingPath: codingPath)
         }
         
         func superEncoder(forKey key: Key) -> Encoder {
-            return encoder
+            return URLQueryItemReferencingEncoder(encoder: encoder, codingPath: codingPath + [key])
         }
     }
     
-    fileprivate struct UnkeyedContanier: UnkeyedEncodingContainer {
+    fileprivate class UnkeyedContanier: UnkeyedEncodingContainer {
         var encoder: URLQueryItemEncoder
         
         var codingPath: [CodingKey]
         
-        var count: Int = 0
+        var count: Int {
+            return encodedItemsCount
+        }
         
-        fileprivate init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
+        var encodedItemsCount: Int = 0
+        
+        fileprivate init(encoder: URLQueryItemEncoder, codingPath: [CodingKey], encodedItemsCount: Int = 0) {
             self.encoder = encoder
-            self.codingPath = codingPath + [URLQueryItemArrayElementKey()]
+            self.codingPath = codingPath
+            self.encodedItemsCount = encodedItemsCount
         }
         
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+            encoder.codingPath.append(
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
+            )
+            defer { codingPath.removeLast() }
             return KeyedEncodingContainer(KeyedContainer<NestedKey>(encoder: encoder, codingPath: codingPath))
         }
         
         func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
+            encoder.codingPath.append(
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
+            )
+            defer { codingPath.removeLast() }
             return self
         }
         
         func superEncoder() -> Encoder {
-            return encoder
+            codingPath.append(URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy))
+            defer { codingPath.removeLast() }
+            return UnkeyedURLQueryItemReferencingEncoder(encoder: encoder, codingPath: codingPath, referencing: self)
         }
         
         func encodeNil() throws {
-            encoder.codingPath = codingPath
-            defer { encoder.codingPath.removeAll() }
+            encoder.codingPath.append(
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
+            )
+            defer { encoder.codingPath.removeLast() }
             try encoder.pushNil(forKey: codingPath)
+            encodedItemsCount += 1
         }
         
-        mutating func encode<T>(_ value: T) throws where T : Encodable {
-            encoder.codingPath = codingPath
-            defer { encoder.codingPath.removeAll() }
+        func encode<T>(_ value: T) throws where T : Encodable {
+            encoder.codingPath.append(
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
+            )
+            defer { encoder.codingPath.removeLast() }
             try value.encode(to: encoder)
+            encodedItemsCount += 1
         }
     }
     
     fileprivate struct SingleValueContanier: SingleValueEncodingContainer {
         let encoder: URLQueryItemEncoder
         var codingPath: [CodingKey]
-        var queryItem: URLQueryItem?
         
         fileprivate init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
             self.encoder = encoder
             self.codingPath = codingPath
-            self.queryItem = nil
         }
         
         mutating func encodeNil() throws {
@@ -335,18 +382,39 @@ extension URLQueryItemEncoder {
             try encoder.push(value, forKey: codingPath)
         }
         
-        mutating func encode(_ value: DateComponents) throws {
-            let dateComponents = value
-            guard (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian,
-                let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day else {
-                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "Invalid date components"))
-            }
-            encoder.items.append(URLQueryItem(name: codingPath.queryItemKey, value: "\(year)-\(month)-\(day)"))
-        }
-        
         mutating func encode<T>(_ value: T) throws where T : Encodable {
+            encoder.codingPath = self.codingPath
+            defer { encoder.codingPath.removeAll() }
             try encoder.push(value, forKey: codingPath)
         }
+    }
+}
+
+fileprivate class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
+    fileprivate let encoder: URLQueryItemEncoder
+    
+    init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
+        self.encoder = encoder
+        super.init()
+        self.codingPath = codingPath
+        self.arrayIndexEncodingStrategy = encoder.arrayIndexEncodingStrategy
+    }
+    
+    deinit {
+        self.encoder.items.append(contentsOf: self.items)
+    }
+}
+
+fileprivate class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencingEncoder {
+    var referencedUnkeyedContainer: UnkeyedContanier
+    
+    init(encoder: URLQueryItemEncoder, codingPath: [CodingKey], referencing: UnkeyedContanier) {
+        referencedUnkeyedContainer = referencing
+        super.init(encoder: encoder, codingPath: codingPath)
+    }
+    
+    deinit {
+        referencedUnkeyedContainer.encodedItemsCount += items.count
     }
 }
 

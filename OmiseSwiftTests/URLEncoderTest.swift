@@ -27,7 +27,7 @@ extension AnyJSONType: Encodable {
             try container.encode(formatter.string(from: value))
         case let value as [Encodable]:
             var container = encoder.unkeyedContainer()
-            try container.encode(value.map(AnyJSONType.init))
+            try container.encode(contentsOf: value.map(AnyJSONType.init))
         case let value as Dictionary<String, Encodable>:
             var container = encoder.container(keyedBy: AnyJSONAttributeEncodingKey.self)
             for (key, value) in value {
@@ -84,7 +84,7 @@ class URLEncoderTest: OmiseTestCase {
             ])
     }
 
-    func testEncodeNested() throws {
+    func testEncodeNestedWithEmptyIndexStrategy() throws {
         let values = AnyJSONType([
             "0outer": "normal",
             "1nested": ["inside": "inner"] as [String: String],
@@ -93,6 +93,7 @@ class URLEncoderTest: OmiseTestCase {
         ])
 
         let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         let result = try encoder.encode(values)
         XCTAssertEqual(7, result.count)
         XCTAssertEqual("0outer", result[0].name)
@@ -110,8 +111,79 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("inside deepest", result[6].value)
         XCTAssertEqual("3array[][deepest]", result[6].name)
     }
+    
+    func testEncodeNestedWithIndexStrategy() throws {
+        let values = AnyJSONType([
+            "0outer": "normal",
+            "1nested": ["inside": "inner"] as [String: String],
+            "2deeper": ["nesting": ["also": "works"]  ],
+            "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
+            "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
+            "5deepdictionary": ["anesting": ["also": "works"],
+                                "another nesting": [ "deep": [ "deepest1" : "hello 1", "deepest2": "hello 2" ],
+                                                     "deeparray": [ "rolling in", ["the" : 2, "deep": 1]]]],
+            "6outer": "normal",
+            "7nested": ["inside": "inner"] as [String: String],
+            "8deeper": ["nesting": ["also": "works"]  ],
 
-    func testConverter() throws {
+            ])
+        
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .index
+        let result = try encoder.encode(values)
+        XCTAssertEqual(21, result.count)
+        XCTAssertEqual("0outer", result[0].name)
+        XCTAssertEqual("normal", result[0].value)
+        XCTAssertEqual("1nested[inside]", result[1].name)
+        XCTAssertEqual("inner", result[1].value)
+        XCTAssertEqual("2deeper[nesting][also]", result[2].name)
+        XCTAssertEqual("works", result[2].value)
+        // 3array
+        XCTAssertEqual("one", result[3].value)
+        XCTAssertEqual("3array[0]", result[3].name)
+        XCTAssertEqual("two", result[4].value)
+        XCTAssertEqual("3array[1]", result[4].name)
+        XCTAssertEqual("three", result[5].value)
+        XCTAssertEqual("3array[2]", result[5].name)
+        XCTAssertEqual("inside deepest", result[6].value)
+        XCTAssertEqual("3array[3][deepest]", result[6].name)
+        // 4deeparray
+        XCTAssertEqual("one", result[7].value)
+        XCTAssertEqual("4deeparray[0]", result[7].name)
+        XCTAssertEqual("two", result[8].value)
+        XCTAssertEqual("4deeparray[1]", result[8].name)
+        XCTAssertEqual("three", result[9].value)
+        XCTAssertEqual("4deeparray[2]", result[9].name)
+        XCTAssertEqual("deepest", result[10].value)
+        XCTAssertEqual("4deeparray[3][0]", result[10].name)
+        XCTAssertEqual("inside deepest", result[11].value)
+        XCTAssertEqual("4deeparray[3][1]", result[11].name)
+        
+        // 5deepdictionary
+        XCTAssertEqual("works", result[12].value)
+        XCTAssertEqual("5deepdictionary[anesting][also]", result[12].name)
+        XCTAssertEqual("hello 1", result[13].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deep][deepest1]", result[13].name)
+        XCTAssertEqual("hello 2", result[14].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deep][deepest2]", result[14].name)
+        // 5deepdictionary -> deeparray
+        XCTAssertEqual("rolling in", result[15].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][0]", result[15].name)
+        XCTAssertEqual("2", result[17].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][1][the]", result[17].name)
+        XCTAssertEqual("1", result[16].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][1][deep]", result[16].name)
+        
+        // resting
+        XCTAssertEqual("6outer", result[18].name)
+        XCTAssertEqual("normal", result[18].value)
+        XCTAssertEqual("7nested[inside]", result[19].name)
+        XCTAssertEqual("inner", result[19].value)
+        XCTAssertEqual("8deeper[nesting][also]", result[20].name)
+        XCTAssertEqual("works", result[20].value)
+    }
+
+    func testConvertChargeFilterParams() throws {
         var searchFilterParams = ChargeFilterParams()
         searchFilterParams.amount = 1000
         searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")!
@@ -127,7 +199,27 @@ class URLEncoderTest: OmiseTestCase {
             "1000.0",
             "4242",
             "true",
-            "2016-8-1"
+            "2016-8-1",
+            ])
+    }
+    
+    func testConvertListParams() throws {
+        let from = Date()
+        let to = from.addingTimeInterval(3600)
+        let listParams = ListParams(from: from, to: to, offset: nil, limit: nil, order: Ordering.chronological)
+        
+        let encoder = URLQueryItemEncoder()
+        let items = try encoder.encode(listParams)
+        
+        let formatter = ISO8601DateFormatter()
+        let expectedFromDateString = formatter.string(from: from)
+        let expectedToDateString = formatter.string(from: to)
+        XCTAssertEqual(3, items.count)
+        let result = items.map({ (query) in query.value ?? "(nil)" })
+        XCTAssertEqual(result, [
+            expectedFromDateString,
+            "chronological",
+            expectedToDateString,
             ])
     }
 }
