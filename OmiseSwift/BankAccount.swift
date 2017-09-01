@@ -36,6 +36,18 @@ extension BankAccount {
         }
         self.bank = bank
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(name, forKey: .name)
+        try container.encode(lastDigits, forKey: .lastDigits)
+        try container.encodeIfPresent(accountNumber, forKey: .accountNumber)
+        
+        try container.encodeIfPresent(bank.bankID, forKey: .bankBrand)
+        try container.encodeIfPresent(bank.branchCode, forKey: .branchCode)
+    }
 }
 
 public struct BankAccountParams: APIJSONQuery {

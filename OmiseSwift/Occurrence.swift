@@ -77,6 +77,33 @@ extension Occurrence {
             throw DecodingError.dataCorrupted(context)
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isLive, forKey: .isLive)
+        try container.encode(schedule, forKey: .schedule)
+        try container.encode(scheduleDate, forKey: .scheduleDate)
+        try container.encode(processedDate, forKey: .processedDate)
+        
+        try container.encode(result, forKey: .result)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: retryDate) as? String, forKey: .retryDate)
+        
+        switch status {
+        case .successful:
+            try container.encode("successful", forKey: .status)
+        case .skipped(let skippedMessage):
+            try container.encode("skipped", forKey: .status)
+            try container.encode(skippedMessage, forKey: .message)
+        case .failed(let failureMessage):
+            try container.encode("failed", forKey: .status)
+            try container.encode(failureMessage, forKey: .message)
+        }
+    }
 }
 
 

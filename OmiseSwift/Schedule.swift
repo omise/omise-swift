@@ -164,6 +164,27 @@ extension Schedule {
             )
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isLive, forKey: .isLive)
+        try container.encode(status, forKey: .status)
+        try container.encode(every, forKey: .every)
+        
+        try period.encode(to: encoder)
+        
+        try container.encode(DateComponentsConverter.convert(fromValue: startDate), forKey: .startDate)
+        try container.encode(DateComponentsConverter.convert(fromValue: endDate), forKey: .endDate)
+        try container.encode(occurrences, forKey: .occurrences)
+        try container.encode(nextOccurrenceDates.flatMap(DateComponentsConverter.convert(fromValue:)), forKey: .nextOccurrenceDates)
+        
+        try container.encode(parameter, forKey: .parameter(Data.parameterKey))
+    }
 }
 
 extension Calendar {
@@ -172,7 +193,7 @@ extension Calendar {
     }
 }
 
-public protocol SchedulingParameter: Decodable {}
+public protocol SchedulingParameter: Codable {}
 
 public protocol Schedulable: OmiseIdentifiableObject, OmiseCreatableObject {
     associatedtype Parameter: SchedulingParameter
@@ -195,7 +216,7 @@ extension Schedulable {
 }
 
 
-extension Schedule.Status: Decodable {
+extension Schedule.Status: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let status = try container.decode(String.self)
@@ -214,6 +235,24 @@ extension Schedule.Status: Decodable {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unrecognized schedule status")
             throw DecodingError.dataCorrupted(context)
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        let status: String
+        switch self {
+        case .active:
+            status = "active"
+        case .expiring:
+            status = "expiring"
+        case .expired:
+            status = "expired"
+        case .deleted:
+            status = "deleted"
+        case .suspended:
+            status = "suspended"
+        }
+        try container.encode(status)
     }
 }
 
@@ -234,6 +273,18 @@ public struct AnySchedulable: Schedulable {
             } else {
                 let json = try container.decode([String: AnyJSONType].self)
                 self = .other(json: json)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case .charge(let parameter):
+                try container.encode(parameter)
+            case .transfer(let parameter):
+                try container.encode(parameter)
+            case .other(json: let parameter):
+                try container.encode(parameter)
             }
         }
     }

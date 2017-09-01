@@ -9,7 +9,7 @@ public enum DisputeStatus: String, Codable {
 
 
 public struct Dispute: OmiseResourceObject {
-    public enum Reason: Decodable {
+    public enum Reason: Codable {
         case cancelledRecurringTransaction
         case creditNotProcessed
         case duplicateProcessing
@@ -110,11 +110,50 @@ extension Dispute.Reason: Equatable {
             self = .unauthorizedCharge
             
         case "not_available":
-            self = .cancelledRecurringTransaction
+            self = .notAvailable
         case "other": fallthrough
         default:
             self = .other
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .cancelledRecurringTransaction:
+            try container.encode("cancelled_recurring_transaction")
+        case .creditNotProcessed:
+            try container.encode("credit_not_processed")
+        case .duplicateProcessing:
+            try container.encode("duplicate_processing")
+        case .expiredCard:
+            try container.encode("expired_card")
+        case .goodsOrServicesNotProvided:
+            try container.encode("goods_or_services_not_provided")
+        case .incorrectCurrency:
+            try container.encode("incorrect_currency")
+        case .incorrectTransactionAmount:
+            try container.encode("incorrect_transaction_amount")
+        case .latePresentment:
+            try container.encode("late_presentment")
+        case .notnMatchingAmountNumber:
+            try container.encode("non_matching_account_number")
+        case .notAsDescribedOrDefectiveMerchandise:
+            try container.encode("not_as_described_or_defective_merchandise")
+        case .notRecorded:
+            try container.encode("not_recorded")
+        case .paidByOtherMeans:
+            try container.encode("paid_by_other_means")
+        case .transactionNotRecognized:
+            try container.encode("transaction_not_recognised")
+        case .unauthorizedCharge:
+            try container.encode("unauthorized_charge_aka_fraud")
+        case .notAvailable:
+            try container.encode("not_available")
+        case .other:
+            try container.encode("other")
+        }
+        
     }
 }
 

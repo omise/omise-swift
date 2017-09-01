@@ -170,6 +170,15 @@ extension Card {
             self = .tokenized(try container.decode(TokenizedCard.self))
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case .customer(let customerCard):
+            try customerCard.encode(to: encoder)
+        case .tokenized(let tokenizedCard):
+            try tokenizedCard.encode(to: encoder)
+        }
+    }
 }
 
 public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {

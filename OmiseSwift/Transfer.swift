@@ -98,6 +98,32 @@ extension Transfer {
             self.status = .pending
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isLive, forKey: .isLive)
+        
+        try container.encode(amount, forKey: .amount)
+        try container.encode(currency, forKey: .currency)
+        try container.encode(fee, forKey: .fee)
+        try container.encode(bankAccount, forKey: .bankAccount)
+        try container.encode(shouldFailFast, forKey: .shouldFailFast)
+        
+        try container.encode(isSent, forKey: .isSent)
+        try container.encode(isPaid, forKey: .isPaid)
+        try container.encodeIfPresent(sentDate, forKey: .sentDate)
+        try container.encodeIfPresent(paidDate, forKey: .paidDate)
+        try container.encode(recipient, forKey: .recipient)
+        try container.encodeIfPresent(transaction, forKey: .transaction)
+        
+        if case .failed(let failureCode) = status {
+            try container.encode(failureCode, forKey: .failureCode)
+        }
+    }
 }
 
 
@@ -184,6 +210,19 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
             self.amount = .value(Value(amount: amount, currency: currency))
         default:
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid requesting transfer amount"))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(recipientID, forKey: .recipientID)
+        switch amount {
+        case .value(let value):
+            try container.encode(value.amount, forKey: .amount)
+            try container.encode(value.currency, forKey: .currency)
+        case .percentageOfBalance(let percentage):
+            try container.encode(percentage, forKey: .percentageOfBalance)
         }
     }
     

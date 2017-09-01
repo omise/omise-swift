@@ -160,6 +160,46 @@ extension Charge {
             let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
             throw DecodingError.dataCorrupted(context)
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isLive, forKey: .isLive)
+
+        try container.encode(amount, forKey: .amount)
+        try container.encode(currency, forKey: .currency)
+        try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
+        try container.encode(isAutoCapture, forKey: .isAutoCapture)
+        try container.encode(isAuthorized, forKey: .isAuthorized)
+        try container.encode(isPaid, forKey: .isPaid)
+        
+        try container.encodeIfPresent(transaction, forKey: .transaction)
+        try container.encodeIfPresent(refunded, forKey: .refunded)
+        try container.encodeIfPresent(refunds, forKey: .refunds)
+        try container.encodeIfPresent(customer, forKey: .customer)
+        try container.encodeIfPresent(ipAddress, forKey: .ipAddress)
+        try container.encodeIfPresent(dispute, forKey: .dispute)
+        try container.encodeIfPresent(returnURL, forKey: .returnURL)
+        try container.encodeIfPresent(authorizedURL, forKey: .authorizedURL)
+        try container.encode(metadata, forKey: .metadata)
+        
+        switch status {
+        case .successful:
+            try container.encode("successful", forKey: .status)
+        case .pending:
+            try container.encode("pending", forKey: .status)
+        case .reversed:
+            try container.encode("reversed", forKey: .status)
+        case .failed(let failureCode):
+            try container.encode("failed", forKey: .status)
+            try container.encode(failureCode, forKey: .failureCode)
+        }
+        
         
     }
 }

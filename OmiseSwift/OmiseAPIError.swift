@@ -142,7 +142,7 @@ public enum ChargeFailure: Codable {
 }
 
 
-public enum TransferFailure: Decodable {
+public enum TransferFailure: Codable {
     /// Bank rejected the transfer request
     case sentFailed
     /// Bank cannot process request for transferring to bank account
@@ -174,6 +174,11 @@ public enum TransferFailure: Decodable {
     
     public init(from decoder: Decoder) throws {
         self.init(code: try decoder.singleValueContainer().decode(String.self))
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(code)
     }
 }
 

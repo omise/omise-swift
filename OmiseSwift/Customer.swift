@@ -47,6 +47,20 @@ extension Customer {
         cards = try container.decode(ListProperty<Card>.self, forKey: .cards)
         metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(isLive, forKey: .isLive)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encodeIfPresent(defaultCard, forKey: .defaultCard)
+        try container.encode(email, forKey: .email)
+        try container.encode(customerDescription, forKey: .customerDescription)
+        try container.encode(cards, forKey: .cards)
+        try container.encode(metadata, forKey: .metadata)
+    }
 }
 
 public struct CustomerParams: APIJSONQuery {
