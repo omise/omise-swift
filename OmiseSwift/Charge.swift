@@ -199,8 +199,6 @@ extension Charge {
             try container.encode("failed", forKey: .status)
             try container.encode(failureCode, forKey: .failureCode)
         }
-        
-        
     }
 }
 
@@ -294,6 +292,28 @@ public struct ChargeFilterParams: OmiseFilterParams {
         case cardLastDigits = "card_last_digits"
         case isCustomerPresent = "customer_present"
         case failureCode = "failure_code"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        isAuthorized = try container.decodeIfPresent(Bool.self, forKey: .isAuthorized)
+        isCaptured = try container.decodeIfPresent(Bool.self, forKey: .isCaptured)
+        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        isCustomerPresent = try container.decodeIfPresent(Bool.self, forKey: .isCustomerPresent)
+        failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeIfPresent(isAuthorized, forKey: .isAuthorized)
+        try container.encodeIfPresent(isCaptured, forKey: .isCaptured)
+        try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
+        try container.encodeIfPresent(isCustomerPresent, forKey: .isCustomerPresent)
+        try container.encodeIfPresent(failureCode, forKey: .failureCode)
     }
     
     public init(created: DateComponents? = nil, amount: Double? = nil,

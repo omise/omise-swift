@@ -132,6 +132,12 @@ public struct TransferParams: APIJSONQuery {
     public var recipientID: String?
     public var failFast: Bool?
     
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case recipientID = "recipient"
+        case failFast = "fail_fast"
+    }
+    
     public init(amount: Int64, recipientID: String? = nil, failFast: Bool? = nil) {
         self.amount = amount
         self.recipientID = recipientID
@@ -160,6 +166,50 @@ public struct TransferFilterParams: OmiseFilterParams {
     public var sentDate: DateComponents?
     public var failureCode: String?
     public var failureMessage: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case amount
+        case currency
+        case bankLastDigits = "bank_last_digits"
+        case fee
+        case isPaid = "paid"
+        case paidDate = "paid_at"
+        case isSent = "sent"
+        case sentDate = "sent_at"
+        case failureCode = "failure_code"
+        case failureMessage = "failure_message"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
+        bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
+        fee = try container.decodeIfPresent(Double.self, forKey: .fee)
+        isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
+        paidDate = try container.decodeIfPresent(String.self, forKey: .paidDate).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
+        sentDate = try container.decodeIfPresent(String.self, forKey: .sentDate).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        failureCode = try container.decodeIfPresent(String.self, forKey: .failureCode)
+        failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeIfPresent(currency, forKey: .currency)
+        try container.encodeIfPresent(bankLastDigits, forKey: .bankLastDigits)
+        try container.encodeIfPresent(fee, forKey: .fee)
+        try container.encodeIfPresent(isPaid, forKey: .isPaid)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: paidDate), forKey: .paidDate)
+        try container.encodeIfPresent(isSent, forKey: .isSent)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: sentDate), forKey: .sentDate)
+        try container.encodeIfPresent(failureCode, forKey: .failureCode)
+        try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
+    }
     
     public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
                 bankLastDigits: LastDigits? = nil, fee: Double? = nil,

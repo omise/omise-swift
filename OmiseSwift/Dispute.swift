@@ -179,12 +179,35 @@ public struct DisputeFilterParams: OmiseFilterParams {
     public var reasonCode: String?
     public var status: DisputeStatus?
     
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case cardLastDigits = "card_last_digits"
+        case reasonCode = "reason_code"
+        case status
+    }
+    
     public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
                 created: DateComponents? = nil, reasonCode: String? = nil) {
         self.status = status
         self.cardLastDigits = cardLastDigits
         self.created = created
         self.reasonCode = reasonCode
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        reasonCode = try container.decodeIfPresent(String.self, forKey: .reasonCode)
+        status = try container.decodeIfPresent(DisputeStatus.self, forKey: .status)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
+        try container.encodeIfPresent(reasonCode, forKey: .reasonCode)
+        try container.encodeIfPresent(status, forKey: .status)
     }
 }
 

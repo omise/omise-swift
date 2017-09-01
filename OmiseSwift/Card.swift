@@ -337,6 +337,14 @@ public struct CardParams: APIJSONQuery {
     public var postalCode: String?
     public var city: String?
     
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+        case postalCode = "postal_code"
+        case city
+    }
+    
     public init(name: String? = nil,
          expirationMonth: Int? = nil, expirationYear: Int? = nil,
          postalCode: String? = nil, city: String? = nil) {

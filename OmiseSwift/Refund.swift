@@ -38,6 +38,11 @@ public struct RefundParams: APIJSONQuery {
     public var amount: Int64
     public var isVoid: Bool?
     
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case isVoid = "void"
+    }
+    
     public init(amount: Int64, void: Bool? = nil) {
         self.amount = amount
         self.isVoid = void

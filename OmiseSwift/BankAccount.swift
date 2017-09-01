@@ -55,6 +55,12 @@ public struct BankAccountParams: APIJSONQuery {
     public var accountNumber: String?
     public var name: String?
     
+    private enum CodingKeys: String, CodingKey {
+        case brand
+        case accountNumber = "number"
+        case name
+    }
+    
     public init(brand: String? = nil, accountNumber: String? = nil, name: String? = nil) {
         self.brand = brand
         self.accountNumber = accountNumber

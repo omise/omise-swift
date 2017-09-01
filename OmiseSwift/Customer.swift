@@ -99,6 +99,20 @@ public struct CustomerFilterParams: OmiseFilterParams {
 
     public var created: DateComponents?
     
+    private enum CodingKeys: String, CodingKey {
+        case created
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+    }
+    
     public init(created: DateComponents?) {
         self.created = created
     }

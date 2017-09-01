@@ -43,7 +43,6 @@ public struct TokenParams: APIJSONQuery {
         }
     }
 
-    
     public func encode(to encoder: Encoder) throws {
         var tokenContainer = encoder.container(keyedBy: TokenCodingKeys.self)
         var cardContainer = tokenContainer.nestedContainer(keyedBy: TokenCodingKeys.CardCodingKeys.self, forKey: .card)

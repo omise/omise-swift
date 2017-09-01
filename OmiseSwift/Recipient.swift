@@ -39,6 +39,15 @@ public struct RecipientParams: APIJSONQuery {
     public var taxID: String?
     public var bankAccount: BankAccountParams?
     
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case email
+        case recipientDescription = "description"
+        case type
+        case taxID = "tax_id"
+        case bankAccount = "bank_account"
+    }
+    
     public init(name: String? = nil, email: String? = nil, recipientDescription: String? = nil,
                 type: RecipientType? = nil, taxID: String? = nil, bankAccount: BankAccountParams? = nil) {
         self.name = name
