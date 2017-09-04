@@ -22,7 +22,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.refunded, 10000)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_4yq7duwb9jts1vxgqua")
                 XCTAssertEqual(charge.customer?.dataID, "cust_test_4yq6txdpfadhbaqnwp3")
-                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2015-01-15T05:00:29Z"))
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2015-01-15T05:00:29Z"))
                 XCTAssertEqual(charge.card?.id, "card_test_4yq6tuucl9h4erukfl0")
             case let .fail(error):
                 XCTFail("\(error)")
@@ -50,7 +50,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.isPaid, true)
                 XCTAssertEqual(charge.refunded, 0)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_57v787szdbe4b2ala5p")
-                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2017-05-05T08:17:33Z"))
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-05-05T08:17:33Z"))
                 XCTAssertEqual(charge.card?.id, "card_test_57v7856t6viu321t7h4")
             case let .fail(error):
                 XCTFail("\(error)")
@@ -76,7 +76,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.location, "/charges/chrg_test_58qdpc54lq6a5enm88m")
                 XCTAssertEqual(charge.isLive, false)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_58qdpcrr81jsqpoks6l")
-                XCTAssertEqual(charge.createdDate, DateConverter.convert(fromAttribute: "2017-07-24T01:30:01Z"))
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-07-24T01:30:01Z"))
                 XCTAssertNotNil(charge.dispute)
                 
                 XCTAssertEqual(charge.dispute?.id, "dspt_test_58qhpee050f4qo36rnp")

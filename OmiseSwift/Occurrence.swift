@@ -56,11 +56,11 @@ extension Occurrence {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isLive = try container.decode(Bool.self, forKey: .isLive)
         schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)
-        scheduleDate = try DateComponentsConverter.decode(using: container, forKey: .scheduleDate)
+        scheduleDate = try container.decodeOmiseDateComponents(forKey: .scheduleDate)
         processedDate = try container.decode(Date.self, forKey: .processedDate)
         result = try container.decode(DetailProperty<Data>.self, forKey: .result)
         
-        retryDate = try DateComponentsConverter.decodeIfPresent(using: container, forKey: .retryDate)
+        retryDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .retryDate)
         
         let status = try container.decode(String.self, forKey: .status)
         let message = try container.decodeIfPresent(String.self, forKey: .message)
@@ -91,7 +91,7 @@ extension Occurrence {
         try container.encode(processedDate, forKey: .processedDate)
         
         try container.encode(result, forKey: .result)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: retryDate) as? String, forKey: .retryDate)
+        try container.encodeOmiseDateComponentsIfPresent(retryDate, forKey: .retryDate)
         
         switch status {
         case .successful:

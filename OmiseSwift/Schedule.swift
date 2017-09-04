@@ -142,11 +142,11 @@ extension Schedule {
         every = try container.decode(Int.self, forKey: .every)
         period = try Period.init(from: decoder)
         
-        startDate = try DateComponentsConverter.decode(using: container, forKey: .startDate)
-        endDate = try DateComponentsConverter.decode(using: container, forKey: .endDate)
+        startDate = try container.decodeOmiseDateComponents(forKey: .startDate)
+        endDate = try container.decodeOmiseDateComponents(forKey: .endDate)
         
         occurrences = try container.decode(ListProperty<Occurrence<Data>>.self, forKey: .occurrences)
-        nextOccurrenceDates = try container.decode(Array<String>.self, forKey: .nextOccurrenceDates).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        nextOccurrenceDates = try container.decodeOmiseDateComponentsArray(forKey: .nextOccurrenceDates)
         
         if let parameterKey = container.allKeys.first(where: { (key) -> Bool in
             if case .parameter = key {
@@ -178,11 +178,10 @@ extension Schedule {
         
         try period.encode(to: encoder)
         
-        try container.encode(DateComponentsConverter.convert(fromValue: startDate), forKey: .startDate)
-        try container.encode(DateComponentsConverter.convert(fromValue: endDate), forKey: .endDate)
+        try container.encodeOmiseDateComponents(startDate, forKey: .startDate)
+        try container.encodeOmiseDateComponents(endDate, forKey: .endDate)
         try container.encode(occurrences, forKey: .occurrences)
-        try container.encode(nextOccurrenceDates.flatMap(DateComponentsConverter.convert(fromValue:)), forKey: .nextOccurrenceDates)
-        
+        try container.encodeOmiseDateComponentsArray(nextOccurrenceDates, forKey: .nextOccurrenceDates)
         try container.encode(parameter, forKey: .parameter(Data.parameterKey))
     }
 }
@@ -346,8 +345,8 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
         var container = encoder.container(keyedBy: Schedule<Data>.CodingKeys.self)
         
         try container.encode(every, forKey: .every)
-        try container.encode(DateComponentsConverter.convert(fromValue: endDate) as? String, forKey: .endDate)
-        try container.encode(DateComponentsConverter.convert(fromValue: startDate) as? String, forKey: .startDate)
+        try container.encodeOmiseDateComponents(endDate, forKey: .endDate)
+        try container.encodeOmiseDateComponentsIfPresent(startDate, forKey: .startDate)
         
         try period.encode(to: encoder)
         

@@ -196,7 +196,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
         reasonCode = try container.decodeIfPresent(String.self, forKey: .reasonCode)
         status = try container.decodeIfPresent(DisputeStatus.self, forKey: .status)
@@ -204,7 +204,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
         try container.encodeIfPresent(reasonCode, forKey: .reasonCode)
         try container.encodeIfPresent(status, forKey: .status)

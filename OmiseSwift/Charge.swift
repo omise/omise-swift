@@ -140,8 +140,7 @@ extension Charge {
         switch sourceOfFund {
         case "offsite"?:
             card = nil
-            let offsiteValue = try container.decode(String.self, forKey: .offsite)
-            offsite = OffsitePaymentConverter.convert(fromAttribute: offsiteValue)
+            offsite = try container.decode(OffsitePayment.self, forKey: .offsite)
             payment = offsite.map(Payment.offsite)
         case "card"?, nil:
             offsite = nil
@@ -296,7 +295,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
         amount = try container.decodeIfPresent(Double.self, forKey: .amount)
         isAuthorized = try container.decodeIfPresent(Bool.self, forKey: .isAuthorized)
         isCaptured = try container.decodeIfPresent(Bool.self, forKey: .isCaptured)
@@ -307,7 +306,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(isAuthorized, forKey: .isAuthorized)
         try container.encodeIfPresent(isCaptured, forKey: .isCaptured)

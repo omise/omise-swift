@@ -183,30 +183,30 @@ public struct TransferFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeIfPresent(String.self, forKey: .created).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
         amount = try container.decodeIfPresent(Double.self, forKey: .amount)
         currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
         bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
         fee = try container.decodeIfPresent(Double.self, forKey: .fee)
         isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
-        paidDate = try container.decodeIfPresent(String.self, forKey: .paidDate).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        paidDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .paidDate)
         isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
-        sentDate = try container.decodeIfPresent(String.self, forKey: .sentDate).flatMap(DateComponentsConverter.convert(fromAttribute:))
+        sentDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .sentDate)
         failureCode = try container.decodeIfPresent(String.self, forKey: .failureCode)
         failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: created), forKey: .created)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(currency, forKey: .currency)
         try container.encodeIfPresent(bankLastDigits, forKey: .bankLastDigits)
         try container.encodeIfPresent(fee, forKey: .fee)
         try container.encodeIfPresent(isPaid, forKey: .isPaid)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: paidDate), forKey: .paidDate)
+        try container.encodeOmiseDateComponentsIfPresent(paidDate, forKey: .paidDate)
         try container.encodeIfPresent(isSent, forKey: .isSent)
-        try container.encodeIfPresent(DateComponentsConverter.convert(fromValue: sentDate), forKey: .sentDate)
+        try container.encodeOmiseDateComponentsIfPresent(sentDate, forKey: .sentDate)
         try container.encodeIfPresent(failureCode, forKey: .failureCode)
         try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
     }
