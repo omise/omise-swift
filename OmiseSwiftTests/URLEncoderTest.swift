@@ -30,7 +30,10 @@ extension AnyJSONType: Encodable {
             try container.encode(contentsOf: value.map(AnyJSONType.init))
         case let value as Dictionary<String, Encodable>:
             var container = encoder.container(keyedBy: AnyJSONAttributeEncodingKey.self)
-            for (key, value) in value {
+            let sortedValuesByKey = value.sorted(by: { (first, second) -> Bool in
+                return first.key < second.key
+            })
+            for (key, value) in sortedValuesByKey {
                 let value = AnyJSONType(value)
                 try container.encode(value, forKey: AnyJSONAttributeEncodingKey(stringValue: key))
             }
@@ -90,18 +93,27 @@ class URLEncoderTest: OmiseTestCase {
             "1nested": ["inside": "inner"] as [String: String],
             "2deeper": ["nesting": ["also": "works"]  ],
             "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
-        ])
-
+            "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
+            "5deepdictionary": ["anesting": ["also": "works"],
+                                "another nesting": [ "deep": [ "deepest1" : "hello 1", "deepest2": "hello 2" ],
+                                                     "deeparray": [ "rolling in", ["the" : 2, "deep": 1]]]],
+            "6outer": "normal",
+            "7nested": ["inside": "inner"] as [String: String],
+            "8deeper": ["nesting": ["also": "works"]  ],
+            
+            ])
+        
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         let result = try encoder.encode(values)
-        XCTAssertEqual(7, result.count)
+        XCTAssertEqual(21, result.count)
         XCTAssertEqual("0outer", result[0].name)
         XCTAssertEqual("normal", result[0].value)
         XCTAssertEqual("1nested[inside]", result[1].name)
         XCTAssertEqual("inner", result[1].value)
         XCTAssertEqual("2deeper[nesting][also]", result[2].name)
         XCTAssertEqual("works", result[2].value)
+        // 3array
         XCTAssertEqual("one", result[3].value)
         XCTAssertEqual("3array[]", result[3].name)
         XCTAssertEqual("two", result[4].value)
@@ -110,6 +122,40 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("3array[]", result[5].name)
         XCTAssertEqual("inside deepest", result[6].value)
         XCTAssertEqual("3array[][deepest]", result[6].name)
+        // 4deeparray
+        XCTAssertEqual("one", result[7].value)
+        XCTAssertEqual("4deeparray[]", result[7].name)
+        XCTAssertEqual("two", result[8].value)
+        XCTAssertEqual("4deeparray[]", result[8].name)
+        XCTAssertEqual("three", result[9].value)
+        XCTAssertEqual("4deeparray[]", result[9].name)
+        XCTAssertEqual("deepest", result[10].value)
+        XCTAssertEqual("4deeparray[][]", result[10].name)
+        XCTAssertEqual("inside deepest", result[11].value)
+        XCTAssertEqual("4deeparray[][]", result[11].name)
+        
+        // 5deepdictionary
+        XCTAssertEqual("works", result[12].value)
+        XCTAssertEqual("5deepdictionary[anesting][also]", result[12].name)
+        XCTAssertEqual("hello 1", result[13].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deep][deepest1]", result[13].name)
+        XCTAssertEqual("hello 2", result[14].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deep][deepest2]", result[14].name)
+        // 5deepdictionary -> deeparray
+        XCTAssertEqual("rolling in", result[15].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][]", result[15].name)
+        XCTAssertEqual("2", result[17].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][][the]", result[17].name)
+        XCTAssertEqual("1", result[16].value)
+        XCTAssertEqual("5deepdictionary[another nesting][deeparray][][deep]", result[16].name)
+        
+        // resting
+        XCTAssertEqual("6outer", result[18].name)
+        XCTAssertEqual("normal", result[18].value)
+        XCTAssertEqual("7nested[inside]", result[19].name)
+        XCTAssertEqual("inner", result[19].value)
+        XCTAssertEqual("8deeper[nesting][also]", result[20].name)
+        XCTAssertEqual("works", result[20].value)
     }
     
     func testEncodeNestedWithIndexStrategy() throws {
@@ -218,8 +264,8 @@ class URLEncoderTest: OmiseTestCase {
         let result = items.map({ (query) in query.value ?? "(nil)" })
         XCTAssertEqual(result, [
             expectedFromDateString,
-            "chronological",
             expectedToDateString,
+            "chronological",
             ])
     }
 }

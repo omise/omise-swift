@@ -19,7 +19,6 @@ public class URLQueryItemEncoder {
         items = []
         try value.encode(to: self)
         return items
-            .sorted(by: { (item1, item2) in item1.name < item2.name })
     }
 }
 
