@@ -43,10 +43,7 @@ public struct Transfer: OmiseResourceObject {
     
     public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
-}
-
-
-extension Transfer {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

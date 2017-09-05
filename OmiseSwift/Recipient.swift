@@ -28,6 +28,22 @@ public struct Recipient: OmiseResourceObject {
     
     public let taxID: String?
     public let bankAccount: BankAccount
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case isVerified = "verified"
+        case isActive = "active"
+        case name
+        case email
+        case recipientDescription = "description"
+        case type
+        case taxID = "tax_id"
+        case bankAccount = "bank_account"
+    }
 }
 
 

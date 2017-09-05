@@ -14,3 +14,13 @@ public enum Failable<TResult> {
     }
 }
 
+/*public init(from decoder: Decoder) throws {
+ do {
+ let error = try APIError(from: decoder)
+ self = .fail(OmiseError.api(error))
+ } catch is DecodingError {
+ let result = try TResult(from: decoder)
+ self = .success(result)
+ }
+ }*/
+

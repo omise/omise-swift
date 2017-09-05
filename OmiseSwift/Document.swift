@@ -12,9 +12,7 @@ public struct Document: OmiseResourceObject {
     public var createdDate: Date
     
     public let filename: String
-}
-
-extension Document {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

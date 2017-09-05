@@ -19,9 +19,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     
     public let charge: DetailProperty<Charge>
     public let transaction: DetailProperty<Transaction>
-}
-
-extension Refund {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

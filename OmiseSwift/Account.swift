@@ -12,6 +12,16 @@ public struct Account: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreat
     
     public let currency: Currency
     public let supportedCurrencies: Set<Currency>
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created"
+        case email
+        case currency
+        case supportedCurrencies = "supported_currencies"
+    }
 }
 
 

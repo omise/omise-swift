@@ -28,10 +28,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
     
     public let status: Status
     public let result: DetailProperty<Data>
-}
-
-
-extension Occurrence {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

@@ -51,9 +51,7 @@ public struct Dispute: OmiseResourceObject {
     public let charge: DetailProperty<Charge>
     public let documents: ListProperty<Document>
     public let closedDate: Date?
-}
 
-extension Dispute {
     private enum CodingKeys: String, CodingKey {
         case object
         case location

@@ -25,9 +25,7 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
     public let currency: Currency
     
     public let transferableDate: Date
-}
-
-extension Transaction {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

@@ -22,9 +22,7 @@ public struct Link: OmiseResourceObject {
     public let linkDescription: String
     public let charges: ListProperty<Charge>
     public let paymentURL: URL
-}
-
-extension Link {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

@@ -19,6 +19,15 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
     public var totalValue: Value {
         return Value(amount: total, currency: currency)
     }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case isLive = "livemode"
+        case available
+        case currency
+        case total
+    }
 }
 
 

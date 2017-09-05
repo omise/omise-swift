@@ -31,9 +31,7 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject {
     public let vat: Int64
     public let wht: Int64
     public let total: Int64
-}
-
-extension Receipt {
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
