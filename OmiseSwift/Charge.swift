@@ -51,7 +51,7 @@ public struct Charge: OmiseResourceObject {
     public let returnURL: URL?
     public let authorizedURL: URL?
     
-    public let metadata: [String: AnyJSONType]
+    public let metadata: [String: Any]
 }
 
 extension Charge {
@@ -110,7 +110,7 @@ extension Charge {
         dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
         returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
         authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
-        metadata = try container.decode([String: AnyJSONType].self, forKey: .metadata)
+        metadata = try container.decode([String: Any].self, forKey: .metadata)
         
         let statusValue = try container.decode(String.self, forKey: .status)
         let failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
@@ -233,10 +233,7 @@ public struct ChargeParams: APIJSONQuery {
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
-        if let metadata = metadata, !metadata.isEmpty {
-            try container.encodeIfPresent(metadata, forKey: .metadata)
-        }
-
+        try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
     public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
@@ -263,9 +260,7 @@ public struct UpdateChargeParams: APIJSONQuery {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
-        if let metadata = metadata, !metadata.isEmpty {
-            try container.encodeIfPresent(metadata, forKey: .metadata)
-        }
+        try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
     public init(chargeDescription: String? = nil, metadata: [String: Any]? = nil) {

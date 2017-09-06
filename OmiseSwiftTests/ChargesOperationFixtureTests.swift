@@ -156,9 +156,9 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.chargeDescription, "Charge for order 3947 (XXL)")
-                XCTAssertEqual(charge.metadata["user-id"]?.jsonValue as? String, "a-user-id")
-                XCTAssertEqual((charge.metadata["user"]?.jsonValue as? [String: AnyJSONType])?["name"]?.jsonValue as? String, "John Appleseed")
-                XCTAssertEqual((charge.metadata["user"]?.jsonValue as? [String: AnyJSONType])?["tel"]?.jsonValue as? String, "08-xxxx-xxxx")
+                XCTAssertEqual(charge.metadata["user-id"] as? String, "a-user-id")
+                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["name"] as? String, "John Appleseed")
+                XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["tel"] as? String, "08-xxxx-xxxx")
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -204,5 +204,26 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
+    
+    func testEncodingCreateChargeParams() throws {
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), chargeDescription: "Hello", customerID: nil, cardID: nil, isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let data = try encoder.encode(params)
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decodedParams = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        
+        XCTAssertEqual(params.chargeDescription, decodedParams["description"] as? String)
+        XCTAssertEqual(params.value.amount, decodedParams["amount"] as? Int64)
+        XCTAssertEqual(params.value.currency.code, decodedParams["currency"] as? String)
+        XCTAssertEqual(
+            params.metadata?["customer id"] as? String,
+            (decodedParams["metadata"] as? [String: Any])?["customer id"] as? String
+        )
+    }
 }
+
 
