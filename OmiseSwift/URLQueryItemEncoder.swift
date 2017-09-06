@@ -154,6 +154,10 @@ extension URLQueryItemEncoder {
         items.append(URLQueryItem(name: codingPath.queryItemKey, value: "\(value)"))
     }
     
+    private func push(_ value: URL, forKey codingPath: [CodingKey]) throws {
+        items.append(URLQueryItem(name: codingPath.queryItemKey, value: value.absoluteString))
+    }
+    
     private func push<T: Encodable>(_ value: T?, forKey codingPath: [CodingKey]) throws {
         switch value {
         case let value as String:
@@ -190,6 +194,9 @@ extension URLQueryItemEncoder {
         case let value as Date:
             try push(value, forKey: codingPath)
         case let value as DateComponents:
+            try push(value, forKey: codingPath)
+            
+        case let value as URL:
             try push(value, forKey: codingPath)
             
         case nil:

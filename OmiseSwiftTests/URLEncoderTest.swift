@@ -268,4 +268,28 @@ class URLEncoderTest: OmiseTestCase {
             "chronological",
             ])
     }
+    
+    func testCreateChargeParams() throws {
+        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), chargeDescription: "A charge description", customerID: nil, cardID: nil, isAutoCapture: true, returnURL: URL(string: "https://omise.co"), metadata: ["customer-id": "1", "stock-count": 66473])
+        
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
+        let result = try encoder.encode(createChargeParams)
+        XCTAssertEqual(result.count, 7)
+        
+        XCTAssertEqual("amount", result[0].name)
+        XCTAssertEqual("1000000", result[0].value)
+        XCTAssertEqual("currency", result[1].name)
+        XCTAssertEqual("THB", result[1].value)
+        XCTAssertEqual("description", result[2].name)
+        XCTAssertEqual("A charge description", result[2].value)
+        XCTAssertEqual("capture", result[3].name)
+        XCTAssertEqual("true", result[3].value)
+        XCTAssertEqual("return_uri", result[4].name)
+        XCTAssertEqual("https://omise.co", result[4].value)
+        XCTAssertEqual("metadata[customer-id]", result[5].name)
+        XCTAssertEqual("1", result[5].value)
+        XCTAssertEqual("metadata[stock-count]", result[6].name)
+        XCTAssertEqual("66473", result[6].value)
+    }
 }
