@@ -9,7 +9,7 @@ public class APIClient: NSObject {
     
     let config: APIConfiguration
     
-    fileprivate let pinningSignature: Data? = {
+    fileprivate let pinningCertificateData: Data? = {
         let bundle = Bundle(for: APIClient.self)
         if let certificateURL = bundle.url(forResource: "OmisePinning", withExtension: "der"),
             let certificateData = try? Data(contentsOf: certificateURL) {
@@ -89,7 +89,7 @@ extension APIClient: URLSessionDelegate {
             completionHandler(challengeDisposition, credential)
         }
         
-        guard let signature = pinningSignature else {
+        guard let signature = pinningCertificateData else {
             credential = nil
             challengeDisposition = .performDefaultHandling
             return
@@ -104,26 +104,29 @@ extension APIClient: URLSessionDelegate {
         var secresult = SecTrustResultType.invalid
         let status = SecTrustEvaluate(serverTrust, &secresult)
         
-        guard errSecSuccess == status,
-            let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0)else {
+        guard errSecSuccess == status else {
                 credential = nil
                 challengeDisposition = .cancelAuthenticationChallenge
                 return
         }
         
-        let serverCertificateData = SecCertificateCopyData(serverCertificate)
-        let data = CFDataGetBytePtr(serverCertificateData);
-        let size = CFDataGetLength(serverCertificateData);
-        let cert1 = NSData(bytes: data, length: size)
-        if cert1.isEqual(to: signature) {
-            credential = URLCredential(trust: serverTrust)
-            challengeDisposition = .useCredential
-        } else {
-            credential = nil
-            challengeDisposition = .cancelAuthenticationChallenge
+        for i in (0..<SecTrustGetCertificateCount(serverTrust)).reversed() {
+            guard let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, i) else { continue }
+                
+            let serverCertificateData = SecCertificateCopyData(serverCertificate)
+            let data = CFDataGetBytePtr(serverCertificateData);
+            let size = CFDataGetLength(serverCertificateData);
+            let cert1 = NSData(bytes: data, length: size)
+            if cert1.isEqual(to: signature) {
+                credential = URLCredential(trust: serverTrust)
+                challengeDisposition = .useCredential
+                return
+            }
         }
+
+        credential = nil
+        challengeDisposition = .cancelAuthenticationChallenge
     }
 }
-
 
 
