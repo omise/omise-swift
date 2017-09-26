@@ -4,12 +4,6 @@ public protocol Retrievable {}
 
 public struct RetrieveParams: APIJSONQuery {
     public var isExpanded: Bool = false
-    
-    public var json: JSONAttributes {
-        return [
-            "expand": isExpanded,
-        ]
-    }
 }
 
 public extension Retrievable where Self: OmiseLocatableObject & OmiseIdentifiableObject {

@@ -27,7 +27,7 @@ class AccountAndBalanceOperationsTest: LiveTest {
             
             switch result {
             case let .success(balance):
-                XCTAssertEqual(balance.available.amount, 22118104)
+                XCTAssertEqual(balance.available, 22118104)
             case let .fail(err):
                 XCTFail("\(err)")
             }

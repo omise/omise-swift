@@ -11,41 +11,37 @@ public struct Link: OmiseResourceObject {
     public let isLive: Bool
     public let createdDate: Date
     
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    public let amount: Int64
+    public let currency: Currency
     public let isUsed: Bool
     public let isMultiple: Bool
     public let title: String
     public let linkDescription: String
     public let charges: ListProperty<Charge>
     public let paymentURL: URL
-}
-
-
-extension Link {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Link.parseOmiseResource(JSON: json) else {
-                return nil
-        }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
         
-        guard let value = Value(JSON: json),
-            let isUsed = json["used"] as? Bool, let isMultiple = json["multiple"] as? Bool,
-            let title = json["title"] as? String, let linkDescription = json["description"] as? String,
-            let charges = json["charges"].flatMap(ListProperty<Charge>.init(JSON:)),
-            let paymentURL = (json["payment_uri"] as? String).flatMap(URL.init(string:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.value = value
-        self.isUsed = isUsed
-        self.isMultiple = isMultiple
-        self.title = title
-        self.linkDescription = linkDescription
-        self.charges = charges
-        self.paymentURL = paymentURL
+        case amount
+        case currency
+        case isUsed = "used"
+        case isMultiple = "multiple"
+        case title
+        case linkDescription = "description"
+        case charges
+        case paymentURL = "payment_uri"
     }
+
 }
+
 
 public struct LinkParams: APIJSONQuery {
     public var value: Value
@@ -53,14 +49,21 @@ public struct LinkParams: APIJSONQuery {
     public var linkDescription: String
     public var isMultiple: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": value.amount,
-            "currency": value.currency.code,
-            "title": title,
-            "description": linkDescription,
-            "multiple": isMultiple,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case currency
+        case title
+        case linkDescription = "description"
+        case isMultiple = "multiple"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var keyedContainer = encoder.container(keyedBy: CodingKeys.self)
+        try keyedContainer.encode(value.amount, forKey: .amount)
+        try keyedContainer.encode(value.currency, forKey: .currency)
+        try keyedContainer.encode(title, forKey: .title)
+        try keyedContainer.encodeIfPresent(linkDescription, forKey: .linkDescription)
+        try keyedContainer.encodeIfPresent(isMultiple, forKey: .isMultiple)
     }
     
     public init(value: Value, title: String, linkDescription: String, isMultiple: Bool? = nil) {
@@ -81,14 +84,30 @@ public struct LinkFilterParams: OmiseFilterParams {
     
     public var usedDate: DateComponents?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "amount": amount,
-            "multiple": isMultiple,
-            "used": isUsed,
-            "used_at": DateComponentsConverter.convert(fromValue: usedDate),
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case amount
+        case isMultiple = "multiple"
+        case isUsed = "used"
+        case usedDate = "used_at"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        isMultiple = try container.decodeIfPresent(Bool.self, forKey: .isMultiple)
+        isUsed = try container.decodeIfPresent(Bool.self, forKey: .isUsed)
+        usedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .usedDate)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeIfPresent(isMultiple, forKey: .isMultiple)
+        try container.encodeIfPresent(isUsed, forKey: .isUsed)
+        try container.encodeOmiseDateComponentsIfPresent(usedDate, forKey: .usedDate)
     }
     
     public init(created: DateComponents? = nil, amount: Double? = nil,
@@ -99,16 +118,6 @@ public struct LinkFilterParams: OmiseFilterParams {
         self.isMultiple = isMultiple
         self.isUsed = isUsed
         self.usedDate = usedDate
-    }
-    
-    public init(JSON: [String: Any]) {
-        self.init(
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            amount: (JSON["amount"] as? Double),
-            isMultiple: JSON["multiple"] as? Bool,
-            isUsed: JSON["used"] as? Bool,
-            usedDate: JSON["used_at"].flatMap(DateComponentsConverter.convert(fromAttribute:))
-        )
     }
 }
 

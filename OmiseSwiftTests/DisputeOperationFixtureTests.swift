@@ -68,7 +68,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(dispute.documents.total, 1)
                 XCTAssertEqual(dispute.status, .won)
                 XCTAssertEqual(dispute.transaction.dataID, "trxn_test_58h9gj859q3dpqdx94r")
-                XCTAssertEqual(dispute.closedDate, DateConverter.convert(fromAttribute: "2017-07-18T10:56:28Z"))
+                XCTAssertEqual(dispute.closedDate, dateFormatter.date(from: "2017-07-18T10:56:28Z"))
                 guard let recentDocument = dispute.documents.first else {
                     XCTFail("Cannot get the recent document")
                     return

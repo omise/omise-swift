@@ -36,27 +36,3 @@ extension ListProperty: RandomAccessCollection {
 }
 
 
-extension ListProperty {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any] ,
-            let object = ListProperty.parseObject(JSON: json) else {
-            return nil
-        }
-        
-        guard let from = json["from"].flatMap(DateConverter.convert(fromAttribute:)),
-            let to = json["to"].flatMap(DateConverter.convert(fromAttribute:)),
-            let limit = json["limit"] as? Int, let total = json["total"] as? Int, let offset = json["offset"] as? Int,
-            let data = (json["data"] as? [Any])?.flatMap(Item.init) else {
-                return nil
-        }
-        
-        self.object = object
-        self.from = from
-        self.to = to
-        self.limit = limit
-        self.total = total
-        self.offset = offset
-        self.data = data
-    }
-}
-

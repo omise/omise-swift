@@ -11,6 +11,7 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject {
     public let date: Date
     
     public let number: String
+    public let isCreditNote: Bool
     
     public let customerName: String
     public let customerAddress: String
@@ -31,77 +32,35 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject {
     public let wht: Int64
     public let total: Int64
     
-    public let isCreditNote: Bool
-}
-
-
-extension Receipt {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Receipt.parseOmiseProperties(JSON: json) else {
-                return nil
-        }
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case date
         
-        guard let number = json["number"] as? String,
-            let isCreditNote = json["credit_note"] as? Bool,
-            let date = json["date"].flatMap(DateConverter.convert(fromAttribute:)) else {
-                return nil
-        }
+        case number
+        case isCreditNote = "credit_note"
         
-        guard let customerName = json["customer_name"] as? String,
-            let customerAddress = json["customer_address"] as? String,
-            let customerTaxID = json["customer_tax_id"] as? String,
-            let customerEmail = json["customer_email"] as? String,
-            let customerStatementName = json["customer_statement_name"] as? String else {
-                return nil
-        }
+        case customerName = "customer_name"
+        case customerAddress = "customer_address"
+        case customerTaxID = "customer_tax_id"
+        case customerEmail = "customer_email"
+        case customerStatementName = "customer_statement_name"
         
-        guard let companyName = json["company_name"] as? String,
-            let companyAddress = json["company_address"] as? String,
-            let companyTaxID = json["company_tax_id"] as? String else {
-                return nil
-        }
+        case companyName = "company_name"
+        case companyAddress = "company_address"
+        case companyTaxID = "company_tax_id"
         
-        guard let currency = (json["currency"] as? String).flatMap(Currency.init(code:)),
-            let chargeFee = json["charge_fee"] as? Int64,
-            let voidedFee = json["voided_fee"] as? Int64,
-            let transferFee = json["transfer_fee"] as? Int64,
-            let feeSubtotal = json["subtotal"] as? Int64,
-            let vat = json["vat"] as? Int64,
-            let wht = json["wht"] as? Int64,
-            let total = json["total"] as? Int64 else {
-                return nil
-        }
-        
-        assert(feeSubtotal == chargeFee - voidedFee + transferFee, "Fee subtotal doesn't match the fee equation")
-        
-        (self.object, self.location, self.id) = omiseObjectProperties
-
-        self.number = number
-        self.date = date
-        
-        self.customerName = customerName
-        self.customerAddress = customerAddress
-        self.customerTaxID = customerTaxID
-        self.customerEmail = customerEmail
-        self.customerStatementName = customerStatementName
-        
-        self.companyName = companyName
-        self.companyTaxID = companyTaxID
-        self.companyAddress = companyAddress
-        
-        self.currency = currency
-        self.chargeFee = chargeFee
-        self.voidedFee = voidedFee
-        self.transferFee = transferFee
-        self.feeSubtotal = feeSubtotal
-        self.vat = vat
-        self.wht = wht
-        self.total = total
-        
-        
-        self.isCreditNote = isCreditNote
+        case currency
+        case chargeFee = "charge_fee"
+        case voidedFee = "voided_fee"
+        case transferFee = "transfer_fee"
+        case feeSubtotal = "subtotal"
+        case vat
+        case wht
+        case total
     }
+
 }
 
 

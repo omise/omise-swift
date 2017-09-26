@@ -51,21 +51,43 @@ extension Payment: Equatable {
 }
 
 
-public enum OffsitePayment {
+public enum OffsitePayment: Codable {
     case internetBanking(InternetBanking)
     case alipay
     
-    public var offsite: String {
-        return OffsitePaymentConverter.convert(fromValue: self) as? String ?? {
-            switch self {
-            case .internetBanking(let bank):
-                return OffsitePaymentConverter.internetBankingPrefix + bank.rawValue
-            case .alipay:
-                return OffsitePaymentConverter.alipayValue
-            }
-            }()
+    static let internetBankingPrefix = "internet_banking_"
+    static let alipayValue = "alipay"
+}
+
+extension OffsitePayment {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        let value = try container.decode(String.self)
+        if value.hasPrefix(OffsitePayment.internetBankingPrefix),
+            let internetBankingOffsite = value
+                .range(of: OffsitePayment.internetBankingPrefix).map({ String(value[$0.upperBound...]) })
+                .flatMap(InternetBanking.init(rawValue:)).map(OffsitePayment.internetBanking) {
+            self = internetBankingOffsite
+        } else if value == OffsitePayment.alipayValue {
+            self = .alipay
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
+        }
     }
     
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        
+        let offsiteValue: String
+        switch self {
+        case .internetBanking(let internetBanking):
+            offsiteValue = OffsitePayment.internetBankingPrefix + internetBanking.rawValue
+        case .alipay:
+            offsiteValue = OffsitePayment.alipayValue
+        }
+        try container.encode(offsiteValue)
+    }
 }
 
 extension OffsitePayment: Equatable {

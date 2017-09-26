@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum RecipientType: String {
+public enum RecipientType: String, Codable {
     case individual
     case corporation
 }
@@ -28,31 +28,21 @@ public struct Recipient: OmiseResourceObject {
     
     public let taxID: String?
     public let bankAccount: BankAccount
-}
-
-
-extension Recipient {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Recipient.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let name = json["name"] as? String, let type = EnumConverter<RecipientType>.convert(fromAttribute: json["type"]),
-            let account = json["bank_account"].flatMap(BankAccount.init(JSON:)),
-            let isActive = json["active"] as? Bool, let isVerified = json["verified"] as? Bool else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.name = name
-        self.type = type
-        self.bankAccount = account
-        self.isActive = isActive
-        self.isVerified = isVerified
-        self.email = json["email"] as? String
-        self.recipientDescription = json["description"] as? String
-        self.taxID = json["tax_id"] as? String
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case isVerified = "verified"
+        case isActive = "active"
+        case name
+        case email
+        case recipientDescription = "description"
+        case type
+        case taxID = "tax_id"
+        case bankAccount = "bank_account"
     }
 }
 
@@ -65,15 +55,13 @@ public struct RecipientParams: APIJSONQuery {
     public var taxID: String?
     public var bankAccount: BankAccountParams?
     
-    public var json: JSONAttributes {
-        return Dictionary<String, Any>.makeFlattenDictionaryFrom([
-            "name": name,
-            "email": email,
-            "description": recipientDescription,
-            "type": type?.rawValue,
-            "tax_id": taxID,
-            "bank_account": bankAccount
-        ])
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case email
+        case recipientDescription = "description"
+        case type
+        case taxID = "tax_id"
+        case bankAccount = "bank_account"
     }
     
     public init(name: String? = nil, email: String? = nil, recipientDescription: String? = nil,
@@ -104,18 +92,8 @@ extension Recipient: Listable {}
 public struct RecipientFilterParams: OmiseFilterParams {
     public var type: RecipientType?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "type": type?.rawValue
-            ])
-    }
-    
     public init(type: RecipientType?) {
         self.type = type
-    }
-    
-    public init(JSON: [String : Any]) {
-        self.init(type: (JSON["type"] as? String).flatMap(RecipientType.init(rawValue:)))
     }
 }
 

@@ -29,43 +29,62 @@ public struct Transfer: OmiseResourceObject {
     public let isPaid: Bool
     public let paidDate: Date?
     
-    public let value: Value
-    public let fee: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public var feeValue: Value {
+        return Value(amount: fee, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let fee: Int64
+    public let currency: Currency
     
     public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
-}
-
-
-extension Transfer {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Transfer.parseOmiseResource(JSON: json) else {
-                return nil
-        }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case bankAccount = "bank_account"
+        case shouldFailFast = "fail_fast"
+        case fee
+        case amount
+        case currency
+        case isSent = "sent"
+        case isPaid = "paid"
+        case sentDate = "sent_at"
+        case paidDate = "paid_at"
+        case recipient
+        case transaction
+        case failureCode = "failure_code"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        bankAccount = try container.decode(BankAccount.self, forKey: .bankAccount)
+        shouldFailFast = try container.decode(Bool.self, forKey: .shouldFailFast)
+        fee = try container.decode(Int64.self, forKey: .fee)
+        amount = try container.decode(Int64.self, forKey: .amount)
+        currency = try container.decode(Currency.self, forKey: .currency)
+        isSent = try container.decode(Bool.self, forKey: .isSent)
+        isPaid = try container.decode(Bool.self, forKey: .isPaid)
+        sentDate = try container.decodeIfPresent(Date.self, forKey: .sentDate)
+        paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
+        recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
+        transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
         
-        guard let bankAccount = json["bank_account"].flatMap(BankAccount.init(JSON:)),
-            let value = Value(JSON: json),
-            let fee = json["fee"] as? Int64, let currency = json["currency"].flatMap(CurrencyFieldConverter.convert(fromAttribute:)),
-            let isSent = json["sent"] as? Bool, let isPaid = json["paid"] as? Bool,
-            let recipient = json["recipient"].flatMap(DetailProperty<Recipient>.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.bankAccount = bankAccount
-        self.isSent = isSent
-        self.isPaid = isPaid
-        self.value = value
-        self.fee = Value(amount: fee, currency: currency)
-        self.recipient = recipient
-        
-        self.transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:))
-        self.sentDate = json["sent_at"].flatMap(DateConverter.convert(fromAttribute:))
-        self.paidDate = json["paid_at"].flatMap(DateConverter.convert(fromAttribute:))
-        
-        let failure = (json["failure_code"] as? String).flatMap(TransferFailure.init(code:))
-        switch (isPaid, isSent, failure) {
+        let failureCode = try container.decodeIfPresent(TransferFailure.self, forKey: .failureCode)
+        switch (isPaid, isSent, failureCode) {
         case (_, _, let failure?):
             self.status = .failed(failure)
         case (true, true, nil):
@@ -75,8 +94,32 @@ extension Transfer {
         default:
             self.status = .pending
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isLive, forKey: .isLive)
         
-        self.shouldFailFast = json["fail_fast"] as? Bool ?? false
+        try container.encode(amount, forKey: .amount)
+        try container.encode(currency, forKey: .currency)
+        try container.encode(fee, forKey: .fee)
+        try container.encode(bankAccount, forKey: .bankAccount)
+        try container.encode(shouldFailFast, forKey: .shouldFailFast)
+        
+        try container.encode(isSent, forKey: .isSent)
+        try container.encode(isPaid, forKey: .isPaid)
+        try container.encodeIfPresent(sentDate, forKey: .sentDate)
+        try container.encodeIfPresent(paidDate, forKey: .paidDate)
+        try container.encode(recipient, forKey: .recipient)
+        try container.encodeIfPresent(transaction, forKey: .transaction)
+        
+        if case .failed(let failureCode) = status {
+            try container.encode(failureCode, forKey: .failureCode)
+        }
     }
 }
 
@@ -86,12 +129,10 @@ public struct TransferParams: APIJSONQuery {
     public var recipientID: String?
     public var failFast: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            "recipient": recipientID,
-            "fail_fast": failFast,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case recipientID = "recipient"
+        case failFast = "fail_fast"
     }
     
     public init(amount: Int64, recipientID: String? = nil, failFast: Bool? = nil) {
@@ -103,12 +144,6 @@ public struct TransferParams: APIJSONQuery {
 
 public struct UpdateTransferParams: APIJSONQuery {
     public var amount: Int64
-    
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            ])
-    }
     
     public init(amount: Int64) {
         self.amount = amount
@@ -129,20 +164,48 @@ public struct TransferFilterParams: OmiseFilterParams {
     public var failureCode: String?
     public var failureMessage: String?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "amount": amount,
-            "currency": currency?.code,
-            "bank_last_digits": bankLastDigits?.lastDigits,
-            "fee": fee,
-            "paid": isPaid,
-            "paid_at": DateComponentsConverter.convert(fromValue: paidDate),
-            "sent": isSent,
-            "sent_at": DateComponentsConverter.convert(fromValue: sentDate),
-            "failure_code": failureCode,
-            "failure_message": failureMessage,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case amount
+        case currency
+        case bankLastDigits = "bank_last_digits"
+        case fee
+        case isPaid = "paid"
+        case paidDate = "paid_at"
+        case isSent = "sent"
+        case sentDate = "sent_at"
+        case failureCode = "failure_code"
+        case failureMessage = "failure_message"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
+        bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
+        fee = try container.decodeIfPresent(Double.self, forKey: .fee)
+        isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
+        paidDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .paidDate)
+        isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
+        sentDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .sentDate)
+        failureCode = try container.decodeIfPresent(String.self, forKey: .failureCode)
+        failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeIfPresent(currency, forKey: .currency)
+        try container.encodeIfPresent(bankLastDigits, forKey: .bankLastDigits)
+        try container.encodeIfPresent(fee, forKey: .fee)
+        try container.encodeIfPresent(isPaid, forKey: .isPaid)
+        try container.encodeOmiseDateComponentsIfPresent(paidDate, forKey: .paidDate)
+        try container.encodeIfPresent(isSent, forKey: .isSent)
+        try container.encodeOmiseDateComponentsIfPresent(sentDate, forKey: .sentDate)
+        try container.encodeIfPresent(failureCode, forKey: .failureCode)
+        try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
     }
     
     public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
@@ -162,54 +225,52 @@ public struct TransferFilterParams: OmiseFilterParams {
         self.failureCode = failureCode
         self.failureMessage = failureMessage
     }
-    
-    public init(JSON: [String : Any]) {
-        self.init(
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            amount: (JSON["amount"] as? Double),
-            currency: (JSON["currency"] as? String).flatMap(Currency.init(code:)),
-            bankLastDigits: (JSON["bank_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
-            fee: (JSON["fee"] as? Double),
-            isPaid: JSON["paid"] as? Bool,
-            paidDate: JSON["paid_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            isSent: JSON["sent"] as? Bool,
-            sentDate: JSON["sent_at"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            failureCode: JSON["failure_code"] as? String,
-            failureMessage: JSON["failure_message"] as? String
-        )
-    }
 }
 
 public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
     public enum Amount {
         case value(Value)
-        case percentageOfBalance(Int)
+        case percentageOfBalance(Double)
     }
     
     public let recipientID: String
     public let amount: Amount
     
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let recipientID = json["recipient"] as? String else {
-                return nil
-        }
+    private enum CodingKeys: String, CodingKey {
+        case recipientID = "recipient"
+        case percentageOfBalance = "percentage_of_balance"
+        case amount
+        case currency
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        recipientID = try container.decode(String.self, forKey: .recipientID)
+        let percentageOfBalance = try container.decodeIfPresent(Double.self, forKey: .percentageOfBalance)
+        let amount = try container.decodeIfPresent(Int64.self, forKey: .amount)
+        let currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
         
-        let value = Value(JSON: json)
-        let percentageOfBalance = json["percentage_of_balance"] as? Int
-        
-        let amount: Amount
-        switch (percentageOfBalance, value) {
-        case (let percentage?, nil) where 1...100 ~= percentage:
-            amount = .percentageOfBalance(percentage)
-        case (nil, let value?):
-            amount = .value(value)
+        switch (percentageOfBalance, amount, currency) {
+        case (let percentageOfBalance?, nil, _) where 0.0...100 ~= percentageOfBalance:
+            self.amount = .percentageOfBalance(percentageOfBalance)
+        case (nil, let amount?, let currency?):
+            self.amount = .value(Value(amount: amount, currency: currency))
         default:
-            return nil
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid requesting transfer amount"))
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
-        self.amount = amount
-        self.recipientID = recipientID
+        try container.encode(recipientID, forKey: .recipientID)
+        switch amount {
+        case .value(let value):
+            try container.encode(value.amount, forKey: .amount)
+            try container.encode(value.currency, forKey: .currency)
+        case .percentageOfBalance(let percentage):
+            try container.encode(percentage, forKey: .percentageOfBalance)
+        }
     }
     
     /// Returns a Boolean value indicating whether two values are equal.

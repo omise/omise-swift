@@ -15,23 +15,6 @@ public struct Token: OmiseResourceObject {
     public var card: Card
 }
 
-extension Token {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Token.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let isUsed = json["used"] as? Bool,
-            let card = json["card"].flatMap(Card.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.isUsed = isUsed
-        self.card = card
-    }
-}
 
 public struct TokenParams: APIJSONQuery {
     public var name: String?
@@ -46,18 +29,31 @@ public struct TokenParams: APIJSONQuery {
     
     public var postalCode: String?
     
-    public var json: JSONAttributes {
-        return [
-            "card": Dictionary.makeFlattenDictionaryFrom([
-                "name": name,
-                "number": number,
-                "expiration_month": expiration?.month,
-                "expiration_year": expiration?.year,
-                "security_code": securityCode,
-                "city": city as Any,
-                "postal_code": postalCode,
-                ])
-        ]
+    private enum TokenCodingKeys: String, CodingKey {
+        case card
+        
+        enum CardCodingKeys: String, CodingKey {
+            case number
+            case name
+            case expirationMonth = "expiration_month"
+            case expirationYear = "expiration_year"
+            case securityCode = "security_code"
+            case city
+            case postalCode = "postal_code"
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var tokenContainer = encoder.container(keyedBy: TokenCodingKeys.self)
+        var cardContainer = tokenContainer.nestedContainer(keyedBy: TokenCodingKeys.CardCodingKeys.self, forKey: .card)
+        
+        try cardContainer.encode(number, forKey: .number)
+        try cardContainer.encodeIfPresent(name, forKey: .name)
+        try cardContainer.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
+        try cardContainer.encodeIfPresent(expiration?.year, forKey: .expirationYear)
+        try cardContainer.encodeIfPresent(securityCode, forKey: .securityCode)
+        try cardContainer.encodeIfPresent(city, forKey: .city)
+        try cardContainer.encodeIfPresent(postalCode, forKey: .postalCode)
     }
     
     public init(number: String, name: String?, expiration: (month: Int, year: Int)?, securityCode: String?, city: String? = nil, postalCode: String? = nil) {

@@ -6,7 +6,7 @@ public enum Period {
     case weekly(Set<Weekday>)
     case monthly(MonthlyPeriodRule)
     
-    public enum Weekday: Equatable {
+    public enum Weekday: String, Equatable, Decodable {
         case monday
         case tuesday
         case wednesday
@@ -67,64 +67,29 @@ extension Period: Equatable {
     }
 }
 
-extension Period {
-    init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let period = json["period"] as? String else {
-                return nil
-        }
-        
-        let onValues = json["on"] as? [String: Any]
-        
-        let onWeekdays = (onValues?["weekdays"] as? [String])?.flatMap({ Weekday(weekdayString: $0) })
-        let monthlyRule: MonthlyPeriodRule?
-        
-        let onMonthdays = (onValues?["days_of_month"] as? [Int])?.flatMap({ MonthlyPeriodRule.DayOfMonth(rawValue: $0) })
-        let onWeekdayOfMonth = (onValues?["weekday_of_month"] as? String)
-            .flatMap({ value -> (MonthlyPeriodRule.Ordinal, Weekday)? in
-                let splitted = value.components(separatedBy: "_")
-                guard splitted.count == 2,
-                    let ordinal = splitted.first.flatMap(MonthlyPeriodRule.Ordinal.init(ordinalString:)),
-                    let weekday = splitted.last.flatMap(Weekday.init(weekdayString:)) else {
-                        return nil
-                }
-                
-                return (ordinal, weekday)
-            })
-        
-        switch (onMonthdays, onWeekdayOfMonth) {
-        case (let onMonthdays?, nil):
-            monthlyRule = MonthlyPeriodRule.daysOfMonth(Set(onMonthdays))
-        case (nil, let onWeekdayOfMonth?):
-            monthlyRule = MonthlyPeriodRule.weekdayOfMonth(ordinal: onWeekdayOfMonth.0, weekday: onWeekdayOfMonth.1)
-        default:
-            monthlyRule = nil
-        }
-        
-        switch (period, onWeekdays, monthlyRule) {
-        case ("day", nil, nil):
-            self = .daily
-        case ("week", let onWeekdays?, nil):
-            self = .weekly(Set(onWeekdays))
-        case ("month", nil, let monthlyRule?):
-            self = .monthly(monthlyRule)
-        default:
-            return nil
+extension Period: Codable {
+    enum CodingKeys: String, CodingKey {
+        case period
+        case on
+        enum RuleCodingKeys: String, CodingKey {
+            case weekdays
+            case daysOfMonth = "days_of_month"
+            case weekdayOfMonth = "weekday_of_month"
         }
     }
     
-    public var json: JSONAttributes {
-        let periodString: String
-        let ruleJSON: [String: Any]
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
         switch self {
         case .daily:
-            periodString = "day"
-            ruleJSON = [:]
-        case .weekly(let weekdays):
-            periodString = "week"
-            ruleJSON = [
-                "weekdays": weekdays.sorted(by: { (first, second) -> Bool in
+            try container.encode("daily", forKey: .period)
+        case .weekly(let weekDays):
+            try container.encode("weekly", forKey: .period)
+            var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+            var weekDaysContainers = ruleContainer.nestedUnkeyedContainer(forKey: .weekdays)
+            try weekDaysContainers.encode(contentsOf:
+                weekDays.sorted(by: { (first, second) -> Bool in
                     switch (first, second) {
                     case (.monday, _):
                         return true
@@ -155,25 +120,97 @@ extension Period {
                         return false
                     }
                 }).map({ $0.apiValue })
-            ]
-        case .monthly(let monthlyRule):
-            periodString = "month"
-            switch monthlyRule {
+            )
+        case .monthly(let month):
+            try container.encode("weekly", forKey: .period)
+            var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+            switch month {
             case .daysOfMonth(let daysOfMonth):
-                ruleJSON = [
-                    "days_of_month": daysOfMonth.map({ $0.rawValue }).sorted()
-                ]
+                var daysOfMonthContainers = ruleContainer.nestedUnkeyedContainer(forKey: .daysOfMonth)
+                try daysOfMonthContainers.encode(contentsOf: daysOfMonth.map({ $0.rawValue }).sorted())
             case .weekdayOfMonth(ordinal: let ordinal, weekday: let weekday):
-                ruleJSON = [
-                    "weekday_of_month": "\(ordinal.apiValue)_\(weekday.apiValue.lowercased())"
-                ]
+                try ruleContainer.encode("\(ordinal.apiValue)_\(weekday.apiValue.lowercased())", forKey: .weekdayOfMonth)
+            }
+        }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let period = try container.decode(String.self, forKey: .period)
+        
+        let rules = try container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
+        let onWeekdays = try rules.decodeIfPresent(Array<Weekday>.self, forKey: .weekdays)
+        let onMonthDays = try rules.decodeIfPresent(Array<MonthlyPeriodRule.DayOfMonth>.self, forKey: .daysOfMonth)
+        let onWeekdayOfMonth: (MonthlyPeriodRule.Ordinal, Weekday)?
+        
+        do {
+            if let onWeekdaysOfMonthValue = try rules.decodeIfPresent(String.self, forKey: .weekdayOfMonth) {
+                let splitted = onWeekdaysOfMonthValue.components(separatedBy: "_")
+                if splitted.count == 2,
+                    let ordinal = splitted.first.flatMap(MonthlyPeriodRule.Ordinal.init(ordinalString:)),
+                    let weekday = splitted.last.flatMap(Weekday.init(weekdayString:)) {
+                    onWeekdayOfMonth = (ordinal, weekday)
+                } else {
+                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+                }
+            } else {
+                onWeekdayOfMonth = nil
             }
         }
         
-        return Dictionary.makeFlattenDictionaryFrom([
-            "period": periodString,
-            "on": ruleJSON
-            ])
+        let monthlyRule: MonthlyPeriodRule?
+        switch (onMonthDays, onWeekdayOfMonth) {
+        case (let onMonthDays?, nil):
+            monthlyRule = MonthlyPeriodRule.daysOfMonth(Set(onMonthDays))
+        case (nil, let onWeekdayOfMonth?):
+            monthlyRule = MonthlyPeriodRule.weekdayOfMonth(ordinal: onWeekdayOfMonth.0, weekday: onWeekdayOfMonth.1)
+        default:
+            monthlyRule = nil
+        }
+        
+        switch (period, onWeekdays, monthlyRule) {
+        case ("day", nil, nil):
+            self = .daily
+        case ("week", let onWeekdays?, nil):
+            self = .weekly(Set(onWeekdays))
+        case ("month", nil, let monthlyRule?):
+            self = .monthly(monthlyRule)
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+        }
+    }
+}
+
+extension Period.MonthlyPeriodRule.DayOfMonth: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(Int.self)
+        guard 1...28 ~= value else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+        }
+        self.day = value
+    }
+}
+
+extension Period.MonthlyPeriodRule.Ordinal: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        switch value.lowercased() {
+        case "1st":
+            self = .first
+        case "2nd":
+            self = .second
+        case "3rd":
+            self = .third
+        case "4th":
+            self = .fourth
+        case "last":
+            self = .last
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+        }
     }
 }
 
@@ -275,7 +312,4 @@ extension Period.MonthlyPeriodRule.Ordinal {
         }
     }
 }
-
-
-
 

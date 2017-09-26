@@ -9,17 +9,6 @@ public struct ListParams: APIJSONQuery {
     public var limit: Int?
     public var order: Ordering?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "from": DateConverter.convert(fromValue: from),
-            "to": DateConverter.convert(fromValue: to),
-            "offset": offset,
-            "limit": limit,
-            "order": order?.rawValue
-        ])
-    }
-    
-    
     public init(from: Date? = nil, to: Date? = nil, offset: Int? = nil, limit: Int? = nil, order: Ordering? = nil) {
         self.from = from
         self.to = to
@@ -71,7 +60,7 @@ public extension Listable where Self: OmiseLocatableObject {
 }
 
 
-public extension List where TItem: OmiseLocatableObject & Listable {
+public extension List {
     public func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
         let listParams = ListParams(from: nil, to: nil, offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
@@ -116,7 +105,7 @@ public extension List where TItem: OmiseLocatableObject & Listable {
     }
 }
 
-public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObject & OmiseCreatableObject & Listable  {
+public extension List where TItem: OmiseIdentifiableObject & OmiseCreatableObject {
     public func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
         let listParams: ListParams
         
@@ -150,7 +139,7 @@ public extension List where TItem: OmiseLocatableObject & OmiseIdentifiableObjec
     }
 }
 
-public extension List where TItem: OmiseResourceObject & Listable {
+public extension List where TItem: OmiseResourceObject {
     public func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
         loadNextPage(using: client, count: count) { (result) in
             switch result {

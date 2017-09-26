@@ -3,7 +3,7 @@ import Foundation
 public let centBasedCurrencyFactor = 100
 public let identicalBasedCurrencyFactor = 1
 
-public enum Currency {
+public enum Currency: Codable {
     case thb
     case jpy
     case idr
@@ -71,6 +71,36 @@ public enum Currency {
         case "EUR":
             self = .eur
         default: return nil
+        }
+    }
+}
+
+extension Currency {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(code)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let code = try container.decode(String.self)
+        switch code.uppercased() {
+        case "THB":
+            self = .thb
+        case "JPY":
+            self = .jpy
+        case "IDR":
+            self = .idr
+        case "SGD":
+            self = .sgd
+        case "USD":
+            self = .usd
+        case "GBP":
+            self = .gbp
+        case "EUR":
+            self = .eur
+        default:
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unknown currency code"))
         }
     }
 }

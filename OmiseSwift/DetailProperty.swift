@@ -13,15 +13,23 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
     }
 }
 
-
-extension DetailProperty {
-    public init?(JSON json: Any) {
-        if let data = T(JSON: json) {
-            self = .loaded(data)
-        } else if let dataID = (json as? String) ?? (json as? [String: Any])?["id"] as? String {
-            self = .notLoaded(dataID)
-        } else {
-            return nil
+extension DetailProperty: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = .loaded(try container.decode(T.self))
+        } catch DecodingError.typeMismatch {
+            self = .notLoaded(try container.decode(String.self))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .loaded(let value):
+            try container.encode(value)
+        case .notLoaded(let dataID):
+            try container.encode(dataID)
         }
     }
 }

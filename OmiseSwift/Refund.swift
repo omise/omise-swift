@@ -10,41 +10,35 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     public let id: String
     public var createdDate: Date
     
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    
+    public let amount: Int64
+    public let currency: Currency
     
     public let charge: DetailProperty<Charge>
     public let transaction: DetailProperty<Transaction>
-}
-
-extension Refund {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Refund.parseOmiseProperties(JSON: json) else {
-                return nil
-        }
-        
-        guard let value = Value(JSON: json), let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
-            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)) else {
-                return nil
-        }
-        (self.object, self.location, self.id, self.createdDate) = omiseObjectProperties
-        
-        self.value = value
-        self.charge = charge
-        self.transaction = transaction
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created"
+        case amount
+        case currency
+        case charge
+        case transaction
     }
 }
-
 
 public struct RefundParams: APIJSONQuery {
     public var amount: Int64
     public var isVoid: Bool?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "amount": amount,
-            "void": isVoid,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case isVoid = "void"
     }
     
     public init(amount: Int64, void: Bool? = nil) {

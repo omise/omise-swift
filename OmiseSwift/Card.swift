@@ -1,6 +1,6 @@
 import Foundation
 
-public enum CardBrand: String {
+public enum CardBrand: String, Codable {
     case visa = "Visa"
     case masterCard = "MasterCard"
     case jcb = "JCB"
@@ -11,16 +11,28 @@ public enum CardBrand: String {
 }
 
 
-public enum CardFinancing: String {
+public enum CardFinancing: String, Codable {
     case credit
     case debit
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        switch value {
+        case "credit", "":
+            self = .credit
+        case "debit":
+            self = .debit
+        default:
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid Card Financing")
+        }
+    }
 }
 
 
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
-    
     
     public var object: String {
         switch self {
@@ -149,14 +161,22 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     }
 }
 
-extension Card {
-    public init?(JSON json: Any) {
-        if let parsedCustomerCard = CustomerCard.init(JSON: json) {
-            self = .customer(parsedCustomerCard)
-        } else if let parsedTokenizedCard = TokenizedCard(JSON: json) {
-            self = .tokenized(parsedTokenizedCard)
-        } else {
-            return nil
+extension Card {    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = .customer(try container.decode(CustomerCard.self))
+        } catch let error where error is DecodingError {
+            self = .tokenized(try container.decode(TokenizedCard.self))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case .customer(let customerCard):
+            try customerCard.encode(to: encoder)
+        case .tokenized(let tokenizedCard):
+            try tokenizedCard.encode(to: encoder)
         }
     }
 }
@@ -185,34 +205,47 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
 }
 
 extension TokenizedCard {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any] else {
-            return nil
-        }
-        
-        guard let idProperties = TokenizedCard.parseIdentifiableProperties(JSON: json),
-            let isLive = json["livemode"] as? Bool,
-            let lastDigits = LastDigitsConverter.convert(fromAttribute: json["last_digits"]),
-            let cardBrand: CardBrand = EnumConverter.convert(fromAttribute: json["brand"]),
-            let fingerPrint = json["fingerprint"] as? String else {
-                return nil
-        }
-        
-        (self.object, self.id, self.createdDate) = idProperties
-        self.isLive = isLive
-        self.lastDigits = lastDigits
-        self.brand = cardBrand
-        
-        self.name = json["name"] as? String
-        self.bankName = json["bank"] as? String
-        self.postalCode = json["postal_code"] as? String
-        self.countryCode = json["country"] as? String
-        self.city = json["city"] as? String
-        
-        self.financing = EnumConverter.convert(fromAttribute: json["financing"])
-        self.fingerPrint = fingerPrint
-        
-        if let expirationMonth = json["expiration_month"] as? Int, let expirationYear = json["expiration_year"] as? Int {
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case lastDigits = "last_digits"
+        case brand
+        case name
+        case bankName = "bank"
+        case postalCode = "postal_code"
+        case countryCode = "country"
+        case city
+        case financing
+        case fingerPrint = "fingerprint"
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        fatalError()
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        brand = try container.decode(CardBrand.self, forKey: .brand)
+        name = try container.decode(String.self, forKey: .name)
+        bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
+        postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        countryCode = try container.decodeIfPresent(String.self, forKey: .countryCode)
+        city = try container.decodeIfPresent(String.self, forKey: .city)
+        financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
+        fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
+        let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)
+        if let expirationMonth = expirationMonth, let expirationYear = expirationYear {
             self.expiration = (month: expirationMonth, year: expirationYear)
         } else {
             self.expiration = nil
@@ -248,32 +281,48 @@ public struct CustomerCard: OmiseResourceObject {
 
 
 extension CustomerCard {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any] else {
-            return nil
-        }
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case lastDigits = "last_digits"
+        case brand
+        case name
+        case bankName = "bank"
+        case postalCode = "postal_code"
+        case countryCode = "country"
+        case city
+        case financing
+        case fingerPrint = "fingerprint"
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+    }
+    
+    public func encode(to encoder: Encoder) throws {
         
-        guard let omiseObjectProperties = CustomerCard.parseOmiseResource(JSON: json),
-            let lastDigits = LastDigitsConverter.convert(fromAttribute: json["last_digits"]),
-            let cardBrand: CardBrand = EnumConverter.convert(fromAttribute: json["brand"]),
-            let fingerPrint = json["fingerprint"] as? String else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.lastDigits = lastDigits
-        self.brand = cardBrand
-        
-        self.name = json["name"] as? String
-        self.bankName = json["bank"] as? String
-        self.postalCode = json["postal_code"] as? String
-        self.countryCode = json["country"] as? String
-        self.city = json["city"] as? String
-        
-        self.financing = EnumConverter.convert(fromAttribute: json["financing"])
-        self.fingerPrint = fingerPrint
-        
-        if let expirationMonth = json["expiration_month"] as? Int, let expirationYear = json["expiration_year"] as? Int {
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        brand = try container.decode(CardBrand.self, forKey: .brand)
+        name = try container.decode(String.self, forKey: .name)
+        bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
+        postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        countryCode = try container.decodeIfPresent(String.self, forKey: .countryCode)
+        city = try container.decodeIfPresent(String.self, forKey: .city)
+        financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
+        fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
+        let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)
+        if let expirationMonth = expirationMonth, let expirationYear = expirationYear {
             self.expiration = (month: expirationMonth, year: expirationYear)
         } else {
             self.expiration = nil
@@ -287,15 +336,13 @@ public struct CardParams: APIJSONQuery {
     public var expirationYear: Int?
     public var postalCode: String?
     public var city: String?
-
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "name": name,
-            "expiration_month": expirationMonth,
-            "expiration_year": expirationYear,
-            "postal_code": postalCode,
-            "city": city,
-        ])
+    
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case expirationMonth = "expiration_month"
+        case expirationYear = "expiration_year"
+        case postalCode = "postal_code"
+        case city
     }
     
     public init(name: String? = nil,

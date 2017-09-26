@@ -12,5 +12,15 @@ public enum Failable<TResult> {
             return Failable<T>.fail(error)
         }
     }
-    
 }
+
+/*public init(from decoder: Decoder) throws {
+ do {
+ let error = try APIError(from: decoder)
+ self = .fail(OmiseError.api(error))
+ } catch is DecodingError {
+ let result = try TResult(from: decoder)
+ self = .success(result)
+ }
+ }*/
+

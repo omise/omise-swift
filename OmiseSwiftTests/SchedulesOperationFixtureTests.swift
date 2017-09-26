@@ -17,7 +17,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_582oau15y3okc3bxy2b")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:54:52Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-24T10:54:52Z"))
                 XCTAssertEqual(schedule.status, Schedule<Transfer>.Status.active)
                 let expectedMonthlyRule = Period.MonthlyPeriodRule.daysOfMonth([27])
                 XCTAssertEqual(schedule.period, Period.monthly(expectedMonthlyRule))
@@ -56,7 +56,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_582o6x3rigzamtpkhpu")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:43:45Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-24T10:43:45Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
                 XCTAssertEqual(schedule.period, Period.daily)
                 XCTAssertEqual(schedule.every, 1)
@@ -77,13 +77,13 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 let occurrences = schedule.occurrences
                 XCTAssertEqual(occurrences.total, 2)
                 if let firstOccurrence = occurrences.data.first {
-                XCTAssertEqual(firstOccurrence.id, "occu_test_582o6x3smr1taeb7mdg")
-                XCTAssertEqual(firstOccurrence.schedule.dataID, scheduleTestingID)
-                XCTAssertEqual(firstOccurrence.scheduleDate, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
-                XCTAssertEqual(firstOccurrence.status, .successful)
-                XCTAssertEqual(firstOccurrence.processedDate, DateConverter.convert(fromAttribute: "2017-05-25T01:30:07Z"))
-                XCTAssertEqual(firstOccurrence.result.dataID, "chrg_test_582wuxps5hp238fh2lb")
-                XCTAssertEqual(firstOccurrence.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:43:45Z"))
+                    XCTAssertEqual(firstOccurrence.id, "occu_test_582o6x3smr1taeb7mdg")
+                    XCTAssertEqual(firstOccurrence.schedule.dataID, scheduleTestingID)
+                    XCTAssertEqual(firstOccurrence.scheduleDate, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
+                    XCTAssertEqual(firstOccurrence.status, .successful)
+                    XCTAssertEqual(firstOccurrence.processedDate, dateFormatter.date(from: "2017-05-25T01:30:07Z"))
+                    XCTAssertEqual(firstOccurrence.result.dataID, "chrg_test_582wuxps5hp238fh2lb")
+                    XCTAssertEqual(firstOccurrence.createdDate, dateFormatter.date(from: "2017-05-24T10:43:45Z"))
                 } else {
                     XCTFail("Failed to parse occurrences")
                 }
@@ -110,7 +110,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_5830728kmmgobeli6ma")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-25T07:11:21Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:11:21Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.weekdayOfMonth(ordinal: .last, weekday: .friday)))
                 XCTAssertEqual(schedule.every, 1)
@@ -143,7 +143,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_5830784ijsp6ybzh161")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-25T07:11:49Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:11:49Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.weekdayOfMonth(ordinal: .first, weekday: .monday)))
                 XCTAssertEqual(schedule.every, 1)
@@ -176,7 +176,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_58306nhkn5goe12i4sx")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-25T07:10:12Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:10:12Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
                 XCTAssertEqual(schedule.period, Period.weekly([.monday, .tuesday, .wednesday, .thursday, .friday]))
                 XCTAssertEqual(schedule.every, 1)
@@ -209,7 +209,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_58306a2njevec7qiqfz")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-25T07:09:08Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:09:08Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.deleted)
                 XCTAssertEqual(schedule.period, Period.weekly([.tuesday, .wednesday, .thursday, .friday, .saturday]))
                 XCTAssertEqual(schedule.every, 1)
@@ -248,7 +248,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 let gregorianCalendar = Calendar(identifier: .gregorian)
                 XCTAssertEqual(schedule.id, "schd_test_582o4mb9rnji2q1pdty")
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_582o4mb9rnji2q1pdty")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-24T10:37:13Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-24T10:37:13Z"))
                 XCTAssertEqual(schedule.status, Schedule<AnySchedulable>.Status.deleted)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([1, 27])))
                 XCTAssertEqual(schedule.every, 1)
@@ -291,7 +291,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.id, "schd_test_584zfswqzu5m40sycxc")
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_584zfswqzu5m40sycxc")
-                XCTAssertEqual(schedule.createdDate, DateConverter.convert(fromAttribute: "2017-05-30T08:37:10Z"))
+                XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-30T08:37:10Z"))
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
                 XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1, 16])))
                 XCTAssertEqual(schedule.every, 1)

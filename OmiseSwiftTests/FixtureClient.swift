@@ -13,7 +13,7 @@ class FixtureClient: APIClient {
     }
     
     @discardableResult
-    override func requestToEndpoint<TResult : OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
+    override func requestToEndpoint<TResult>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
             let req: FixtureRequest<TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
@@ -69,10 +69,12 @@ class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
         do {
             let result: TResult = try deserializeData(data)
             return performCallback(.success(result))
-        } catch let err as NSError {
-            return performCallback(.fail(.other(err)))
         } catch let err as OmiseError {
             return performCallback(.fail(err))
+        } catch let err as DecodingError {
+            return performCallback(.fail(.other(err)))
+        } catch let err as NSError {
+            return performCallback(.fail(.other(err)))
         }
     }
     

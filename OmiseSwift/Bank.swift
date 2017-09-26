@@ -27,7 +27,7 @@ private let banks: [String: [String: JSONDictionary]] = {
 private let bankCountryCodeMap: [String: String] = {
     var countryCodes: [String: String] = [:]
     
-    banks.forEach({ (countryCode, banks) in
+    banks.forEach({ let (countryCode, banks) = $0;
         banks.keys.forEach({ code in
             countryCodes[code] = countryCode
         })

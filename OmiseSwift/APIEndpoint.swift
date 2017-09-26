@@ -1,29 +1,16 @@
 import Foundation
 
-public protocol APIQuery {}
+public protocol APIQuery: Encodable {}
 
-public protocol APIURLQuery: APIQuery {
-    var queryItems: [URLQueryItem] { get }
-}
+public protocol APIURLQuery: APIQuery {}
 
-public protocol APIJSONQuery: APIURLQuery {
-    var json: JSONAttributes { get }
-}
+public protocol APIJSONQuery: APIURLQuery {}
 
-public protocol APIMultipartFormQuery: APIQuery {
-    
-}
+public protocol APIMultipartFormQuery: APIQuery {}
 
 public protocol APIFileQuery: APIMultipartFormQuery {
     var filename: String { get }
     var fileContent: Data { get }
-}
-
-extension APIJSONQuery {
-    public var queryItems: [URLQueryItem] {
-        return encodeDict(json, parentKey: nil)
-            .sorted(by: { (item1, item2) in item1.name < item2.name })
-    }
 }
 
 
@@ -72,12 +59,17 @@ public struct APIEndpoint<DataType: OmiseObject> {
             return url
         }
         
-        switch parameter {
-        case .get(let query?):
-            urlComponents.queryItems = query.queryItems
-        case .head(let query?):
-            urlComponents.queryItems = query.queryItems
-        default:
+        let encoder = URLQueryItemEncoder()
+        do {
+            switch parameter {
+            case .get(let query?):
+                urlComponents.queryItems = try encoder.encode(query)
+            case .head(let query?):
+                urlComponents.queryItems = try encoder.encode(query)
+            default:
+                return url
+            }
+        } catch {
             return url
         }
         

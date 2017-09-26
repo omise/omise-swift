@@ -9,16 +9,7 @@ public class APIClient: NSObject {
     
     let config: APIConfiguration
     
-    fileprivate let pinningCertificateData: Data? = {
-        let bundle = Bundle(for: APIClient.self)
-        if let certificateURL = bundle.url(forResource: "OmisePinning", withExtension: "der"),
-            let certificateData = try? Data(contentsOf: certificateURL) {
-            return certificateData
-        } else {
-            return nil
-        }
-    }()
-    
+    fileprivate let pinningCertificateData: Data? = Bundle(for: APIClient.self).url(forResource: "OmisePinning", withExtension: "der").flatMap({ try? Data(contentsOf: $0) })
     
     public init(config: APIConfiguration) {
         self.config = config
@@ -52,7 +43,7 @@ public class APIClient: NSObject {
     }
     
     @discardableResult
-    public func requestToEndpoint<TResult: OmiseObject>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
+    public func requestToEndpoint<TResult>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
         do {
             let req: APIRequest<TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()

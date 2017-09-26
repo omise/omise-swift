@@ -8,28 +8,28 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
     public let location: String
     public let isLive: Bool
     
-    public var available: Value
-    public var total: Value
-}
-
-extension Balance {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseLocationObject = Balance.parseLocationResource(JSON: json),
-            let isLive = json["livemode"] as? Bool,
-            let available = json["available"] as? Int64,
-            let total = json["total"] as? Int64,
-            let currencyCode = json["currency"] as? String,
-            let currency = Currency(code: currencyCode) else {
-                return nil
-        }
-        
-        (self.object, self.location) = omiseLocationObject
-        self.isLive = isLive
-        self.available = Value(amount: available, currency: currency)
-        self.total = Value(amount: total, currency: currency)
+    public let currency: Currency
+    public var available: Int64
+    public var total: Int64
+    
+    public var availableValue: Value {
+        return Value(amount: available, currency: currency)
+    }
+    
+    public var totalValue: Value {
+        return Value(amount: total, currency: currency)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case isLive = "livemode"
+        case available
+        case currency
+        case total
     }
 }
+
 
 extension Balance: SingletonRetrievable {}
 

@@ -1,6 +1,6 @@
 import Foundation
 
-public enum DisputeStatus: String {
+public enum DisputeStatus: String, Codable {
     case open
     case pending
     case won
@@ -9,7 +9,7 @@ public enum DisputeStatus: String {
 
 
 public struct Dispute: OmiseResourceObject {
-    public enum Reason {
+    public enum Reason: Codable {
         case cancelledRecurringTransaction
         case creditNotProcessed
         case duplicateProcessing
@@ -38,7 +38,11 @@ public struct Dispute: OmiseResourceObject {
     public let isLive: Bool
     public var createdDate: Date
     
-    public let value: Value
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
+    public let amount: Int64
+    public let currency: Currency
     public var status: DisputeStatus
     public let reasonMessage: String
     public let reasonCode: Reason
@@ -47,45 +51,32 @@ public struct Dispute: OmiseResourceObject {
     public let charge: DetailProperty<Charge>
     public let documents: ListProperty<Document>
     public let closedDate: Date?
-}
 
-
-extension Dispute {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let omiseObjectProperties = Dispute.parseOmiseResource(JSON: json) else {
-                return nil
-        }
-        
-        guard let value = Value(JSON: json),
-            let status = json["status"].flatMap(EnumConverter<DisputeStatus>.convert(fromAttribute:)),
-            let reasonCode = json["reason_code"].flatMap(Reason.init(JSON:)),
-            let reasonMessage = json["reason_message"] as? String,
-            let transaction = json["transaction"].flatMap(DetailProperty<Transaction>.init(JSON:)),
-            let charge = json["charge"].flatMap(DetailProperty<Charge>.init(JSON:)),
-            let documents = json["documents"].flatMap(ListProperty<Document>.init(JSON:)) else {
-                return nil
-        }
-        
-        (self.object, self.location, self.id, self.isLive, self.createdDate) = omiseObjectProperties
-        self.value = value
-        self.status = status
-        self.reasonCode = reasonCode
-        self.reasonMessage = reasonMessage
-        self.responseMessage = json["message"] as? String
-        self.transaction = transaction
-        self.charge = charge
-        self.documents = documents
-        self.closedDate = DateConverter.convert(fromAttribute: json["closed_at"])
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case isLive = "livemode"
+        case createdDate = "created"
+        case amount
+        case currency
+        case status
+        case reasonMessage = "reason_message"
+        case reasonCode = "reason_code"
+        case responseMessage = "message"
+        case transaction
+        case charge
+        case documents
+        case closedDate = "closed_at"
     }
 }
 
+
 extension Dispute.Reason: Equatable {
-    init?(JSON json: Any) {
-        guard let code = json as? String else {
-            return nil
-        }
-        
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let code = try container.decode(String.self)
         switch code {
         case "cancelled_recurring_transaction":
             self = .cancelledRecurringTransaction
@@ -115,13 +106,52 @@ extension Dispute.Reason: Equatable {
             self = .transactionNotRecognized
         case "unauthorized_charge_aka_fraud":
             self = .unauthorizedCharge
-
+            
         case "not_available":
-            self = .cancelledRecurringTransaction
+            self = .notAvailable
         case "other": fallthrough
         default:
             self = .other
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .cancelledRecurringTransaction:
+            try container.encode("cancelled_recurring_transaction")
+        case .creditNotProcessed:
+            try container.encode("credit_not_processed")
+        case .duplicateProcessing:
+            try container.encode("duplicate_processing")
+        case .expiredCard:
+            try container.encode("expired_card")
+        case .goodsOrServicesNotProvided:
+            try container.encode("goods_or_services_not_provided")
+        case .incorrectCurrency:
+            try container.encode("incorrect_currency")
+        case .incorrectTransactionAmount:
+            try container.encode("incorrect_transaction_amount")
+        case .latePresentment:
+            try container.encode("late_presentment")
+        case .notnMatchingAmountNumber:
+            try container.encode("non_matching_account_number")
+        case .notAsDescribedOrDefectiveMerchandise:
+            try container.encode("not_as_described_or_defective_merchandise")
+        case .notRecorded:
+            try container.encode("not_recorded")
+        case .paidByOtherMeans:
+            try container.encode("paid_by_other_means")
+        case .transactionNotRecognized:
+            try container.encode("transaction_not_recognised")
+        case .unauthorizedCharge:
+            try container.encode("unauthorized_charge_aka_fraud")
+        case .notAvailable:
+            try container.encode("not_available")
+        case .other:
+            try container.encode("other")
+        }
+        
     }
 }
 
@@ -136,12 +166,6 @@ public enum DisputeStatusQuery: String {
 public struct DisputeParams: APIJSONQuery {
     public var message: String?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "message": message,
-            ])
-    }
-    
     public init(message: String?) {
         self.message = message
     }
@@ -153,13 +177,11 @@ public struct DisputeFilterParams: OmiseFilterParams {
     public var reasonCode: String?
     public var status: DisputeStatus?
     
-    public var json: JSONAttributes {
-        return Dictionary.makeFlattenDictionaryFrom([
-            "created": DateComponentsConverter.convert(fromValue: created),
-            "card_last_digits": cardLastDigits?.lastDigits,
-            "reason_code": reasonCode,
-            "status": status?.rawValue
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case cardLastDigits = "card_last_digits"
+        case reasonCode = "reason_code"
+        case status
     }
     
     public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
@@ -170,13 +192,20 @@ public struct DisputeFilterParams: OmiseFilterParams {
         self.reasonCode = reasonCode
     }
     
-    public init(JSON: [String : Any]) {
-        self.init(
-            status: (JSON["status"] as? String).flatMap(DisputeStatus.init(rawValue:)),
-            cardLastDigits: (JSON["card_last_digits"] as? String).flatMap(LastDigits.init(lastDigitsString:)),
-            created: JSON["created"].flatMap(DateComponentsConverter.convert(fromAttribute:)),
-            reasonCode: JSON["reason_code"] as? String
-        )
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        reasonCode = try container.decodeIfPresent(String.self, forKey: .reasonCode)
+        status = try container.decodeIfPresent(DisputeStatus.self, forKey: .status)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
+        try container.encodeIfPresent(reasonCode, forKey: .reasonCode)
+        try container.encodeIfPresent(status, forKey: .status)
     }
 }
 

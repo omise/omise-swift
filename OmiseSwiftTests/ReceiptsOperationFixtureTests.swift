@@ -31,7 +31,7 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receipt.vat, 256)
                 XCTAssertEqual(receipt.wht, 0)
                 XCTAssertEqual(receipt.total, 3906)
-                XCTAssertEqual(receipt.date, DateConverter.convert(fromAttribute: "2017-07-13T16:59:59Z"))
+                XCTAssertEqual(receipt.date, dateFormatter.date(from: "2017-07-13T16:59:59Z"))
                 XCTAssertEqual(receipt.currency, .thb)
                 XCTAssertFalse(receipt.isCreditNote)
             case let .fail(error):
@@ -72,7 +72,7 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receiptSampleData?.vat, 256)
                 XCTAssertEqual(receiptSampleData?.wht, 0)
                 XCTAssertEqual(receiptSampleData?.total, 3906)
-                XCTAssertEqual(receiptSampleData?.date, DateConverter.convert(fromAttribute: "2017-07-13T16:59:59Z"))
+                XCTAssertEqual(receiptSampleData?.date, dateFormatter.date(from: "2017-07-13T16:59:59Z"))
                 XCTAssertEqual(receiptSampleData?.currency, .thb)
                 XCTAssertEqual(receiptSampleData?.isCreditNote, false)
 

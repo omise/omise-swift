@@ -10,20 +10,43 @@ public struct BankAccount: OmiseObject {
 }
 
 extension BankAccount {
-    public init?(JSON json: Any) {
-        guard let json = json as? [String: Any],
-            let object = BankAccount.parseObject(JSON: json),
-            let bank = (json["brand"] as? String ?? json["bank_code"] as? String).flatMap({Bank(bankID: $0, branchCode: json["branch_code"] as? String) }),
-            let name = json["name"] as? String,
-            let lastDigits = json["last_digits"].flatMap(LastDigitsConverter.convert(fromAttribute:)) else {
-                return nil
-        }
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case bankCode = "bank_code"
+        case bankBrand = "brand"
+        case branchCode = "branch_code"
+        case accountNumber = "number"
+        case lastDigits = "last_digits"
+        case name
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decode(String.self, forKey: .object)
+        name = try container.decode(String.self, forKey: .name)
+        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        accountNumber = try container.decodeIfPresent(String.self, forKey: .object)
         
-        self.object = object
+        let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
+         container.decode(String.self, forKey: .bankCode)
+        let branchCode = try container.decodeIfPresent(String.self, forKey: .branchCode)
+        guard let bank = Bank(bankID: bankID, branchCode: branchCode) else {
+            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid Bank data")
+            throw DecodingError.dataCorrupted(context)
+        }
         self.bank = bank
-        self.name = name
-        self.lastDigits = lastDigits
-        self.accountNumber = json["number"] as? String
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(name, forKey: .name)
+        try container.encode(lastDigits, forKey: .lastDigits)
+        try container.encodeIfPresent(accountNumber, forKey: .accountNumber)
+        
+        try container.encodeIfPresent(bank.bankID, forKey: .bankBrand)
+        try container.encodeIfPresent(bank.branchCode, forKey: .branchCode)
     }
 }
 
@@ -32,12 +55,10 @@ public struct BankAccountParams: APIJSONQuery {
     public var accountNumber: String?
     public var name: String?
     
-    public var json: JSONAttributes {
-        return Dictionary<String, Any>.makeFlattenDictionaryFrom([
-            "brand": brand,
-            "number": accountNumber,
-            "name": name,
-            ])
+    private enum CodingKeys: String, CodingKey {
+        case brand
+        case accountNumber = "number"
+        case name
     }
     
     public init(brand: String? = nil, accountNumber: String? = nil, name: String? = nil) {
