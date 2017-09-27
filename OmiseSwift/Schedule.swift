@@ -374,7 +374,7 @@ extension Schedule where Data: APISchedulable {
     }
     
     public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: ScheduleParams<Data>, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Schedule.verifyParent(parent) else {
+        guard Schedule<Data>.verifyParent(parent) else {
             return nil
         }
         

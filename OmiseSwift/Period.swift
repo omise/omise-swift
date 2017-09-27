@@ -83,9 +83,9 @@ extension Period: Codable {
         
         switch self {
         case .daily:
-            try container.encode("daily", forKey: .period)
+            try container.encode("day", forKey: .period)
         case .weekly(let weekDays):
-            try container.encode("weekly", forKey: .period)
+            try container.encode("week", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
             var weekDaysContainers = ruleContainer.nestedUnkeyedContainer(forKey: .weekdays)
             try weekDaysContainers.encode(contentsOf:
@@ -122,7 +122,7 @@ extension Period: Codable {
                 }).map({ $0.apiValue })
             )
         case .monthly(let month):
-            try container.encode("weekly", forKey: .period)
+            try container.encode("month", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
             switch month {
             case .daysOfMonth(let daysOfMonth):

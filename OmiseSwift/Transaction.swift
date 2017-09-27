@@ -34,7 +34,7 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
         case type
         case currency
         case amount
-        case transferableDate = "transferable_date"
+        case transferableDate = "transferable"
     }
 }
 

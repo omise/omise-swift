@@ -60,6 +60,7 @@ public struct APIEndpoint<DataType: OmiseObject> {
         }
         
         let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         do {
             switch parameter {
             case .get(let query?):
