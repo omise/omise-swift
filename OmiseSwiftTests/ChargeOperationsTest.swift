@@ -30,7 +30,13 @@ class ChargeOperationsTest: LiveTest {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.id, "chrg_test_54phpsikwx0q7sv8h4g")                
+                XCTAssertEqual(charge.id, "chrg_test_54phpsikwx0q7sv8h4g")
+                switch charge.transaction {
+                case .loaded(let transaction)?:
+                    XCTAssertEqual(transaction.id, "trxn_test_54phpsjg3xlhyapzlyp")
+                default:
+                    XCTFail("Could not load charge's transaction data")
+                }
             case let .fail(error):
                 XCTFail("\(error)")
             }
