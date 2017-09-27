@@ -141,25 +141,25 @@ public extension List where TItem: OmiseIdentifiableObject & OmiseCreatableObjec
 
 public extension List where TItem: OmiseResourceObject {
     public func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        loadNextPage(using: client, count: count) { (result) in
+        _ = loadNextPage(using: client, count: count) { (result) in
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
             case .fail(let error):
                 callback(.fail(error))
             }
-        }
+        } as APIRequest?
     }
     
     public func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        loadPreviousPage(using: client, count: count) { (result) in
+        _ = loadPreviousPage(using: client, count: count) { (result) in
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
             case .fail(let error):
                 callback(.fail(error))
             }
-        }
+        } as APIRequest?
     }
 }
 

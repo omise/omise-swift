@@ -18,6 +18,14 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     public var order: Ordering?
     public var filter: FilterParams?
     
+    private enum CodingKeys: String, CodingKey {
+        case scope
+        case page
+        case query
+        case order
+        case filter = "filters"
+    }
+    
     public init(scope: String, page: Int? = nil, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil) {
         self.scope = scope
         self.page = page

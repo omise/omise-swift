@@ -4,6 +4,10 @@ public protocol Retrievable {}
 
 public struct RetrieveParams: APIJSONQuery {
     public var isExpanded: Bool = false
+    
+    private enum CodingKeys: String, CodingKey {
+        case isExpanded = "expand"
+    }
 }
 
 public extension Retrievable where Self: OmiseLocatableObject & OmiseIdentifiableObject {
