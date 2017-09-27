@@ -13,6 +13,16 @@ public struct Token: OmiseResourceObject {
     public var isUsed: Bool
     
     public var card: Card
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created"
+        case isLive = "livemode"
+        case isUsed = "used"
+        case card
+    }
 }
 
 

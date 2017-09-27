@@ -4,12 +4,12 @@ import Omise
 
 class TokenOperationTest: LiveTest {
     
-    func testTransferCreate() {
+    func testTokenCreate() {
         let expectation = self.expectation(description: "token create")
         
         let createParams = TokenParams(number: "4242424242424242", name: "John Appleseed", expiration: (month: 1, year: 2021), securityCode: "123")
         
-        let request = Token.create(using: testClient, params: createParams) { (result) in
+        let request = Token.create(using: testClient, usingKey: AnyAccessKey(""), params: createParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
