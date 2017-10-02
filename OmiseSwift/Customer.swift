@@ -43,7 +43,7 @@ extension Customer {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         defaultCard = try container.decodeIfPresent(DetailProperty<Card>.self, forKey: .defaultCard)
         email = try container.decode(String.self, forKey: .email)
-        customerDescription = try container.decode(String.self, forKey: .customerDescription)
+        customerDescription = try container.decodeIfPresent(String.self, forKey: .customerDescription)
         cards = try container.decode(ListProperty<Card>.self, forKey: .cards)
         metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
     }
@@ -57,7 +57,7 @@ extension Customer {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(defaultCard, forKey: .defaultCard)
         try container.encode(email, forKey: .email)
-        try container.encode(customerDescription, forKey: .customerDescription)
+        try container.encodeIfPresent(customerDescription, forKey: .customerDescription)
         try container.encode(cards, forKey: .cards)
         try container.encode(metadata, forKey: .metadata)
     }
