@@ -49,6 +49,9 @@
                   Identifier = "FixtureTestCase">
                </Test>
                <Test
+                  Identifier = "ForexOperationFixtureTests">
+               </Test>
+               <Test
                   Identifier = "LinkOperationFixtureTest">
                </Test>
                <Test

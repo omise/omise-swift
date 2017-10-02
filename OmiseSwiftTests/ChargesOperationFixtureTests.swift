@@ -224,6 +224,40 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             (decodedParams["metadata"] as? [String: Any])?["customer id"] as? String
         )
     }
+    
+    func testChargeWithLoadedCustomer() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_59f0shjjikr16e93vfq") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.value.amount, 99900)
+                
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_59f0shn44u2jnh9x2vv")
+                
+                if case .loaded(let customer)? = charge.customer {
+                    XCTAssertNil(customer.customerDescription)
+                    XCTAssertEqual(customer.id, "cust_test_53ip53r3m4jjy3c28n4")
+                    XCTAssertEqual(customer.email, "robin@omise.co")
+                } else {
+                    XCTFail("Cannot parse transaction data")
+                }
+                if case .loaded(let transaction)? = charge.transaction {
+                    XCTAssertEqual(transaction.amount, 95999)
+                } else {
+                    XCTFail("Cannot parse transaction data")
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+
+    }
 }
 
 
