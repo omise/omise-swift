@@ -88,6 +88,7 @@ public class APIRequest<Result: OmiseObject> {
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 6.0
         request.addValue(auth, forHTTPHeaderField: "Authorization")
+        request.addValue(client.config.apiVersion, forHTTPHeaderField: "Omise-Version")
         
         let payloadData: (String, Data)?
         
