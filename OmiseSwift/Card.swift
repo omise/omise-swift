@@ -290,7 +290,7 @@ public struct CustomerCard: OmiseResourceObject {
     public let brand: CardBrand
     public let expiration: (month: Int, year: Int)?
     
-    public let name: String?
+    public let name: String
     public let fingerPrint: String
     
     public let financing: CardFinancing?

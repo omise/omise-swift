@@ -68,7 +68,7 @@ extension Period: Equatable {
 }
 
 extension Period: Codable {
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case period
         case on
         enum RuleCodingKeys: String, CodingKey {
