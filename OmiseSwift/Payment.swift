@@ -115,6 +115,6 @@ extension OffsitePayment: Equatable {
 public enum InternetBanking: String {
     case bay
     case bbl
+    case ktb
     case scb
-    case tmb
 }
