@@ -233,7 +233,7 @@ extension KeyedDecodingContainerProtocol {
         return try decode(type, forKey: key)
     }
     
-    func decodeJSONDictionary() throws -> Dictionary<String, Any> {
+    fileprivate func decodeJSONDictionary() throws -> Dictionary<String, Any> {
         var dictionary = Dictionary<String, Any>()
         
         for key in allKeys {
