@@ -37,8 +37,7 @@ public struct Charge: OmiseResourceObject {
     public var transaction: DetailProperty<Transaction>?
     
     public var card: Card?
-    public var offsite: OffsitePayment?
-    public var payment: Payment
+    public var source: EnrolledSource?
     
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?
@@ -72,7 +71,7 @@ extension Charge {
         case isCaptured = "captured"
         case transaction
         case card
-        case offsite
+        case source
         case refunded
         case refunds
         case customer
@@ -81,8 +80,6 @@ extension Charge {
         case returnURL = "return_uri"
         case authorizedURL = "authorized_uri"
         case metadata
-        
-        case sourceOfFund = "source_of_fund"
     }
     
     public init(from decoder: Decoder) throws {
@@ -131,34 +128,8 @@ extension Charge {
         
         self.status = status
         
-        let payment: Payment?
-        let card: Card?
-        let offsite: OffsitePayment?
-        
-        let sourceOfFund = try container.decodeIfPresent(String.self, forKey: .sourceOfFund)
-        
-        switch sourceOfFund {
-        case "offsite"?:
-            card = nil
-            offsite = try container.decode(OffsitePayment.self, forKey: .offsite)
-            payment = offsite.map(Payment.offsite)
-        case "card"?, nil:
-            offsite = nil
-            card = try container.decode(Card.self, forKey: .card)
-            payment = card.map(Payment.card)
-        default:
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
-            throw DecodingError.dataCorrupted(context)
-        }
-        
-        if let payment = payment {
-            self.payment = payment
-            self.card = card
-            self.offsite = offsite
-        } else {
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
-            throw DecodingError.dataCorrupted(context)
-        }
+        source = try container.decodeIfPresent(EnrolledSource.self, forKey: .source)
+        card = try container.decodeIfPresent(Card.self, forKey: .card)
     }
     
     public func encode(to encoder: Encoder) throws {

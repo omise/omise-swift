@@ -135,7 +135,7 @@ extension SourceType {
                 .range(of: internetBankingPrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(InternetBanking.init(rawValue:)).map(PaymentSource.Payment.internetBanking) {
             self = internetBankingOffsite
-        } else if value == OffsitePayment.alipayValue {
+        } else if value == alipayValue {
             self = .alipay
         } else if value.hasPrefix(billPaymentPrefix),
             let billPaymentOffline = value
@@ -274,7 +274,7 @@ extension EnrolledSource.SourceType {
                 .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.SourceType.internetBanking) {
             self = internetBankingOffsite
-        } else if typeValue == OffsitePayment.alipayValue {
+        } else if typeValue == alipayValue {
             self = .alipay
         } else if typeValue.hasPrefix(billPaymentPrefix),
             let billPaymentValue = typeValue
@@ -432,6 +432,14 @@ extension PaymentSource: Creatable {
         let endpoint = self.createEndpointWith(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
+}
+
+
+public enum InternetBanking: String {
+    case bay
+    case bbl
+    case ktb
+    case scb
 }
 
 
