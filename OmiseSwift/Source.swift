@@ -409,4 +409,29 @@ public enum Source: SourceData {
 }
 
 
+public struct PaymentSourceParams: APIJSONQuery {
+    public let amount: Int64
+    public let currency: Currency
+    public let type: SourceType
+}
+
+extension PaymentSource: Creatable {
+    public typealias CreateParams = PaymentSourceParams
+    
+    public typealias CreateEndpoint = APIEndpoint<PaymentSource>
+    public typealias CreateRequest = APIRequest<PaymentSource>
+
+    public static func createEndpointWith(params: CreateParams) -> CreateEndpoint {
+        return CreateEndpoint(
+            pathComponents: ["sources"],
+            parameter: .post(params)
+        )
+    }
+    
+    public static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+        let endpoint = self.createEndpointWith(params: params)
+        return client.requestToEndpoint(endpoint, callback: callback)
+    }
+}
+
 
