@@ -84,6 +84,11 @@ class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
     }
 }
 
+
+protocol AdditionalFixtureData {
+    var fixtureFileSuffix: String? { get }
+}
+
 extension Omise.APIEndpoint {
     var fixtureFilePath: String {
         guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true), let hostname = components.host else {
@@ -94,7 +99,28 @@ extension Omise.APIEndpoint {
             return ((path as NSString).appendingPathComponent(segment)) as String
         }
         
-        return (filePath + "-" + parameter.method.lowercased() as NSString).appendingPathExtension("json")! as String
+        let fixtureFileSuffix: String?
+        switch parameter {
+        case .get((let query as (APIURLQuery & AdditionalFixtureData)?)):
+            fixtureFileSuffix = query?.fixtureFileSuffix
+        case .head((let query as (APIURLQuery & AdditionalFixtureData)?)):
+            fixtureFileSuffix = query?.fixtureFileSuffix
+            
+        case .post((let query as (APIQuery & AdditionalFixtureData)?)):
+            fixtureFileSuffix = query?.fixtureFileSuffix
+        case .patch((let query as (APIQuery & AdditionalFixtureData)?)):
+            fixtureFileSuffix = query?.fixtureFileSuffix
+        
+        default:
+            fixtureFileSuffix = nil
+        }
+        
+        var filename = filePath
+        if let fixtureFileSuffix = fixtureFileSuffix {
+            filename += "-\(fixtureFileSuffix)"
+        }
+        filename += "-" + parameter.method.lowercased()
+        return (filename as NSString).appendingPathExtension("json")! as String
     }
 }
 
