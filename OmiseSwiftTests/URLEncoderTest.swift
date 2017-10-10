@@ -100,13 +100,13 @@ class URLEncoderTest: OmiseTestCase {
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-            
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
             ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         let result = try encoder.encode(values)
-        XCTAssertEqual(21, result.count)
+        XCTAssertEqual(24, result.count)
         XCTAssertEqual("0outer", result[0].name)
         XCTAssertEqual("normal", result[0].value)
         XCTAssertEqual("1nested[inside]", result[1].name)
@@ -156,6 +156,13 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("inner", result[19].value)
         XCTAssertEqual("8deeper[nesting][also]", result[20].name)
         XCTAssertEqual("works", result[20].value)
+        
+        XCTAssertEqual("0", result[21].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][]", result[21].name)
+        XCTAssertEqual("1", result[22].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][]", result[22].name)
+        XCTAssertEqual("2", result[23].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][]", result[23].name)
     }
     
     func testEncodeNestedWithIndexStrategy() throws {
@@ -171,13 +178,13 @@ class URLEncoderTest: OmiseTestCase {
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
             ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .index
         let result = try encoder.encode(values)
-        XCTAssertEqual(21, result.count)
+        XCTAssertEqual(24, result.count)
         XCTAssertEqual("0outer", result[0].name)
         XCTAssertEqual("normal", result[0].value)
         XCTAssertEqual("1nested[inside]", result[1].name)
@@ -227,6 +234,14 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("inner", result[19].value)
         XCTAssertEqual("8deeper[nesting][also]", result[20].name)
         XCTAssertEqual("works", result[20].value)
+        
+        
+        XCTAssertEqual("0", result[21].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][0]", result[21].name)
+        XCTAssertEqual("1", result[22].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][1]", result[22].name)
+        XCTAssertEqual("2", result[23].value)
+        XCTAssertEqual("9deeparrayindeepdictionary[array][2]", result[23].name)
     }
 
     func testConvertChargeFilterParams() throws {
