@@ -159,6 +159,7 @@ extension URLQueryItemEncoder {
     }
     
     private func push<T: Encodable>(_ value: T?, forKey codingPath: [CodingKey]) throws {
+        self.codingPath = codingPath
         switch value {
         case let value as String:
             try push(value, forKey: codingPath)
@@ -390,7 +391,6 @@ extension URLQueryItemEncoder {
         
         mutating func encode<T>(_ value: T) throws where T : Encodable {
             encoder.codingPath = self.codingPath
-            defer { encoder.codingPath.removeAll() }
             try encoder.push(value, forKey: codingPath)
         }
     }
