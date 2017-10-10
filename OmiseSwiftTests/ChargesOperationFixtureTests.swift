@@ -175,8 +175,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 2025)
-                XCTAssertEqual(charge.payment, Payment.offsite(.internetBanking(.scb)))
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.source?.type.type, EnrolledSource.Payment.internetBanking(.scb).type)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -195,7 +195,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
-                XCTAssertEqual(charge.payment, Payment.offsite(.alipay))
+                XCTAssertEqual(charge.source?.type.type, EnrolledSource.SourceType.alipay.type)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -204,6 +204,66 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
+    
+    func testTestcoLotusBillPaymentChargeRetrieve() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5929fjoo8hwgakspj7y") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.id, "src_test_5929eggu29qfzi5vcfs")
+                XCTAssertEqual(charge.source?.flow, .offline)
+                switch charge.source?.type {
+                case EnrolledSource.Payment.billPayment(.tescoLotus(let bill))?:
+                    XCTAssertEqual(bill.omiseTaxID, "0105556091152")
+                    XCTAssertEqual(bill.referenceNumber1, "025821267592373884")
+                    XCTAssertEqual(bill.referenceNumber2, "237000400584228075")
+                    XCTAssertEqual(bill.barcodeURL, URL(string: "https://api.omise.co/charges/chrg_test_5929fjoo8hwgakspj7y/documents/docu_test_5929fjznrj5nsr0fqhu/download")!)
+                default:
+                    XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testSinarmasVirtualAccountChargeRetrieve() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_592kd97reyadw42v247") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 1100000)
+                XCTAssertEqual(charge.currency, .idr)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_592kd3dkxre5h91e5cf")
+                XCTAssertEqual(charge.source?.flow, .offline)
+                switch charge.source?.type {
+                case EnrolledSource.Payment.virtualAccount(EnrolledSource.SourceType.VirtualAccount.sinarmas(vaCode: let vaCode))?:
+                    XCTAssertEqual(vaCode, "2128932047849310")
+                default:
+                    XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     
     func testEncodingCreateChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), chargeDescription: "Hello", customerID: nil, cardID: nil, isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
