@@ -174,9 +174,15 @@ extension Charge {
 
 
 public struct ChargeParams: APIJSONQuery {
-    public var customerID: String?
-    public var cardID: String?
+    
+    public enum Payment {
+        case card(cardID: String)
+        case customer(customerID: String, cardID: String?)
+        case source(PaymentSource)
+    }
+    
     public var value: Value
+    public var payment: Payment
     public var chargeDescription: String?
     public var isAutoCapture: Bool?
     public var returnURL: URL?
@@ -186,6 +192,7 @@ public struct ChargeParams: APIJSONQuery {
     private enum CodingKeys: String, CodingKey {
         case customerID = "customer"
         case cardID = "card"
+        case sourceID = "source"
         case amount
         case currency
         case chargeDescription = "description"
@@ -199,19 +206,43 @@ public struct ChargeParams: APIJSONQuery {
         
         try container.encode(value.amount, forKey: .amount)
         try container.encode(value.currency, forKey: .currency)
-        try container.encodeIfPresent(customerID, forKey: .customerID)
-        try container.encodeIfPresent(cardID, forKey: .cardID)
+        switch payment {
+        case .card(cardID: let cardID):
+            try container.encode(cardID, forKey: .cardID)
+        case .customer(customerID: let customerID, cardID: let cardID):
+            try container.encode(customerID, forKey: .customerID)
+            try container.encodeIfPresent(cardID, forKey: .cardID)
+        case .source(let source):
+            try container.encode(source.id, forKey: .sourceID)
+        }
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
         try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
-    public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, customerID: String, cardID: String? = nil, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.value = value
         self.chargeDescription = chargeDescription
-        self.customerID = customerID
-        self.cardID = cardID
+        self.payment = .customer(customerID: customerID, cardID: cardID)
+        self.isAutoCapture = isAutoCapture
+        self.returnURL = returnURL
+        self.metadata = metadata
+    }
+    
+    public init(value: Value, cardID: String, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.value = value
+        self.chargeDescription = chargeDescription
+        self.payment = .card(cardID: cardID)
+        self.isAutoCapture = isAutoCapture
+        self.returnURL = returnURL
+        self.metadata = metadata
+    }
+    
+    public init(value: Value, source: PaymentSource, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.value = value
+        self.chargeDescription = chargeDescription
+        self.payment = .source(source)
         self.isAutoCapture = isAutoCapture
         self.returnURL = returnURL
         self.metadata = metadata

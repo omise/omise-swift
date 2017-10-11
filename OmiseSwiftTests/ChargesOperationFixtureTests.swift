@@ -120,7 +120,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeCreate() {
         let expectation = self.expectation(description: "Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb))
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), cardID: "")
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -266,23 +266,47 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     
     func testEncodingCreateChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), chargeDescription: "Hello", customerID: nil, cardID: nil, isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        let data = try encoder.encode(params)
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        let decodedParams = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        let items = try encoder.encode(params)
         
-        XCTAssertEqual(params.chargeDescription, decodedParams["description"] as? String)
-        XCTAssertEqual(params.value.amount, decodedParams["amount"] as? Int64)
-        XCTAssertEqual(params.value.currency.code, decodedParams["currency"] as? String)
-        XCTAssertEqual(
-            params.metadata?["customer id"] as? String,
-            (decodedParams["metadata"] as? [String: Any])?["customer id"] as? String
-        )
+        XCTAssertEqual(items.count, 5)
+        XCTAssertEqual(items[0].name, "amount")
+        XCTAssertEqual(items[0].value, "1000000")
+        XCTAssertEqual(items[1].name, "currency")
+        XCTAssertEqual(items[1].value, "THB")
+        XCTAssertEqual(items[2].name, "card")
+        XCTAssertEqual(items[2].value, "crd_test_12345")
+        XCTAssertEqual(items[3].name, "description")
+        XCTAssertEqual(items[3].value, "Hello")
+        XCTAssertEqual(items[4].name, "metadata[customer id]")
+        XCTAssertEqual(items[4].value, "1")
+    }
+    
+    
+    func testEncodingCreateSourceChargeParams() throws {
+        let source = PaymentSource(id: "src_test_12345", object: "source", currency: .thb, amount: 10_000_00, flow: .redirect, type: .alipay)
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), source: source, chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
+        
+        let items = try encoder.encode(params)
+        
+        XCTAssertEqual(items.count, 5)
+        XCTAssertEqual(items[0].name, "amount")
+        XCTAssertEqual(items[0].value, "1000000")
+        XCTAssertEqual(items[1].name, "currency")
+        XCTAssertEqual(items[1].value, "THB")
+        XCTAssertEqual(items[2].name, "source")
+        XCTAssertEqual(items[2].value, "src_test_12345")
+        XCTAssertEqual(items[3].name, "description")
+        XCTAssertEqual(items[3].value, "Hello")
+        XCTAssertEqual(items[4].name, "metadata[customer id]")
+        XCTAssertEqual(items[4].value, "1")
     }
     
     func testChargeWithLoadedCustomer() throws {

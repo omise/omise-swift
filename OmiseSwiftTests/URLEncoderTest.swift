@@ -285,26 +285,28 @@ class URLEncoderTest: OmiseTestCase {
     }
     
     func testCreateChargeParams() throws {
-        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), chargeDescription: "A charge description", customerID: nil, cardID: nil, isAutoCapture: true, returnURL: URL(string: "https://omise.co"), metadata: ["customer-id": "1", "stock-count": 66473])
+        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345", chargeDescription: "A charge description", isAutoCapture: true, returnURL: URL(string: "https://omise.co"), metadata: ["customer-id": "1", "stock-count": 66473])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         let result = try encoder.encode(createChargeParams)
-        XCTAssertEqual(result.count, 7)
+        XCTAssertEqual(result.count, 8)
         
         XCTAssertEqual("amount", result[0].name)
         XCTAssertEqual("1000000", result[0].value)
         XCTAssertEqual("currency", result[1].name)
         XCTAssertEqual("THB", result[1].value)
-        XCTAssertEqual("description", result[2].name)
-        XCTAssertEqual("A charge description", result[2].value)
-        XCTAssertEqual("capture", result[3].name)
-        XCTAssertEqual("true", result[3].value)
-        XCTAssertEqual("return_uri", result[4].name)
-        XCTAssertEqual("https://omise.co", result[4].value)
-        XCTAssertEqual("metadata[customer-id]", result[5].name)
-        XCTAssertEqual("1", result[5].value)
-        XCTAssertEqual("metadata[stock-count]", result[6].name)
-        XCTAssertEqual("66473", result[6].value)
+        XCTAssertEqual("card", result[2].name)
+        XCTAssertEqual("crd_test_12345", result[2].value)
+        XCTAssertEqual("description", result[3].name)
+        XCTAssertEqual("A charge description", result[3].value)
+        XCTAssertEqual("capture", result[4].name)
+        XCTAssertEqual("true", result[4].value)
+        XCTAssertEqual("return_uri", result[5].name)
+        XCTAssertEqual("https://omise.co", result[5].value)
+        XCTAssertEqual("metadata[customer-id]", result[6].name)
+        XCTAssertEqual("1", result[6].value)
+        XCTAssertEqual("metadata[stock-count]", result[7].name)
+        XCTAssertEqual("66473", result[7].value)
     }
 }
