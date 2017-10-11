@@ -21,6 +21,14 @@ public protocol SourceData: OmiseIdentifiableObject {
     
     var flow: Flow { get }
     var type: Payment { get }
+    
+    var value: Value { get }
+}
+
+extension SourceData {
+    public var value: Value {
+        return Value(amount: amount, currency: currency)
+    }
 }
 
 public enum SourceType: Codable, Equatable {
