@@ -7,7 +7,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
     var loadedIndices = 0..<0
     public let order: Ordering
     
-    public var limit: Int = 0
+    private(set) public var limit: Int = 0
     private(set) public var total: Int = 0
     private(set) public var data: [TItem] = [] {
         didSet {
@@ -79,6 +79,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         
         let replacingRange = indexOfFirstUpdatedItem..<indexOfLastUpdatedItem
         self.data[replacingRange] = ArraySlice(list.data)
+        
+        loadedIndices = range(fromOffset: list.offset, limit: list.data.count)
         
         return updatedData
     }

@@ -12,6 +12,9 @@ public struct SearchResult<Item: Searchable & OmiseObject>: OmiseLocatableObject
     public let page: Int
     public let totalPage: Int
     
+    public let numberOfItemsPerPage: Int
+    public let total: Int
+    
     public let filters: Item.FilterParams
     public var data: [Item]
 }
@@ -53,20 +56,10 @@ extension SearchResult {
         case query
         case page
         case totalPage = "total_pages"
+        case numberOfItemsPerPage = "per_page"
+        case total
         case filters
         case data
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        object = try container.decode(String.self, forKey: .object)
-        location = try container.decode(String.self, forKey: .location)
-        scope = try container.decode(String.self, forKey: .scope)
-        query = try container.decode(String.self, forKey: .query)
-        page = try container.decode(Int.self, forKey: .page)
-        totalPage = try container.decode(Int.self, forKey: .totalPage)
-        filters = try container.decode(Item.FilterParams.self, forKey: .filters)
-        data = try container.decode([Item].self, forKey: .data)
     }
 }
 
