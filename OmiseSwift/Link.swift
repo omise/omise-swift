@@ -82,8 +82,8 @@ public struct LinkParams: APIJSONQuery {
 
 public struct LinkFilterParams: OmiseFilterParams {
     
-    public var created: DateComponents?
     public var amount: Double?
+    public var created: DateComponents?
     
     public var isMultiple: Bool?
     public var isUsed: Bool?
@@ -91,8 +91,8 @@ public struct LinkFilterParams: OmiseFilterParams {
     public var usedDate: DateComponents?
     
     private enum CodingKeys: String, CodingKey {
-        case created
         case amount
+        case created
         case isMultiple = "multiple"
         case isUsed = "used"
         case usedDate = "used_at"
@@ -100,27 +100,27 @@ public struct LinkFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
-        isMultiple = try container.decodeIfPresent(Bool.self, forKey: .isMultiple)
-        isUsed = try container.decodeIfPresent(Bool.self, forKey: .isUsed)
+        isMultiple = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isMultiple)
+        isUsed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isUsed)
         usedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .usedDate)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(isMultiple, forKey: .isMultiple)
         try container.encodeIfPresent(isUsed, forKey: .isUsed)
         try container.encodeOmiseDateComponentsIfPresent(usedDate, forKey: .usedDate)
     }
     
-    public init(created: DateComponents? = nil, amount: Double? = nil,
+    public init(amount: Double? = nil, created: DateComponents? = nil,
                 isMultiple: Bool? = nil, isUsed: Bool? = nil,
                 usedDate: DateComponents? = nil) {
-        self.created = created
         self.amount = amount
+        self.created = created
         self.isMultiple = isMultiple
         self.isUsed = isUsed
         self.usedDate = usedDate

@@ -59,17 +59,6 @@ public struct Charge: OmiseResourceObject, Equatable {
         }
     }
     
-    public var paymentSourceType: Charge.PaymentSourceType {
-        switch payment {
-        case .card:
-            return .card
-        case .source(let source):
-            return .source(source.paymentInformation.sourceType)
-        case .unknown:
-            return .unknown
-        }
-    }
-    
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?
     
@@ -82,6 +71,45 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let authorizedURL: URL?
     
     public let metadata: JSONDictionary
+}
+
+extension Charge {
+    
+    public enum Status : Equatable {
+        case failed(ChargeFailure)
+        case expired
+        case reversed
+        case pending
+        case successful
+        case unknown(String)
+    }
+    
+    public enum APIStatus: String, Codable, Equatable {
+        case successful
+        case pending
+        case reversed
+        case expired
+        case failed
+    }
+    
+    public enum SourceOfFund : String, Codable, Equatable {
+        case card
+        case offsite
+        case offline
+    }
+    
+    public enum Payment {
+        case card(Card)
+        case source(EnrolledSource)
+        case unknown
+    }
+    
+    public enum PaymentInformation {
+        case card(Card)
+        case source(EnrolledSource.EnrolledPaymentInformation)
+        case unknown
+    }
+    
 }
 
 extension Charge {
@@ -166,15 +194,15 @@ extension Charge {
         
         let status: Charge.Status
         switch (statusValue, failureCode, failureMessage) {
-        case ("failed", let failureCode?, let failureMessage?):
+        case (Charge.APIStatus.failed.rawValue, let failureCode?, let failureMessage?):
             status = .failed(ChargeFailure(code: failureCode, message: failureMessage))
-        case ("expired", nil, nil):
+        case (Charge.APIStatus.expired.rawValue, nil, nil):
             status = .expired
-        case ("successful", nil, nil):
+        case (Charge.APIStatus.successful.rawValue, nil, nil):
             status = .successful
-        case ("pending", nil, nil):
+        case (Charge.APIStatus.pending.rawValue, nil, nil):
             status = .pending
-        case ("reversed", nil, nil):
+        case (Charge.APIStatus.reversed.rawValue, nil, nil):
             status = .reversed
         case (let statusValue, nil, nil):
             status = .unknown(statusValue)
@@ -238,15 +266,15 @@ extension Charge {
         
         switch status {
         case .successful:
-            try container.encode("successful", forKey: .status)
+            try container.encode(Charge.APIStatus.successful, forKey: .status)
         case .pending:
-            try container.encode("pending", forKey: .status)
+            try container.encode(Charge.APIStatus.pending, forKey: .status)
         case .reversed:
-            try container.encode("reversed", forKey: .status)
+            try container.encode(Charge.APIStatus.reversed, forKey: .status)
         case .expired:
-            try container.encode("expired", forKey: .status)
+            try container.encode(Charge.APIStatus.expired, forKey: .status)
         case .failed(let failure):
-            try container.encode("failed", forKey: .status)
+            try container.encode(Charge.APIStatus.failed, forKey: .status)
             try container.encode(failure.code, forKey: .failureCode)
             try container.encode(failure.message, forKey: .failureMessage)
         case .unknown(let statusValue):
@@ -261,33 +289,6 @@ extension Charge {
         case .unknown:
             break
         }
-    }
-    
-    public enum Status : Equatable {
-        case failed(ChargeFailure)
-        case expired
-        case reversed
-        case pending
-        case successful
-        case unknown(String)
-    }
-    
-    public enum Payment {
-        case card(Card)
-        case source(EnrolledSource)
-        case unknown
-    }
-    
-    public enum PaymentInformation {
-        case card(Card)
-        case source(EnrolledSource.EnrolledPaymentInformation)
-        case unknown
-    }
-    
-    public enum PaymentSourceType {
-        case card
-        case source(SourceType)
-        case unknown
     }
 }
 
@@ -396,64 +397,108 @@ public struct UpdateChargeParams: APIJSONQuery {
 }
 
 public struct ChargeFilterParams: OmiseFilterParams {
-    public var createdDate: DateComponents?
     public var amount: Double?
     public var isAuthorized: Bool?
+    public var isAutoCapture: Bool?
     public var isCaptured: Bool?
+    public var capturedDate: DateComponents?
     public var cardLastDigits: LastDigits?
+    public var createdDate: DateComponents?
     public var isCustomerPresent: Bool?
     public var failureCode: ChargeFailure.Code?
     public var failureMessage: String?
+    public var isRefunded: Bool?
+    public var refundedAmount: Double?
+    public var isReversed: Bool?
+    public var status: Charge.APIStatus?
+    public var sourceOfFund: Charge.SourceOfFund?
+    public var isVoided: Bool?
     
     private enum CodingKeys: String, CodingKey {
-        case createdDate = "created"
         case amount
         case isAuthorized = "authorized"
+        case isAutoCapture = "capture"
         case isCaptured = "captured"
+        case capturedDate = "captured_at"
         case cardLastDigits = "card_last_digits"
+        case createdDate = "created"
         case isCustomerPresent = "customer_present"
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
+        case isRefunded = "refunded"
+        case refundedAmount = "refunded_amount"
+        case isReversed = "reversed"
+        case status = "status"
+        case sourceOfFund = "source_of_fund"
+        case isVoided = "voided"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
-        isAuthorized = try container.decodeIfPresent(Bool.self, forKey: .isAuthorized)
-        isCaptured = try container.decodeIfPresent(Bool.self, forKey: .isCaptured)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
+        isAuthorized = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isAuthorized)
+        isAutoCapture = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isAutoCapture)
+        isCaptured = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCaptured)
+        capturedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .capturedDate)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
-        isCustomerPresent = try container.decodeIfPresent(Bool.self, forKey: .isCustomerPresent)
+        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
+        isCustomerPresent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCustomerPresent)
         failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
         failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
+        isRefunded = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isRefunded)
+        refundedAmount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .refundedAmount)
+        isReversed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isReversed)
+        status = try container.decodeIfPresent(Charge.APIStatus.self, forKey: .status)
+        sourceOfFund = try container.decodeIfPresent(Charge.SourceOfFund.self, forKey: .sourceOfFund)
+        isVoided = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isVoided)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(isAuthorized, forKey: .isAuthorized)
+        try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
         try container.encodeIfPresent(isCaptured, forKey: .isCaptured)
+        try container.encodeOmiseDateComponentsIfPresent(capturedDate, forKey: .capturedDate)
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
+        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(isCustomerPresent, forKey: .isCustomerPresent)
         try container.encodeIfPresent(failureCode, forKey: .failureCode)
         try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
+        try container.encodeIfPresent(isRefunded, forKey: .isRefunded)
+        try container.encodeIfPresent(refundedAmount, forKey: .refundedAmount)
+        try container.encodeIfPresent(isReversed, forKey: .isReversed)
+        try container.encodeIfPresent(status, forKey: .status)
+        try container.encodeIfPresent(sourceOfFund, forKey: .sourceOfFund)
+        try container.encodeIfPresent(isVoided, forKey: .isVoided)
     }
     
-    public init(createdDate: DateComponents? = nil, amount: Double? = nil,
-                isAuthorized: Bool? = nil, isCaptured: Bool? = nil,
+    public init(amount: Double? = nil, isAuthorized: Bool? = nil,
+                isAutoCapture: Bool? = nil, isCaptured: Bool? = nil,
+                capturedDate: DateComponents? = nil,
                 cardLastDigits: LastDigits? = nil,
+                createdDate: DateComponents? = nil,
                 isCustomerPresent: Bool? = nil,
-                failureCode: ChargeFailure.Code? = nil,
-                failureMessage: String? = nil) {
-        self.createdDate = createdDate
+                failureCode: ChargeFailure.Code? = nil, failureMessage: String? = nil,
+                isRefunded: Bool? = nil, refundedAmount: Double? = nil,
+                isReversed: Bool? = nil, status: Charge.APIStatus? = nil,
+                sourceOfFund: Charge.SourceOfFund? = nil, isVoided: Bool? = nil) {
         self.amount = amount
         self.isAuthorized = isAuthorized
+        self.isAutoCapture = isAutoCapture
+        self.capturedDate = capturedDate
         self.isCaptured = isCaptured
         self.cardLastDigits = cardLastDigits
+        self.createdDate = createdDate
         self.isCustomerPresent = isCustomerPresent
         self.failureCode = failureCode
+        self.isRefunded = isRefunded
         self.failureMessage = failureMessage
+        self.refundedAmount = refundedAmount
+        self.isReversed = isReversed
+        self.status = status
+        self.sourceOfFund = sourceOfFund
+        self.isVoided = isVoided
     }
 }
 
@@ -519,8 +564,5 @@ extension Charge: Schedulable, APISchedulable {
     public typealias Parameter = ChargeSchedulingParameter
     public typealias ScheduleDataParams = ChargeSchedulingParameter
 }
-
-
-
 
 

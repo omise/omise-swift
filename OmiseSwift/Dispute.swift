@@ -9,26 +9,6 @@ public enum DisputeStatus: String, Codable, Equatable {
 
 
 public struct Dispute: OmiseResourceObject, Equatable {
-    public enum Reason: Codable {
-        case cancelledRecurringTransaction
-        case creditNotProcessed
-        case duplicateProcessing
-        case expiredCard
-        case goodsOrServicesNotProvided
-        case incorrectCurrency
-        case incorrectTransactionAmount
-        case latePresentment
-        case notnMatchingAmountNumber
-        case notAsDescribedOrDefectiveMerchandise
-        case notRecorded
-        case paidByOtherMeans
-        case transactionNotRecognized
-        case unauthorizedCharge
-        
-        case notAvailable
-        case other
-    }
-    
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/disputes")
     
     public let object: String
@@ -54,7 +34,10 @@ public struct Dispute: OmiseResourceObject, Equatable {
     
     public var metadata: JSONDictionary
     
+}
+
     
+extension Dispute {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -117,6 +100,28 @@ public struct Dispute: OmiseResourceObject, Equatable {
     }
 }
 
+
+extension Dispute {
+    public enum Reason: Codable {
+        case cancelledRecurringTransaction
+        case creditNotProcessed
+        case duplicateProcessing
+        case expiredCard
+        case goodsOrServicesNotProvided
+        case incorrectCurrency
+        case incorrectTransactionAmount
+        case latePresentment
+        case notnMatchingAmountNumber
+        case notAsDescribedOrDefectiveMerchandise
+        case notRecorded
+        case paidByOtherMeans
+        case transactionNotRecognized
+        case unauthorizedCharge
+        
+        case notAvailable
+        case other
+    }
+}
 
 extension Dispute.Reason: Equatable {
     
@@ -218,39 +223,50 @@ public struct DisputeParams: APIJSONQuery {
 }
 
 public struct DisputeFilterParams: OmiseFilterParams {
-    public var created: DateComponents?
+    public var amount: Double?
     public var cardLastDigits: LastDigits?
-    public var reasonCode: String?
+    public var closedDate: DateComponents?
+    public var createdDate: DateComponents?
+    public var currency: Currency?
     public var status: DisputeStatus?
     
     private enum CodingKeys: String, CodingKey {
-        case created
+        case amount
         case cardLastDigits = "card_last_digits"
-        case reasonCode = "reason_code"
+        case closedDate = "closed_at"
+        case createdDate = "created"
+        case currency
         case status
     }
     
-    public init(status: DisputeStatus? = nil, cardLastDigits: LastDigits? = nil,
-                created: DateComponents? = nil, reasonCode: String? = nil) {
-        self.status = status
+    public init(amount: Double? = nil, cardLastDigits: LastDigits? = nil,
+                closedDate: DateComponents? = nil, createdDate: DateComponents? = nil,
+                currency: Currency? = nil, status: DisputeStatus? = nil) {
+        self.amount = amount
         self.cardLastDigits = cardLastDigits
-        self.created = created
-        self.reasonCode = reasonCode
+        self.closedDate = closedDate
+        self.createdDate = createdDate
+        self.currency = currency
+        self.status = status
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
-        reasonCode = try container.decodeIfPresent(String.self, forKey: .reasonCode)
+        closedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .closedDate)
+        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
+        currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
         status = try container.decodeIfPresent(DisputeStatus.self, forKey: .status)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
-        try container.encodeIfPresent(reasonCode, forKey: .reasonCode)
+        try container.encodeOmiseDateComponentsIfPresent(closedDate, forKey: .closedDate)
+        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
+        try container.encodeIfPresent(currency, forKey: .currency)
         try container.encodeIfPresent(status, forKey: .status)
     }
 }

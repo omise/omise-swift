@@ -83,12 +83,55 @@ public struct RefundParams: APIJSONQuery {
     }
 }
 
+
+public struct RefundFilterParams: OmiseFilterParams {
+    public var amount: Double?
+    public var cardLastDigits: LastDigits?
+    public var createdDate: DateComponents?
+    public var isVoided: Bool?
+    
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case cardLastDigits = "card_last_digits"
+        case createdDate = "created"
+        case isVoided = "voided"
+    }
+    
+    public init(amount: Double? = nil, cardLastDigits: LastDigits? = nil,
+        createdDate: DateComponents? = nil, isVoided: Bool? = nil) {
+        self.amount = amount
+        self.cardLastDigits = cardLastDigits
+        self.createdDate = createdDate
+        self.isVoided = isVoided
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
+        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        createdDate = try container.decodeOmiseDateComponents(forKey: .createdDate)
+        isVoided = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isVoided)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(amount, forKey: .amount)
+        try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
+        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
+        try container.encodeIfPresent(isVoided, forKey: .isVoided)
+    }
+}
+
+
 extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
 
 extension Refund: Listable {}
 extension Refund: Retrievable {}
+extension Refund: Searchable {
+    public typealias FilterParams = RefundFilterParams
+}
 
 
 extension Charge {
