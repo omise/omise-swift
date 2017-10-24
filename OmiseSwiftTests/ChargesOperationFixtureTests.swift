@@ -93,7 +93,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-
     }
     
     func testChargeList() {
@@ -256,8 +255,45 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    
+    func testEncodeCharge() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case .success(let charge):
+                let encoder = JSONEncoder()
+                encoder.dateEncodingStrategy = .iso8601
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                guard let data = try? encoder.encode(charge) else {
+                    XCTFail("Charge Encoding failed")
+                    return
+                }
+                
+                guard let decodedCharge = try? decoder.decode(Charge.self, from: data) else {
+                    XCTFail("Charge Decoding failed")
+                    return
+                }
+                
+                XCTAssertEqual(charge.id, decodedCharge.id)
+                
+            case .fail(let error):
+                XCTFail("\(error)")
+            }
+            
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
 
     }
+    
 }
 
 
