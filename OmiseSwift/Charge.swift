@@ -198,6 +198,15 @@ extension Charge {
             try container.encode("failed", forKey: .status)
             try container.encode(failureCode, forKey: .failureCode)
         }
+        
+        switch payment {
+        case .card(let card):
+            try container.encode(card, forKey: .card)
+            try container.encode("card", forKey: .sourceOfFund)
+        case .offsite(let offsite):
+            try container.encode(offsite, forKey: .offsite)
+            try container.encode("offsite", forKey: .sourceOfFund)
+        }
     }
 }
 

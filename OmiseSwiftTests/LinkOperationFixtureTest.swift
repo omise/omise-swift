@@ -1,7 +1,7 @@
 import XCTest
 import Omise
 
-private let linkTestingID = "link_test_565dgexs3bvcsjyvmpm"
+private let linkTestingID = "link_test_573u5l7fabtjnos5hdi"
 
 class LinkOperationFixtureTest: FixtureTestCase {
     func testLinkeRetrieve() {
@@ -12,7 +12,8 @@ class LinkOperationFixtureTest: FixtureTestCase {
             
             switch result {
             case let .success(link):
-                XCTAssertEqual(link.value.amount, 1490000)
+                XCTAssertEqual(link.value.amount, 1990000)
+                XCTAssertEqual(link.charges.total, 3)
             case let .fail(error):
                 XCTFail("\(error)")
             }

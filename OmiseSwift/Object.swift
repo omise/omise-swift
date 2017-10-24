@@ -90,10 +90,10 @@ public struct AnyJSONType: JSONType {
             jsonValue = boolValue
         } else if let doubleValue = try? container.decode(Double.self) {
             jsonValue = doubleValue
-        } else if let doubleValue = try? container.decode(Array<AnyJSONType>.self) {
-            jsonValue = doubleValue
-        } else if let doubleValue = try? container.decode(Dictionary<String, AnyJSONType>.self) {
-            jsonValue = doubleValue
+        } else if let arrayValue = try? container.decode(Array<AnyJSONType>.self) {
+            jsonValue = arrayValue
+        } else if let dictionaryValue = try? container.decode(Dictionary<String, AnyJSONType>.self) {
+            jsonValue = dictionaryValue
         } else {
             throw DecodingError.typeMismatch(JSONType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unsupported JSON tyep"))
         }
