@@ -24,3 +24,4 @@ public extension Creatable where Self: OmiseLocatableObject {
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
+

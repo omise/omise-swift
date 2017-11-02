@@ -37,8 +37,7 @@ public struct Charge: OmiseResourceObject {
     public var transaction: DetailProperty<Transaction>?
     
     public var card: Card?
-    public var offsite: OffsitePayment?
-    public var payment: Payment
+    public var source: EnrolledSource?
     
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?
@@ -72,7 +71,7 @@ extension Charge {
         case isCaptured = "captured"
         case transaction
         case card
-        case offsite
+        case source
         case refunded
         case refunds
         case customer
@@ -81,8 +80,6 @@ extension Charge {
         case returnURL = "return_uri"
         case authorizedURL = "authorized_uri"
         case metadata
-        
-        case sourceOfFund = "source_of_fund"
     }
     
     public init(from decoder: Decoder) throws {
@@ -131,34 +128,8 @@ extension Charge {
         
         self.status = status
         
-        let payment: Payment?
-        let card: Card?
-        let offsite: OffsitePayment?
-        
-        let sourceOfFund = try container.decodeIfPresent(String.self, forKey: .sourceOfFund)
-        
-        switch sourceOfFund {
-        case "offsite"?:
-            card = nil
-            offsite = try container.decode(OffsitePayment.self, forKey: .offsite)
-            payment = offsite.map(Payment.offsite)
-        case "card"?, nil:
-            offsite = nil
-            card = try container.decode(Card.self, forKey: .card)
-            payment = card.map(Payment.card)
-        default:
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
-            throw DecodingError.dataCorrupted(context)
-        }
-        
-        if let payment = payment {
-            self.payment = payment
-            self.card = card
-            self.offsite = offsite
-        } else {
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid payment value")
-            throw DecodingError.dataCorrupted(context)
-        }
+        source = try container.decodeIfPresent(EnrolledSource.self, forKey: .source)
+        card = try container.decodeIfPresent(Card.self, forKey: .card)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -212,9 +183,16 @@ extension Charge {
 
 
 public struct ChargeParams: APIJSONQuery {
-    public var customerID: String?
-    public var cardID: String?
+    
+    public enum Payment {
+        case card(cardID: String)
+        case customer(customerID: String, cardID: String?)
+        case source(PaymentSource)
+        case sourceType(SourceType)
+    }
+    
     public var value: Value
+    public var payment: Payment
     public var chargeDescription: String?
     public var isAutoCapture: Bool?
     public var returnURL: URL?
@@ -224,12 +202,17 @@ public struct ChargeParams: APIJSONQuery {
     private enum CodingKeys: String, CodingKey {
         case customerID = "customer"
         case cardID = "card"
+        case sourceID = "source"
         case amount
         case currency
         case chargeDescription = "description"
         case isAutoCapture = "capture"
         case returnURL = "return_uri"
         case metadata
+        
+        fileprivate enum SourceCodingKeys: String, CodingKey {
+            case type
+        }
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -237,22 +220,47 @@ public struct ChargeParams: APIJSONQuery {
         
         try container.encode(value.amount, forKey: .amount)
         try container.encode(value.currency, forKey: .currency)
-        try container.encodeIfPresent(customerID, forKey: .customerID)
-        try container.encodeIfPresent(cardID, forKey: .cardID)
+        switch payment {
+        case .card(cardID: let cardID):
+            try container.encode(cardID, forKey: .cardID)
+        case .customer(customerID: let customerID, cardID: let cardID):
+            try container.encode(customerID, forKey: .customerID)
+            try container.encodeIfPresent(cardID, forKey: .cardID)
+        case .source(let source):
+            try container.encode(source.id, forKey: .sourceID)
+        case .sourceType(let sourceType):
+            var sourceContainer = container.nestedContainer(keyedBy: CodingKeys.SourceCodingKeys.self, forKey: .sourceID)
+            try sourceContainer.encode(sourceType, forKey: .type)
+        }
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
         try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
-    public init(value: Value, chargeDescription: String? = nil, customerID: String? = nil, cardID: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    private init(value: Value, payment: Payment, chargeDescription: String?, isAutoCapture: Bool?, returnURL: URL?, metadata: [String: Any]?) {
         self.value = value
+        self.payment = payment
         self.chargeDescription = chargeDescription
-        self.customerID = customerID
-        self.cardID = cardID
         self.isAutoCapture = isAutoCapture
         self.returnURL = returnURL
         self.metadata = metadata
+    }
+    
+    public init(value: Value, customerID: String, cardID: String? = nil, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.init(value: value, payment: .customer(customerID: customerID, cardID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    }
+    
+    public init(value: Value, cardID: String, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.init(value: value, payment: .card(cardID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    }
+    
+    public init(value: Value, source: PaymentSource, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.init(value: value, payment: .source(source), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    }
+    
+    public init(value: Value, sourceType: SourceType, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+        self.init(value: value, payment: .sourceType(sourceType), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
 }
 

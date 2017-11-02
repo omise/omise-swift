@@ -67,6 +67,9 @@
                   Identifier = "SchedulesOperationFixtureTests">
                </Test>
                <Test
+                  Identifier = "SourceOperationFixtureTests">
+               </Test>
+               <Test
                   Identifier = "TransferOperationFixtureTests">
                </Test>
             </SkippedTests>

@@ -6,7 +6,7 @@ public protocol AccessKey {
 
 
 public struct APIConfiguration {
-    public let apiVersion: String = "2015-11-17"
+    public let apiVersion: String = "2017-11-02"
     public let accessKey: AccessKey
     
     public init(key: AccessKey) {

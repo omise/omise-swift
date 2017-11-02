@@ -1,0 +1,49 @@
+{
+  "object": "charge",
+  "id": "chrg_test_592kd97reyadw42v247",
+  "livemode": false,
+  "location": "/charges/chrg_test_592kd97reyadw42v247",
+  "amount": 1100000,
+  "currency": "idr",
+  "description": null,
+  "metadata": {},
+  "status": "pending",
+  "capture": true,
+  "authorized": false,
+  "reversed": false,
+  "paid": false,
+  "transaction": null,
+  "refunded": 0,
+  "refunds": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2017-08-24T05:11:01Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": null,
+    "location": "/charges/chrg_test_592kd97reyadw42v247/refunds",
+    "data": []
+  },
+  "return_uri": null,
+  "reference": null,
+  "authorize_uri": null,
+  "failure_code": null,
+  "failure_message": null,
+  "card": null,
+  "customer": null,
+  "ip": null,
+  "dispute": null,
+  "created": "2017-08-24T05:11:01Z",
+  "source": {
+    "object": "source",
+    "id": "src_test_592kd3dkxre5h91e5cf",
+    "references": {
+      "va_code": "2128932047849310"
+    },
+    "type": "virtual_account_sinarmas",
+    "flow": "offline",
+    "amount": 1100000,
+    "currency": "idr"
+  }
+}

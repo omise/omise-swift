@@ -22,8 +22,7 @@ public protocol OmiseLiveModeObject: OmiseObject {
     var isLive: Bool { get }
 }
 
-public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
-}
+public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {}
 
 extension OmiseLocatableObject {
     static func makeResourcePathsWithParent(_ parent: OmiseResourceObject? = nil, id: String? = nil) -> [String] {
