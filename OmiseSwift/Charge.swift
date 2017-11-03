@@ -8,6 +8,10 @@ public enum ChargeStatus {
     case successful
 }
 
+public enum ChargePayment {
+    case card(Card)
+    case source(EnrolledSource)
+}
 
 public struct Charge: OmiseResourceObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
@@ -38,6 +42,8 @@ public struct Charge: OmiseResourceObject {
     
     public var card: Card?
     public var source: EnrolledSource?
+    
+    public let payment: ChargePayment
     
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?
@@ -130,6 +136,15 @@ extension Charge {
         
         source = try container.decodeIfPresent(EnrolledSource.self, forKey: .source)
         card = try container.decodeIfPresent(Card.self, forKey: .card)
+        
+        switch (card, source) {
+        case (let card?, nil):
+            payment = .card(card)
+        case (nil, let source?):
+            payment = .source(source)
+        case (nil, nil), (.some, .some):
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge payment information"))
+        }
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -172,11 +187,9 @@ extension Charge {
         
         switch payment {
         case .card(let card):
-            try container.encode(card, forKey: .card)
-            try container.encode("card", forKey: .sourceOfFund)
-        case .offsite(let offsite):
-            try container.encode(offsite, forKey: .offsite)
-            try container.encode("offsite", forKey: .sourceOfFund)
+            try container.encodeIfPresent(card, forKey: .card)
+        case .source(let source):
+            try container.encodeIfPresent(source, forKey: .source)
         }
     }
 }
