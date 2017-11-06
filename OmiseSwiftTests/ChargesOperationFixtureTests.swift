@@ -104,10 +104,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(chargesList):
                 XCTAssertNotNil(chargesList.data)
-                XCTAssertEqual(chargesList.data.count, 40)
+                XCTAssertEqual(chargesList.data.count, 60)
                 let chargeSampleData = chargesList.data.first
                 XCTAssertNotNil(chargeSampleData)
-                XCTAssertEqual(chargeSampleData?.value.amount, 8990000)
+                XCTAssertEqual(chargeSampleData?.value.amount, 3190000)
             case let .fail(error):
                 XCTFail("\(error)")
             }

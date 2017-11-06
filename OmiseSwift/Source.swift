@@ -341,7 +341,6 @@ public enum Source: SourceData {
     case enrolled(EnrolledSource)
     case source(PaymentSource)
     
-    
     public var amount: Int64 {
         switch self {
         case .enrolled(let source):
