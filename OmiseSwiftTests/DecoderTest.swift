@@ -1,0 +1,44 @@
+import XCTest
+
+class DecodeTests: XCTestCase {
+    
+    func jsonData(withFileName name: String) throws -> Data {
+        let bundle = Bundle(for: FixtureClient.self)
+        let directoryURL = bundle.url(forResource: "Fixtures/objects", withExtension: nil)!
+        let filePath = (name as NSString).appendingPathExtension("json")! as String
+        let fixtureFileURL = directoryURL.appendingPathComponent(filePath)
+        return try Data(contentsOf: fixtureFileURL)
+    }
+    
+    func testAnyJSONTypeDecoding() {
+        do {
+            let jsonData = try self.jsonData(withFileName: "metadata")
+            let decodedData =  try JSONDecoder().decode(MetadataDummy.self, from: jsonData)
+            let metadata = decodedData.metadata
+            XCTAssertEqual(metadata["a_string"] as? String, "some_string")
+            XCTAssertEqual(metadata["an_integer"] as? Int, 1)
+            XCTAssertEqual(metadata["a_bool"] as? Bool, true)
+            XCTAssertEqual(metadata["a_double"] as? Double, 12.34)
+            guard let object: [String: Any] = metadata["an_object"] as? [String: Any] else {
+                XCTFail("could not decode object")
+                return
+            }
+            XCTAssertEqual(object["a_key"] as? String, "a_value")
+            guard let nestedObject: [String: Any] = object["a_nested_object"] as? [String: Any] else {
+                XCTFail("Could not decode nested object")
+                return
+            }
+            XCTAssertEqual(nestedObject["a_nested_key"] as? String, "a_nested_value")
+            guard let array: [Any] = metadata["an_array"] as? [Any] else {
+                XCTFail("Could not decode array")
+                return
+            }
+            XCTAssertTrue(array.count == 2)
+            XCTAssertEqual(array[0] as? String, "value_1")
+            XCTAssertEqual(array[1] as? String, "value_2")
+        } catch let thrownError {
+            XCTFail(thrownError.localizedDescription)
+        }
+    }
+}
+
