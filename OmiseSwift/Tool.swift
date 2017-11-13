@@ -237,12 +237,12 @@ extension KeyedDecodingContainerProtocol {
         var dictionary = Dictionary<String, Any>()
         
         for key in allKeys {
-            if let intValue = try? decode(Int.self, forKey: key) {
-                dictionary[key.stringValue] = intValue
+            if let boolValue = try? decode(Bool.self, forKey: key) {
+                dictionary[key.stringValue] = boolValue
             } else if let stringValue = try? decode(String.self, forKey: key) {
                 dictionary[key.stringValue] = stringValue
-            } else if let boolValue = try? decode(Bool.self, forKey: key) {
-                dictionary[key.stringValue] = boolValue
+            } else if let intValue = try? decode(Int.self, forKey: key) {
+                dictionary[key.stringValue] = intValue
             } else if let doubleValue = try? decode(Double.self, forKey: key) {
                 dictionary[key.stringValue] = doubleValue
             } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self, forKey: key) {
@@ -314,9 +314,9 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
         try value.forEach({ (key, value) in
             let key = JSONCodingKeys(key: key)
             switch value {
-            case let value as Int:
-                try encode(value, forKey: key)
             case let value as Bool:
+                try encode(value, forKey: key)
+            case let value as Int:
                 try encode(value, forKey: key)
             case let value as String:
                 try encode(value, forKey: key)
@@ -363,9 +363,9 @@ extension UnkeyedEncodingContainer {
     mutating func encodeJSONArray(_ value: Array<Any>) throws {
         try value.enumerated().forEach({ (index, value) in
             switch value {
-            case let value as Int:
-                try encode(value)
             case let value as Bool:
+                try encode(value)
+            case let value as Int:
                 try encode(value)
             case let value as String:
                 try encode(value)
