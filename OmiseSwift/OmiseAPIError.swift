@@ -141,6 +141,12 @@ public enum ChargeFailure: Codable {
     }
 }
 
+extension ChargeFailure: Equatable {
+    public static func ==(lhs: ChargeFailure, rhs: ChargeFailure) -> Bool {
+        return lhs.code == rhs.code
+    }
+}
+
 
 public enum TransferFailure: Codable {
     /// Bank rejected the transfer request
@@ -182,4 +188,9 @@ public enum TransferFailure: Codable {
     }
 }
 
+extension TransferFailure: Equatable {
+    public static func ==(lhs: TransferFailure, rhs: TransferFailure) -> Bool {
+        return lhs.code == rhs.code
+    }
+}
 

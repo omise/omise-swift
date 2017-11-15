@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum Flow: String, Codable {
+public enum Flow: String, Codable, Equatable {
     case redirect
     case offline
 }

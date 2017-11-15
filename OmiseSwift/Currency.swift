@@ -3,6 +3,7 @@ import Foundation
 public let centBasedCurrencyFactor = 100
 public let identicalBasedCurrencyFactor = 1
 
+
 public enum Currency: Codable {
     case thb
     case jpy
@@ -110,7 +111,6 @@ extension Currency: Hashable {
     public static func ==(lhs: Currency, rhs: Currency) -> Bool {
         return lhs.code == rhs.code
     }
-    
     
     public var hashValue: Int {
         return ~code.hashValue

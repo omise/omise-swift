@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum RecipientType: String, Codable {
+public enum RecipientType: String, Codable, Equatable {
     case individual
     case corporation
 }

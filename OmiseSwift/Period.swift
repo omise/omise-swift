@@ -57,10 +57,10 @@ extension Period: Equatable {
         switch (lhs, rhs) {
         case (.daily, .daily):
             return true
-        case (.weekly, .weekly):
-            return true
-        case (.monthly, .monthly):
-            return true
+        case (.weekly(let lhsWeekDays), .weekly(let rhsWeekDays)):
+            return lhsWeekDays == rhsWeekDays
+        case (.monthly(let lhsMonthlyRule), .monthly(let rhsMonthlyRule)):
+            return lhsMonthlyRule == rhsMonthlyRule
         default:
             return false
         }

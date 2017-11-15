@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum TransactionType: String, Codable {
+public enum TransactionType: String, Codable, Equatable {
     case debit
     case credit
 }

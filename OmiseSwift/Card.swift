@@ -1,6 +1,6 @@
 import Foundation
 
-public enum CardBrand: String, Codable {
+public enum CardBrand: String, Codable, Equatable {
     case visa = "Visa"
     case masterCard = "MasterCard"
     case jcb = "JCB"
@@ -11,7 +11,7 @@ public enum CardBrand: String, Codable {
 }
 
 
-public enum CardFinancing: String, Codable {
+public enum CardFinancing: String, Codable, Equatable {
     case credit
     case debit
     
