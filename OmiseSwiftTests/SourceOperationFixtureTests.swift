@@ -15,7 +15,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .success(source):
                 XCTAssertEqual(source.amount, 1000_00)
                 XCTAssertEqual(source.currency, .thb)
-                XCTAssertEqual(source.type, SourceType.internetBanking(.scb))
+                XCTAssertEqual(source.sourceType, SourceType.internetBanking(.scb))
                 XCTAssertEqual(source.flow, Flow.redirect)
             case let .fail(error):
                 XCTFail("\(error)")
@@ -37,7 +37,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .success(source):
                 XCTAssertEqual(source.amount, 1000_00)
                 XCTAssertEqual(source.currency, .thb)
-                XCTAssertEqual(source.type, SourceType.alipay)
+                XCTAssertEqual(source.sourceType, SourceType.alipay)
                 XCTAssertEqual(source.flow, Flow.redirect)
             case let .fail(error):
                 XCTFail("\(error)")
@@ -59,7 +59,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .success(source):
                 XCTAssertEqual(source.amount, 1000_00)
                 XCTAssertEqual(source.currency, .thb)
-                XCTAssertEqual(source.type, SourceType.billPayment(.tescoLotus))
+                XCTAssertEqual(source.sourceType, SourceType.billPayment(.tescoLotus))
                 XCTAssertEqual(source.flow, Flow.offline)
             case let .fail(error):
                 XCTFail("\(error)")
@@ -81,7 +81,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .success(source):
                 XCTAssertEqual(source.amount, 1_100_000)
                 XCTAssertEqual(source.currency, .idr)
-                XCTAssertEqual(source.type, SourceType.virtualAccount(.sinarmas))
+                XCTAssertEqual(source.sourceType, SourceType.virtualAccount(.sinarmas))
                 XCTAssertEqual(source.flow, Flow.offline)
             case let .fail(error):
                 XCTFail("\(error)")
