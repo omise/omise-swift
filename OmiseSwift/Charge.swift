@@ -8,6 +8,19 @@ public enum ChargeStatus {
     case successful
 }
 
+extension ChargeStatus: Equatable {
+    public static func ==(lhs: ChargeStatus, rhs: ChargeStatus) -> Bool {
+        switch (lhs, rhs) {
+        case (.failed(let lhsFailedStatus), .failed(let rhsFailedStatus)):
+            return lhsFailedStatus == rhsFailedStatus
+        case (.reversed, .reversed), (.pending, .pending), (.successful, .successful):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public enum ChargePayment {
     case card(Card)
     case source(EnrolledSource)
