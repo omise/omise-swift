@@ -175,7 +175,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
-                XCTAssertEqual(charge.source?.type.type, EnrolledSource.Payment.internetBanking(.scb).type)
+                XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.internetBanking(.scb).sourceType)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -194,7 +194,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
-                XCTAssertEqual(charge.source?.type.type, EnrolledSource.SourceType.alipay.type)
+                XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.alipay.sourceType)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -216,8 +216,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.amount, charge.amount)
                 XCTAssertEqual(charge.source?.id, "src_test_5929eggu29qfzi5vcfs")
                 XCTAssertEqual(charge.source?.flow, .offline)
-                switch charge.source?.type {
-                case EnrolledSource.Payment.billPayment(.tescoLotus(let bill))?:
+                switch charge.source?.paymentInformation {
+                case EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let bill))?:
                     XCTAssertEqual(bill.omiseTaxID, "0105556091152")
                     XCTAssertEqual(bill.referenceNumber1, "025821267592373884")
                     XCTAssertEqual(bill.referenceNumber2, "237000400584228075")
@@ -248,8 +248,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.currency, charge.currency)
                 XCTAssertEqual(charge.source?.id, "src_test_592kd3dkxre5h91e5cf")
                 XCTAssertEqual(charge.source?.flow, .offline)
-                switch charge.source?.type {
-                case EnrolledSource.Payment.virtualAccount(EnrolledSource.SourceType.VirtualAccount.sinarmas(vaCode: let vaCode))?:
+                switch charge.source?.paymentInformation {
+                case EnrolledSource.EnrolledPaymentInformation.virtualAccount(EnrolledSource.PaymentInformation.VirtualAccount.sinarmas(vaCode: let vaCode))?:
                     XCTAssertEqual(vaCode, "2128932047849310")
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
@@ -330,7 +330,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateSourceChargeParams() throws {
-        let source = PaymentSource(id: "src_test_12345", object: "source", currency: .thb, amount: 10_000_00, flow: .redirect, type: .alipay)
+        let source = PaymentSource(id: "src_test_12345", object: "source", currency: .thb, amount: 10_000_00, flow: .redirect, paymentInformation: .alipay)
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), source: source, chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
