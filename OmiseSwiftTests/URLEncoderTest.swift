@@ -310,3 +310,20 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("66473", result[7].value)
     }
 }
+
+
+struct MetadataDummy: Decodable {
+    
+    let metadata: [String: Any]
+    
+    private enum CodingKeys: String, CodingKey {
+        case metadata
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        metadata = try container.decode([String: Any].self, forKey: .metadata)
+    }
+}
+
+
