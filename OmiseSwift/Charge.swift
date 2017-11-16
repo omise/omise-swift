@@ -26,6 +26,16 @@ public enum ChargePayment {
     case source(EnrolledSource)
 }
 
+public enum ChargePaymentInformation {
+    case card(Card)
+    case source(EnrolledSource.EnrolledPaymentInformation)
+}
+
+public enum ChargePaymentSourceType {
+    case card
+    case source(SourceType)
+}
+
 public struct Charge: OmiseResourceObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
     
@@ -57,6 +67,24 @@ public struct Charge: OmiseResourceObject {
     public var source: EnrolledSource?
     
     public let payment: ChargePayment
+    
+    public var paymentInformation: ChargePaymentInformation {
+        switch payment {
+        case .card(let card):
+            return .card(card)
+        case .source(let source):
+            return .source(source.paymentInformation)
+        }
+    }
+    
+    public var paymentSourceType: ChargePaymentSourceType {
+        switch payment {
+        case .card:
+            return .card
+        case .source(let source):
+            return .source(source.paymentInformation.sourceType)
+        }
+    }
     
     public var refunded: Int64?
     public var refunds: ListProperty<Refund>?

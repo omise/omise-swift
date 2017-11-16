@@ -14,13 +14,15 @@ let virtualAccountPrefix = "virtual_account_"
 
 
 public protocol SourceData: OmiseIdentifiableObject {
-    associatedtype Payment: Codable
+    associatedtype PaymentInformation: Codable
     
     var amount: Int64 { get }
     var currency: Currency { get }
     
     var flow: Flow { get }
-    var type: Payment { get }
+    var paymentInformation: PaymentInformation { get }
+    
+    var sourceType: SourceType { get }
     
     var value: Value { get }
 }
@@ -30,6 +32,15 @@ extension SourceData {
         return Value(amount: amount, currency: currency)
     }
 }
+
+
+public enum InternetBanking: String {
+    case bay
+    case bbl
+    case ktb
+    case scb
+}
+
 
 public enum SourceType: Codable, Equatable {
     case internetBanking(InternetBanking)
@@ -82,7 +93,7 @@ public enum SourceType: Codable, Equatable {
 
 
 public struct PaymentSource: SourceData {
-    public typealias Payment = SourceType
+    public typealias PaymentInformation = SourceType
     
     public let id: String
     public let object: String
@@ -91,7 +102,11 @@ public struct PaymentSource: SourceData {
     public let amount: Int64
     
     public let flow: Flow
-    public let type: SourceType
+    public let paymentInformation: SourceType
+    
+    public var sourceType: SourceType {
+        return paymentInformation
+    }
 }
 
 extension PaymentSource {
@@ -117,7 +132,7 @@ extension PaymentSource {
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
-        type = try container.decode(SourceType.self, forKey: .type)
+        paymentInformation = try container.decode(SourceType.self, forKey: .type)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -128,7 +143,7 @@ extension PaymentSource {
         try container.encode(currency, forKey: .currency)
         try container.encode(amount, forKey: .amount)
         try container.encode(flow, forKey: .flow)
-        try container.encode(type, forKey: .type)
+        try container.encode(paymentInformation, forKey: .type)
     }
 }
 
@@ -141,19 +156,19 @@ extension SourceType {
         if value.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = value
                 .range(of: internetBankingPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(PaymentSource.Payment.internetBanking) {
+                .flatMap(InternetBanking.init(rawValue:)).map(PaymentSource.PaymentInformation.internetBanking) {
             self = internetBankingOffsite
         } else if value == alipayValue {
             self = .alipay
         } else if value.hasPrefix(billPaymentPrefix),
             let billPaymentOffline = value
                 .range(of: billPaymentPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(PaymentSource.Payment.BillPayment.init(rawValue:)).map(PaymentSource.Payment.billPayment) {
+                .flatMap(PaymentSource.PaymentInformation.BillPayment.init(rawValue:)).map(PaymentSource.PaymentInformation.billPayment) {
             self = billPaymentOffline
         } else if value.hasPrefix(virtualAccountPrefix),
             let virtualAccountOffline = value
             .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(PaymentSource.Payment.VirtualAccount.init(rawValue:)).map(PaymentSource.Payment.virtualAccount) {
+                .flatMap(PaymentSource.PaymentInformation.VirtualAccount.init(rawValue:)).map(PaymentSource.PaymentInformation.virtualAccount) {
             self = virtualAccountOffline
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
@@ -182,9 +197,9 @@ public struct BillInformation: Codable {
 
 
 public struct EnrolledSource: SourceData {
-    public typealias Payment = EnrolledSource.SourceType
+    public typealias PaymentInformation = EnrolledSource.EnrolledPaymentInformation
     
-    public enum SourceType: Codable {
+    public enum EnrolledPaymentInformation: Codable {
         case internetBanking(InternetBanking)
         case alipay
         case billPayment(BillPayment)
@@ -202,7 +217,7 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        var type: Omise.SourceType {
+        var sourceType: Omise.SourceType {
             switch self {
             case .internetBanking(let bank):
                 return Omise.SourceType.internetBanking(bank)
@@ -233,7 +248,11 @@ public struct EnrolledSource: SourceData {
     public let amount: Int64
     
     public let flow: Flow
-    public let type: Payment
+    public let paymentInformation: PaymentInformation
+    
+    public var sourceType: SourceType {
+        return paymentInformation.sourceType
+    }
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -250,7 +269,7 @@ public struct EnrolledSource: SourceData {
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
-        type = try Payment.init(from: decoder)
+        paymentInformation = try PaymentInformation.init(from: decoder)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -261,12 +280,12 @@ public struct EnrolledSource: SourceData {
         try container.encode(currency, forKey: .currency)
         try container.encode(amount, forKey: .amount)
         try container.encode(flow, forKey: .flow)
-        try type.encode(to: encoder)
+        try paymentInformation.encode(to: encoder)
     }
 }
 
 
-extension EnrolledSource.SourceType {
+extension EnrolledSource.EnrolledPaymentInformation {
     private enum CodingKeys: String, CodingKey {
         case type
         case references
@@ -280,7 +299,7 @@ extension EnrolledSource.SourceType {
         if typeValue.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = typeValue
                 .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.SourceType.internetBanking) {
+                .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.internetBanking) {
             self = internetBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay
@@ -299,7 +318,7 @@ extension EnrolledSource.SourceType {
                 .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) }) {
             switch virtualAccountOffline {
             case SourceType.VirtualAccount.sinarmas.rawValue:
-                let accountContainer = try container.nestedContainer(keyedBy: EnrolledSource.SourceType.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
+                let accountContainer = try container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 let vaCode = try accountContainer.decode(String.self, forKey: .vaCode)
                 self = .virtualAccount(.sinarmas(vaCode: vaCode))
             default:
@@ -329,7 +348,7 @@ extension EnrolledSource.SourceType {
             switch account {
             case .sinarmas(vaCode: let vaCode):
                 try container.encode(billPaymentPrefix + SourceType.BillPayment.tescoLotus.rawValue, forKey: .type)
-                var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.SourceType.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
+                var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 try accountContainer.encode(vaCode, forKey: .vaCode)
             }
         }
@@ -368,16 +387,20 @@ public enum Source: SourceData {
         }
     }
     
-    public var type: SourceType {
+    public var paymentInformation: SourceType {
         switch self {
         case .enrolled(let source):
-            return source.type.type
+            return source.paymentInformation.sourceType
         case .source(let source):
-            return source.type
+            return source.paymentInformation
         }
     }
     
-    public typealias Payment = SourceType
+    public var sourceType: SourceType {
+        return paymentInformation
+    }
+    
+    public typealias PaymentInformation = SourceType
     
     public var id: String {
         switch self {
@@ -439,14 +462,6 @@ extension PaymentSource: Creatable {
         let endpoint = self.createEndpointWith(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
-}
-
-
-public enum InternetBanking: String {
-    case bay
-    case bbl
-    case ktb
-    case scb
 }
 
 
