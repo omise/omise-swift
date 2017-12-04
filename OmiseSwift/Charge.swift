@@ -3,6 +3,7 @@ import Foundation
 
 public enum ChargeStatus {
     case failed(ChargeFailure)
+    case expired
     case reversed
     case pending
     case successful
@@ -163,6 +164,8 @@ extension Charge {
         switch (statusValue, failureCode) {
         case ("failed", let failureCode?):
             status = .failed(failureCode)
+        case ("expired", nil):
+            status = .expired
         case ("successful", nil):
             status = .successful
         case ("pending", nil):
@@ -221,6 +224,8 @@ extension Charge {
             try container.encode("pending", forKey: .status)
         case .reversed:
             try container.encode("reversed", forKey: .status)
+        case .expired:
+            try container.encode("expired", forKey: .status)
         case .failed(let failureCode):
             try container.encode("failed", forKey: .status)
             try container.encode(failureCode, forKey: .failureCode)
