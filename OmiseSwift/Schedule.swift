@@ -275,7 +275,7 @@ public struct AnySchedulable: Schedulable {
     public enum AnySchedulingParameter: SchedulingParameter {
         case charge(ChargeSchedulingParameter)
         case transfer(TransferSchedulingParameter)
-        case other(json: [String: AnyJSONType])
+        case other(json: [String: Any])
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
@@ -285,7 +285,7 @@ public struct AnySchedulable: Schedulable {
             } else if let transferParameter = try? container.decode(TransferSchedulingParameter.self) {
                 self = .transfer(transferParameter)
             } else {
-                let json = try container.decode([String: AnyJSONType].self)
+                let json = try decoder.decodeJSONDictionary()
                 self = .other(json: json)
             }
         }
@@ -298,7 +298,7 @@ public struct AnySchedulable: Schedulable {
             case .transfer(let parameter):
                 try container.encode(parameter)
             case .other(json: let parameter):
-                try container.encode(parameter)
+                try encoder.encodeJSONDictionary(parameter)
             }
         }
     }
@@ -308,7 +308,7 @@ public struct AnySchedulable: Schedulable {
     public let createdDate: Date
     public let object: String
     
-    public let json: [String: AnyJSONType]
+    public let json: [String: Any]
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -317,19 +317,18 @@ public struct AnySchedulable: Schedulable {
     }
     
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let json = try container.decode([String: AnyJSONType].self)
+        let json = try decoder.decodeJSONDictionary()
         
-        guard let object = json["object"]?.jsonValue as? String else {
+        guard let object = json["object"] as? String else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.object, context)
         }
         
-        guard let id = json["id"]?.jsonValue as? String else {
+        guard let id = json["id"] as? String else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
-        guard let createdDate = json["created"]?.jsonValue as? Date else {
+        guard let createdDate = json["createdDate"] as? Date else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
         }

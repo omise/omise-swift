@@ -29,7 +29,7 @@ extension OmiseError: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension OmiseError: LocalizedError {
-    public var errorDescription: String {
+    public var errorDescription: String? {
         return self.message
     }
 }

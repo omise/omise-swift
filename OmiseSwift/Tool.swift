@@ -127,26 +127,7 @@ extension Decoder {
     
     func decodeJSONDictionary() throws -> Dictionary<String, Any> {
         let container = try self.container(keyedBy: JSONCodingKeys.self)
-        var dictionary = Dictionary<String, Any>()
-        
-        for key in container.allKeys {
-            if let boolValue = try? container.decode(Bool.self, forKey: key) {
-                dictionary[key.stringValue] = boolValue
-            } else if let stringValue = try? container.decode(String.self, forKey: key) {
-                dictionary[key.stringValue] = stringValue
-            } else if let intValue = try? container.decode(Int.self, forKey: key) {
-                dictionary[key.stringValue] = intValue
-            } else if let doubleValue = try? container.decode(Double.self, forKey: key) {
-                dictionary[key.stringValue] = doubleValue
-            } else if let nestedDictionary = try? container.decode(Dictionary<String, Any>.self, forKey: key) {
-                dictionary[key.stringValue] = nestedDictionary
-            } else if let nestedArray = try? container.decode(Array<Any>.self, forKey: key) {
-                dictionary[key.stringValue] = nestedArray
-            } else if try container.decodeNil(forKey: key) {
-                dictionary[key.stringValue] = String?.none as Any
-            }
-        }
-        return dictionary
+        return try container.decodeJSONDictionary()
     }
 }
 
@@ -281,11 +262,16 @@ extension UnkeyedDecodingContainer {
                 array.append(value)
             } else if let nestedDictionary = try? decode(Dictionary<String, Any>.self) {
                 array.append(nestedDictionary)
-            } else if let nestedArray = try? decode(Array<Any>.self) {
+            } else if let nestedArray = try? decodeArrayElement() {
                 array.append(nestedArray)
             }
         }
         return array
+    }
+    
+    private mutating func decodeArrayElement() throws -> Array<Any> {
+        var nestedContainer = try self.nestedUnkeyedContainer()
+        return try nestedContainer.decodeJSONArray()
     }
     
     mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
@@ -294,35 +280,22 @@ extension UnkeyedDecodingContainer {
     }
 }
 
+extension SingleValueDecodingContainer {
+//    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+//        let nestedContainer = try  .nestedContainer(keyedBy: JSONCodingKeys.self)
+//        return try nestedContainer.decodeJSONDictionary()
+//    }
+}
+
 extension Encoder {
     func encodeOmiseDateComponents(_ dateComponents: DateComponents) throws {
         var container = singleValueContainer()
         try container.encode(_encodeOmiseDateComponents(dateComponents, codingPath: codingPath))
     }
     
-    func encodeJSONDictionary(_ value: Dictionary<String, Any>) throws {
+    func encodeJSONDictionary(_ jsonDictionary: Dictionary<String, Any>) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
-        try value.forEach({ (key, value) in
-            let key = JSONCodingKeys(key: key)
-            switch value {
-            case let value as Bool:
-                try container.encode(value, forKey: key)
-            case let value as Int:
-                try container.encode(value, forKey: key)
-            case let value as String:
-                try container.encode(value, forKey: key)
-            case let value as Double:
-                try container.encode(value, forKey: key)
-            case let value as Dictionary<String, Any>:
-                try container.encode(value, forKey: key)
-            case let value as Array<Any>:
-                try container.encode(value, forKey: key)
-            case Optional<Any>.none:
-                try container.encodeNil(forKey: key)
-            default:
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + [key], debugDescription: "Invalid JSON value"))
-            }
-        })
+        try container.encodeJSONDictionary(jsonDictionary)
     }
 }
 
@@ -409,9 +382,9 @@ extension UnkeyedEncodingContainer {
             case let value as Double:
                 try encode(value)
             case let value as Dictionary<String, Any>:
-                try encode(value)
+                try encodeJSONDictionary(value)
             case let value as Array<Any>:
-                try encode(value)
+                try encodeArrayElement(value)
             case Optional<Any>.none:
                 try encodeNil()
             default:
@@ -419,6 +392,11 @@ extension UnkeyedEncodingContainer {
                 throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + keys, debugDescription: "Invalid JSON value"))
             }
         })
+    }
+    
+    private mutating func encodeArrayElement(_ value: Array<Any>) throws {
+        var nestedContainer = self.nestedUnkeyedContainer()
+        try nestedContainer.encodeJSONArray(value)
     }
     
     mutating func encodeJSONDictionary(_ value: Dictionary<String, Any>) throws {

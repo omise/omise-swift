@@ -1,4 +1,20 @@
 import XCTest
+@testable import Omise
+
+
+struct MetadataDummy: Decodable {
+    
+    let metadata: [String: Any]
+    
+    private enum CodingKeys: String, CodingKey {
+        case metadata
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        metadata = try container.decode([String: Any].self, forKey: .metadata)
+    }
+}
 
 class DecodeTests: XCTestCase {
     
