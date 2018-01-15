@@ -12,7 +12,7 @@ public class URLQueryItemEncoder {
     
     fileprivate(set) public var codingPath: [CodingKey] = []
     fileprivate var items: [URLQueryItem] = []
-    public var arrayIndexEncodingStrategy = ArrayIndexEncodingStrategy.index
+    public var arrayIndexEncodingStrategy = ArrayIndexEncodingStrategy.emptySquareBrackets
     public init() {}
     
     public func encode(_ value: Encodable) throws -> [URLQueryItem] {
@@ -20,11 +20,30 @@ public class URLQueryItemEncoder {
         try value.encode(to: self)
         return items
     }
+    
+    
+    private static let formURLEncodedAllowedCharacters: CharacterSet = {
+        var characters = CharacterSet.urlQueryAllowed
+        characters.remove(charactersIn: ":#[]@?/!$&'()*+,;=")
+        return characters
+    }()
+    
+    public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data {
+        var components = URLComponents()
+        components.queryItems = queryItems.map({
+            URLQueryItem(
+                name: $0.name.addingPercentEncoding(withAllowedCharacters: URLQueryItemEncoder.formURLEncodedAllowedCharacters) ?? $0.name,
+                value: $0.value?.addingPercentEncoding(withAllowedCharacters: URLQueryItemEncoder.formURLEncodedAllowedCharacters)
+            )
+        })
+        
+        return components.query!.data(using: .utf8)!
+    }
 }
 
 extension Array where Element == CodingKey {
     fileprivate func queryItemKeyForKey(_ key: CodingKey) -> String {
-        let keysPath = self + [key] 
+        let keysPath = self + [key]
         return keysPath.queryItemKey
     }
     
@@ -71,7 +90,6 @@ private struct URLQueryItemArrayElementKey: CodingKey {
         encodingStrategy = .index
     }
 }
-
 
 extension URLQueryItemEncoder {
     private func pushNil(forKey codingPath: [CodingKey]) throws {
@@ -199,13 +217,12 @@ extension URLQueryItemEncoder {
             
         case let value as URL:
             try push(value, forKey: codingPath)
-        
+            
         case let value:
             try value.encode(to: self)
         }
     }
 }
-
 
 extension URLQueryItemEncoder: Encoder {
     public var userInfo: [CodingUserInfoKey : Any] { return [:] }
@@ -420,7 +437,4 @@ fileprivate class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencing
         referencedUnkeyedContainer.encodedItemsCount += items.count
     }
 }
-
-
-
 

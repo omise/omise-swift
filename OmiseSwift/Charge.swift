@@ -261,7 +261,7 @@ public struct ChargeParams: APIJSONQuery {
         case card(cardID: String)
         case customer(customerID: String, cardID: String?)
         case source(PaymentSource)
-        case sourceType(SourceType)
+        case sourceType(PaymentSourceInformation)
     }
     
     public var value: Value
@@ -302,8 +302,7 @@ public struct ChargeParams: APIJSONQuery {
         case .source(let source):
             try container.encode(source.id, forKey: .sourceID)
         case .sourceType(let sourceType):
-            var sourceContainer = container.nestedContainer(keyedBy: CodingKeys.SourceCodingKeys.self, forKey: .sourceID)
-            try sourceContainer.encode(sourceType, forKey: .type)
+            try container.encode(sourceType, forKey: .sourceID)
         }
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encodeIfPresent(isAutoCapture, forKey: .isAutoCapture)
@@ -332,7 +331,7 @@ public struct ChargeParams: APIJSONQuery {
         self.init(value: value, payment: .source(source), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, sourceType: SourceType, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, sourceType: PaymentSourceInformation, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.init(value: value, payment: .sourceType(sourceType), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
 }

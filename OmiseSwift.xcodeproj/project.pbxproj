@@ -52,6 +52,8 @@
 		8A4469D31ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */; };
 		8A4469D51ED5E13D00F07334 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D41ED5E13D00F07334 /* Period.swift */; };
 		8A4469D61ED5E13D00F07334 /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D41ED5E13D00F07334 /* Period.swift */; };
+		8A47E936202980780070A247 /* SourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47E935202980780070A247 /* SourceType.swift */; };
+		8A47E937202980BE0070A247 /* SourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47E935202980780070A247 /* SourceType.swift */; };
 		8A4FC9461F87795300F32E9F /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4FC9451F87795300F32E9F /* Source.swift */; };
 		8A4FC9471F87795300F32E9F /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4FC9451F87795300F32E9F /* Source.swift */; };
 		8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F98C1D2160F900CA3D35 /* Creatable.swift */; };
@@ -235,6 +237,7 @@
 		8A4224AA1E4C8F8E00B11AF2 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A4469D41ED5E13D00F07334 /* Period.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
+		8A47E935202980780070A247 /* SourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceType.swift; sourceTree = "<group>"; };
 		8A4FC9451F87795300F32E9F /* Source.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
 		8A56D41A1D78172D00F30D88 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		8A5880EB1F46EB4D00647405 /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
@@ -478,6 +481,7 @@
 				8A4224AA1E4C8F8E00B11AF2 /* Search.swift */,
 				8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */,
 				8A4FC9451F87795300F32E9F /* Source.swift */,
+				8A47E935202980780070A247 /* SourceType.swift */,
 				8A3B90141E360AD30074D6CD /* Token.swift */,
 				8ACB413F1E27A4B6001793CD /* Transaction.swift */,
 				8ACB41381E27A335001793CD /* Transfer.swift */,
@@ -699,6 +703,7 @@
 				8A50C50D1E2E259600EC9407 /* Ordering.swift in Sources */,
 				8A242A521E2E1BAA0068BB5D /* APIEndpoint.swift in Sources */,
 				8ACB41581E28A3C2001793CD /* Refund.swift in Sources */,
+				8A47E937202980BE0070A247 /* SourceType.swift in Sources */,
 				8A50C5081E2E250800EC9407 /* Retrievable.swift in Sources */,
 				8ACB41501E28A3C2001793CD /* Charge.swift in Sources */,
 				8ADE88B41ED4619A00239263 /* Occurrence.swift in Sources */,
@@ -760,6 +765,7 @@
 				8ACD571F1E2E3A9600FEE5A0 /* LastDigits.swift in Sources */,
 				8ACD57291E2E3A9600FEE5A0 /* Recipient.swift in Sources */,
 				8ACD57191E2E3A9600FEE5A0 /* List.swift in Sources */,
+				8A47E936202980780070A247 /* SourceType.swift in Sources */,
 				8ACD571C1E2E3A9600FEE5A0 /* Endpoint.swift in Sources */,
 				8ACD57151E2E3A9600FEE5A0 /* Currency.swift in Sources */,
 				8ACD572A1E2E3A9600FEE5A0 /* Searchable.swift in Sources */,
