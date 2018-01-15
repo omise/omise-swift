@@ -108,9 +108,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 let chargeSampleData = chargesList.data.first
                 XCTAssertNotNil(chargeSampleData)
                 XCTAssertEqual(chargeSampleData?.value.amount, 3190000)
-                let expiredCharges = chargesList.data.filter({
-                    if case .expired = $0.status { return true } else { return false }
-                })
+                let expiredCharges = chargesList.data.filter({ .expired ~= $0.status })
                 XCTAssertEqual(expiredCharges.count, 1)
             case let .fail(error):
                 XCTFail("\(error)")

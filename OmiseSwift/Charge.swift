@@ -14,7 +14,7 @@ extension ChargeStatus: Equatable {
         switch (lhs, rhs) {
         case (.failed(let lhsFailedStatus), .failed(let rhsFailedStatus)):
             return lhsFailedStatus == rhsFailedStatus
-        case (.reversed, .reversed), (.pending, .pending), (.successful, .successful):
+        case (.reversed, .reversed), (.pending, .pending), (.successful, .successful), (.expired, .expired):
             return true
         default:
             return false
