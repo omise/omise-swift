@@ -347,7 +347,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case .virtualAccount(let account):
             switch account {
             case .sinarmas(vaCode: let vaCode):
-                try container.encode(billPaymentPrefix + SourceType.BillPayment.tescoLotus.rawValue, forKey: .type)
+                try container.encode(virtualAccountPrefix + SourceType.VirtualAccount.sinarmas.rawValue, forKey: .type)
                 var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 try accountContainer.encode(vaCode, forKey: .vaCode)
             }
