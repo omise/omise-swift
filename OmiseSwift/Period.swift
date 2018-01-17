@@ -238,7 +238,7 @@ extension Period.MonthlyPeriodRule: Equatable {
 
 extension Period.Weekday {
     init?(weekdayString: String) {
-        switch weekdayString.lowercased()  {
+        switch weekdayString.lowercased() {
         case "monday":
             self = .monday
         case "tuesday":
@@ -281,7 +281,7 @@ extension Period.Weekday {
 
 extension Period.MonthlyPeriodRule.Ordinal {
     init?(ordinalString: String) {
-        switch ordinalString.lowercased()  {
+        switch ordinalString.lowercased() {
         case "1st":
             self = .first
         case "2nd":
