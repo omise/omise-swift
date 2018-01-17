@@ -33,6 +33,29 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeChargeRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_57v787rzs4vr0dj1xc0")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.value.currency.code, decodedCharge.value.currency.code)
+        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.customer?.dataID, decodedCharge.customer?.dataID)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
+    }
+    
     func testCharge2014APIRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
@@ -59,6 +82,29 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeCharge2014APIRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_57v787rzs4vr0dj1xc0")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.value.currency.code, decodedCharge.value.currency.code)
+        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isPaid, decodedCharge.isPaid)
+        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
     }
     
     func testDisputedCharge() {
@@ -93,6 +139,37 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeDisputedCharge() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_58qdpc54lq6a5enm88m")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.value.currency.code, decodedCharge.value.currency.code)
+        XCTAssertNil(defaultCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        
+        XCTAssertNotNil(defaultCharge.dispute)
+        XCTAssertNotNil(decodedCharge.dispute)
+        
+        XCTAssertEqual(defaultCharge.dispute?.id, decodedCharge.dispute?.id)
+        XCTAssertEqual(defaultCharge.dispute?.value.amount, decodedCharge.dispute?.value.amount)
+        XCTAssertEqual(defaultCharge.dispute?.status, decodedCharge.dispute?.status)
+        XCTAssertEqual(defaultCharge.dispute?.reasonCode, decodedCharge.dispute?.reasonCode)
+        XCTAssertEqual(defaultCharge.dispute?.reasonMessage, decodedCharge.dispute?.reasonMessage)
+        XCTAssertEqual(defaultCharge.dispute?.responseMessage, decodedCharge.dispute?.responseMessage)
+        XCTAssertEqual(defaultCharge.dispute?.charge.dataID, decodedCharge.dispute?.charge.dataID)
     }
     
     func testChargeList() {
@@ -187,6 +264,20 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeInternetBankingChargeRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_5668k0kp0a9v2mr7myq")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
+    }
+    
     func testAlipayChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
@@ -204,6 +295,20 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeAlipayChargeRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_57003cpwde7oww4x3o0")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
     }
     
     func testTestcoLotusBillPaymentChargeRetrieve() {
@@ -234,6 +339,32 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeTestcoLotusBillPaymentChargeRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5929fjoo8hwgakspj7y")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
+        XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
+        XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
+        switch (defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation) {
+        case (EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let bill))?, EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let decodedBill))?):
+
+            XCTAssertEqual(bill.omiseTaxID, decodedBill.omiseTaxID)
+            XCTAssertEqual(bill.referenceNumber1, decodedBill.referenceNumber1)
+            XCTAssertEqual(bill.referenceNumber2, decodedBill.referenceNumber2)
+            XCTAssertEqual(bill.barcodeURL, decodedBill.barcodeURL)
+        default:
+            XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
+        }
     }
     
     func testSinarmasVirtualAccountChargeRetrieve() {
