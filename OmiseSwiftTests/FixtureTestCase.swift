@@ -7,18 +7,31 @@ class FixtureTestCase: OmiseTestCase {
         return FixtureClient(config: config)
     }
     
-    func fixturesData(for filename: String) -> Data? {
-        let bundle = Bundle(for: OmiseTestCase.self)
-        guard let path = bundle.path(forResource: filename, ofType: "json") else {
-            XCTFail("could not load fixtures.")
-            return nil
+    static let fixturesDirectoryURL = Bundle(for: FixtureClient.self).url(forResource: "Fixtures", withExtension: nil)!
+    static let apiOmiseFixturesDirectoryURL = Bundle(for: FixtureClient.self).url(forResource: "Fixtures", withExtension: nil)!.appendingPathComponent("api.omise.co")
+    
+    func fixturesObjectFor<T: OmiseIdentifiableObject & OmiseLocatableObject>(type: T.Type, dataID: String, suffix: String? = nil) throws -> T {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
+        fileURL.appendPathComponent(String(T.resourceInfo.path.suffix(from: T.resourceInfo.path.index(where: { $0 != "/"}) ?? T.resourceInfo.path.startIndex)))
+        var dataIDComponent = dataID
+        
+        if let suffix = suffix {
+            dataIDComponent += "-\(suffix)"
+        }
+        dataIDComponent += "-get"
+        
+        fileURL.appendPathComponent(dataIDComponent)
+        fileURL.appendPathExtension("json")
+        
+        guard let data = try? Data(contentsOf: fileURL) else {
+            throw NSError(domain: URLError.errorDomain, code: URLError.fileDoesNotExist.rawValue, userInfo: [
+                NSURLErrorFailingURLErrorKey: fileURL,
+            ])
         }
         
-        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
-            XCTFail("could not load fixtures at path: \(path)")
-            return nil
-        }
-        
-        return data
+        return try decoder.decode(T.self, from: data)
     }
 }
