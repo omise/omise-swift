@@ -265,6 +265,29 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeChargeWithSinarmasVirtualAccountSource() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_592kd97reyadw42v247")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.value.currency, decodedCharge.value.currency)
+        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.amount)
+        XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.currency)
+        XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
+        XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
+    }
     
     func testEncodingCreateChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
@@ -407,43 +430,26 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
-    func testEncodeCharge() throws {
-        let expectation = self.expectation(description: "Charge result")
+    func testEncodeChargeWithLoadedCustomer() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_59f0shjjikr16e93vfq")
         
-        let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
-            defer { expectation.fulfill() }
-            
-            switch result {
-            case .success(let charge):
-                let encoder = JSONEncoder()
-                encoder.dateEncodingStrategy = .iso8601
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                
-                guard let data = try? encoder.encode(charge) else {
-                    XCTFail("Charge Encoding failed")
-                    return
-                }
-                
-                guard let decodedCharge = try? decoder.decode(Charge.self, from: data) else {
-                    XCTFail("Charge Decoding failed")
-                    return
-                }
-                
-                XCTAssertEqual(charge.id, decodedCharge.id)
-                
-            case .fail(let error):
-                XCTFail("\(error)")
-            }
-            
-        }
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         
-        XCTAssertNotNil(request)
-        waitForExpectations(timeout: 15.0, handler: nil)
-
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
+        XCTAssertEqual(defaultCharge.value.currency, decodedCharge.value.currency)
+        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        XCTAssertEqual(defaultCharge.dispute?.id, decodedCharge.dispute?.id)
     }
-    
 }
 
 
