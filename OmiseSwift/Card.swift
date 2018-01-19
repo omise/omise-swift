@@ -207,7 +207,6 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
 extension TokenizedCard {
     private enum CodingKeys: String, CodingKey {
         case object
-        case location
         case id
         case isLive = "livemode"
         case createdDate = "created"
