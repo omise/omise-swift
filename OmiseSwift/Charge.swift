@@ -25,16 +25,19 @@ extension ChargeStatus: Equatable {
 public enum ChargePayment {
     case card(Card)
     case source(EnrolledSource)
+    case unknown
 }
 
 public enum ChargePaymentInformation {
     case card(Card)
     case source(EnrolledSource.EnrolledPaymentInformation)
+    case unknown
 }
 
 public enum ChargePaymentSourceType {
     case card
     case source(SourceType)
+    case unknown
 }
 
 public struct Charge: OmiseResourceObject {
@@ -75,6 +78,8 @@ public struct Charge: OmiseResourceObject {
             return .card(card)
         case .source(let source):
             return .source(source.paymentInformation)
+        case .unknown:
+            return .unknown
         }
     }
     
@@ -84,6 +89,8 @@ public struct Charge: OmiseResourceObject {
             return .card
         case .source(let source):
             return .source(source.paymentInformation.sourceType)
+        case .unknown:
+            return .unknown
         }
     }
     
@@ -236,6 +243,8 @@ extension Charge {
             try container.encodeIfPresent(card, forKey: .card)
         case .source(let source):
             try container.encodeIfPresent(source, forKey: .source)
+        case .unknown:
+            break
         }
     }
 }
