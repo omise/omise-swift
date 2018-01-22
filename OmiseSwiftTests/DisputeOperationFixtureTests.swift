@@ -34,20 +34,32 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         decoder.dateDecodingStrategy = .iso8601
         
         let decodedDispute = try decoder.decode(Dispute.self, from: encodedData)
-        XCTAssertEqual(defaultDispute.value.amount, decodedDispute.value.amount)
-        XCTAssertEqual(defaultDispute.value.amountInUnit, decodedDispute.value.amountInUnit)
-        XCTAssertEqual(defaultDispute.value.currency, decodedDispute.value.currency)
-        XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
-        XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
-        XCTAssertEqual(defaultDispute.currency, decodedDispute.currency)
+        XCTAssertEqual(defaultDispute.object, decodedDispute.object)
         XCTAssertEqual(defaultDispute.id, decodedDispute.id)
         XCTAssertEqual(defaultDispute.isLive, decodedDispute.isLive)
         XCTAssertEqual(defaultDispute.location, decodedDispute.location)
-        XCTAssertEqual(defaultDispute.object, decodedDispute.object)
+        XCTAssertEqual(defaultDispute.value.amount, decodedDispute.value.amount)
+        XCTAssertEqual(defaultDispute.value.amountInUnit, decodedDispute.value.amountInUnit)
+        XCTAssertEqual(defaultDispute.value.currency, decodedDispute.value.currency)
+        XCTAssertEqual(defaultDispute.status, decodedDispute.status)
+        XCTAssertEqual(defaultDispute.transaction.dataID, decodedDispute.transaction.dataID)
         XCTAssertEqual(defaultDispute.reasonCode, decodedDispute.reasonCode)
         XCTAssertEqual(defaultDispute.reasonMessage, decodedDispute.reasonMessage)
         XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
-        XCTAssertEqual(defaultDispute.status, decodedDispute.status)
+        XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
+        XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
+        
+        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
+            XCTFail("Cannot get the recent document")
+            return
+        }
+        
+        XCTAssertEqual(defaultDocument.object, decodedDocument.object)
+        XCTAssertEqual(defaultDocument.id, decodedDocument.id)
+        XCTAssertEqual(defaultDocument.isLive, decodedDocument.isLive)
+        XCTAssertEqual(defaultDocument.location, decodedDocument.location)
+        XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
+        XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
     }
     
     func testDisputeWithDocumentsRetrieve() {
@@ -89,19 +101,32 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         decoder.dateDecodingStrategy = .iso8601
         
         let decodedDispute = try decoder.decode(Dispute.self, from: encodedData)
+        XCTAssertEqual(defaultDispute.object, decodedDispute.object)
+        XCTAssertEqual(defaultDispute.id, decodedDispute.id)
+        XCTAssertEqual(defaultDispute.isLive, decodedDispute.isLive)
+        XCTAssertEqual(defaultDispute.location, decodedDispute.location)
         XCTAssertEqual(defaultDispute.value.amount, decodedDispute.value.amount)
-        XCTAssertNil(defaultDispute.responseMessage)
-        XCTAssertNil(decodedDispute.responseMessage)
+        XCTAssertEqual(defaultDispute.value.amountInUnit, decodedDispute.value.amountInUnit)
+        XCTAssertEqual(defaultDispute.value.currency, decodedDispute.value.currency)
+        XCTAssertEqual(defaultDispute.status, decodedDispute.status)
+        XCTAssertEqual(defaultDispute.transaction.dataID, decodedDispute.transaction.dataID)
         XCTAssertEqual(defaultDispute.reasonCode, decodedDispute.reasonCode)
         XCTAssertEqual(defaultDispute.reasonMessage, decodedDispute.reasonMessage)
-        XCTAssertEqual(defaultDispute.documents.total, decodedDispute.documents.total)
-        guard let recentDocument = defaultDispute.documents.first, let decodedRecentDocument = decodedDispute.documents.first else {
+        XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
+        XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
+        XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
+        
+        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
             XCTFail("Cannot get the recent document")
             return
         }
         
-        XCTAssertEqual(recentDocument.filename, decodedRecentDocument.filename)
-        XCTAssertEqual(recentDocument.id, decodedRecentDocument.id)
+        XCTAssertEqual(defaultDocument.object, decodedDocument.object)
+        XCTAssertEqual(defaultDocument.id, decodedDocument.id)
+        XCTAssertEqual(defaultDocument.isLive, decodedDocument.isLive)
+        XCTAssertEqual(defaultDocument.location, decodedDocument.location)
+        XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
+        XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
     }
     
     func testWonDisputeRetrieve() {
@@ -146,14 +171,32 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         decoder.dateDecodingStrategy = .iso8601
         
         let decodedDispute = try decoder.decode(Dispute.self, from: encodedData)
+        XCTAssertEqual(defaultDispute.object, decodedDispute.object)
+        XCTAssertEqual(defaultDispute.id, decodedDispute.id)
+        XCTAssertEqual(defaultDispute.isLive, decodedDispute.isLive)
+        XCTAssertEqual(defaultDispute.location, decodedDispute.location)
         XCTAssertEqual(defaultDispute.value.amount, decodedDispute.value.amount)
-        XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
-        XCTAssertEqual(defaultDispute.reasonCode, decodedDispute.reasonCode)
-        XCTAssertEqual(defaultDispute.reasonMessage, decodedDispute.reasonMessage)
-        XCTAssertEqual(defaultDispute.documents.total, decodedDispute.documents.total)
+        XCTAssertEqual(defaultDispute.value.amountInUnit, decodedDispute.value.amountInUnit)
+        XCTAssertEqual(defaultDispute.value.currency, decodedDispute.value.currency)
         XCTAssertEqual(defaultDispute.status, decodedDispute.status)
         XCTAssertEqual(defaultDispute.transaction.dataID, decodedDispute.transaction.dataID)
+        XCTAssertEqual(defaultDispute.reasonCode, decodedDispute.reasonCode)
+        XCTAssertEqual(defaultDispute.reasonMessage, decodedDispute.reasonMessage)
+        XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
+        XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
         XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
+        
+        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
+            XCTFail("Cannot get the recent document")
+            return
+        }
+        
+        XCTAssertEqual(defaultDocument.object, decodedDocument.object)
+        XCTAssertEqual(defaultDocument.id, decodedDocument.id)
+        XCTAssertEqual(defaultDocument.isLive, decodedDocument.isLive)
+        XCTAssertEqual(defaultDocument.location, decodedDocument.location)
+        XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
+        XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
     }
     
     func testDisputeList() {
