@@ -22,6 +22,10 @@ class ForexOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeUSDForex() throws {
+        
+    }
+    
     func testJPYForex() {
         let expectation = self.expectation(description: "JPY Forex Retrieve")
         
@@ -39,6 +43,10 @@ class ForexOperationFixtureTests: FixtureTestCase {
         }
         
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeJYPForex() throws {
+        
     }
     
     func testSGDForex() {
@@ -60,6 +68,10 @@ class ForexOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeSGDForex() throws {
+        
+    }
+    
     func testEURForex() {
         let expectation = self.expectation(description: "EUR Forex Retrieve")
         
@@ -79,6 +91,10 @@ class ForexOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeEURForex() throws {
+        
+    }
+    
     func testGBPForex() {
         let expectation = self.expectation(description: "GBP Forex Retrieve")
         
@@ -96,6 +112,10 @@ class ForexOperationFixtureTests: FixtureTestCase {
         }
         
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeGBPForex() throws {
+        
     }
     
 }
