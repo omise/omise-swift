@@ -43,6 +43,40 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Transfer>.self, dataID: "schd_test_582oau15y3okc3bxy2b")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedSchedule = try decoder.decode(Schedule<Transfer>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
+        XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
+        XCTAssertEqual(defaultSchedule.occurrences.from, decodedSchedule.occurrences.from)
+        XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
+        XCTAssertEqual(defaultSchedule.occurrences.limit, decodedSchedule.occurrences.limit)
+        
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        
+        XCTAssertEqual(decodedSchedule.parameter.amount, decodedSchedule.parameter.amount)
+        XCTAssertEqual(decodedSchedule.parameter.recipientID, decodedSchedule.parameter.recipientID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+    }
+    
     func testEveryDayChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
@@ -96,6 +130,55 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeEveryDayChargeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Charge>.self, dataID: "schd_test_582o6x3rigzamtpkhpu")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedSchedule = try decoder.decode(Schedule<Charge>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
+        XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
+        XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.first, decodedSchedule.nextOccurrenceDates.first)
+        
+        XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
+        XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
+        XCTAssertEqual(defaultSchedule.occurrences.from, decodedSchedule.occurrences.from)
+        XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
+        XCTAssertEqual(defaultSchedule.occurrences.limit, decodedSchedule.occurrences.limit)
+        XCTAssertEqual(defaultSchedule.occurrences.data.count, decodedSchedule.occurrences.data.count)
+        
+        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+            return
+        }
+        
+        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
+        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
+        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
+        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
+        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
+        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
+        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
+        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
+        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+    }
     
     func testEveryLastFridayOfMonthChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
@@ -128,6 +211,47 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeEveryLastFridayOfMonthChargeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Charge>.self, dataID: "schd_test_5830728kmmgobeli6ma")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        let decodedSchedule = try decoder.decode(Schedule<Charge>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
+        XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
+        XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+            return
+        }
+        
+        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
+        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
+        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
+        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
+        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
+        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
+        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
+        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
+        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
     }
     
     func testEveryFirstMondayOfMonthChargeScheduleRetrieve() {
@@ -163,6 +287,47 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeEveryFirstMondayOfMonthChargeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Charge>.self, dataID: "schd_test_5830784ijsp6ybzh161")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedSchedule = try decoder.decode(Schedule<Charge>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
+        XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
+        XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+            return
+        }
+        
+        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
+        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
+        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
+        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
+        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
+        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
+        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
+        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
+        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+    }
+    
     func testEveryWeekdaysChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
@@ -194,6 +359,47 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeEveryWeekdaysChargeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Charge>.self, dataID: "schd_test_58306nhkn5goe12i4sx")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedSchedule = try decoder.decode(Schedule<Charge>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
+        XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
+        XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+            return
+        }
+        
+        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
+        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
+        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
+        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
+        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
+        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
+        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
+        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
+        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
     }
     
     func testDeletedChargeScheduleRetrieve() {
@@ -228,6 +434,46 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeDeletedChargeScheduleRetrieve() throws {
+        let defaultSchedule = try fixturesObjectFor(type: Schedule<Charge>.self, dataID: "schd_test_58306a2njevec7qiqfz")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSchedule)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedSchedule = try decoder.decode(Schedule<Charge>.self, from: encodedData)
+        XCTAssertEqual(defaultSchedule.object, decodedSchedule.object)
+        XCTAssertEqual(defaultSchedule.id, decodedSchedule.id)
+        XCTAssertEqual(defaultSchedule.isLive, decodedSchedule.isLive)
+        XCTAssertEqual(defaultSchedule.location, decodedSchedule.location)
+        XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
+        XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
+        XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
+        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
+        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        
+        XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
+        XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
+        XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
+        
+        XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+            return
+        }
+        
+        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
+        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
+        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
+        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
+        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
+        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
+        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
+        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
+        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+    }
     
     func testListSchedule() {
         let expectation = self.expectation(description: "List Schedule result")
