@@ -23,7 +23,27 @@ class ForexOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeUSDForex() throws {
+        let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "USD")
         
+        XCTAssertEqual(defaultForex.from, .usd)
+        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.rate, 32.84666705)
+        XCTAssertEqual(defaultForex.location, "/forex/usd")
+        XCTAssertEqual(defaultForex.object, "forex")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultForex)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedForex = try decoder.decode(Forex.self, from: encodedData)
+        
+        XCTAssertEqual(defaultForex.from, decodedForex.from)
+        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.rate, decodedForex.rate)
+        XCTAssertEqual(defaultForex.location, decodedForex.location)
+        XCTAssertEqual(defaultForex.object, decodedForex.object)
     }
     
     func testJPYForex() {
@@ -46,7 +66,27 @@ class ForexOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeJYPForex() throws {
+        let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "JPY")
         
+        XCTAssertEqual(defaultForex.from, .jpy)
+        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.rate, 0.29617176959999997)
+        XCTAssertEqual(defaultForex.location, "/forex/jpy")
+        XCTAssertEqual(defaultForex.object, "forex")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultForex)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedForex = try decoder.decode(Forex.self, from: encodedData)
+        
+        XCTAssertEqual(defaultForex.from, decodedForex.from)
+        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.rate, decodedForex.rate)
+        XCTAssertEqual(defaultForex.location, decodedForex.location)
+        XCTAssertEqual(defaultForex.object, decodedForex.object)
     }
     
     func testSGDForex() {
@@ -69,7 +109,27 @@ class ForexOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeSGDForex() throws {
+        let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "SGD")
         
+        XCTAssertEqual(defaultForex.from, .sgd)
+        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.rate, 24.054176718999997)
+        XCTAssertEqual(defaultForex.location, "/forex/sgd")
+        XCTAssertEqual(defaultForex.object, "forex")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultForex)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedForex = try decoder.decode(Forex.self, from: encodedData)
+        
+        XCTAssertEqual(defaultForex.from, decodedForex.from)
+        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.rate, decodedForex.rate)
+        XCTAssertEqual(defaultForex.location, decodedForex.location)
+        XCTAssertEqual(defaultForex.object, decodedForex.object)
     }
     
     func testEURForex() {
@@ -92,7 +152,27 @@ class ForexOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeEURForex() throws {
+        let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "EUR")
         
+        XCTAssertEqual(defaultForex.from, .eur)
+        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.rate, 36.784682468599996)
+        XCTAssertEqual(defaultForex.location, "/forex/eur")
+        XCTAssertEqual(defaultForex.object, "forex")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultForex)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedForex = try decoder.decode(Forex.self, from: encodedData)
+        
+        XCTAssertEqual(defaultForex.from, decodedForex.from)
+        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.rate, decodedForex.rate)
+        XCTAssertEqual(defaultForex.location, decodedForex.location)
+        XCTAssertEqual(defaultForex.object, decodedForex.object)
     }
     
     func testGBPForex() {
@@ -115,7 +195,27 @@ class ForexOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeGBPForex() throws {
+        let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "GBP")
         
+        XCTAssertEqual(defaultForex.from, .gbp)
+        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.rate, 42.8132877978)
+        XCTAssertEqual(defaultForex.location, "/forex/gbp")
+        XCTAssertEqual(defaultForex.object, "forex")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultForex)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedForex = try decoder.decode(Forex.self, from: encodedData)
+        
+        XCTAssertEqual(defaultForex.from, decodedForex.from)
+        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.rate, decodedForex.rate)
+        XCTAssertEqual(defaultForex.location, decodedForex.location)
+        XCTAssertEqual(defaultForex.object, decodedForex.object)
     }
     
 }
