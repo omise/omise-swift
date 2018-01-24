@@ -6,7 +6,7 @@ public enum Period {
     case weekly(Set<Weekday>)
     case monthly(MonthlyPeriodRule)
     
-    public enum Weekday: String, Equatable, Decodable {
+    public enum Weekday: String, Equatable, Codable {
         case monday
         case tuesday
         case wednesday
@@ -84,6 +84,7 @@ extension Period: Codable {
         switch self {
         case .daily:
             try container.encode("day", forKey: .period)
+            var _ = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
         case .weekly(let weekDays):
             try container.encode("week", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
@@ -119,7 +120,7 @@ extension Period: Codable {
                     case (.thursday, .friday), (.thursday, .saturday), (.thursday, .sunday):
                         return false
                     }
-                }).map({ $0.apiValue })
+                })
             )
         case .monthly(let month):
             try container.encode("month", forKey: .period)
@@ -262,19 +263,19 @@ extension Period.Weekday {
     fileprivate var apiValue: String {
         switch self {
         case .monday:
-            return "Monday"
+            return "monday"
         case .tuesday:
-            return "Tuesday"
+            return "tuesday"
         case .wednesday:
-            return "Wednesday"
+            return "wednesday"
         case .thursday:
-            return "Thursday"
+            return "thursday"
         case .friday:
-            return "Friday"
+            return "friday"
         case .saturday:
-            return "Saturday"
+            return "saturday"
         case .sunday:
-            return "Sunday"
+            return "sunday"
         }
     }
 }
