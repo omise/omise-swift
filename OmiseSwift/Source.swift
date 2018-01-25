@@ -275,8 +275,8 @@ public struct EnrolledSource: SourceData {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
+        try container.encode(object, forKey: .object)
         try container.encode(id, forKey: .id)
-        try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
         try container.encode(amount, forKey: .amount)
         try container.encode(flow, forKey: .flow)
@@ -347,7 +347,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case .virtualAccount(let account):
             switch account {
             case .sinarmas(vaCode: let vaCode):
-                try container.encode(billPaymentPrefix + SourceType.BillPayment.tescoLotus.rawValue, forKey: .type)
+                try container.encode(virtualAccountPrefix + SourceType.VirtualAccount.sinarmas.rawValue, forKey: .type)
                 var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 try accountContainer.encode(vaCode, forKey: .vaCode)
             }

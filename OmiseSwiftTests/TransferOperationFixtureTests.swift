@@ -2,14 +2,14 @@ import XCTest
 import Omise
 
 
-private let tranferTestingID = "trsf_test_4yqacz8t3cbipcj766u"
+private let transferTestingID = "trsf_test_4yqacz8t3cbipcj766u"
 
 class TransferOperationFixtureTests: FixtureTestCase {
     
     func testTransferRetrieve() {
         let expectation = self.expectation(description: "transfer result")
         
-        let request = Transfer.retrieve(using: testClient, id: tranferTestingID) { (result) in
+        let request = Transfer.retrieve(using: testClient, id: transferTestingID) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -25,6 +25,23 @@ class TransferOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeTransferRetrieve() throws {
+        let defaultTransfer = try fixturesObjectFor(type: Transfer.self, dataID: transferTestingID)
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultTransfer)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedTransfer = try decoder.decode(Transfer.self, from: encodedData)
+        XCTAssertEqual(defaultTransfer.value.amount, decodedTransfer.value.amount)
+        XCTAssertEqual(defaultTransfer.sentDate, decodedTransfer.sentDate)
+        XCTAssertEqual(defaultTransfer.paidDate, decodedTransfer.paidDate)
+        XCTAssertFalse(defaultTransfer.shouldFailFast)
+        XCTAssertFalse(decodedTransfer.shouldFailFast)
     }
     
     func testTransferList() {
@@ -70,7 +87,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
         
         let updateParams = UpdateTransferParams(amount: 1_000_00)
         
-        let request = Transfer.update(using: testClient, id: tranferTestingID, params: updateParams) { (result) in
+        let request = Transfer.update(using: testClient, id: transferTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -87,12 +104,12 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferDestroy() {
         let expectation = self.expectation(description: "transfer destroy")
         
-        let request = Transfer.destroy(using: testClient, id: tranferTestingID) { (result) in
+        let request = Transfer.destroy(using: testClient, id: transferTestingID) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.id, tranferTestingID)
+                XCTAssertEqual(transfer.id, transferTestingID)
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -125,6 +142,26 @@ class TransferOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeTransferOtherFailureCode() throws {
+        let defaultTransfer = try fixturesObjectFor(type: Transfer.self, dataID: "trsf_test_4yqacz8t3cbipcj272c")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultTransfer)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedTransfer = try decoder.decode(Transfer.self, from: encodedData)
+        XCTAssertEqual(defaultTransfer.value.amount, decodedTransfer.value.amount)
+        XCTAssertEqual(defaultTransfer.sentDate, decodedTransfer.sentDate)
+        XCTAssertEqual(defaultTransfer.paidDate, decodedTransfer.paidDate)
+        if case TransferStatus.failed(.other(let transferFailedCode)) = defaultTransfer.status, case TransferStatus.failed(.other(let decodedTransferFailedCode)) = decodedTransfer.status {
+            XCTAssertEqual(transferFailedCode, decodedTransferFailedCode)
+        } else {
+            XCTFail()
+        }
     }
 }
 

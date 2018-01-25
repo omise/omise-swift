@@ -84,7 +84,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLive, forKey: .isLive)
         try container.encode(schedule, forKey: .schedule)
-        try container.encode(scheduleDate, forKey: .scheduleDate)
+        try container.encodeOmiseDateComponents(scheduleDate, forKey: .scheduleDate)
         try container.encode(processedDate, forKey: .processedDate)
         
         try container.encode(result, forKey: .result)

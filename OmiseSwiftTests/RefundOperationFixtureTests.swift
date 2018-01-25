@@ -39,6 +39,29 @@ class RefundOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testEncodeRefundRetrieve() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_4yq7duw15p9hdrjp8oq")
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        guard let defaultRefund = defaultCharge.refunds?.first, let decodedRefund = decodedCharge.refunds?.first else {
+            XCTFail("Cannot get the recent refund")
+            return
+        }
+        XCTAssertEqual(defaultRefund.object, decodedRefund.object)
+        XCTAssertEqual(defaultRefund.id, decodedRefund.id)
+        XCTAssertEqual(defaultRefund.location, decodedRefund.location)
+        XCTAssertEqual(defaultRefund.amount, decodedRefund.amount)
+        XCTAssertEqual(defaultRefund.currency, decodedRefund.currency)
+        XCTAssertEqual(defaultRefund.charge.dataID, decodedRefund.charge.dataID)
+        XCTAssertEqual(defaultRefund.transaction.dataID, decodedRefund.transaction.dataID)
+        XCTAssertEqual(defaultRefund.createdDate, decodedRefund.createdDate)
+    }
+    
     func testRefundList() {
         let expectation = self.expectation(description: "Refund list")
         

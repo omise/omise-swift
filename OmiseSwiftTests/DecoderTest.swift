@@ -13,7 +13,7 @@ class DecodeTests: XCTestCase {
     func testAnyJSONTypeDecoding() {
         do {
             let jsonData = try self.jsonData(withFileName: "metadata")
-            let decodedData =  try JSONDecoder().decode(MetadataDummy.self, from: jsonData)
+            let decodedData = try JSONDecoder().decode(MetadataDummy.self, from: jsonData)
             let metadata = decodedData.metadata
             XCTAssertEqual(metadata["a_string"] as? String, "some_string")
             XCTAssertEqual(metadata["an_integer"] as? Int, 1)

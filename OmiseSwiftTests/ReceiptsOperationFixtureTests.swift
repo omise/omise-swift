@@ -7,7 +7,7 @@ private let receiptTestingID = "rcpt_test_12345"
 
 class ReceiptsOperationFixtureTests: FixtureTestCase {
     
-    func testReceipteRetrieve() {
+    func testReceiptRetrieve() {
         let expectation = self.expectation(description: "Receipt result")
         
         let request = Receipt.retrieve(using: testClient, id: receiptTestingID) { (result) in
@@ -41,6 +41,40 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeReceiptRetrieve() throws {
+        let defaultReceipt = try fixturesObjectFor(type: Receipt.self, dataID: receiptTestingID)
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultReceipt)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedReceipt = try decoder.decode(Receipt.self, from: encodedData)
+        XCTAssertEqual(defaultReceipt.object, decodedReceipt.object)
+        XCTAssertEqual(defaultReceipt.id, decodedReceipt.id)
+        XCTAssertEqual(defaultReceipt.number, decodedReceipt.number)
+        XCTAssertEqual(defaultReceipt.location, decodedReceipt.location)
+        XCTAssertEqual(defaultReceipt.date, decodedReceipt.date)
+        XCTAssertEqual(defaultReceipt.customerName, decodedReceipt.customerName)
+        XCTAssertEqual(defaultReceipt.customerAddress, decodedReceipt.customerAddress)
+        XCTAssertEqual(defaultReceipt.customerTaxID, decodedReceipt.customerTaxID)
+        XCTAssertEqual(defaultReceipt.customerEmail, decodedReceipt.customerEmail)
+        XCTAssertEqual(defaultReceipt.customerStatementName, decodedReceipt.customerStatementName)
+        XCTAssertEqual(defaultReceipt.companyName, decodedReceipt.companyName)
+        XCTAssertEqual(defaultReceipt.companyAddress, decodedReceipt.companyAddress)
+        XCTAssertEqual(defaultReceipt.companyTaxID, decodedReceipt.companyTaxID)
+        XCTAssertEqual(defaultReceipt.chargeFee, decodedReceipt.chargeFee)
+        XCTAssertEqual(defaultReceipt.voidedFee, decodedReceipt.voidedFee)
+        XCTAssertEqual(defaultReceipt.transferFee, decodedReceipt.transferFee)
+        XCTAssertEqual(defaultReceipt.feeSubtotal, decodedReceipt.feeSubtotal)
+        XCTAssertEqual(defaultReceipt.vat, decodedReceipt.vat)
+        XCTAssertEqual(defaultReceipt.wht, decodedReceipt.wht)
+        XCTAssertEqual(defaultReceipt.total, decodedReceipt.total)
+        XCTAssertEqual(defaultReceipt.isCreditNote, decodedReceipt.isCreditNote)
+        XCTAssertEqual(defaultReceipt.currency, decodedReceipt.currency)
     }
     
     func testReceiptList() {

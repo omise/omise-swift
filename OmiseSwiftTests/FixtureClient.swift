@@ -95,7 +95,7 @@ extension Omise.APIEndpoint {
             preconditionFailure("Invalid URL")
         }
         
-        let filePath =  pathComponents.reduce(hostname) { (path: String, segment: String) -> String in
+        let filePath = pathComponents.reduce(hostname) { (path: String, segment: String) -> String in
             return ((path as NSString).appendingPathComponent(segment)) as String
         }
         
