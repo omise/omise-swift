@@ -68,13 +68,16 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.occurrences.from, decodedSchedule.occurrences.from)
         XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
         XCTAssertEqual(defaultSchedule.occurrences.limit, decodedSchedule.occurrences.limit)
-        
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
-        
         XCTAssertEqual(decodedSchedule.parameter.amount, decodedSchedule.parameter.amount)
         XCTAssertEqual(decodedSchedule.parameter.recipientID, decodedSchedule.parameter.recipientID)
-        
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
+        
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+            XCTFail("Cannot get the recent next occurrence date")
+            return
+        }
+        XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
     }
     
     func testEveryDayChargeScheduleRetrieve() {
@@ -156,7 +159,12 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.first, decodedSchedule.nextOccurrenceDates.first)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+            XCTFail("Cannot get the recent next occurrence date")
+            return
+        }
+        XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
         
         XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
         XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
@@ -165,19 +173,20 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.occurrences.limit, decodedSchedule.occurrences.limit)
         XCTAssertEqual(defaultSchedule.occurrences.data.count, decodedSchedule.occurrences.data.count)
         
-        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+        guard let defaultRecentOccurrenceDate = defaultSchedule.occurrences.data.first, let decodedRecentOccurrenceDate = decodedSchedule.occurrences.data.first else {
+            XCTFail("Cannot get the recent occurrence date")
             return
         }
         
-        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
-        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
-        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
-        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
-        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
-        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
-        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
-        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
-        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+        XCTAssertEqual(defaultRecentOccurrenceDate.object, decodedRecentOccurrenceDate.object)
+        XCTAssertEqual(defaultRecentOccurrenceDate.isLive, decodedRecentOccurrenceDate.isLive)
+        XCTAssertEqual(defaultRecentOccurrenceDate.id, decodedRecentOccurrenceDate.id)
+        XCTAssertEqual(defaultRecentOccurrenceDate.location, decodedRecentOccurrenceDate.location)
+        XCTAssertEqual(defaultRecentOccurrenceDate.schedule.dataID, decodedRecentOccurrenceDate.schedule.dataID)
+        XCTAssertEqual(defaultRecentOccurrenceDate.processedDate, decodedRecentOccurrenceDate.processedDate)
+        XCTAssertEqual(defaultRecentOccurrenceDate.status, decodedRecentOccurrenceDate.status)
+        XCTAssertEqual(defaultRecentOccurrenceDate.result.dataID, decodedRecentOccurrenceDate.result.dataID)
+        XCTAssertEqual(defaultRecentOccurrenceDate.createdDate, decodedRecentOccurrenceDate.createdDate)
     }
     
     func testEveryLastFridayOfMonthChargeScheduleRetrieve() {
@@ -239,19 +248,13 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+            XCTFail("Cannot get the recent next occurrence date")
             return
         }
         
-        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
-        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
-        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
-        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
-        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
-        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
-        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
-        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
-        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+        XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
     }
     
     func testEveryFirstMondayOfMonthChargeScheduleRetrieve() {
@@ -313,19 +316,13 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+            XCTFail("Cannot get the recent next occurrence date")
             return
         }
         
-        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
-        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
-        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
-        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
-        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
-        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
-        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
-        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
-        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+        XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
     }
     
     func testEveryWeekdaysChargeScheduleRetrieve() {
@@ -384,22 +381,20 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.parameter.value.amount, decodedSchedule.parameter.value.amount)
         XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
         XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
-        
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
+        XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
+        XCTAssertEqual(defaultSchedule.occurrences.from, decodedSchedule.occurrences.from)
+        XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
+        XCTAssertEqual(defaultSchedule.occurrences.data.count, decodedSchedule.occurrences.data.count)
+        
+        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+            XCTFail("Cannot get the recent next occurrence date")
             return
         }
         
-        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
-        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
-        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
-        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
-        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
-        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
-        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
-        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
-        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
+        XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
     }
     
     func testDeletedChargeScheduleRetrieve() {
@@ -458,21 +453,12 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.parameter.value.currency, decodedSchedule.parameter.value.currency)
         XCTAssertEqual(defaultSchedule.parameter.customerID, decodedSchedule.parameter.customerID)
         
+        XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
+        XCTAssertEqual(defaultSchedule.occurrences.from, decodedSchedule.occurrences.from)
+        XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
+        XCTAssertEqual(defaultSchedule.occurrences.data.count, decodedSchedule.occurrences.data.count)
+        
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
-        
-        guard let defaultOccurrence = defaultSchedule.occurrences.data.first, let decodedOccurrence = decodedSchedule.occurrences.data.first else {
-            return
-        }
-        
-        XCTAssertEqual(defaultOccurrence.object, decodedOccurrence.object)
-        XCTAssertEqual(defaultOccurrence.isLive, decodedOccurrence.isLive)
-        XCTAssertEqual(defaultOccurrence.id, decodedOccurrence.id)
-        XCTAssertEqual(defaultOccurrence.location, decodedOccurrence.location)
-        XCTAssertEqual(defaultOccurrence.schedule.dataID, decodedOccurrence.schedule.dataID)
-        XCTAssertEqual(defaultOccurrence.processedDate, decodedOccurrence.processedDate)
-        XCTAssertEqual(defaultOccurrence.status, decodedOccurrence.status)
-        XCTAssertEqual(defaultOccurrence.result.dataID, decodedOccurrence.result.dataID)
-        XCTAssertEqual(defaultOccurrence.createdDate, decodedOccurrence.createdDate)
     }
     
     func testListSchedule() {
