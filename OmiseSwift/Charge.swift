@@ -7,6 +7,7 @@ public enum ChargeStatus {
     case reversed
     case pending
     case successful
+    case unknown(String)
 }
 
 extension ChargeStatus: Equatable {
@@ -16,6 +17,8 @@ extension ChargeStatus: Equatable {
             return lhsFailedStatus == rhsFailedStatus
         case (.reversed, .reversed), (.pending, .pending), (.successful, .successful), (.expired, .expired):
             return true
+        case (.unknown(let lhsStatus), .unknown(let rhsStatus)):
+            return lhsStatus == rhsStatus
         default:
             return false
         }
@@ -179,8 +182,8 @@ extension Charge {
             status = .pending
         case ("reversed", nil):
             status = .reversed
-        default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge status"))
+        case (let statusValue, _):
+            status = .unknown(statusValue)
         }
         
         self.status = status
@@ -194,7 +197,7 @@ extension Charge {
         case (nil, let source?):
             payment = .source(source)
         case (nil, nil), (.some, .some):
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge payment information"))
+            payment = .unknown
         }
     }
     
@@ -236,6 +239,8 @@ extension Charge {
         case .failed(let failureCode):
             try container.encode("failed", forKey: .status)
             try container.encode(failureCode, forKey: .failureCode)
+        case .unknown(let statusValue):
+            try container.encode(statusValue, forKey: .status)
         }
         
         switch payment {

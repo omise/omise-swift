@@ -11,9 +11,32 @@ public enum CardBrand: String, Codable, Equatable {
 }
 
 
-public enum CardFinancing: String, Codable, Equatable {
+public enum CardFinancing: RawRepresentable, Codable, Equatable {
+    public var rawValue: String {
+        switch self {
+        case .credit:
+            return "credit"
+        case .debit:
+            return "debit"
+        case .unknown(let value):
+            return value
+        }
+    }
+    
     case credit
     case debit
+    case unknown(String)
+    
+    public init?(rawValue: String) {
+        switch rawValue {
+        case "credit", "":
+            self = .credit
+        case "debit":
+            self = .debit
+        case let value:
+            self = .unknown(value)
+        }
+    }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -23,8 +46,8 @@ public enum CardFinancing: String, Codable, Equatable {
             self = .credit
         case "debit":
             self = .debit
-        default:
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid Card Financing")
+        case let value:
+            self = .unknown(value)
         }
     }
 }
