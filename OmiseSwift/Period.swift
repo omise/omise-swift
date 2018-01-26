@@ -5,6 +5,7 @@ public enum Period {
     case daily
     case weekly(Set<Weekday>)
     case monthly(MonthlyPeriodRule)
+    case unknown(String, [String: Any]?)
     
     public enum Weekday: String, Equatable, Codable {
         case monday
@@ -25,7 +26,7 @@ public enum Period {
             }
             
             public init?(rawValue: Int) {
-                guard 1...28 ~= rawValue else {
+                guard -31...31 ~= rawValue else {
                     return nil
                 }
                 self.day = rawValue
@@ -132,6 +133,9 @@ extension Period: Codable {
             case .weekdayOfMonth(ordinal: let ordinal, weekday: let weekday):
                 try ruleContainer.encode("\(ordinal.apiValue)_\(weekday.apiValue.lowercased())", forKey: .weekdayOfMonth)
             }
+        case .unknown(let value, let rules):
+            try container.encode(value, forKey: .period)
+            try container.encodeIfPresent(rules, forKey: .on)
         }
     }
     
@@ -177,8 +181,9 @@ extension Period: Codable {
             self = .weekly(Set(onWeekdays))
         case ("month", nil, let monthlyRule?):
             self = .monthly(monthlyRule)
-        default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+        case (let value, _, _):
+            let rules = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .on)
+            self = .unknown(value, rules)
         }
     }
 }
@@ -187,7 +192,7 @@ extension Period.MonthlyPeriodRule.DayOfMonth: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(Int.self)
-        guard 1...28 ~= value else {
+        guard -31...31 ~= value else {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
         }
         self.day = value

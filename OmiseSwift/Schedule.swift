@@ -9,6 +9,7 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject {
         case expired
         case deleted
         case suspended
+        case unknown(String)
     }
     
     public static var resourceInfo: ResourceInfo {
@@ -148,19 +149,19 @@ extension Schedule {
         occurrences = try container.decode(ListProperty<Occurrence<Data>>.self, forKey: .occurrences)
         nextOccurrenceDates = try container.decodeOmiseDateComponentsArray(forKey: .nextOccurrenceDates)
         
-        if let parameterKey = container.allKeys.first(where: { (key) -> Bool in
+        let parameterKey = container.allKeys.first(where: { (key) -> Bool in
             if case .parameter = key {
                 return true
             } else {
                 return false
             }
-        }) {
+        })
+        if let parameterKey = parameterKey {
             parameter = try container.decode(Data.Parameter.self, forKey: parameterKey)
         } else {
-            throw DecodingError
-                .keyNotFound(
-                    Schedule<Data>.CodingKeys.parameter("parameter"),
-                    DecodingError.Context(codingPath: container.codingPath, debugDescription: "Missing scheduling parameter")
+            throw DecodingError.keyNotFound(
+                Schedule<Data>.CodingKeys.parameter("parameter"),
+                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Missing scheduling parameter")
             )
         }
     }
@@ -230,9 +231,8 @@ extension Schedule.Status: Codable {
             self = .deleted
         case "suspended":
             self = .suspended
-        default:
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unrecognized schedule status")
-            throw DecodingError.dataCorrupted(context)
+        case let value:
+            self = .unknown(value)
         }
     }
     
@@ -250,9 +250,24 @@ extension Schedule.Status: Codable {
             status = "deleted"
         case .suspended:
             status = "suspended"
+        case .unknown(let value):
+            status = value
         }
         try container.encode(status)
     }
+    
+    public static func ==(lhs: Schedule<Data>.Status, rhs: Schedule<Data>.Status) -> Bool {
+        switch (lhs, rhs) {
+        case (.active, .active), (.expiring, .expiring), (.expired, .expired),
+        (.deleted, .deleted), (.suspended, .suspended):
+        return true
+        case let (.unknown(lhsValue), .unknown(rhsValue)):
+            return lhsValue == rhsValue
+        default:
+            return false
+        }
+    }
+
 }
 
 
@@ -314,7 +329,7 @@ public struct AnySchedulable: Schedulable {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
-        guard let createdDate = json["createdDate"]?.jsonValue as? Date else {
+        guard let createdDate = json["created"]?.jsonValue as? Date else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
         }
