@@ -81,7 +81,7 @@ extension URLQueryItemEncoder {
     private func push(_ value: DateComponents, forKey codingPath: [CodingKey]) throws {
         guard (value.calendar?.identifier ?? Calendar.current.identifier) == .gregorian,
             let year = value.year, let month = value.month, let day = value.day else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "Invalid date components"))
+                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath, debugDescription: "Invalid date components"))
         }
         
         items.append(URLQueryItem(name: codingPath.queryItemKey, value: "\(year)-\(month)-\(day)"))
