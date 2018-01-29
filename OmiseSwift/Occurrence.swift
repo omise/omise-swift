@@ -7,6 +7,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
         case skipped(String)
         case failed(String)
         case successful
+        case unknown(status: String, message: String?)
     }
     
     public static var resourceInfo: ResourceInfo {
@@ -69,9 +70,8 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
             self.status = .failed(message)
         case ("skipped", let message?):
             self.status = .skipped(message)
-        default:
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid Occurrence status")
-            throw DecodingError.dataCorrupted(context)
+        case (let statusValue, let message):
+            self.status = .unknown(status: statusValue, message: message)
         }
     }
     
@@ -99,6 +99,9 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
         case .failed(let failureMessage):
             try container.encode("failed", forKey: .status)
             try container.encode(failureMessage, forKey: .message)
+        case .unknown(status: let name, message: let message):
+            try container.encode(name, forKey: .status)
+            try container.encodeIfPresent(message, forKey: .message)
         }
     }
 }

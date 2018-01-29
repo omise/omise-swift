@@ -231,6 +231,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
     public enum Amount {
         case value(Value)
         case percentageOfBalance(Double)
+        case unknown
     }
     
     public let recipientID: String
@@ -256,7 +257,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
         case (nil, let amount?, let currency?):
             self.amount = .value(Value(amount: amount, currency: currency))
         default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid requesting transfer amount"))
+            self.amount = .unknown
         }
     }
     
@@ -270,6 +271,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
             try container.encode(value.currency, forKey: .currency)
         case .percentageOfBalance(let percentage):
             try container.encode(percentage, forKey: .percentageOfBalance)
+        case .unknown: break
         }
     }
     

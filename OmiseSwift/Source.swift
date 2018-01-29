@@ -34,11 +34,44 @@ extension SourceData {
 }
 
 
-public enum InternetBanking: String {
+public enum InternetBanking: RawRepresentable {
+    public init?(rawValue: String) {
+        switch rawValue {
+        case "bay":
+            self = .bay
+        case "bbl":
+            self = .bbl
+        case "ktb":
+            self = .ktb
+        case "scb":
+            self = .scb
+        case let value:
+            self = .unknown(value)
+        }
+    }
+    
+    public var rawValue: String {
+        switch self {
+        case .bay:
+            return "bay"
+        case .bbl:
+            return "bbl"
+        case .ktb:
+            return "ktb"
+        case .scb:
+            return "scb"
+            
+        case .unknown(let value):
+            return value
+        }
+    }
+    
     case bay
     case bbl
     case ktb
     case scb
+    
+    case unknown(String)
 }
 
 
@@ -48,12 +81,55 @@ public enum SourceType: Codable, Equatable {
     case billPayment(BillPayment)
     case virtualAccount(VirtualAccount)
     
-    public enum BillPayment: String {
-        case tescoLotus = "tesco_lotus"
+    case unknown(String)
+    
+    public enum BillPayment: RawRepresentable {
+        static private let tescoLotusValue = "tesco_lotus"
+        case tescoLotus
+        case unknown(String)
+        
+        public var rawValue: String {
+            switch self {
+            case .tescoLotus:
+                return BillPayment.tescoLotusValue
+            case .unknown(let value):
+                return value
+            }
+        }
+        
+        public init?(rawValue: String) {
+            switch rawValue {
+            case BillPayment.tescoLotusValue:
+                self = .tescoLotus
+            case let value:
+                self = .unknown(value)
+            }
+        }
     }
     
-    public enum VirtualAccount: String {
+    public enum VirtualAccount: RawRepresentable {
+        static private let sinarmasValue = "sinarmas"
+        
         case sinarmas
+        case unknown(String)
+        
+        public var rawValue: String {
+            switch self {
+            case .sinarmas:
+                return VirtualAccount.sinarmasValue
+            case .unknown(let value):
+                return value
+            }
+        }
+        
+        public init?(rawValue: String) {
+            switch rawValue {
+            case VirtualAccount.sinarmasValue:
+                self = .sinarmas
+            case let value:
+                self = .unknown(value)
+            }
+        }
     }
     
     var value: String {
@@ -68,6 +144,8 @@ public enum SourceType: Codable, Equatable {
             value = billPaymentPrefix + bill.rawValue
         case .virtualAccount(let account):
             value = virtualAccountPrefix + account.rawValue
+        case .unknown(let source):
+            value = source
         }
         return value
     }
@@ -84,6 +162,9 @@ public enum SourceType: Codable, Equatable {
             
         case (.virtualAccount(let lhsAccount), .virtualAccount(let rhsAccount)):
             return lhsAccount == rhsAccount
+            
+        case (.unknown(let lhsSource), .unknown(let rhsSource)):
+            return lhsSource == rhsSource
             
         default:
             return false
@@ -122,10 +203,6 @@ extension PaymentSource {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
-        guard references == nil || references!.isEmpty else {
-            throw DecodingError.dataCorruptedError(forKey: .references, in: container, debugDescription: "\(Swift.type(of: self)) must not contain the enrolled references data")
-        }
         
         id = try container.decode(String.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
@@ -167,11 +244,11 @@ extension SourceType {
             self = billPaymentOffline
         } else if value.hasPrefix(virtualAccountPrefix),
             let virtualAccountOffline = value
-            .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
+                .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(PaymentSource.PaymentInformation.VirtualAccount.init(rawValue:)).map(PaymentSource.PaymentInformation.virtualAccount) {
             self = virtualAccountOffline
         } else {
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
+            self = .unknown(value)
         }
     }
     
@@ -205,12 +282,16 @@ public struct EnrolledSource: SourceData {
         case billPayment(BillPayment)
         case virtualAccount(VirtualAccount)
         
+        case unknown(name: String, references: [String: Any]?)
+        
         public enum BillPayment {
             case tescoLotus(BillInformation)
+            case unknown(name: String, references: [String: Any])
         }
         
         public enum VirtualAccount {
             case sinarmas(vaCode: String)
+            case unknown(name: String, references: [String: Any])
             
             fileprivate enum SinarmasCodingKeys: String, CodingKey {
                 case vaCode = "va_code"
@@ -228,6 +309,8 @@ public struct EnrolledSource: SourceData {
                 switch billPayment {
                 case .tescoLotus:
                     bill = Omise.SourceType.BillPayment.tescoLotus
+                case .unknown(let name, _):
+                    bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
             case .virtualAccount(let account):
@@ -235,8 +318,12 @@ public struct EnrolledSource: SourceData {
                 switch account {
                 case .sinarmas:
                     virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
+                case .unknown(let name, _):
+                    virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
                 }
                 return Omise.SourceType.virtualAccount(virtualAccount)
+            case .unknown(name: let sourceName, references: _):
+                return Omise.SourceType.unknown(sourceName)
             }
         }
     }
@@ -310,8 +397,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             case SourceType.BillPayment.tescoLotus.rawValue:
                 let billInformation = try container.decode(BillInformation.self, forKey: .references)
                 self = .billPayment(.tescoLotus(billInformation))
-            default:
-                throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
+            case let billPaymentType:
+                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
+                self = .billPayment(.unknown(name: billPaymentType, references: references))
             }
         } else if typeValue.hasPrefix(virtualAccountPrefix),
             let virtualAccountOffline = typeValue
@@ -321,11 +409,13 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 let accountContainer = try container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 let vaCode = try accountContainer.decode(String.self, forKey: .vaCode)
                 self = .virtualAccount(.sinarmas(vaCode: vaCode))
-            default:
-                throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
+            case let virtualAccountType:
+                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
+                self = .virtualAccount(.unknown(name: virtualAccountType, references: references))
             }
         } else {
-            throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Invalid/Unsupported Offsite Payment information")
+            let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
+            self = .unknown(name: typeValue, references: references)
         }
     }
     
@@ -343,6 +433,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             case .tescoLotus(let bill):
                 try container.encode(billPaymentPrefix + SourceType.BillPayment.tescoLotus.rawValue, forKey: .type)
                 try container.encode(bill, forKey: .references)
+            case let .unknown(name: name, references: references):
+                try container.encode(billPaymentPrefix + name, forKey: .type)
+                try container.encode(references, forKey: .references)
             }
         case .virtualAccount(let account):
             switch account {
@@ -350,7 +443,13 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 try container.encode(virtualAccountPrefix + SourceType.VirtualAccount.sinarmas.rawValue, forKey: .type)
                 var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
                 try accountContainer.encode(vaCode, forKey: .vaCode)
+            case let .unknown(name: name, references: references):
+                try container.encode(virtualAccountPrefix + name, forKey: .type)
+                try container.encode(references, forKey: .references)
             }
+        case .unknown(name: let sourceType, references: let references):
+            try container.encode(sourceType, forKey: .type)
+            try container.encodeIfPresent(references, forKey: .references)
         }
     }
 }

@@ -57,22 +57,21 @@ public struct Bank {
     public let offcialName: String?
     public let name: String
     
-    public init?(bankID: String, branchCode: String?) {
-        guard let data = bankData[bankID], let countryCode = bankCountryCodeMap[bankID],
-            let code = data["code"] as? String else {
-            return nil
-        }
+    public init(bankID: String, branchCode: String?) {
+        let data = bankData[bankID]
+        let countryCode = bankCountryCodeMap[bankID]
+        let code = data?["code"] as? String
         
         self.bankID = bankID
-        self.code = code
+        self.code = code ?? bankID
         
         self.countryCode = countryCode
         self.branchCode = branchCode
         
-        self.offcialName = data["offcial_name"] as? String
-        self.name = (data["nice_name"] as? String) ?? bankID
+        self.offcialName = data?["offcial_name"] as? String
+        self.name = (data?["nice_name"] as? String) ?? bankID
         
-        self.preferredColor = (data["color"] as? String).flatMap(Color.init(hexString:))
+        self.preferredColor = (data?["color"] as? String).flatMap(Color.init(hexString:))
     }
 }
 

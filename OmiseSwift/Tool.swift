@@ -53,18 +53,6 @@ public extension Color {
 }
 
 
-extension Dictionary {
-    static func makeFlattenDictionaryFrom(_ values: ([Key: Value?])) -> Dictionary<Key, Value> {
-        return Dictionary(uniqueKeysWithValues: values.flatMap({ element -> (Key, Value)? in
-            if let value = element.value {
-                return (element.key, value)
-            } else {
-                return nil
-            }
-        }))
-    }
-}
-
 func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
     let jsonDecoder = JSONDecoder()
     jsonDecoder.dateDecodingStrategy = .iso8601

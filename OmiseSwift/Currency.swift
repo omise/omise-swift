@@ -71,7 +71,12 @@ public enum Currency: Codable {
             self = .gbp
         case "EUR":
             self = .eur
-        default: return nil
+        case let currencyCode:
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            numberFormatter.currencyCode = currencyCode
+            let factor = Int(pow(10, Double(numberFormatter.maximumFractionDigits)))
+            self = .custom(code: currencyCode, factor: factor)
         }
     }
 }
@@ -100,8 +105,12 @@ extension Currency {
             self = .gbp
         case "EUR":
             self = .eur
-        default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unknown currency code"))
+        case let currencyCode:
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            numberFormatter.currencyCode = currencyCode
+            let factor = Int(pow(10, Double(numberFormatter.maximumFractionDigits)))
+            self = .custom(code: currencyCode, factor: factor)
         }
     }
 }

@@ -7,6 +7,7 @@ public enum ChargeStatus {
     case reversed
     case pending
     case successful
+    case unknown(String)
 }
 
 extension ChargeStatus: Equatable {
@@ -16,6 +17,8 @@ extension ChargeStatus: Equatable {
             return lhsFailedStatus == rhsFailedStatus
         case (.reversed, .reversed), (.pending, .pending), (.successful, .successful), (.expired, .expired):
             return true
+        case (.unknown(let lhsStatus), .unknown(let rhsStatus)):
+            return lhsStatus == rhsStatus
         default:
             return false
         }
@@ -25,16 +28,19 @@ extension ChargeStatus: Equatable {
 public enum ChargePayment {
     case card(Card)
     case source(EnrolledSource)
+    case unknown
 }
 
 public enum ChargePaymentInformation {
     case card(Card)
     case source(EnrolledSource.EnrolledPaymentInformation)
+    case unknown
 }
 
 public enum ChargePaymentSourceType {
     case card
     case source(SourceType)
+    case unknown
 }
 
 public struct Charge: OmiseResourceObject {
@@ -75,6 +81,8 @@ public struct Charge: OmiseResourceObject {
             return .card(card)
         case .source(let source):
             return .source(source.paymentInformation)
+        case .unknown:
+            return .unknown
         }
     }
     
@@ -84,6 +92,8 @@ public struct Charge: OmiseResourceObject {
             return .card
         case .source(let source):
             return .source(source.paymentInformation.sourceType)
+        case .unknown:
+            return .unknown
         }
     }
     
@@ -172,8 +182,8 @@ extension Charge {
             status = .pending
         case ("reversed", nil):
             status = .reversed
-        default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge status"))
+        case (let statusValue, _):
+            status = .unknown(statusValue)
         }
         
         self.status = status
@@ -187,7 +197,7 @@ extension Charge {
         case (nil, let source?):
             payment = .source(source)
         case (nil, nil), (.some, .some):
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid charge payment information"))
+            payment = .unknown
         }
     }
     
@@ -229,6 +239,8 @@ extension Charge {
         case .failed(let failureCode):
             try container.encode("failed", forKey: .status)
             try container.encode(failureCode, forKey: .failureCode)
+        case .unknown(let statusValue):
+            try container.encode(statusValue, forKey: .status)
         }
         
         switch payment {
@@ -236,6 +248,8 @@ extension Charge {
             try container.encodeIfPresent(card, forKey: .card)
         case .source(let source):
             try container.encodeIfPresent(source, forKey: .source)
+        case .unknown:
+            break
         }
     }
 }

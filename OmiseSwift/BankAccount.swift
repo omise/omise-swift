@@ -30,10 +30,7 @@ extension BankAccount {
         let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
          container.decode(String.self, forKey: .bankCode)
         let branchCode = try container.decodeIfPresent(String.self, forKey: .branchCode)
-        guard let bank = Bank(bankID: bankID, branchCode: branchCode) else {
-            let context = DecodingError.Context(codingPath: container.codingPath, debugDescription: "Invalid Bank data")
-            throw DecodingError.dataCorrupted(context)
-        }
+        let bank = Bank(bankID: bankID, branchCode: branchCode)
         self.bank = bank
     }
     
