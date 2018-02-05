@@ -181,6 +181,18 @@ extension List: RandomAccessCollection {
     public var endIndex: (Array<TItem>.Index) {
         return data.endIndex
     }
+    
+    public func index(before i: (Array<TItem>.Index)) -> (Array<TItem>.Index) {
+        return data.index(before: i)
+    }
+    
+    public func index(after i: (Array<TItem>.Index)) -> (Array<TItem>.Index) {
+        return data.index(after: i)
+    }
+    
+    public func index(_ i: (Array<TItem>.Index), offsetBy n: Int) -> (Array<TItem>.Index) {
+        return data.index(i, offsetBy: n)
+    }
 }
 
 
