@@ -3,6 +3,7 @@ import XCTest
 
 
 private let chargeTestingID = "chrg_test_4yq7duw15p9hdrjp8oq"
+private let defaultReturnURL = URL(string: "https://omise.co")!
 
 class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeRetrieve() {
@@ -325,10 +326,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testChargeCreate() {
+    func testCustomerChargeCreate() {
         let expectation = self.expectation(description: "Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), cardID: "")
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), customerID: "cust_test_4yq6txdpfadhbaqnwp3")
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -337,6 +338,117 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 100000)
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testAlipayChargeCreate() {
+        let expectation = self.expectation(description: "Alipay Charge create")
+        
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .alipay, returnURL: defaultReturnURL)
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.source?.paymentInformation, .alipay)
+                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testBillPaymentChargeCreate() {
+        let expectation = self.expectation(description: "Bill Payment Charge create")
+        
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .billPayment(.tescoLotus), returnURL: defaultReturnURL)
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            let billInformation = EnrolledSource.EnrolledPaymentInformation.BillPayment.BillInformation(omiseTaxID: "0105556091152", referenceNumber1: "623243015668135342", referenceNumber2: "996175710129771411", barcodeURL: URL(string: "https://api.omise.co/charges/chrg_test_5avny0ohe8il6je0nr0/documents/docu_test_5avny0pa3idaf1gz6mp/downloads/545977BC29569301")!, expired: dateFormatter.date(from: "2018-02-07T15:42:07Z")!)
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.source?.paymentInformation, .billPayment(.tescoLotus(billInformation)))
+                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testInternetBankingChargeCreate() {
+        let expectation = self.expectation(description: "Internet Banking SCB Charge create")
+        
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .internetBanking(.scb), returnURL: defaultReturnURL)
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.source?.paymentInformation, .internetBanking(.scb))
+                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testVirtualAccountChargeCreate() {
+        let expectation = self.expectation(description: "Virtual Account Charge create")
+        
+        let createParams = ChargeParams(value: Value(amount: 1100000, currency: .idr), sourceType: .virtualAccount(.sinarmas), returnURL: defaultReturnURL)
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 1100000)
+                XCTAssertEqual(charge.source?.paymentInformation, .virtualAccount(.sinarmas(vaCode: "2128932047849310")))
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testWalletAlipayChargeCreate() {
+        let expectation = self.expectation(description: "Wallet Alipay Charge create")
+        
+        let alipayWallet = AlipayWalletParams(barcode: "1234567890123456", storeID: "1", storeName: "Main Store", terminalID: nil)
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .wallet(.alipay(alipayWallet)))
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 2225)
+                XCTAssertEqual(charge.source?.paymentInformation, .wallet(.alipay(EnrolledSource.EnrolledPaymentInformation.Wallet.AlipayWallet(expired: dateFormatter.date(from: "2018-02-03T11:53:15Z")!))))
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -571,6 +683,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             XCTAssertEqual(bill.referenceNumber1, decodedBill.referenceNumber1)
             XCTAssertEqual(bill.referenceNumber2, decodedBill.referenceNumber2)
             XCTAssertEqual(bill.barcodeURL, decodedBill.barcodeURL)
+            XCTAssertEqual(bill.expired, decodedBill.expired)
         default:
             XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
         }
@@ -1228,4 +1341,17 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
 }
 
+
+extension ChargeParams: AdditionalFixtureData {
+    var fixtureFileSuffix: String? {
+        switch payment {
+        case .card(let id), .customer(customerID: let id, cardID: _):
+            return id
+        case .source(let source):
+            return source.id
+        case .sourceType(let sourceType):
+            return sourceType.value
+        }
+    }
+}
 
