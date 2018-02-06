@@ -1,0 +1,14 @@
+{
+  "object": "source",
+  "id": "src_test_5avle5cxg430bi579f1",
+  "livemode": false,
+  "location": "/sources/src_test_5avle5cxg430bi579f1",
+  "type": "wallet_alipay",
+  "flow": "offline",
+  "amount": 100000,
+  "currency": "thb",
+  "barcode": "1234567890123456",
+  "store_id": "1",
+  "store_name": "Main Store",
+  "terminal_id": null
+}
