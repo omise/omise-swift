@@ -380,12 +380,14 @@ public struct EnrolledSource: SourceData {
                 let referenceNumber1: String
                 let referenceNumber2: String
                 let barcodeURL: URL
+                let expired: Date
                 
                 private enum CodingKeys: String, CodingKey {
                     case omiseTaxID = "omise_tax_id"
                     case referenceNumber1 = "reference_number_1"
                     case referenceNumber2 = "reference_number_2"
                     case barcodeURL = "barcode"
+                    case expired = "expires_at"
                 }
 
                 public static func ==(lhs: BillInformation, rhs: BillInformation) -> Bool {
