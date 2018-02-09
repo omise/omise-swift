@@ -345,7 +345,7 @@ public enum Wallet: Codable, Equatable {
                 lhs.storeName == rhs.storeName && lhs.terminalID == rhs.terminalID
         }
     }
-
+    
     public static func ==(lhs: Wallet, rhs: Wallet) -> Bool {
         switch (lhs, rhs) {
         case (.alipay(let lhsValue), .alipay(let rhsValue)):
@@ -389,13 +389,13 @@ public struct EnrolledSource: SourceData {
                     case barcodeURL = "barcode"
                     case expired = "expires_at"
                 }
-
+                
                 public static func ==(lhs: BillInformation, rhs: BillInformation) -> Bool {
                     return lhs.omiseTaxID == rhs.omiseTaxID && lhs.referenceNumber1 == rhs.referenceNumber1 &&
                         lhs.referenceNumber2 == rhs.referenceNumber2 && lhs.barcodeURL == rhs.barcodeURL
                 }
             }
-
+            
             public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
                 switch (lhs, rhs) {
                 case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
@@ -414,7 +414,7 @@ public struct EnrolledSource: SourceData {
             fileprivate enum SinarmasCodingKeys: String, CodingKey {
                 case vaCode = "va_code"
             }
-
+            
             public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount, rhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount) -> Bool {
                 switch (lhs, rhs) {
                 case let (.sinarmas(lhsValue), .sinarmas(rhsValue)):
@@ -447,7 +447,7 @@ public struct EnrolledSource: SourceData {
                     case expired = "expires_at"
                 }
             }
-    
+            
             public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.Wallet, rhs: EnrolledSource.EnrolledPaymentInformation.Wallet) -> Bool {
                 switch (lhs, rhs) {
                 case (.alipay, .alipay):
@@ -496,7 +496,7 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.unknown(sourceName)
             }
         }
-      
+        
         public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation, rhs: EnrolledSource.EnrolledPaymentInformation) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
@@ -689,7 +689,7 @@ extension PaymentSource: Creatable {
     
     public typealias CreateEndpoint = APIEndpoint<PaymentSource>
     public typealias CreateRequest = APIRequest<PaymentSource>
-
+    
     public static func createEndpointWith(params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: ["sources"],

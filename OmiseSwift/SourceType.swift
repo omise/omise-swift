@@ -1,13 +1,11 @@
 import Foundation
 
 
-
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
 let virtualAccountPrefix = "virtual_account_"
 let walletPrefix = "wallet_"
-
 
 
 public enum InternetBanking: RawRepresentable {
