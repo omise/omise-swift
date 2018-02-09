@@ -143,7 +143,7 @@ extension Decoder {
             } else if let nestedArray = try? container.decode(Array<Any>.self, forKey: key) {
                 dictionary[key.stringValue] = nestedArray
             } else if try container.decodeNil(forKey: key) {
-                dictionary[key.stringValue] = true
+                dictionary[key.stringValue] = String?.none as Any
             }
         }
         return dictionary
@@ -245,7 +245,7 @@ extension KeyedDecodingContainerProtocol {
         return try decode(type, forKey: key)
     }
     
-    fileprivate func decodeJSONDictionary() throws -> Dictionary<String, Any> {
+    func decodeJSONDictionary() throws -> Dictionary<String, Any> {
         var dictionary = Dictionary<String, Any>()
         
         for key in allKeys {
@@ -262,7 +262,7 @@ extension KeyedDecodingContainerProtocol {
             } else if let nestedArray = try? decode(Array<Any>.self, forKey: key) {
                 dictionary[key.stringValue] = nestedArray
             } else if try decodeNil(forKey: key) {
-                dictionary[key.stringValue] = true
+                dictionary[key.stringValue] = String?.none as Any
             }
         }
         return dictionary

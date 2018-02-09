@@ -370,6 +370,48 @@ class SourceOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testResilientWalletSource() {
+        let expectation = self.expectation(description: "Creating Resilient Internet Banking Source")
+        
+        let omiseWallet = Wallet.unknown(name: "omise", parameters: [
+            "barcode": "1234567890",
+            "store_id": "store_1",
+            "store_name": "store 1",
+            "terminal_id": String?.none as Any,
+            ])
+        
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceInformation.wallet(omiseWallet))
+        
+        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(source):
+                XCTAssertEqual(source.amount, 22_25)
+                XCTAssertEqual(source.currency, .thb)
+                XCTAssertEqual(source.sourceType, SourceType.wallet(SourceType.Wallet.unknown("omise")))
+                XCTAssertEqual(source.flow, Flow.offline)
+                
+                if case .wallet(.unknown(let name, let parameters)) = source.paymentInformation {
+                    XCTAssertEqual(name, "omise")
+                    XCTAssertEqual(parameters.count, 4)
+                    XCTAssertEqual(parameters["barcode"] as? String, "1234567890")
+                    XCTAssertEqual(parameters["store_id"] as? String, "store_1")
+                    XCTAssertEqual(parameters["store_name"] as? String, "store 1")
+                    XCTAssertNil(parameters["terminal_id"] as? String)
+                } else {
+                    XCTFail("Wrong payment information")
+                }
+
+                
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        })
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testResilientSource() {
         let expectation = self.expectation(description: "Creating Resilient Source")
         

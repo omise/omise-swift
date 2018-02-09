@@ -194,10 +194,22 @@ public enum PaymentSourceInformation: Codable, Equatable {
             case SourceType.Wallet.alipay.rawValue:
                 let alipayWallet = try Wallet.AlipayWallet.init(from: decoder)
                 self = .wallet(.alipay(alipayWallet))
-            default: self = .alipay
-//            case let walletType:
-//                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-//                self = .wallet(.unknown(name: walletType, references: references))
+            case let walletType:
+                let parameters = try decoder.decodeJSONDictionary().filter({ (key, _) -> Bool in
+                    switch key {
+                    case PaymentSource.CodingKeys.id.stringValue,
+                         PaymentSource.CodingKeys.object.stringValue,
+                         PaymentSource.CodingKeys.isLive.stringValue,
+                         PaymentSource.CodingKeys.location.stringValue,
+                         PaymentSource.CodingKeys.currency.stringValue,
+                         PaymentSource.CodingKeys.amount.stringValue,
+                         PaymentSource.CodingKeys.flow.stringValue,
+                         PaymentSource.CodingKeys.type.stringValue:
+                        return false
+                    default: return true
+                    }
+                })
+                self = .wallet(.unknown(name: walletType, parameters: parameters))
             }
         } else {
             self = .unknown(typeValue)
@@ -230,12 +242,13 @@ public enum PaymentSourceInformation: Codable, Equatable {
     }
 }
 
-public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiableObject {
+public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: nil, path: "sources")
     public typealias PaymentInformation = PaymentSourceInformation
     
     public let id: String
     public let object: String
+    public let isLive: Bool
     public let location: String
     
     public let currency: Currency
@@ -250,9 +263,10 @@ public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiable
 }
 
 extension PaymentSource {
-    private enum CodingKeys: String, CodingKey {
+    fileprivate enum CodingKeys: String, CodingKey {
         case id
         case object
+        case isLive = "livemode"
         case location
         case currency
         case amount
@@ -266,6 +280,7 @@ extension PaymentSource {
         
         id = try container.decode(String.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
         location = try container.decode(String.self, forKey: .location)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
@@ -278,6 +293,7 @@ extension PaymentSource {
         
         try container.encode(id, forKey: .id)
         try container.encode(object, forKey: .object)
+        try container.encode(isLive, forKey: .isLive)
         try container.encode(location, forKey: .location)
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
