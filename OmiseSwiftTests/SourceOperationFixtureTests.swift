@@ -437,7 +437,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateWalletAlipaySource() throws {
         let expectation = self.expectation(description: "Creating Virtual Account Sinarmas Source")
         
-        let alipayWallet = AlipayWalletParams(barcode: "1234567890", storeID: "store_1", storeName: "store 1", terminalID: nil)
+        let alipayWallet = AlipayWalletParams(storeID: "store_1", storeName: "store 1", terminalID: nil, barcode: "1234567890")
         let createParams = PaymentSourceParams(amount: 22_25, currency: .thb, type: .wallet(Wallet.alipay(alipayWallet)))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -467,7 +467,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeAlipayWalletSource() throws {
-        let alipayWallet = AlipayWalletParams(barcode: "1234567890123456", storeID: "1", storeName: "Main Store", terminalID: nil)
+        let alipayWallet = AlipayWalletParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
         let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb, type: PaymentSourceInformation.wallet(.alipay(alipayWallet)))
         
         let encoder = URLQueryItemEncoder()
