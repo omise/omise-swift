@@ -356,6 +356,13 @@ public enum Wallet: Codable, Equatable {
             case terminalID = "terminal_id"
         }
         
+        public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
+            self.storeID = storeID
+            self.storeName = storeName
+            self.terminalID = terminalID
+            self.barcode = barcode
+        }
+        
         public static func ==(lhs: Wallet.AlipayWallet, rhs: Wallet.AlipayWallet) -> Bool {
             return lhs.barcode == rhs.barcode && lhs.storeID == rhs.storeID &&
                 lhs.storeName == rhs.storeName && lhs.terminalID == rhs.terminalID
@@ -695,6 +702,18 @@ public struct PaymentSourceParams: APIJSONQuery {
         try container.encode(currency, forKey: .currency)
         
         try type.encode(to: encoder)
+    }
+    
+    public init(amount: Int64, currency: Currency, type: PaymentSourceInformation) {
+        self.amount = amount
+        self.currency = currency
+        self.type = type
+    }
+    
+    public init(value: Value, type: PaymentSourceInformation) {
+        self.amount = value.amount
+        self.currency = value.currency
+        self.type = type
     }
 }
 

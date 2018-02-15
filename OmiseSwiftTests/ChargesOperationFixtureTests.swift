@@ -438,7 +438,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testWalletAlipayChargeCreate() {
         let expectation = self.expectation(description: "Wallet Alipay Charge create")
         
-        let alipayWallet = AlipayWalletParams(barcode: "1234567890123456", storeID: "1", storeName: "Main Store", terminalID: nil)
+        let alipayWallet = AlipayWalletParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
         let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .wallet(.alipay(alipayWallet)))
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
