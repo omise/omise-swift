@@ -4,7 +4,7 @@ public let centBasedCurrencyFactor = 100
 public let identicalBasedCurrencyFactor = 1
 
 
-public enum Currency: Codable {
+public enum Currency: Codable, Hashable {
     case thb
     case jpy
     case idr
@@ -112,17 +112,6 @@ extension Currency {
             let factor = Int(pow(10, Double(numberFormatter.maximumFractionDigits)))
             self = .custom(code: currencyCode, factor: factor)
         }
-    }
-}
-
-
-extension Currency: Hashable {
-    public static func ==(lhs: Currency, rhs: Currency) -> Bool {
-        return lhs.code == rhs.code
-    }
-    
-    public var hashValue: Int {
-        return ~code.hashValue
     }
 }
 

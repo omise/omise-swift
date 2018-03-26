@@ -255,19 +255,6 @@ extension Schedule.Status: Codable {
         }
         try container.encode(status)
     }
-    
-    public static func ==(lhs: Schedule<Data>.Status, rhs: Schedule<Data>.Status) -> Bool {
-        switch (lhs, rhs) {
-        case (.active, .active), (.expiring, .expiring), (.expired, .expired),
-        (.deleted, .deleted), (.suspended, .suspended):
-        return true
-        case let (.unknown(lhsValue), .unknown(rhsValue)):
-            return lhsValue == rhsValue
-        default:
-            return false
-        }
-    }
-
 }
 
 

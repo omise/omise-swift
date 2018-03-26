@@ -1,7 +1,7 @@
 import Foundation
 
 
-public enum ChargeFailure: Codable {
+public enum ChargeFailure: Codable, Equatable {
     
     // Credit Card Failure
     /// Insufficient funds in the account or the card has reached the credit limit.
@@ -151,14 +151,7 @@ public enum ChargeFailure: Codable {
     }
 }
 
-extension ChargeFailure: Equatable {
-    public static func ==(lhs: ChargeFailure, rhs: ChargeFailure) -> Bool {
-        return lhs.code == rhs.code
-    }
-}
-
-
-public enum TransferFailure: Codable {
+public enum TransferFailure: Codable, Equatable {
     /// Bank rejected the transfer request
     case sentFailed
     /// Bank cannot process request for transferring to bank account
@@ -195,12 +188,6 @@ public enum TransferFailure: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(code)
-    }
-}
-
-extension TransferFailure: Equatable {
-    public static func ==(lhs: TransferFailure, rhs: TransferFailure) -> Bool {
-        return lhs.code == rhs.code
     }
 }
 

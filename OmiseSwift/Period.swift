@@ -17,7 +17,7 @@ public enum Period {
         case sunday
     }
     
-    public enum MonthlyPeriodRule {
+    public enum MonthlyPeriodRule: Equatable {
         public struct DayOfMonth: RawRepresentable, Hashable, ExpressibleByIntegerLiteral {
             public typealias RawValue = Int
             public let day: Int
@@ -216,28 +216,6 @@ extension Period.MonthlyPeriodRule.Ordinal: Decodable {
             self = .last
         default:
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
-        }
-    }
-}
-
-
-extension Period.MonthlyPeriodRule: Equatable {
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func ==(lhs: Period.MonthlyPeriodRule, rhs: Period.MonthlyPeriodRule) -> Bool {
-        switch (lhs, rhs) {
-        case (.daysOfMonth(let lhsDays), .daysOfMonth(let rhsDays)):
-            return lhsDays == rhsDays
-        case (.weekdayOfMonth(let lhs), .weekdayOfMonth(let rhs)):
-            return lhs.ordinal == rhs.ordinal && lhs.weekday == rhs.weekday
-        default:
-            return false
         }
     }
 }

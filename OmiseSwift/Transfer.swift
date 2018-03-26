@@ -228,7 +228,7 @@ public struct TransferFilterParams: OmiseFilterParams {
 }
 
 public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
-    public enum Amount {
+    public enum Amount: Equatable {
         case value(Value)
         case percentageOfBalance(Double)
         case unknown
@@ -272,39 +272,6 @@ public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
         case .percentageOfBalance(let percentage):
             try container.encode(percentage, forKey: .percentageOfBalance)
         case .unknown: break
-        }
-    }
-    
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func ==(lhs: TransferSchedulingParameter, rhs: TransferSchedulingParameter) -> Bool {
-        return lhs.amount == rhs.amount && lhs.recipientID == rhs.recipientID
-    }
-}
-
-extension TransferSchedulingParameter.Amount: Equatable {
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func ==(lhs: TransferSchedulingParameter.Amount, rhs: TransferSchedulingParameter.Amount) -> Bool {
-        switch (lhs, rhs) {
-        case (.value(let lhsValue), .value(let rhsValue)):
-            return lhsValue == rhsValue
-        case (.percentageOfBalance(let lhsPercentage), .percentageOfBalance(let rhsPercentage)):
-            return lhsPercentage == rhsPercentage
-        default:
-            return false
         }
     }
 }
