@@ -368,35 +368,9 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
     }
 }
 
-/*
- // Make Schedule conforms to `Creatable` protocol when Conditional Conformances is ready in Swift.
- // For now we need to make this workaround to avoid the compiler error in Swift
-extension Schedule: Creatable {
+extension Schedule : Creatable where Data : Creatable & APISchedulable {
     public typealias CreateParams = ScheduleParams<Data>
 }
-*/
-
-extension Schedule where Data: APISchedulable {
-    public typealias CreateEndpoint = APIEndpoint<Schedule>
-    public typealias CreateRequest = APIRequest<Schedule>
-    
-    public static func createEndpointWith(parent: OmiseResourceObject?, params: ScheduleParams<Data>) -> CreateEndpoint {
-        return CreateEndpoint(
-            pathComponents: Schedule.makeResourcePathsWithParent(parent),
-            parameter: .post(params)
-        )
-    }
-    
-    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: ScheduleParams<Data>, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Schedule<Data>.verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.createEndpointWith(parent: parent, params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
-    }
-}
-
 
 
 
