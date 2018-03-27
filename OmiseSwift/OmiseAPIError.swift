@@ -34,6 +34,10 @@ public enum ChargeFailure: Codable {
  
     /// Processing has failed.
     case failedProcessing
+    
+    // Wallet Alipay Failures
+    case invalidBarcode
+    
     case other(String)
  
     public var code: String {
@@ -76,6 +80,10 @@ public enum ChargeFailure: Codable {
             return "internal_error"
         case .amountMismatch:
             return "amount_mismatch"
+            
+        case .invalidBarcode:
+            return "invalid_barcode"
+            
         case .undefined:
             return "undefined"
         case .other(let code):
@@ -123,6 +131,8 @@ public enum ChargeFailure: Codable {
             self = .internalError
         case "amount_mismatch":
             self = .amountMismatch
+        case "invalid_barcode":
+            self = .invalidBarcode
         case "undefined":
             self = .undefined
             
