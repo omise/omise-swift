@@ -28,7 +28,7 @@ public enum ChargePaymentSourceType {
     case unknown
 }
 
-public struct Charge: OmiseResourceObject {
+public struct Charge: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
     
     public let object: String

@@ -9,7 +9,7 @@ public enum TransferStatus {
 }
 
 
-public struct Transfer: OmiseResourceObject {
+public struct Transfer: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transfers")
     
     public let object: String

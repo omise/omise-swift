@@ -15,7 +15,7 @@ func omiseWarn(_ message: String) {
 public typealias JSONDictionary = [String: Any]
 
 public extension Color {
-    convenience init?(hexString: String) {
+    public convenience init?(hexString: String) {
         let r, g, b, a: CGFloat
         
         guard hexString.hasPrefix("#") else {

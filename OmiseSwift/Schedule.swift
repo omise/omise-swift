@@ -2,7 +2,7 @@ import Foundation
 import EventKit
 
 
-public struct Schedule<Data: Schedulable>: OmiseResourceObject {
+public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public enum Status: Equatable {
         case active
         case expiring

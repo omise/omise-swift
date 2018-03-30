@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject {
+public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/refunds")
     
     public let object: String

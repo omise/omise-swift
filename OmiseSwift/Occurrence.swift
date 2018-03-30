@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
+public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     
     public enum Status: Equatable {
         case skipped(String)

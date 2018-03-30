@@ -13,6 +13,12 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
     }
 }
 
+extension DetailProperty: Equatable where T: Equatable {
+    public static func == (lhs: DetailProperty<T>, rhs: DetailProperty<T>) -> Bool {
+        return lhs.dataID == rhs.dataID
+    }
+}
+
 extension DetailProperty: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

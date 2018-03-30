@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Link: OmiseResourceObject {
+public struct Link: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/links")
     
     public let object: String

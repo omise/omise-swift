@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Customer: OmiseResourceObject {
+public struct Customer: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/customers")
     
     public let location: String

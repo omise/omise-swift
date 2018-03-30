@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Token: OmiseResourceObject {
+public struct Token: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/tokens")
     
     public var object: String
