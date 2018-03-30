@@ -60,7 +60,6 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject {
         case wht
         case total
     }
-
 }
 
 

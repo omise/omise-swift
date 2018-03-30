@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OmiseError: Error {
+public enum OmiseError: Error, Equatable {
     case unexpected(String)
     case configuration(String)
     case api(APIError)
@@ -19,6 +19,23 @@ public enum OmiseError: Error {
         case .api(let err):
             let statusCode = err.statusCode.map({ "\($0)" }) ?? "(N/A)"
             return "(\(statusCode)/\(err.code)) \(err.message)"
+        }
+    }
+}
+
+extension OmiseError {
+    public static func == (lhs: OmiseError, rhs: OmiseError) -> Bool {
+        switch (lhs, rhs) {
+        case let (.unexpected(lhsValue), .unexpected(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.configuration(lhsValue), .configuration(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.api(lhsValue), .api(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.other(lhsValue), .other(rhsValue)):
+            return lhsValue.localizedDescription == rhsValue.localizedDescription
+        default:
+            return false
         }
     }
 }
