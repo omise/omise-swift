@@ -1,28 +1,13 @@
 import Foundation
 
 
-public enum ChargeStatus {
+public enum ChargeStatus : Equatable {
     case failed(ChargeFailure)
     case expired
     case reversed
     case pending
     case successful
     case unknown(String)
-}
-
-extension ChargeStatus: Equatable {
-    public static func ==(lhs: ChargeStatus, rhs: ChargeStatus) -> Bool {
-        switch (lhs, rhs) {
-        case (.failed(let lhsFailedStatus), .failed(let rhsFailedStatus)):
-            return lhsFailedStatus == rhsFailedStatus
-        case (.reversed, .reversed), (.pending, .pending), (.successful, .successful), (.expired, .expired):
-            return true
-        case (.unknown(let lhsStatus), .unknown(let rhsStatus)):
-            return lhsStatus == rhsStatus
-        default:
-            return false
-        }
-    }
 }
 
 public enum ChargePayment {
@@ -43,7 +28,7 @@ public enum ChargePaymentSourceType {
     case unknown
 }
 
-public struct Charge: OmiseResourceObject {
+public struct Charge: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
     
     public let object: String

@@ -8,7 +8,7 @@ let virtualAccountPrefix = "virtual_account_"
 let walletPrefix = "wallet_"
 
 
-public enum InternetBanking: RawRepresentable {
+public enum InternetBanking: RawRepresentable, Equatable {
     public init?(rawValue: String) {
         switch rawValue {
         case "bay":
@@ -58,7 +58,7 @@ public enum SourceType: Codable, Equatable {
     
     case unknown(String)
     
-    public enum BillPayment: RawRepresentable {
+    public enum BillPayment: RawRepresentable, Equatable {
         static private let tescoLotusValue = "tesco_lotus"
         case tescoLotus
         case unknown(String)
@@ -82,7 +82,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum VirtualAccount: RawRepresentable {
+    public enum VirtualAccount: RawRepresentable, Equatable {
         static private let sinarmasValue = "sinarmas"
         
         case sinarmas
@@ -107,7 +107,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum Wallet: RawRepresentable {
+    public enum Wallet: RawRepresentable, Equatable {
         static private let alipayValue = "alipay"
         
         case alipay
@@ -150,30 +150,6 @@ public enum SourceType: Codable, Equatable {
             value = source
         }
         return value
-    }
-    
-    public static func ==(lhs: SourceType, rhs: SourceType) -> Bool {
-        switch (lhs, rhs) {
-        case (.internetBanking(let lhsBank), .internetBanking(let rhsBank)):
-            return lhsBank == rhsBank
-            
-        case (.alipay, .alipay):
-            return true
-        case (.billPayment(let lhsBill), .billPayment(let rhsBill)):
-            return lhsBill == rhsBill
-            
-        case (.virtualAccount(let lhsAccount), .virtualAccount(let rhsAccount)):
-            return lhsAccount == rhsAccount
-            
-        case (.wallet(let lhsWallet), .wallet(let rhsWallet)):
-            return lhsWallet == rhsWallet
-            
-        case (.unknown(let lhsSource), .unknown(let rhsSource)):
-            return lhsSource == rhsSource
-            
-        default:
-            return false
-        }
     }
 }
 

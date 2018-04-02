@@ -14,3 +14,15 @@ public enum Failable<TResult> {
     }
 }
 
+extension Failable: Equatable where TResult: Equatable {
+    public static func == (lhs: Failable<TResult>, rhs: Failable<TResult>) -> Bool {
+        switch (lhs, rhs) {
+        case let (.success(lhsResult), .success(rhsResult)):
+            return lhsResult == rhsResult
+        case let (.fail(lhsError), .fail(rhsError)):
+            return lhsError == rhsError
+        case (.success, .fail), (.fail, .success): return false
+        }
+    }
+}
+

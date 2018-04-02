@@ -7,7 +7,7 @@ public enum RecipientType: String, Codable, Equatable {
 }
 
 
-public struct Recipient: OmiseResourceObject {
+public struct Recipient: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/recipients")
     
     public let object: String

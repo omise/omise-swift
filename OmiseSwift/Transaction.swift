@@ -7,7 +7,7 @@ public enum TransactionType: String, Codable, Equatable {
 }
 
 
-public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject {
+public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transactions")
     
     public let object: String

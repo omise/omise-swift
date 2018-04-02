@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Account: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject {
+public struct Account: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/account")
     
     public let object: String

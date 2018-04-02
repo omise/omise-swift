@@ -3,6 +3,54 @@ import Foundation
 import XCTest
 
 
+// This is a special protocol to support decoding metadata type.
+// This situation will be greatly improved when `Conditional Conformance` feature land in Swift
+public protocol JSONType: Decodable {
+    var jsonValue: Any { get }
+}
+
+extension Int: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension String: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension Double: JSONType {
+    public var jsonValue: Any { return self }
+}
+extension Bool: JSONType {
+    public var jsonValue: Any { return self }
+}
+
+public struct AnyJSONType: JSONType {
+    public let jsonValue: Any
+    
+    public init(_ jsonValue: Any) {
+        self.jsonValue = jsonValue
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        if let intValue = try? container.decode(Int.self) {
+            jsonValue = intValue
+        } else if let stringValue = try? container.decode(String.self) {
+            jsonValue = stringValue
+        } else if let boolValue = try? container.decode(Bool.self) {
+            jsonValue = boolValue
+        } else if let doubleValue = try? container.decode(Double.self) {
+            jsonValue = doubleValue
+        } else if let arrayValue = try? container.decode(Array<AnyJSONType>.self) {
+            jsonValue = arrayValue
+        } else if let dictionaryValue = try? container.decode(Dictionary<String, AnyJSONType>.self) {
+            jsonValue = dictionaryValue
+        } else {
+            throw DecodingError.typeMismatch(JSONType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unsupported JSON tyep"))
+        }
+    }
+}
+
+
 extension AnyJSONType: Encodable {
     public func encode(to encoder: Encoder) throws {
         switch jsonValue {
@@ -28,7 +76,7 @@ extension AnyJSONType: Encodable {
         case let value as [Encodable]:
             var container = encoder.unkeyedContainer()
             try container.encode(contentsOf: value.map(AnyJSONType.init))
-        case let value as Dictionary<String, Encodable>:
+        case let value as Dictionary<String, AnyJSONType>:
             var container = encoder.container(keyedBy: AnyJSONAttributeEncodingKey.self)
             let sortedValuesByKey = value.sorted(by: { (first, second) -> Bool in
                 return first.key < second.key
@@ -310,20 +358,4 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("66473", result[7].value)
     }
 }
-
-
-struct MetadataDummy: Decodable {
-    
-    let metadata: [String: Any]
-    
-    private enum CodingKeys: String, CodingKey {
-        case metadata
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.decode([String: Any].self, forKey: .metadata)
-    }
-}
-
 

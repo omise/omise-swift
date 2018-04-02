@@ -8,7 +8,7 @@ public enum DisputeStatus: String, Codable, Equatable {
 }
 
 
-public struct Dispute: OmiseResourceObject {
+public struct Dispute: OmiseResourceObject, Equatable {
     public enum Reason: Codable {
         case cancelledRecurringTransaction
         case creditNotProcessed

@@ -29,7 +29,7 @@ extension ListProperty: RandomAccessCollection {
     public var endIndex: (Array<Item>.Index) {
         return data.endIndex
     }
-
+    
     public func index(before i: Array<Item>.Index) -> Array<Item>.Index {
         return data.index(before: i)
     }
@@ -40,6 +40,18 @@ extension ListProperty: RandomAccessCollection {
     
     public func index(_ i: (Array<Item>.Index), offsetBy n: Int) -> (Array<Item>.Index) {
         return data.index(i, offsetBy: n)
+    }
+}
+
+extension ListProperty: Equatable where Item: Equatable {
+    public static func == (lhs: ListProperty<Item>, rhs: ListProperty<Item>) -> Bool {
+        return lhs.object == rhs.object &&
+            lhs.from == rhs.from &&
+            lhs.to == rhs.to &&
+            lhs.limit == rhs.limit &&
+            lhs.total == rhs.total &&
+            lhs.offset == rhs.offset &&
+            lhs.data == rhs.data
     }
 }
 

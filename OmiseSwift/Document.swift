@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Document: OmiseResourceObject {
+public struct Document: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: Dispute.self, path: "documents")
     
     public let object: String

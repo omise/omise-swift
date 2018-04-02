@@ -1,9 +1,9 @@
 import Foundation
 
 
-public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
+public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     
-    public enum Status {
+    public enum Status: Equatable {
         case skipped(String)
         case failed(String)
         case successful
@@ -106,26 +106,3 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject {
     }
 }
 
-
-extension Occurrence.Status: Equatable {
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func ==(lhs: Occurrence<Data>.Status, rhs: Occurrence<Data>.Status) -> Bool {
-        switch (lhs, rhs) {
-        case (.successful, .successful):
-            return true
-        case (.failed(let lhsMessage), .failed(let rhsMessage)):
-            return lhsMessage == rhsMessage
-        case (.skipped(let lhsMessage), .skipped(let rhsMessage)):
-            return lhsMessage == rhsMessage
-        default:
-            return false
-        }
-    }
-}

@@ -2,7 +2,7 @@ import Foundation
 import EventKit
 
 
-public struct Schedule<Data: Schedulable>: OmiseResourceObject {
+public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public enum Status: Equatable {
         case active
         case expiring
@@ -255,19 +255,6 @@ extension Schedule.Status: Codable {
         }
         try container.encode(status)
     }
-    
-    public static func ==(lhs: Schedule<Data>.Status, rhs: Schedule<Data>.Status) -> Bool {
-        switch (lhs, rhs) {
-        case (.active, .active), (.expiring, .expiring), (.expired, .expired),
-        (.deleted, .deleted), (.suspended, .suspended):
-        return true
-        case let (.unknown(lhsValue), .unknown(rhsValue)):
-            return lhsValue == rhsValue
-        default:
-            return false
-        }
-    }
-
 }
 
 
@@ -275,7 +262,7 @@ public struct AnySchedulable: Schedulable {
     public enum AnySchedulingParameter: SchedulingParameter {
         case charge(ChargeSchedulingParameter)
         case transfer(TransferSchedulingParameter)
-        case other(json: [String: AnyJSONType])
+        case other(json: [String: Any])
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
@@ -285,7 +272,7 @@ public struct AnySchedulable: Schedulable {
             } else if let transferParameter = try? container.decode(TransferSchedulingParameter.self) {
                 self = .transfer(transferParameter)
             } else {
-                let json = try container.decode([String: AnyJSONType].self)
+                let json = try decoder.decodeJSONDictionary()
                 self = .other(json: json)
             }
         }
@@ -298,7 +285,7 @@ public struct AnySchedulable: Schedulable {
             case .transfer(let parameter):
                 try container.encode(parameter)
             case .other(json: let parameter):
-                try container.encode(parameter)
+                try encoder.encodeJSONDictionary(parameter)
             }
         }
     }
@@ -308,7 +295,7 @@ public struct AnySchedulable: Schedulable {
     public let createdDate: Date
     public let object: String
     
-    public let json: [String: AnyJSONType]
+    public let json: [String: Any]
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -317,19 +304,18 @@ public struct AnySchedulable: Schedulable {
     }
     
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let json = try container.decode([String: AnyJSONType].self)
+        let json = try decoder.decodeJSONDictionary()
         
-        guard let object = json["object"]?.jsonValue as? String else {
+        guard let object = json["object"] as? String else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.object, context)
         }
         
-        guard let id = json["id"]?.jsonValue as? String else {
+        guard let id = json["id"] as? String else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
-        guard let createdDate = json["created"]?.jsonValue as? Date else {
+        guard let createdDate = json["createdDate"] as? Date else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
         }
@@ -369,35 +355,9 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
     }
 }
 
-/*
- // Make Schedule conforms to `Creatable` protocol when Conditional Conformances is ready in Swift.
- // For now we need to make this workaround to avoid the compiler error in Swift
-extension Schedule: Creatable {
+extension Schedule : Creatable where Data : Creatable & APISchedulable {
     public typealias CreateParams = ScheduleParams<Data>
 }
-*/
-
-extension Schedule where Data: APISchedulable {
-    public typealias CreateEndpoint = APIEndpoint<Schedule>
-    public typealias CreateRequest = APIRequest<Schedule>
-    
-    public static func createEndpointWith(parent: OmiseResourceObject?, params: ScheduleParams<Data>) -> CreateEndpoint {
-        return CreateEndpoint(
-            pathComponents: Schedule.makeResourcePathsWithParent(parent),
-            parameter: .post(params)
-        )
-    }
-    
-    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: ScheduleParams<Data>, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Schedule<Data>.verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.createEndpointWith(parent: parent, params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
-    }
-}
-
 
 
 

@@ -38,13 +38,7 @@ private let bankCountryCodeMap: [String: String] = {
 
 
 // A dictionary where key is a bank's ID and value is a bank's information
-private let bankData: [String: JSONDictionary] = {
-    var data: [String: JSONDictionary] = [:]
-    banks.flatMap({ $0.1 }).forEach({
-        data[$0.0] = $0.1
-    })
-    return data
-}()
+private let bankData: [String: JSONDictionary] = Dictionary<String, JSONDictionary>(banks.flatMap({ $0.1 }), uniquingKeysWith: { $1 })
 
 public struct Bank {
     public let bankID: String

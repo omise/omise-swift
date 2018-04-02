@@ -224,22 +224,6 @@ public enum PaymentSourceInformation: Codable, Equatable {
             try walletInformation.encode(to: encoder)
         }
     }
-    
-    public static func ==(lhs: PaymentSourceInformation, rhs: PaymentSourceInformation) -> Bool {
-        switch (lhs, rhs) {
-        case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
-            return lhsValue == rhsValue
-        case (.alipay, .alipay):
-            return true
-        case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
-            return lhsValue == rhsValue
-        case (.virtualAccount(let lhsValue), .virtualAccount(let rhsValue)):
-            return lhsValue == rhsValue
-        case (.wallet(let lhsValue), .wallet(let rhsValue)):
-            return lhsValue == rhsValue
-        default: return false
-        }
-    }
 }
 
 public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
@@ -362,11 +346,6 @@ public enum Wallet: Codable, Equatable {
             self.terminalID = terminalID
             self.barcode = barcode
         }
-        
-        public static func ==(lhs: Wallet.AlipayWallet, rhs: Wallet.AlipayWallet) -> Bool {
-            return lhs.barcode == rhs.barcode && lhs.storeID == rhs.storeID &&
-                lhs.storeName == rhs.storeName && lhs.terminalID == rhs.terminalID
-        }
     }
     
     public static func ==(lhs: Wallet, rhs: Wallet) -> Bool {
@@ -411,11 +390,6 @@ public struct EnrolledSource: SourceData {
                     case referenceNumber2 = "reference_number_2"
                     case barcodeURL = "barcode"
                     case expired = "expires_at"
-                }
-                
-                public static func ==(lhs: BillInformation, rhs: BillInformation) -> Bool {
-                    return lhs.omiseTaxID == rhs.omiseTaxID && lhs.referenceNumber1 == rhs.referenceNumber1 &&
-                        lhs.referenceNumber2 == rhs.referenceNumber2 && lhs.barcodeURL == rhs.barcodeURL
                 }
             }
             

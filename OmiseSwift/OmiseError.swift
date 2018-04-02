@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OmiseError: Error {
+public enum OmiseError: Error, Equatable {
     case unexpected(String)
     case configuration(String)
     case api(APIError)
@@ -23,13 +23,30 @@ public enum OmiseError: Error {
     }
 }
 
+extension OmiseError {
+    public static func == (lhs: OmiseError, rhs: OmiseError) -> Bool {
+        switch (lhs, rhs) {
+        case let (.unexpected(lhsValue), .unexpected(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.configuration(lhsValue), .configuration(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.api(lhsValue), .api(rhsValue)):
+            return lhsValue == rhsValue
+        case let (.other(lhsValue), .other(rhsValue)):
+            return lhsValue.localizedDescription == rhsValue.localizedDescription
+        default:
+            return false
+        }
+    }
+}
+
 extension OmiseError: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String { return self.message }
     public var debugDescription: String { return self.message }
 }
 
 extension OmiseError: LocalizedError {
-    public var errorDescription: String {
+    public var errorDescription: String? {
         return self.message
     }
 }

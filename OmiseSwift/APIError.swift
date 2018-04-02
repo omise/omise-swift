@@ -1,13 +1,13 @@
 import Foundation
 
-public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible {
+public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equatable {
     
     /**
      An API Error Code enum represent error from Omise API.
      
      - seealso: [Omise: API Error Codes](https://www.omise.co/api-errors)
      */
-    public enum APIErrorCode: CustomDebugStringConvertible, Codable {
+    public enum APIErrorCode: CustomDebugStringConvertible, Codable, Equatable {
         case authenticationFailure
         case notFound
         case usedToken
