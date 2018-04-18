@@ -332,8 +332,13 @@ public enum Wallet: Codable, Equatable {
         public let barcode: String
         
         public struct StoreInformation: Codable, Equatable {
-            public let storeID: String?
-            public let storeName: String?
+            public let storeID: String
+            public let storeName: String
+            
+            public init(storeID: String, storeName: String) {
+                self.storeID = storeID
+                self.storeName = storeName
+            }
         }
         
         public let storeInformation: StoreInformation?
