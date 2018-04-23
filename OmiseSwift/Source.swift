@@ -330,8 +330,27 @@ public enum Wallet: Codable, Equatable {
     
     public struct AlipayWallet: Codable, Equatable {
         public let barcode: String
-        public let storeID: String
-        public let storeName: String
+        
+        public struct StoreInformation: Codable, Equatable {
+            public let storeID: String
+            public let storeName: String
+            
+            public init(storeID: String, storeName: String) {
+                self.storeID = storeID
+                self.storeName = storeName
+            }
+        }
+        
+        public let storeInformation: StoreInformation?
+        
+        public var storeID: String? {
+            return storeInformation?.storeID
+        }
+        
+        public var storeName: String? {
+            return storeInformation?.storeName
+        }
+        
         public let terminalID: String?
         private enum CodingKeys: String, CodingKey {
             case barcode
@@ -340,11 +359,53 @@ public enum Wallet: Codable, Equatable {
             case terminalID = "terminal_id"
         }
         
-        public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
-            self.storeID = storeID
-            self.storeName = storeName
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            let barcode = try container.decode(String.self, forKey: .barcode)
+
+            let storeID = try container.decodeIfPresent(String.self, forKey: .storeID)
+            let storeName = try container.decodeIfPresent(String.self, forKey: .storeName)
+            
+            let terminalID = try container.decodeIfPresent(String.self, forKey: .terminalID)
+            
+            let storeInformation: StoreInformation?
+            switch (storeID, storeName) {
+            case let (storeID?, storeName?):
+                storeInformation = StoreInformation(storeID: storeID, storeName: storeName)
+            case (nil, nil):
+                storeInformation = nil
+            case (nil, .some):
+                throw DecodingError.keyNotFound(CodingKeys.storeID, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Wallet store name is present but store id informaiton is missing"))
+            case (.some, nil):
+                throw DecodingError.keyNotFound(CodingKeys.storeName, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Wallet store id is present but store name informaiton is missing"))
+            }
+            
+            self.init(storeInformation: storeInformation, terminalID: terminalID, barcode: barcode)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(barcode, forKey: .barcode)
+            
+            try container.encodeIfPresent(storeInformation?.storeID, forKey: .storeID)
+            try container.encodeIfPresent(storeInformation?.storeName, forKey: .storeName)
+            try container.encodeIfPresent(terminalID, forKey: .terminalID)
+        }
+        
+        public init(storeInformation: StoreInformation?, terminalID: String?, barcode: String) {
+            self.storeInformation = storeInformation
             self.terminalID = terminalID
             self.barcode = barcode
+        }
+        
+        public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
+            self.init(storeInformation: StoreInformation(storeID: storeID, storeName: storeName), terminalID: terminalID, barcode: barcode)
+        }
+        
+        public init(terminalID: String?, barcode: String) {
+            self.init(storeInformation: nil, terminalID: terminalID, barcode: barcode)
         }
     }
     
