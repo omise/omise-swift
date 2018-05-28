@@ -35,7 +35,7 @@ public enum ChargeFailure: Codable, Equatable {
     /// Processing has failed.
     case failedProcessing
     
-    // Wallet Alipay Failures
+    // Barcode Alipay Failures
     case invalidBarcode
     
     case other(String)
