@@ -435,11 +435,11 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testWalletAlipayChargeCreate() {
-        let expectation = self.expectation(description: "Wallet Alipay Charge create")
+    func testBarcodeAlipayChargeCreate() {
+        let expectation = self.expectation(description: "Barcode Alipay Charge create")
         
-        let alipayWallet = AlipayWalletParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .wallet(.alipay(alipayWallet)))
+        let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
+        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .barcode(.alipay(alipayBarcode)))
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -448,7 +448,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 2225)
-                XCTAssertEqual(charge.source?.paymentInformation, .wallet(.alipay(EnrolledSource.EnrolledPaymentInformation.Wallet.AlipayWallet(expired: dateFormatter.date(from: "2018-02-03T11:53:15Z")!))))
+                XCTAssertEqual(charge.source?.paymentInformation, .barcode(.alipay(EnrolledSource.EnrolledPaymentInformation.Barcode.AlipayBarcode(expired: dateFormatter.date(from: "2018-02-03T11:53:15Z")!))))
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -760,7 +760,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
     }
     
-    func testWalletAlipayChargeRetrieve() throws {
+    func testBarcodeAlipayChargeRetrieve() throws {
         let expectation = self.expectation(description: "Charge result")
         
         let request = Charge.retrieve(using: testClient, id: "chrg_test_5au1dtnsoc7noi31yab") { (result) in
@@ -776,8 +776,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .offline)
                 XCTAssertEqual(charge.metadata["invoice_id"] as? String, "inv-1234567890")
                 switch charge.source?.paymentInformation {
-                case .wallet(.alipay(let alipayWallet))?:
-                    XCTAssertEqual(alipayWallet.expired, dateFormatter.date(from: "2018-02-03T11:53:15Z"))
+                case .barcode(.alipay(let alipayBarcode))?:
+                    XCTAssertEqual(alipayBarcode.expired, dateFormatter.date(from: "2018-02-03T11:53:15Z"))
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
@@ -790,7 +790,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testEncodeWalletAlipayCharge() throws {
+    func testEncodeBarcodeAlipayCharge() throws {
         let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5au1dtnsoc7noi31yab")
         
         let encoder = JSONEncoder()

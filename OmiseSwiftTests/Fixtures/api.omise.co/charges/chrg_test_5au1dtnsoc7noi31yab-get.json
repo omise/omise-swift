@@ -43,7 +43,7 @@
     "references": {
       "expires_at": "2018-02-03T11:53:15Z"
     },
-    "type": "wallet_alipay",
+    "type": "barcode_alipay",
     "flow": "offline",
     "amount": 2225,
     "currency": "thb"

@@ -116,7 +116,7 @@ public enum PaymentSourceInformation: Codable, Equatable {
     case alipay
     case billPayment(SourceType.BillPayment)
     case virtualAccount(SourceType.VirtualAccount)
-    case wallet(Wallet)
+    case barcode(Barcode)
     
     case unknown(String)
     
@@ -144,15 +144,15 @@ public enum PaymentSourceInformation: Codable, Equatable {
                 virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
             }
             return Omise.SourceType.virtualAccount(virtualAccount)
-        case .wallet(let walletInformation):
-            let wallet: Omise.SourceType.Wallet
-            switch walletInformation {
+        case .barcode(let barcodeInformation):
+            let barcode: Omise.SourceType.Barcode
+            switch barcodeInformation {
             case .alipay:
-                wallet = .alipay
+                barcode = .alipay
             case .unknown(let name, _):
-                wallet = .unknown(name)
+                barcode = .unknown(name)
             }
-            return .wallet(wallet)
+            return .barcode(barcode)
         case .unknown(name: let sourceName):
             return Omise.SourceType.unknown(sourceName)
         }
@@ -187,14 +187,14 @@ public enum PaymentSourceInformation: Codable, Equatable {
                 .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(SourceType.VirtualAccount.init(rawValue:)).map(PaymentSourceInformation.virtualAccount) {
             self = virtualAccountOffline
-        } else if typeValue.hasPrefix(walletPrefix),
-            let walletValue = typeValue
-                .range(of: walletPrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch walletValue {
-            case SourceType.Wallet.alipay.rawValue:
-                let alipayWallet = try Wallet.AlipayWallet.init(from: decoder)
-                self = .wallet(.alipay(alipayWallet))
-            case let walletType:
+        } else if typeValue.hasPrefix(barcodePrefix),
+            let barcodeValue = typeValue
+                .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
+            switch barcodeValue {
+            case SourceType.Barcode.alipay.rawValue:
+                let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
+                self = .barcode(.alipay(alipayBarcode))
+            case let barcodeType:
                 let parameters = try decoder.decodeJSONDictionary().filter({ (key, _) -> Bool in
                     switch key {
                     case PaymentSource.CodingKeys.id.stringValue,
@@ -209,7 +209,7 @@ public enum PaymentSourceInformation: Codable, Equatable {
                     default: return true
                     }
                 })
-                self = .wallet(.unknown(name: walletType, parameters: parameters))
+                self = .barcode(.unknown(name: barcodeType, parameters: parameters))
             }
         } else {
             self = .unknown(typeValue)
@@ -220,8 +220,8 @@ public enum PaymentSourceInformation: Codable, Equatable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(value, forKey: .type)
         
-        if case .wallet(let walletInformation) = self {
-            try walletInformation.encode(to: encoder)
+        if case .barcode(let barcodeInformation) = self {
+            try barcodeInformation.encode(to: encoder)
         }
     }
 }
@@ -287,7 +287,7 @@ extension PaymentSource {
 }
 
 
-public enum Wallet: Codable, Equatable {
+public enum Barcode: Codable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case type
     }
@@ -296,9 +296,9 @@ public enum Wallet: Codable, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let typeValue = try container.decode(String.self, forKey: .type)
         switch typeValue {
-        case SourceType.Wallet.alipay.rawValue:
-            let alipayWallet = try AlipayWallet(from: decoder)
-            self = .alipay(alipayWallet)
+        case SourceType.Barcode.alipay.rawValue:
+            let alipayBarcode = try AlipayBarcode(from: decoder)
+            self = .alipay(alipayBarcode)
         case let value:
             let parameters = try decoder.decodeJSONDictionary().filter({ $0.key != "type" })
             self = .unknown(name: value, parameters: parameters)
@@ -307,14 +307,14 @@ public enum Wallet: Codable, Equatable {
     
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .alipay(let walletInformation):
-            try walletInformation.encode(to: encoder)
+        case .alipay(let barcodeInformation):
+            try barcodeInformation.encode(to: encoder)
         case .unknown(name: _, parameters: let parameters):
             try encoder.encodeJSONDictionary(parameters.filter({ $0.key != "type" }))
         }
     }
     
-    case alipay(AlipayWallet)
+    case alipay(AlipayBarcode)
     case unknown(name: String, parameters: [String: Any])
     
     var value: String {
@@ -328,7 +328,7 @@ public enum Wallet: Codable, Equatable {
         return value
     }
     
-    public struct AlipayWallet: Codable, Equatable {
+    public struct AlipayBarcode: Codable, Equatable {
         public let barcode: String
         
         public struct StoreInformation: Codable, Equatable {
@@ -376,9 +376,9 @@ public enum Wallet: Codable, Equatable {
             case (nil, nil):
                 storeInformation = nil
             case (nil, .some):
-                throw DecodingError.keyNotFound(CodingKeys.storeID, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Wallet store name is present but store id informaiton is missing"))
+                throw DecodingError.keyNotFound(CodingKeys.storeID, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Barcode store name is present but store id informaiton is missing"))
             case (.some, nil):
-                throw DecodingError.keyNotFound(CodingKeys.storeName, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Wallet store id is present but store name informaiton is missing"))
+                throw DecodingError.keyNotFound(CodingKeys.storeName, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"))
             }
             
             self.init(storeInformation: storeInformation, terminalID: terminalID, barcode: barcode)
@@ -409,7 +409,7 @@ public enum Wallet: Codable, Equatable {
         }
     }
     
-    public static func ==(lhs: Wallet, rhs: Wallet) -> Bool {
+    public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
         switch (lhs, rhs) {
         case (.alipay(let lhsValue), .alipay(let rhsValue)):
             return lhsValue == rhsValue
@@ -429,7 +429,7 @@ public struct EnrolledSource: SourceData {
         case alipay
         case billPayment(BillPayment)
         case virtualAccount(VirtualAccount)
-        case wallet(Wallet)
+        case barcode(Barcode)
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -484,8 +484,8 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        public enum Wallet: Equatable {
-            case alipay(AlipayWallet)
+        public enum Barcode: Equatable {
+            case alipay(AlipayBarcode)
             case unknown(name: String, references: [String: Any])
             
             var value: String {
@@ -499,14 +499,14 @@ public struct EnrolledSource: SourceData {
                 return value
             }
             
-            public struct AlipayWallet: Codable {
+            public struct AlipayBarcode: Codable {
                 public let expired: Date
                 fileprivate enum CodingKeys: String, CodingKey {
                     case expired = "expires_at"
                 }
             }
             
-            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.Wallet, rhs: EnrolledSource.EnrolledPaymentInformation.Wallet) -> Bool {
+            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.Barcode, rhs: EnrolledSource.EnrolledPaymentInformation.Barcode) -> Bool {
                 switch (lhs, rhs) {
                 case (.alipay, .alipay):
                     return true
@@ -541,15 +541,15 @@ public struct EnrolledSource: SourceData {
                     virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
                 }
                 return Omise.SourceType.virtualAccount(virtualAccount)
-            case .wallet(let walletInformation):
-                let wallet: Omise.SourceType.Wallet
-                switch walletInformation {
+            case .barcode(let barcodeInformation):
+                let barcode: Omise.SourceType.Barcode
+                switch barcodeInformation {
                 case .alipay:
-                    wallet = .alipay
+                    barcode = .alipay
                 case .unknown(name: let name, references: _):
-                    wallet = .unknown(name)
+                    barcode = .unknown(name)
                 }
-                return .wallet(wallet)
+                return .barcode(barcode)
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -565,7 +565,7 @@ public struct EnrolledSource: SourceData {
                 return lhsValue == rhsValue
             case (.virtualAccount(let lhsValue), .virtualAccount(let rhsValue)):
                 return lhsValue == rhsValue
-            case (.wallet(let lhsValue), .wallet(let rhsValue)):
+            case (.barcode(let lhsValue), .barcode(let rhsValue)):
                 return lhsValue == rhsValue
             default: return false
             }
@@ -657,16 +657,16 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
                 self = .virtualAccount(.unknown(name: virtualAccountType, references: references))
             }
-        } else if typeValue.hasPrefix(walletPrefix),
-            let walletValue = typeValue
-                .range(of: walletPrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch walletValue {
-            case SourceType.Wallet.alipay.rawValue:
-                let alipayWallet = try container.decode(Wallet.AlipayWallet.self, forKey: .references)
-                self = .wallet(.alipay(alipayWallet))
-            case let walletType:
+        } else if typeValue.hasPrefix(barcodePrefix),
+            let barcodeValue = typeValue
+                .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
+            switch barcodeValue {
+            case SourceType.Barcode.alipay.rawValue:
+                let alipayBarcode = try container.decode(Barcode.AlipayBarcode.self, forKey: .references)
+                self = .barcode(.alipay(alipayBarcode))
+            case let barcodeType:
                 let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .wallet(.unknown(name: walletType, references: references))
+                self = .barcode(.unknown(name: barcodeType, references: references))
             }
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
@@ -702,13 +702,13 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 try container.encode(virtualAccountPrefix + name, forKey: .type)
                 try container.encode(references, forKey: .references)
             }
-        case .wallet(let wallet):
-            switch wallet {
-            case .alipay(let alipayWallet):
-                try container.encode(walletPrefix + SourceType.Wallet.alipay.rawValue, forKey: .type)
-                try container.encode(alipayWallet, forKey: .references)
+        case .barcode(let barcode):
+            switch barcode {
+            case .alipay(let alipayBarcode):
+                try container.encode(barcodePrefix + SourceType.Barcode.alipay.rawValue, forKey: .type)
+                try container.encode(alipayBarcode, forKey: .references)
             case let .unknown(name: name, references: references):
-                try container.encode(walletPrefix + name, forKey: .type)
+                try container.encode(barcodePrefix + name, forKey: .type)
                 try container.encode(references, forKey: .references)
             }
         case .unknown(name: let sourceType, references: let references):
@@ -719,7 +719,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
 }
 
 
-public typealias AlipayWalletParams = Wallet.AlipayWallet
+public typealias AlipayBarcodeParams = Barcode.AlipayBarcode
 
 public struct PaymentSourceParams: APIJSONQuery {
     public let amount: Int64

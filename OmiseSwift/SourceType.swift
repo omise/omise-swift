@@ -5,7 +5,7 @@ let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
 let virtualAccountPrefix = "virtual_account_"
-let walletPrefix = "wallet_"
+let barcodePrefix = "barcode_"
 
 
 public enum InternetBanking: RawRepresentable, Equatable {
@@ -54,7 +54,7 @@ public enum SourceType: Codable, Equatable {
     case alipay
     case billPayment(BillPayment)
     case virtualAccount(VirtualAccount)
-    case wallet(Wallet)
+    case barcode(Barcode)
     
     case unknown(String)
     
@@ -107,7 +107,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum Wallet: RawRepresentable, Equatable {
+    public enum Barcode: RawRepresentable, Equatable {
         static private let alipayValue = "alipay"
         
         case alipay
@@ -116,7 +116,7 @@ public enum SourceType: Codable, Equatable {
         public var rawValue: String {
             switch self {
             case .alipay:
-                return Wallet.alipayValue
+                return Barcode.alipayValue
             case .unknown(let value):
                 return value
             }
@@ -124,7 +124,7 @@ public enum SourceType: Codable, Equatable {
         
         public init?(rawValue: String) {
             switch rawValue {
-            case Wallet.alipayValue:
+            case Barcode.alipayValue:
                 self = .alipay
             case let value:
                 self = .unknown(value)
@@ -144,8 +144,8 @@ public enum SourceType: Codable, Equatable {
             value = billPaymentPrefix + bill.rawValue
         case .virtualAccount(let account):
             value = virtualAccountPrefix + account.rawValue
-        case .wallet(let walletType):
-            value = walletPrefix + walletType.rawValue
+        case .barcode(let barcodeType):
+            value = barcodePrefix + barcodeType.rawValue
         case .unknown(let source):
             value = source
         }
@@ -176,11 +176,11 @@ extension SourceType {
                 .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(VirtualAccount.init(rawValue:)).map(SourceType.virtualAccount) {
             self = virtualAccountOffline
-        } else if value.hasPrefix(walletPrefix),
-            let walletValue = value
-                .range(of: walletPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(Wallet.init(rawValue:)).map(SourceType.wallet) {
-            self = walletValue
+        } else if value.hasPrefix(barcodePrefix),
+            let barcodeValue = value
+                .range(of: barcodePrefix).map({ String(value[$0.upperBound...]) })
+                .flatMap(Barcode.init(rawValue:)).map(SourceType.barcode) {
+            self = barcodeValue
         } else {
             self = .unknown(value)
         }
