@@ -1,0 +1,55 @@
+{
+  "object": "charge",
+  "id": "chrg_test_5atwzemytjyr1glskwt",
+  "livemode": false,
+  "location": "/charges/chrg_test_5atwzemytjyr1glskwt",
+  "amount": 10700,
+  "currency": "thb",
+  "description": "WooCommerce Order id 22",
+  "funding_amount": 100000,
+  "funding_currency": "thb",
+  "metadata": {
+  },
+  "status": "successful",
+  "capture": true,
+  "authorized": true,
+  "reversed": false,
+  "voided": false,
+  "paid": true,
+  "paid_at": null,
+  "transaction": "trxn_test_5atwzep0rd6fmqw5f3q",
+  "refunded": 0,
+  "refunds": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2018-11-20T07:15:57Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": null,
+    "location": "/charges/chrg_test_5atwzemytjyr1glskwt/refunds",
+    "data": [
+      
+    ]
+  },
+  "return_uri": "https://example.com/?order_id=22",
+  "failure_code": null,
+  "failure_message": null,
+  "card": {
+    "object": "card",
+    "id": "card_test_5atwze9ckre0z66grbk",
+    "livemode": false,
+    "deleted": true
+  },
+  "customer": "cust_test_5atwzehn9asyv7ga6ya",
+  "ip": null,
+  "dispute": null,
+  "created": "2018-02-02T04:23:13Z",
+  "source": null,
+  "disputable": true,
+  "capturable": false,
+  "reversible": false,
+  "refundable": true,
+  "reference": "paym_test_5atwzen4l1rmly2n1n3",
+  "authorize_uri": "https://api.omise.co/payments/paym_test_5atwzen4l1rmly2n1n3/authorize"
+}

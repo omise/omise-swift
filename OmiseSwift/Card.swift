@@ -56,6 +56,7 @@ public enum CardFinancing: RawRepresentable, Codable, Equatable {
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
+    case deleted(DeletedObject<CustomerCard>)
     
     public var object: String {
         switch self {
@@ -63,6 +64,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.object
         case .customer(let card):
             return card.object
+        case .deleted:
+            return "card"
         }
     }
     
@@ -71,6 +74,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
         case .tokenized(let card):
             return card.id
         case .customer(let card):
+            return card.id
+        case .deleted(let card):
             return card.id
         }
     }
@@ -81,6 +86,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.isLive
         case .customer(let card):
             return card.isLive
+        case .deleted(let card):
+            return card.isLive
         }
     }
     
@@ -90,6 +97,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.createdDate
         case .customer(let card):
             return card.createdDate
+        case .deleted:
+            return Date.distantPast
         }
     }
     
@@ -99,6 +108,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.countryCode
         case .customer(let card):
             return card.countryCode
+        case .deleted:
+            return nil
         }
     }
     
@@ -108,6 +119,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.city
         case .customer(let card):
             return card.city
+        case .deleted:
+            return nil
         }
     }
     
@@ -117,6 +130,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.postalCode
         case .customer(let card):
             return card.postalCode
+        case .deleted:
+            return nil
         }
     }
     
@@ -126,6 +141,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.bankName
         case .customer(let card):
             return card.bankName
+        case .deleted:
+            return nil
         }
     }
     
@@ -135,6 +152,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.lastDigits
         case .customer(let card):
             return card.lastDigits
+        case .deleted:
+            return LastDigits(lastDigitsString: "0000")!
         }
     }
     
@@ -144,6 +163,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.brand
         case .customer(let card):
             return card.brand
+        case .deleted:
+            return CardBrand.visa
         }
     }
     
@@ -153,6 +174,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.expiration
         case .customer(let card):
             return card.expiration
+        case .deleted:
+            return nil
         }
     }
     
@@ -162,6 +185,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.name
         case .customer(let card):
             return card.name
+        case .deleted:
+            return nil
         }
     }
     
@@ -171,6 +196,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.fingerPrint
         case .customer(let card):
             return card.fingerPrint
+        case .deleted:
+            return ""
         }
     }
     
@@ -180,6 +207,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.financing
         case .customer(let card):
             return card.financing
+        case .deleted:
+            return nil
         }
     }
 }
@@ -190,7 +219,11 @@ extension Card {
         do {
             self = .customer(try container.decode(CustomerCard.self))
         } catch let error where error is DecodingError {
-            self = .tokenized(try container.decode(TokenizedCard.self))
+            do {
+                self = .tokenized(try container.decode(TokenizedCard.self))
+            } catch let error where error is DecodingError {
+                self = .deleted(try container.decode(DeletedObject<CustomerCard>.self))
+            }
         }
     }
     
@@ -200,6 +233,8 @@ extension Card {
             try customerCard.encode(to: encoder)
         case .tokenized(let tokenizedCard):
             try tokenizedCard.encode(to: encoder)
+        case .deleted(let deletedCard):
+            try deletedCard.encode(to: encoder)
         }
     }
 }
