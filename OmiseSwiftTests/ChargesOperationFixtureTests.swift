@@ -681,6 +681,30 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         }
     }
     
+    func testInstallmentKBankChargeRetrieve() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5czuxmgzinn6qq1tz5u") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 5_000_00)
+                XCTAssertEqual(charge.currency, .thb)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_5cs0totfv87k1i6y45l")
+                XCTAssertEqual(charge.source?.flow, .redirect)
+                XCTAssertEqual(charge.source?.paymentInformation, EnrolledSource.EnrolledPaymentInformation.installment(.kBank))
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testBarcodeAlipayChargeRetrieve() throws {
         let expectation = self.expectation(description: "Charge result")
         
@@ -1187,7 +1211,7 @@ extension ChargeParams: AdditionalFixtureData {
         case .source(let source):
             return source.id
         case .sourceType(let sourceType):
-            return sourceType.value
+            return sourceType.sourceType.value
         }
     }
 }

@@ -298,7 +298,7 @@ public struct ChargeParams: APIJSONQuery {
         case card(cardID: String)
         case customer(customerID: String, cardID: String?)
         case source(PaymentSource)
-        case sourceType(PaymentSourceInformation)
+        case sourceType(PaymentSourceParams.SourceParameter)
     }
     
     public var value: Value
@@ -368,7 +368,7 @@ public struct ChargeParams: APIJSONQuery {
         self.init(value: value, payment: .source(source), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, sourceType: PaymentSourceInformation, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, sourceType: PaymentSourceParams.SourceParameter, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.init(value: value, payment: .sourceType(sourceType), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
 }
