@@ -316,6 +316,8 @@ public struct CustomerCard: OmiseResourceObject {
     public let fingerPrint: String
     
     public let financing: CardFinancing?
+    
+    public let passSecurityCodeCheck: Bool
 }
 
 
@@ -356,6 +358,7 @@ extension CustomerCard {
         try container.encodeIfPresent(city, forKey: .city)
         try container.encodeIfPresent(financing, forKey: .financing)
         try container.encode(fingerPrint, forKey: .fingerPrint)
+        try container.encode(passSecurityCodeCheck, forKey: .expirationYear)
         try container.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
         try container.encodeIfPresent(expiration?.year, forKey: .expirationYear)
     }
@@ -376,6 +379,7 @@ extension CustomerCard {
         city = try container.decodeIfPresent(String.self, forKey: .city)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
         fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        passSecurityCodeCheck = try container.decode(Bool.self, forKey: .fingerPrint)
         let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
         let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)
         if let expirationMonth = expirationMonth, let expirationYear = expirationYear {

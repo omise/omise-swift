@@ -1,5 +1,6 @@
 import Foundation
 
+
 public struct Token: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/tokens")
     
@@ -98,24 +99,3 @@ extension Token: Creatable {
     
 }
 
-extension Token: Retrievable {
-    public typealias RetrieveEndpoint = APIEndpoint<Token>
-    public typealias RetrieveRequest = APIRequest<Token>
-    
-    public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
-        return RetrieveEndpoint(
-            endpoint: .api,
-            pathComponents: [resourceInfo.path, id],
-            parameter: .get(nil)
-        )
-    }
-    
-    public static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
-        guard verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
-        return client.requestToEndpoint(endpoint, callback: callback)
-    }
-}

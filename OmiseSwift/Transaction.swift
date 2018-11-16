@@ -26,6 +26,8 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
     
     public let transferableDate: Date
     
+    public let source: String // TODO: Handle the expand case
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -35,6 +37,7 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
         case currency
         case amount
         case transferableDate = "transferable"
+        case source
     }
 }
 

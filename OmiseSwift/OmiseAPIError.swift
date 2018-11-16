@@ -1,45 +1,59 @@
 import Foundation
 
 
-public enum ChargeFailure: Codable, Equatable {
+public struct ChargeFailure: Equatable {
     
-    // Credit Card Failure
-    /// Insufficient funds in the account or the card has reached the credit limit.
-    case insufficientFund
-    /// Card is stolen or lost.
-    case stolenOrLostCard
-    /// The payment was rejected by the issuer or the acquirer with no specific reason.
-    case paymentRejected
-    /// The security code was invalid or the card didn't pass preauth.
-    case invalidSecurityCode
-    /// Card was marked as fraudulent.
-    case failedFraudCheck
-    /// This number is not attributed or has been deactivated.
-    case invalidAccountNumber
+    public let code: Code
+    public let message: String
     
-    // Offsite Payment Failure
-    case duplicateReferenceNumber
-    case cannotConnectToIBanking
-    case serviceCodeNotActivated
-    case serviceCodeNotCertified
-    case insufficientBalance
-    case accountDoesNotExist
-    case paymentCancelled
-    case invalidReference
-    case invalidParameters
-    case timeout
-    case internalError
-    case amountMismatch
-    case undefined
- 
-    /// Processing has failed.
-    case failedProcessing
+    init(code: Code, message: String) {
+        self.code = code
+        self.message = message
+    }
     
-    // Barcode Alipay Failures
-    case invalidBarcode
+    public enum Code: Codable, Equatable {
+        // Credit Card Failure
+        /// Insufficient funds in the account or the card has reached the credit limit.
+        case insufficientFund
+        /// Card is stolen or lost.
+        case stolenOrLostCard
+        /// The payment was rejected by the issuer or the acquirer with no specific reason.
+        case paymentRejected
+        /// The security code was invalid or the card didn't pass preauth.
+        case invalidSecurityCode
+        /// Card was marked as fraudulent.
+        case failedFraudCheck
+        /// This number is not attributed or has been deactivated.
+        case invalidAccountNumber
+        
+        // Offsite Payment Failure
+        case duplicateReferenceNumber
+        case cannotConnectToIBanking
+        case serviceCodeNotActivated
+        case serviceCodeNotCertified
+        case insufficientBalance
+        case accountDoesNotExist
+        case paymentCancelled
+        case invalidReference
+        case invalidParameters
+        case timeout
+        case internalError
+        case amountMismatch
+        case undefined
+        
+        /// Processing has failed.
+        case failedProcessing
+        
+        // Barcode Alipay Failures
+        case invalidBarcode
+        
+        case other(String)
+    }
+}
+
+
+extension ChargeFailure.Code {
     
-    case other(String)
- 
     public var code: String {
         switch self {
         case .insufficientFund:
@@ -150,6 +164,7 @@ public enum ChargeFailure: Codable, Equatable {
         self.init(code: try decoder.singleValueContainer().decode(String.self))
     }
 }
+
 
 public enum TransferFailure: Codable, Equatable {
     /// Bank rejected the transfer request

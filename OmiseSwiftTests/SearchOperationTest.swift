@@ -39,7 +39,7 @@ class SearchOperationTest: LiveTest {
         dateComponents.year = 2017
         dateComponents.month = 1
         dateComponents.day = 5
-        searchFilter.created = dateComponents
+        searchFilter.createdDate = dateComponents
         searchParams.filter = searchFilter
         
         let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in

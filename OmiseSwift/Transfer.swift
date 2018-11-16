@@ -40,9 +40,11 @@ public struct Transfer: OmiseResourceObject, Equatable {
     public let amount: Int64
     public let fee: Int64
     public let currency: Currency
-    
+        
     public let recipient: DetailProperty<Recipient>
     public let transaction: DetailProperty<Transaction>?
+    
+    public let metadata: JSONDictionary
     
     private enum CodingKeys: String, CodingKey {
         case object
@@ -62,6 +64,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case recipient
         case transaction
         case failureCode = "failure_code"
+        case metadata
     }
     
     public init(from decoder: Decoder) throws {
@@ -94,6 +97,8 @@ public struct Transfer: OmiseResourceObject, Equatable {
         default:
             self.status = .pending
         }
+        
+        metadata = try container.decode(JSONDictionary.self, forKey: .metadata)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -116,6 +121,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         try container.encodeIfPresent(paidDate, forKey: .paidDate)
         try container.encode(recipient, forKey: .recipient)
         try container.encodeIfPresent(transaction, forKey: .transaction)
+        try container.encode(metadata, forKey: .metadata)
         
         if case .failed(let failureCode) = status {
             try container.encode(failureCode, forKey: .failureCode)
