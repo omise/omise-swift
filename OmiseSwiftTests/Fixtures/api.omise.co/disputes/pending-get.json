@@ -1,46 +1,58 @@
 {
   "object": "list",
-  "from": "1970-01-01T07:00:00+07:00",
-  "to": "2015-06-02T17:39:28+07:00",
+  "from": "1970-01-01T00:00:00Z",
+  "to": "2018-11-19T12:56:11Z",
   "offset": 0,
-  "limit": 20,
+  "limit": 60,
   "total": 1,
+  "order": "chronological",
+  "location": "/disputes/pending",
   "data": [
-           {
-           "object": "dispute",
-           "id": "dspt_test_5089off452g5m5te7xs",
-           "livemode": false,
-           "location": "/disputes/dspt_test_5089off452g5m5te7xs",
-           "amount": 3190000,
-           "currency": "thb",
-           "status": "pending",
-           "transaction": "trxn_test_58h9gj859q3dpqdx94r",
-           "message": "Your dispute message",
-           "reason_code": "goods_or_services_not_provided",
-           "reason_message": "Services not provided or Merchandise not received",
-           "charge": "chrg_test_58gzrk4wfk3cavrmea9",
-           "documents": {
-           "object": "list",
-           "from": "1970-01-01T00:00:00Z",
-           "to": "2017-07-18T11:02:47Z",
-           "offset": 0,
-           "limit": 20,
-           "total": 1,
-           "order": null,
-           "location": "/disputes/dspt_test_5089off452g5m5te7xs/documents",
-           "data": [
-                    {
-                    "object": "document",
-                    "id": "docu_test_58h9gloyz5iiug4k3xj",
-                    "livemode": false,
-                    "location": "/disputes/dspt_test_5089off452g5m5te7xs/documents/docu_test_58h9gloyz5iiug4k3xj",
-                    "filename": "Screen Shot.png",
-                    "created": "2017-06-30T18:01:33Z"
-                    }
-                    ]
-           },
-           "created": "2017-06-30T18:01:21Z",
-           "closed_at": "2017-07-18T10:56:28Z"
-           }
+    {
+      "object": "dispute",
+      "id": "dspt_test_5dzhbyswtur9eu7cgzz",
+      "livemode": false,
+      "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz",
+      "amount": 2000,
+      "currency": "thb",
+      "status": "pending",
+      "transaction": "trxn_test_5dzhbyt4t3ljizml216",
+      "message": "Here's evidences",
+      "reason_code": "goods_or_services_not_provided",
+      "reason_message": "Services not provided or Merchandise not received",
+      "charge": "chrg_test_5dy4hkk4o3oib733fzi",
+      "documents": {
+        "object": "list",
+        "from": "1970-01-01T00:00:00Z",
+        "to": "2018-11-19T12:56:11Z",
+        "offset": 0,
+        "limit": 20,
+        "total": 2,
+        "order": null,
+        "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz/documents",
+        "data": [
+          {
+            "object": "document",
+            "id": "docu_test_5dzhc60jm40sg1umiyg",
+            "livemode": false,
+            "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz/documents/docu_test_5dzhc60jm40sg1umiyg",
+            "filename": "Screen Shot.png",
+            "created": "2018-11-19T12:47:55Z"
+          },
+          {
+            "object": "document",
+            "id": "docu_test_5dzhc4c5x7rhrhc1am3",
+            "livemode": false,
+            "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz/documents/docu_test_5dzhc4c5x7rhrhc1am3",
+            "filename": "ScreenShot.png",
+            "created": "2018-11-19T12:47:47Z"
+          }
+        ]
+      },
+      "created": "2018-11-19T12:47:21Z",
+      "closed_at": null,
+      "metadata": {
+      }
+    }
   ]
 }
