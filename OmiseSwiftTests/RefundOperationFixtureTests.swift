@@ -2,10 +2,10 @@ import XCTest
 import Omise
 
 
-private let refundTestingID = "rfnd_test_4yqmv79ahghsiz23y3c"
+private let refundTestingID = "rfnd_test_5dxvp61lyo5npfki3kp"
 private let charge: Charge = {
     let bundle = Bundle(for: OmiseTestCase.self)
-    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/charges/chrg_test_4yq7duw15p9hdrjp8oq-get", ofType: "json") else {
+    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/charges/chrg_test_5dxvbupj5e337skzplh-get", ofType: "json") else {
         XCTFail("could not load fixtures.")
         preconditionFailure()
     }
@@ -40,7 +40,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeRefundRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_4yq7duw15p9hdrjp8oq")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dxvbupj5e337skzplh")
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         let encodedData = try encoder.encode(defaultCharge)
@@ -83,7 +83,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
         
-        let createParams = RefundParams(amount: 100000)
+        let createParams = RefundParams(amount: 10000)
         
         let request = Refund.create(using: testClient, parent: charge, params: createParams) { (result) in
             defer { expectation.fulfill() }
