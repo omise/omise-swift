@@ -42,7 +42,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
     public let currency: Currency
         
     public let recipient: DetailProperty<Recipient>
-    public let transaction: DetailProperty<Transaction>?
+    public let transaction: DetailProperty<Transaction<Transfer>>?
     
     public let metadata: JSONDictionary
     

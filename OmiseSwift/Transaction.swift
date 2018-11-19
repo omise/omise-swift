@@ -7,8 +7,10 @@ public enum TransactionType: String, Codable, Equatable {
 }
 
 
-public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transactions")
+public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
+    public static var resourceInfo: ResourceInfo {
+        return ResourceInfo(path: "/transactions")
+    }
     
     public let object: String
     public let location: String
@@ -26,7 +28,7 @@ public struct Transaction: OmiseIdentifiableObject, OmiseLocatableObject, OmiseC
     
     public let transferableDate: Date
     
-    public let source: String // TODO: Handle the expand case
+    public let source: DetailProperty<Source>
     
     private enum CodingKeys: String, CodingKey {
         case object

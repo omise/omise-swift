@@ -47,7 +47,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let reasonMessage: String
     public let reasonCode: Reason
     public var responseMessage: String?
-    public let transaction: DetailProperty<Transaction>
+    public let transaction: DetailProperty<Transaction<Dispute>>
     public let charge: DetailProperty<Charge>
     public let documents: ListProperty<Document>
     public let closedDate: Date?

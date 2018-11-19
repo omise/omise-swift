@@ -41,7 +41,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let isReversible: Bool
     public let isRefundable: Bool
     
-    public var transaction: DetailProperty<Transaction>?
+    public var transaction: DetailProperty<Transaction<Charge>>?
     
     public var card: Card?
     public var source: EnrolledSource?

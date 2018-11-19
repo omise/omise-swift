@@ -20,7 +20,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     public let isVoided: Bool
     
     public let charge: DetailProperty<Charge>
-    public let transaction: DetailProperty<Transaction>
+    public let transaction: DetailProperty<Transaction<Refund>>
     
     public let metadata: JSONDictionary
     
