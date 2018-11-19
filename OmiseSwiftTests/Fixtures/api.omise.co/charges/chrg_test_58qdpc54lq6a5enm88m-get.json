@@ -5,6 +5,8 @@
   "location": "/charges/chrg_test_58qdpc54lq6a5enm88m",
   "amount": 3190000,
   "currency": "thb",
+  "funding_amount": 3190000,
+  "funding_currency": "thb",
   "description": null,
   "metadata": {
   },
@@ -12,28 +14,35 @@
   "capture": true,
   "authorized": true,
   "reversed": false,
+  "voided": false,
   "paid": true,
-  "transaction": "trxn_test_58qdpcrr81jsqpoks6l",
-  "source_of_fund": "card",
+  "paid_at": "2017-07-24T01:30:03Z",
+  "transaction": {
+    "object": "transaction",
+    "id": "trxn_test_58qdpcrr81jsqpoks6l",
+    "location": "/transactions/trxn_test_58qdpcrr81jsqpoks6l",
+    "type": "credit",
+    "amount": 3065415,
+    "currency": "thb",
+    "transferable": "2017-07-24T01:30:03Z",
+    "source": "chrg_test_58qdpc54lq6a5enm88m",
+    "created": "2017-07-24T01:30:04Z"
+  },
   "refunded": 0,
   "refunds": {
     "object": "list",
     "from": "1970-01-01T00:00:00Z",
-    "to": "2017-08-23T09:07:39Z",
+    "to": "2018-11-19T10:41:45Z",
     "offset": 0,
     "limit": 20,
     "total": 0,
     "order": null,
     "location": "/charges/chrg_test_58qdpc54lq6a5enm88m/refunds",
     "data": [
-    
+      
     ]
   },
   "return_uri": null,
-  "offsite": null,
-  "offline": null,
-  "reference": null,
-  "authorize_uri": null,
   "failure_code": null,
   "failure_message": null,
   "card": {
@@ -55,7 +64,49 @@
     "security_code_check": true,
     "created": "2017-05-24T10:43:02Z"
   },
-  "customer": "cust_test_582o6hikunmz90lx0wl",
+  "customer": {
+    "object": "customer",
+    "id": "cust_test_582o6hikunmz90lx0wl",
+    "livemode": false,
+    "location": "/customers/cust_test_582o6hikunmz90lx0wl",
+    "default_card": "card_test_582o6o2iyn4ke5t595p",
+    "email": "john.appleseed@email.com",
+    "description": "John Appleseed (id: 1)",
+    "metadata": {
+    },
+    "created": "2017-05-24T10:42:31Z",
+    "cards": {
+      "object": "list",
+      "from": "1970-01-01T00:00:00Z",
+      "to": "2018-11-19T10:41:45Z",
+      "offset": 0,
+      "limit": 20,
+      "total": 1,
+      "order": null,
+      "location": "/customers/cust_test_582o6hikunmz90lx0wl/cards",
+      "data": [
+        {
+          "object": "card",
+          "id": "card_test_582o6o2iyn4ke5t595p",
+          "livemode": false,
+          "location": "/customers/cust_test_582o6hikunmz90lx0wl/cards/card_test_582o6o2iyn4ke5t595p",
+          "country": "us",
+          "city": "Bangkok",
+          "postal_code": "10320",
+          "financing": "",
+          "bank": "",
+          "last_digits": "4242",
+          "brand": "Visa",
+          "expiration_month": 5,
+          "expiration_year": 2019,
+          "fingerprint": "btGtw3WOiCnx6AlsOdfgb4MU49UBtNF4YiVi1NKuiR0=",
+          "name": "JOHN DOE",
+          "security_code_check": true,
+          "created": "2017-05-24T10:43:02Z"
+        }
+      ]
+    }
+  },
   "ip": null,
   "dispute": {
     "object": "dispute",
@@ -73,25 +124,34 @@
     "documents": {
       "object": "list",
       "from": "1970-01-01T00:00:00Z",
-      "to": "2017-08-23T09:07:39Z",
+      "to": "2018-11-19T10:41:45Z",
       "offset": 0,
       "limit": 20,
       "total": 1,
       "order": null,
       "location": "/disputes/dspt_test_58qhpee050f4qo36rnp/documents",
       "data": [
-               {
-               "object": "document",
-               "id": "docu_test_58qj9etnu4xqolq3xsa",
-               "livemode": false,
-               "location": "/disputes/dspt_test_58qhpee050f4qo36rnp/documents/docu_test_58qj9etnu4xqolq3xsa",
-               "filename": "ScreenShot.png",
-               "created": "2017-07-24T10:58:23Z"
-               }
-               ]
+        {
+          "object": "document",
+          "id": "docu_test_58qj9etnu4xqolq3xsa",
+          "livemode": false,
+          "location": "/disputes/dspt_test_58qhpee050f4qo36rnp/documents/docu_test_58qj9etnu4xqolq3xsa",
+          "filename": "ScreenShot.png",
+          "created": "2017-07-24T10:58:23Z"
+        }
+      ]
     },
     "created": "2017-07-24T08:19:16Z",
-    "closed_at": null
+    "closed_at": null,
+    "metadata": {
+    }
   },
-  "created": "2017-07-24T01:30:01Z"
+  "created": "2017-07-24T01:30:01Z",
+  "source": null,
+  "disputable": false,
+  "capturable": false,
+  "reversible": false,
+  "refundable": false,
+  "reference": null,
+  "authorize_uri": null
 }

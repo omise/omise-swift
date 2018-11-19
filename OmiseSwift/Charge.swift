@@ -21,6 +21,9 @@ public struct Charge: OmiseResourceObject, Equatable {
     
     public let fundingAmount: Int64
     public let fundingCurrency: Currency
+    public var fundingValue: Value {
+        return Value(amount: fundingAmount, currency: fundingCurrency)
+    }
     
     public var chargeDescription: String?
     

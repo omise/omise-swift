@@ -5,35 +5,56 @@
   "location": "/charges/chrg_test_57v787rzs4vr0dj1xc0",
   "amount": 100000,
   "currency": "thb",
-  "description": "Test API Version 2014-07-27",
+  "funding_amount": 100000,
+  "funding_currency": "thb",
+  "description": "Test API Version 2014-07-27.",
   "metadata": {
   },
   "status": "successful",
   "capture": true,
   "authorized": true,
   "reversed": false,
-  "captured": true,
-  "transaction": "trxn_test_57v787szdbe4b2ala5p",
-  "source_of_fund": "card",
-  "refunded": 0,
+  "voided": false,
+  "paid": true,
+  "paid_at": "2017-05-05T08:17:33Z",
+  "transaction": {
+    "object": "transaction",
+    "id": "trxn_test_57v787szdbe4b2ala5p",
+    "location": "/transactions/trxn_test_57v787szdbe4b2ala5p",
+    "type": "credit",
+    "amount": 96094,
+    "currency": "thb",
+    "transferable": "2017-05-05T08:17:33Z",
+    "source": "chrg_test_57v787rzs4vr0dj1xc0",
+    "created": "2017-05-05T08:17:33Z"
+  },
+  "refunded": 10000,
   "refunds": {
     "object": "list",
-    "from": "1970-01-01T00:00:00+00:00",
-    "to": "2017-05-05T08:17:33+00:00",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2018-11-19T10:39:54Z",
     "offset": 0,
     "limit": 20,
-    "total": 0,
+    "total": 1,
     "order": null,
     "location": "/charges/chrg_test_57v787rzs4vr0dj1xc0/refunds",
     "data": [
-    
+      {
+        "object": "refund",
+        "id": "rfnd_test_57zjj452z26gqtlgd6y",
+        "location": "/charges/chrg_test_57v787rzs4vr0dj1xc0/refunds/rfnd_test_57zjj452z26gqtlgd6y",
+        "created": "2017-05-16T10:42:12Z",
+        "amount": 10000,
+        "currency": "thb",
+        "voided": false,
+        "charge": "chrg_test_57v787rzs4vr0dj1xc0",
+        "transaction": "trxn_test_57zjj456s6btaw2xgr2",
+        "metadata": {
+        }
+      }
     ]
   },
   "return_uri": "http://www.example.com/orders/3947/complete",
-  "offsite": null,
-  "offline": null,
-  "reference": "paym_test_57v787s4gfeptyzlbuc",
-  "authorize_uri": "https://api.omise.co/payments/paym_test_57v787s4gfeptyzlbuc/authorize",
   "failure_code": null,
   "failure_message": null,
   "card": {
@@ -57,5 +78,12 @@
   "customer": null,
   "ip": null,
   "dispute": null,
-  "created": "2017-05-05T08:17:33Z"
+  "created": "2017-05-05T08:17:33Z",
+  "source": null,
+  "disputable": true,
+  "capturable": false,
+  "reversible": false,
+  "refundable": false,
+  "reference": "paym_test_57v787s4gfeptyzlbuc",
+  "authorize_uri": "https://api.omise.co/payments/paym_test_57v787s4gfeptyzlbuc/authorize"
 }
