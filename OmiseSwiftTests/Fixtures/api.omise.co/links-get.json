@@ -1,10 +1,10 @@
 {
   "object": "list",
-  "from": "1970-01-01T00:00:00+00:00",
-  "to": "2016-11-28T06:40:29+00:00",
+  "from": "1970-01-01T00:00:00Z",
+  "to": "2018-11-19T12:59:12Z",
   "offset": 0,
-  "limit": 20,
-  "total": 2,
+  "limit": 60,
+  "total": 3,
   "order": "chronological",
   "location": "/links",
   "data": [
@@ -12,6 +12,7 @@
       "object": "link",
       "id": "link_test_565dgexs3bvcsjyvmpm",
       "livemode": false,
+      "deleted": false,
       "location": "/links/link_test_565dgexs3bvcsjyvmpm",
       "amount": 1490000,
       "currency": "thb",
@@ -21,14 +22,16 @@
       "description": "Buying Bowers & Wilkins P7 wireless from us",
       "charges": {
         "object": "list",
-        "from": "1970-01-01T00:00:00+00:00",
-        "to": "2016-11-28T06:40:30+00:00",
+        "from": "1970-01-01T00:00:00Z",
+        "to": "2018-11-19T12:59:12Z",
         "offset": 0,
         "limit": 20,
         "total": 0,
         "order": null,
         "location": "/links/link_test_565dgexs3bvcsjyvmpm/charges",
-        "data": []
+        "data": [
+          
+        ]
       },
       "payment_uri": "https://link.omise.co/A99C513F",
       "created": "2016-11-28T06:33:59Z"
@@ -37,6 +40,7 @@
       "object": "link",
       "id": "link_test_565diew0w00z37jt9di",
       "livemode": false,
+      "deleted": false,
       "location": "/links/link_test_565diew0w00z37jt9di",
       "amount": 100000,
       "currency": "thb",
@@ -46,17 +50,47 @@
       "description": "Testing create link from Omise Swift SDK",
       "charges": {
         "object": "list",
-        "from": "1970-01-01T00:00:00+00:00",
-        "to": "2016-11-28T06:40:30+00:00",
+        "from": "1970-01-01T00:00:00Z",
+        "to": "2018-11-19T12:59:12Z",
         "offset": 0,
         "limit": 20,
         "total": 0,
         "order": null,
         "location": "/links/link_test_565diew0w00z37jt9di/charges",
-        "data": []
+        "data": [
+          
+        ]
       },
       "payment_uri": "https://link.omise.co/C9F7C752",
       "created": "2016-11-28T06:39:39Z"
-    }
+    },
+    {
+      "object": "link",
+      "id": "link_test_56pcxnsaienm4v0pgls",
+      "livemode": false,
+      "deleted": false,
+      "location": "/links/link_test_56pcxnsaienm4v0pgls",
+      "amount": 100000,
+      "currency": "thb",
+      "used": false,
+      "multiple": false,
+      "title": "Link for testing",
+      "description": "Testing create link from Omise Swift SDK",
+      "charges": {
+        "object": "list",
+        "from": "1970-01-01T00:00:00Z",
+        "to": "2018-11-19T12:59:12Z",
+        "offset": 0,
+        "limit": 20,
+        "total": 0,
+        "order": null,
+        "location": "/links/link_test_56pcxnsaienm4v0pgls/charges",
+        "data": [
+          
+        ]
+      },
+      "payment_uri": "https://link.omise.co/BF1FABA7",
+      "created": "2017-01-18T08:53:06Z"
+    },
   ]
 }
