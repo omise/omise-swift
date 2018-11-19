@@ -1,8 +1,8 @@
 {
   "object": "source",
-  "id": "src_test_5avnh1p1dt3hkh161ac",
+  "id": "src_test_5dzgrh28bfid0ru6xxh",
   "livemode": false,
-  "location": "/sources/src_test_5avnh1p1dt3hkh161ac",
+  "location": "/sources/src_test_5dzgrh28bfid0ru6xxh",
   "type": "internet_banking_scb",
   "flow": "redirect",
   "amount": 100000,
