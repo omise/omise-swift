@@ -22,5 +22,7 @@
   },
   "created": "2017-03-15T05:40:11Z",
   "sent_at": "2017-03-15T06:54:42Z",
-  "paid_at": null
+  "paid_at": null,
+  "metadata": {
+  }
 }

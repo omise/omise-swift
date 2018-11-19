@@ -20,5 +20,8 @@
     "name": "JOHN DOE",
     "created": "2015-06-02T09:26:59Z"
   },
-  "created": "2015-01-15T10:04:47Z"
+  "created": "2015-01-15T10:04:47Z",
+  "paid_at": null,
+  "metadata": {
+  }
 }
