@@ -69,7 +69,7 @@ class SearchOperationTest: LiveTest {
         dateComponents.year = 2016
         dateComponents.month = 9
         dateComponents.day = 2
-        var searchFilter = CustomerFilterParams(created: dateComponents)
+        var searchFilter = CustomerFilterParams(createdDate: dateComponents)
         searchParams.filter = searchFilter
         searchParams.query = "john"
         
@@ -106,7 +106,7 @@ class SearchOperationTest: LiveTest {
             case let .success(customer):
                 XCTAssertEqual(customer.data.count, 1)
                 let samplingCustomer = customer.data.first
-                XCTAssertEqual(samplingCustomer?.email, "pitiphong@omise.co")
+                XCTAssertEqual(samplingCustomer?.email, "john.doe@example.com")
             case let .fail(error):
                 XCTFail("\(error)")
             }
