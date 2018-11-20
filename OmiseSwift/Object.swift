@@ -22,6 +22,7 @@ public protocol OmiseLiveModeObject: OmiseObject {
     var isLive: Bool { get }
 }
 
+
 public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {}
 
 extension OmiseIdentifiableObject where Self: Equatable {
@@ -59,10 +60,9 @@ extension OmiseLocatableObject {
     }
     
     static func verifyParent(_ parent: OmiseResourceObject?) -> Bool {
-        if let parentType = resourceInfo.parentType {
-            guard let parent = parent, parentType == type(of: parent) else {
-                return false
-            }
+        if let parentType = resourceInfo.parentType,
+            let parent = parent, parentType != type(of: parent) {
+            return false
         }
         
         return true

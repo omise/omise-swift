@@ -103,7 +103,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
             switch result {
             case let .success(linksList):
                 XCTAssertNotNil(linksList.data)
-                XCTAssertEqual(linksList.data.count, 2)
+                XCTAssertEqual(linksList.data.count, 3)
                 let linkSampleData = linksList.data.first
                 XCTAssertNotNil(linkSampleData)
                 XCTAssertEqual(linkSampleData?.value.amount, 1490000)

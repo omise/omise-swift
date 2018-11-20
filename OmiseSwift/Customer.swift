@@ -16,7 +16,7 @@ public struct Customer: OmiseResourceObject, Equatable {
     public var customerDescription: String?
     public var cards: ListProperty<Card>
     
-    public let metadata: Dictionary<String, Any>
+    public let metadata: JSONDictionary
 }
 
 

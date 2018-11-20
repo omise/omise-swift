@@ -11,6 +11,7 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
     public let currency: Currency
     public var available: Int64
     public var total: Int64
+    public var reserveAmount: Int64
     
     public var availableValue: Value {
         return Value(amount: available, currency: currency)
@@ -20,6 +21,10 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
         return Value(amount: total, currency: currency)
     }
     
+    public var reserveValue: Value {
+        return Value(amount: reserveAmount, currency: currency)
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -27,6 +32,7 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
         case available
         case currency
         case total
+        case reserveAmount = "reserve_amount"
     }
 }
 

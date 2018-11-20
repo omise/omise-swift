@@ -1,14 +1,14 @@
 {
   "object": "source",
-  "id": "src_test_5atzxwlghyr2jydh33h",
+  "id": "src_test_5dzhlg354h3p9qrdy6i",
   "livemode": false,
-  "location": "/sources/src_test_5atzxwlghyr2jydh33h",
+  "location": "/sources/src_test_5dzhlg354h3p9qrdy6i",
   "type": "barcode_alipay",
   "flow": "offline",
-  "amount": 2225,
+  "amount": 100000,
   "currency": "thb",
-  "barcode": "1234567890",
-  "store_id": "store_1",
-  "store_name": "store 1",
+  "barcode": "1234567890123456",
+  "store_id": "1",
+  "store_name": "Main Store",
   "terminal_id": null
 }

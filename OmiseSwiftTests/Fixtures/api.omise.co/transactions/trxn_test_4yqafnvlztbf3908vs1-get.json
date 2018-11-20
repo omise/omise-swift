@@ -1,8 +1,11 @@
 {
   "object": "transaction",
-  "id": "trxn_test_4yqafnvlztbf3908vs1",
+  "id": "trxn_test_5dycgwnhncth1n3nmhq",
+  "location": "/transactions/trxn_test_5dycgwnhncth1n3nmhq",
   "type": "debit",
   "amount": 192188,
   "currency": "THB",
+  "transferable": "2018-11-16T15:08:25Z",
+  "source": "trsf_test_5dycgvfdi2hmyr9czar",
   "created": "2015-01-15T10:12:25Z"
 }

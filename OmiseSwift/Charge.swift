@@ -1,33 +1,6 @@
 import Foundation
 
 
-public enum ChargeStatus : Equatable {
-    case failed(ChargeFailure)
-    case expired
-    case reversed
-    case pending
-    case successful
-    case unknown(String)
-}
-
-public enum ChargePayment {
-    case card(Card)
-    case source(EnrolledSource)
-    case unknown
-}
-
-public enum ChargePaymentInformation {
-    case card(Card)
-    case source(EnrolledSource.EnrolledPaymentInformation)
-    case unknown
-}
-
-public enum ChargePaymentSourceType {
-    case card
-    case source(SourceType)
-    case unknown
-}
-
 public struct Charge: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
     
@@ -38,7 +11,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let isLive: Bool
     public let createdDate: Date
     
-    public var status: ChargeStatus
+    public var status: Charge.Status
     public var value: Value {
         return Value(amount: amount, currency: currency)
     }
@@ -46,21 +19,36 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let amount: Int64
     public let currency: Currency
     
+    public let fundingAmount: Int64
+    public let fundingCurrency: Currency
+    public var fundingValue: Value {
+        return Value(amount: fundingAmount, currency: fundingCurrency)
+    }
+    
     public var chargeDescription: String?
     
     public let isAutoCapture: Bool
     
     public let isAuthorized: Bool
     public let isPaid: Bool
+    public let paidDate: Date?
     
-    public var transaction: DetailProperty<Transaction>?
+    public let isReversed: Bool
+    public let isVoided: Bool
+    
+    public let isDisputable: Bool
+    public let isCapturable: Bool
+    public let isReversible: Bool
+    public let isRefundable: Bool
+    
+    public var transaction: DetailProperty<Transaction<Charge>>?
     
     public var card: Card?
     public var source: EnrolledSource?
     
-    public let payment: ChargePayment
+    public let payment: Charge.Payment
     
-    public var paymentInformation: ChargePaymentInformation {
+    public var paymentInformation: Charge.PaymentInformation {
         switch payment {
         case .card(let card):
             return .card(card)
@@ -71,7 +59,7 @@ public struct Charge: OmiseResourceObject, Equatable {
         }
     }
     
-    public var paymentSourceType: ChargePaymentSourceType {
+    public var paymentSourceType: Charge.PaymentSourceType {
         switch payment {
         case .card:
             return .card
@@ -93,7 +81,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let returnURL: URL?
     public let authorizedURL: URL?
     
-    public let metadata: [String: Any]
+    public let metadata: JSONDictionary
 }
 
 extension Charge {
@@ -105,12 +93,22 @@ extension Charge {
         case createdDate = "created"
         case status
         case failureCode = "failure_code"
+        case failureMessage = "failure_message"
         case amount
         case currency
+        case fundingAmount = "funding_amount"
+        case fundingCurrency = "funding_currency"
+        case paidDate = "paid_at"
+        case isReversed = "reversed"
         case chargeDescription = "description"
         case isAutoCapture = "capture"
         case isAuthorized = "authorized"
         case isPaid = "paid"
+        case isVoided = "voided"
+        case isDisputable = "disputable"
+        case isCapturable = "capturable"
+        case isReversible = "reversible"
+        case isRefundable = "refundable"
         case isCaptured = "captured"
         case transaction
         case card
@@ -134,6 +132,8 @@ extension Charge {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
+        fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
+        fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
         chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
         isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
         isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
@@ -142,6 +142,14 @@ extension Charge {
         } catch DecodingError.keyNotFound {
             isPaid = try container.decode(Bool.self, forKey: .isPaid)
         }
+        paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
+        isReversed = try container.decode(Bool.self, forKey: .isReversed)
+        isVoided = try container.decode(Bool.self, forKey: .isVoided)
+        isDisputable = try container.decode(Bool.self, forKey: .isDisputable)
+        isCapturable = try container.decode(Bool.self, forKey: .isCapturable)
+        isReversible = try container.decode(Bool.self, forKey: .isReversible)
+        isRefundable = try container.decode(Bool.self, forKey: .isRefundable)
+
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
         refunded = try container.decodeIfPresent(Int64.self, forKey: .refunded)
         refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
@@ -153,22 +161,28 @@ extension Charge {
         metadata = try container.decode([String: Any].self, forKey: .metadata)
         
         let statusValue = try container.decode(String.self, forKey: .status)
-        let failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
+        let failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
+        let failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
         
-        let status: ChargeStatus
-        switch (statusValue, failureCode) {
-        case ("failed", let failureCode?):
-            status = .failed(failureCode)
-        case ("expired", nil):
+        let status: Charge.Status
+        switch (statusValue, failureCode, failureMessage) {
+        case ("failed", let failureCode?, let failureMessage?):
+            status = .failed(ChargeFailure(code: failureCode, message: failureMessage))
+        case ("expired", nil, nil):
             status = .expired
-        case ("successful", nil):
+        case ("successful", nil, nil):
             status = .successful
-        case ("pending", nil):
+        case ("pending", nil, nil):
             status = .pending
-        case ("reversed", nil):
+        case ("reversed", nil, nil):
             status = .reversed
-        case (let statusValue, _):
+        case (let statusValue, nil, nil):
             status = .unknown(statusValue)
+        case (_, .some, .some), (_, .some, .none), (_, .none, .some):
+            throw DecodingError.dataCorruptedError(
+                forKey: .failureCode, in: container,
+                debugDescription: "Invalid Charge Failure status."
+            )
         }
         
         self.status = status
@@ -197,11 +211,21 @@ extension Charge {
 
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
+        try container.encode(fundingAmount, forKey: .fundingAmount)
+        try container.encode(fundingCurrency, forKey: .fundingCurrency)
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encode(isAutoCapture, forKey: .isAutoCapture)
         try container.encode(isAuthorized, forKey: .isAuthorized)
         try container.encode(isPaid, forKey: .isPaid)
-        
+        try container.encodeIfPresent(paidDate, forKey: .paidDate)
+
+        try container.encode(isReversed, forKey: .isReversed)
+        try container.encode(isVoided, forKey: .isVoided)
+        try container.encode(isDisputable, forKey: .isDisputable)
+        try container.encode(isCapturable, forKey: .isCapturable)
+        try container.encode(isReversible, forKey: .isReversible)
+        try container.encode(isRefundable, forKey: .isRefundable)
+
         try container.encodeIfPresent(transaction, forKey: .transaction)
         try container.encodeIfPresent(refunded, forKey: .refunded)
         try container.encodeIfPresent(refunds, forKey: .refunds)
@@ -221,9 +245,10 @@ extension Charge {
             try container.encode("reversed", forKey: .status)
         case .expired:
             try container.encode("expired", forKey: .status)
-        case .failed(let failureCode):
+        case .failed(let failure):
             try container.encode("failed", forKey: .status)
-            try container.encode(failureCode, forKey: .failureCode)
+            try container.encode(failure.code, forKey: .failureCode)
+            try container.encode(failure.message, forKey: .failureMessage)
         case .unknown(let statusValue):
             try container.encode(statusValue, forKey: .status)
         }
@@ -236,6 +261,33 @@ extension Charge {
         case .unknown:
             break
         }
+    }
+    
+    public enum Status : Equatable {
+        case failed(ChargeFailure)
+        case expired
+        case reversed
+        case pending
+        case successful
+        case unknown(String)
+    }
+    
+    public enum Payment {
+        case card(Card)
+        case source(EnrolledSource)
+        case unknown
+    }
+    
+    public enum PaymentInformation {
+        case card(Card)
+        case source(EnrolledSource.EnrolledPaymentInformation)
+        case unknown
+    }
+    
+    public enum PaymentSourceType {
+        case card
+        case source(SourceType)
+        case unknown
     }
 }
 
@@ -344,58 +396,64 @@ public struct UpdateChargeParams: APIJSONQuery {
 }
 
 public struct ChargeFilterParams: OmiseFilterParams {
-    public var created: DateComponents?
+    public var createdDate: DateComponents?
     public var amount: Double?
     public var isAuthorized: Bool?
     public var isCaptured: Bool?
     public var cardLastDigits: LastDigits?
     public var isCustomerPresent: Bool?
-    public var failureCode: ChargeFailure?
+    public var failureCode: ChargeFailure.Code?
+    public var failureMessage: String?
     
     private enum CodingKeys: String, CodingKey {
-        case created
+        case createdDate = "created"
         case amount
         case isAuthorized = "authorized"
         case isCaptured = "captured"
         case cardLastDigits = "card_last_digits"
         case isCustomerPresent = "customer_present"
         case failureCode = "failure_code"
+        case failureMessage = "failure_message"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
         amount = try container.decodeIfPresent(Double.self, forKey: .amount)
         isAuthorized = try container.decodeIfPresent(Bool.self, forKey: .isAuthorized)
         isCaptured = try container.decodeIfPresent(Bool.self, forKey: .isCaptured)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
         isCustomerPresent = try container.decodeIfPresent(Bool.self, forKey: .isCustomerPresent)
-        failureCode = try container.decodeIfPresent(ChargeFailure.self, forKey: .failureCode)
+        failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
+        failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(isAuthorized, forKey: .isAuthorized)
         try container.encodeIfPresent(isCaptured, forKey: .isCaptured)
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
         try container.encodeIfPresent(isCustomerPresent, forKey: .isCustomerPresent)
         try container.encodeIfPresent(failureCode, forKey: .failureCode)
+        try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
     }
     
-    public init(created: DateComponents? = nil, amount: Double? = nil,
+    public init(createdDate: DateComponents? = nil, amount: Double? = nil,
                 isAuthorized: Bool? = nil, isCaptured: Bool? = nil,
                 cardLastDigits: LastDigits? = nil,
                 isCustomerPresent: Bool? = nil,
-                failureCode: ChargeFailure? = nil) {
-        self.created = created
+                failureCode: ChargeFailure.Code? = nil,
+                failureMessage: String? = nil) {
+        self.createdDate = createdDate
         self.amount = amount
         self.isAuthorized = isAuthorized
         self.isCaptured = isCaptured
         self.cardLastDigits = cardLastDigits
         self.isCustomerPresent = isCustomerPresent
         self.failureCode = failureCode
+        self.failureMessage = failureMessage
     }
 }
 

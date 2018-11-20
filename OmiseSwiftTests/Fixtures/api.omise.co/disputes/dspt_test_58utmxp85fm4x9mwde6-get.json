@@ -1,0 +1,153 @@
+{
+  "object": "dispute",
+  "id": "dspt_test_58utmxp85fm4x9mwde6",
+  "livemode": false,
+  "location": "/disputes/dspt_test_58utmxp85fm4x9mwde6",
+  "amount": 3190000,
+  "currency": "thb",
+  "status": "open",
+  "transaction": {
+    "object": "transaction",
+    "id": "trxn_test_58utmxpg5h1crw9arkr",
+    "location": "/transactions/trxn_test_58utmxpg5h1crw9arkr",
+    "type": "debit",
+    "amount": 3190000,
+    "currency": "thb",
+    "transferable": "2017-08-04T01:30:02Z",
+    "source": "dspt_test_58utmxp85fm4x9mwde6",
+    "created": "2017-08-04T10:05:57Z"
+  },
+  "message": "A dispute for testing purpose",
+  "reason_code": "goods_or_services_not_provided",
+  "reason_message": "Services not provided or Merchandise not received",
+  "charge": {
+    "object": "charge",
+    "id": "chrg_test_58uolb88cg88djobvmf",
+    "livemode": false,
+    "location": "/charges/chrg_test_58uolb88cg88djobvmf",
+    "amount": 3190000,
+    "currency": "thb",
+    "funding_amount": 3190000,
+    "funding_currency": "thb",
+    "description": null,
+    "metadata": {
+    },
+    "status": "successful",
+    "capture": true,
+    "authorized": true,
+    "reversed": false,
+    "voided": false,
+    "paid": true,
+    "paid_at": "2017-08-04T01:30:02Z",
+    "transaction": "trxn_test_58uolbpmzbqejny7zds",
+    "refunded": 0,
+    "refunds": {
+      "object": "list",
+      "from": "1970-01-01T00:00:00Z",
+      "to": "2018-11-19T12:12:23Z",
+      "offset": 0,
+      "limit": 20,
+      "total": 0,
+      "order": null,
+      "location": "/charges/chrg_test_58uolb88cg88djobvmf/refunds",
+      "data": [
+        
+      ]
+    },
+    "return_uri": null,
+    "failure_code": null,
+    "failure_message": null,
+    "card": {
+      "object": "card",
+      "id": "card_test_582o6o2iyn4ke5t595p",
+      "livemode": false,
+      "location": "/customers/cust_test_582o6hikunmz90lx0wl/cards/card_test_582o6o2iyn4ke5t595p",
+      "country": "us",
+      "city": "Bangkok",
+      "postal_code": "10320",
+      "financing": "",
+      "bank": "",
+      "last_digits": "4242",
+      "brand": "Visa",
+      "expiration_month": 5,
+      "expiration_year": 2019,
+      "fingerprint": "btGtw3WOiCnx6AlsOdfgb4MU49UBtNF4YiVi1NKuiR0=",
+      "name": "JOHN DOE",
+      "security_code_check": true,
+      "created": "2017-05-24T10:43:02Z"
+    },
+    "customer": "cust_test_582o6hikunmz90lx0wl",
+    "ip": null,
+    "dispute": {
+      "object": "dispute",
+      "id": "dspt_test_58utmxp85fm4x9mwde6",
+      "livemode": false,
+      "location": "/disputes/dspt_test_58utmxp85fm4x9mwde6",
+      "amount": 3190000,
+      "currency": "thb",
+      "status": "open",
+      "transaction": "trxn_test_58utmxpg5h1crw9arkr",
+      "message": null,
+      "reason_code": "goods_or_services_not_provided",
+      "reason_message": "Services not provided or Merchandise not received",
+      "charge": "chrg_test_58uolb88cg88djobvmf",
+      "documents": {
+        "object": "list",
+        "from": "1970-01-01T00:00:00Z",
+        "to": "2018-11-19T12:12:23Z",
+        "offset": 0,
+        "limit": 20,
+        "total": 0,
+        "order": null,
+        "location": "/disputes/dspt_test_58utmxp85fm4x9mwde6/documents",
+        "data": [
+          
+        ]
+      },
+      "created": "2017-08-04T10:05:57Z",
+      "closed_at": null,
+      "metadata": {
+      }
+    },
+    "created": "2017-08-04T01:30:00Z",
+    "source": null,
+    "disputable": false,
+    "capturable": false,
+    "reversible": false,
+    "refundable": false,
+    "reference": null,
+    "authorize_uri": null
+  },
+  "documents": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2018-11-19T12:12:23Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 2,
+    "order": null,
+    "location": "/disputes/dspt_test_58utmxp85fm4x9mwde6/documents",
+    "data": [
+      {
+        "object": "document",
+        "id": "docu_test_5dzhc60jm40sg1umiyg",
+        "livemode": false,
+        "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz/documents/docu_test_5dzhc60jm40sg1umiyg",
+        "filename": "Screen Shot.png",
+        "created": "2018-11-19T12:47:55Z"
+      },
+      {
+        "object": "document",
+        "id": "docu_test_5dzhc4c5x7rhrhc1am3",
+        "livemode": false,
+        "location": "/disputes/dspt_test_5dzhbyswtur9eu7cgzz/documents/docu_test_5dzhc4c5x7rhrhc1am3",
+        "filename": "ScreenShot.png",
+        "created": "2018-11-19T12:47:47Z"
+      }
+    ]
+  },
+  "created": "2017-08-04T10:05:57Z",
+  "closed_at": null,
+  "metadata": {
+  }
+}

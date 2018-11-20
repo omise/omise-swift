@@ -47,10 +47,55 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let reasonMessage: String
     public let reasonCode: Reason
     public var responseMessage: String?
-    public let transaction: DetailProperty<Transaction>
+    public let transaction: DetailProperty<Transaction<Dispute>>
     public let charge: DetailProperty<Charge>
     public let documents: ListProperty<Document>
     public let closedDate: Date?
+    
+    public var metadata: JSONDictionary
+    
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        id = try container.decode(String.self, forKey: .id)
+        isLive = try container.decode(Bool.self, forKey: .isLive)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        amount = try container.decode(Int64.self, forKey: .amount)
+        currency = try container.decode(Currency.self, forKey: .currency)
+        status = try container.decode(DisputeStatus.self, forKey: .status)
+        reasonMessage = try container.decode(String.self, forKey: .reasonMessage)
+        reasonCode = try container.decode(Reason.self, forKey: .reasonCode)
+        responseMessage = try container.decodeIfPresent(String.self, forKey: .responseMessage)
+        transaction = try container.decode(DetailProperty<Transaction>.self, forKey: .transaction)
+        charge = try container.decode(DetailProperty<Charge>.self, forKey: .charge)
+        documents = try container.decode(ListProperty<Document>.self, forKey: .documents)
+        closedDate = try container.decodeIfPresent(Date.self, forKey: .closedDate)
+        metadata = try container.decode(Dictionary<String, Any>.self, forKey: .metadata)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(object, forKey: .object)
+        try container.encode(location, forKey: .location)
+        try container.encode(id, forKey: .id)
+        try container.encode(isLive, forKey: .isLive)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(amount, forKey: .amount)
+        try container.encode(currency, forKey: .currency)
+        try container.encode(status, forKey: .status)
+        try container.encode(reasonMessage, forKey: .reasonMessage)
+        try container.encode(reasonCode, forKey: .reasonCode)
+        try container.encode(responseMessage, forKey: .responseMessage)
+        try container.encode(transaction, forKey: .transaction)
+        try container.encode(charge, forKey: .charge)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(closedDate, forKey: .closedDate)
+        try container.encode(metadata, forKey: .metadata)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case object
@@ -68,6 +113,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
         case charge
         case documents
         case closedDate = "closed_at"
+        case metadata
     }
 }
 

@@ -16,6 +16,9 @@ public struct Link: OmiseResourceObject, Equatable {
     }
     public let amount: Int64
     public let currency: Currency
+    
+    public let isDeleted: Bool
+    
     public let isUsed: Bool
     public let isMultiple: Bool
     public let title: String
@@ -32,6 +35,9 @@ public struct Link: OmiseResourceObject, Equatable {
         
         case amount
         case currency
+        
+        case isDeleted = "deleted"
+        
         case isUsed = "used"
         case isMultiple = "multiple"
         case title

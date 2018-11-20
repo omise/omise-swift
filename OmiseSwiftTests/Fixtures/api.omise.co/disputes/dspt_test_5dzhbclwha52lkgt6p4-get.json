@@ -1,0 +1,38 @@
+{
+  "object": "dispute",
+  "id": "dspt_test_5dzhbclwha52lkgt6p4",
+  "livemode": false,
+  "location": "/disputes/dspt_test_5dzhbclwha52lkgt6p4",
+  "amount": 2000,
+  "currency": "thb",
+  "status": "won",
+  "transaction": "trxn_test_5dzhbcm7gkyg3hnexee",
+  "message": "Here's an evidence",
+  "reason_code": "goods_or_services_not_provided",
+  "reason_message": "Services not provided or Merchandise not received",
+  "charge": "chrg_test_5dy4hlq32qmi6yo5lye",
+  "documents": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2018-11-19T12:46:08Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 1,
+    "order": null,
+    "location": "/disputes/dspt_test_5dzhbclwha52lkgt6p4/documents",
+    "data": [
+      {
+        "object": "document",
+        "id": "docu_test_5dzhbe7mf4sg0eq1bzk",
+        "livemode": false,
+        "location": "/disputes/dspt_test_5dzhbclwha52lkgt6p4/documents/docu_test_5dzhbe7mf4sg0eq1bzk",
+        "filename": "Screenshot.png",
+        "created": "2018-11-19T12:45:43Z"
+      }
+    ]
+  },
+  "created": "2018-11-19T12:45:36Z",
+  "closed_at": "2018-11-19T12:45:57Z",
+  "metadata": {
+  }
+}
