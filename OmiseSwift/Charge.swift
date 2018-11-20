@@ -405,6 +405,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     public var cardLastDigits: LastDigits?
     public var createdDate: DateComponents?
     public var isCustomerPresent: Bool?
+    public var isDisputed: Bool?
     public var failureCode: ChargeFailure.Code?
     public var failureMessage: String?
     public var isRefunded: Bool?
@@ -423,6 +424,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         case cardLastDigits = "card_last_digits"
         case createdDate = "created"
         case isCustomerPresent = "customer_present"
+        case isDisputed = "disputed"
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
         case isRefunded = "refunded"
@@ -443,6 +445,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
         createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
         isCustomerPresent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCustomerPresent)
+        isDisputed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDisputed)
         failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
         failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
         isRefunded = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isRefunded)
@@ -463,6 +466,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
         try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(isCustomerPresent, forKey: .isCustomerPresent)
+        try container.encodeIfPresent(isDisputed, forKey: .isDisputed)
         try container.encodeIfPresent(failureCode, forKey: .failureCode)
         try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
         try container.encodeIfPresent(isRefunded, forKey: .isRefunded)
@@ -479,6 +483,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
                 cardLastDigits: LastDigits? = nil,
                 createdDate: DateComponents? = nil,
                 isCustomerPresent: Bool? = nil,
+                isDisputed: Bool? = nil,
                 failureCode: ChargeFailure.Code? = nil, failureMessage: String? = nil,
                 isRefunded: Bool? = nil, refundedAmount: Double? = nil,
                 isReversed: Bool? = nil, status: Charge.APIStatus? = nil,
@@ -491,6 +496,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         self.cardLastDigits = cardLastDigits
         self.createdDate = createdDate
         self.isCustomerPresent = isCustomerPresent
+        self.isDisputed = isDisputed
         self.failureCode = failureCode
         self.isRefunded = isRefunded
         self.failureMessage = failureMessage
