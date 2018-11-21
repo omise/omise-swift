@@ -479,6 +479,39 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testDeletedCardChargeRetrieve() {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5atwzemytjyr1glskwt") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.value.amount, 10700)
+                XCTAssertEqual(charge.value.currency.code, "THB")
+                XCTAssertEqual(charge.chargeDescription, "WooCommerce Order id 22")
+                XCTAssertEqual(charge.id, "chrg_test_5atwzemytjyr1glskwt")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_5atwzemytjyr1glskwt")
+                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.refunded, 0)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5atwzep0rd6fmqw5f3q")
+                XCTAssertEqual(charge.customer?.dataID, "cust_test_5atwzehn9asyv7ga6ya")
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2018-02-02T04:23:13Z"))
+                XCTAssertEqual(charge.card?.id, "card_test_5atwze9ckre0z66grbk")
+                if case .deleted(let deletedCard)? = charge.card {
+                    XCTAssertEqual(deletedCard.id, "card_test_5atwze9ckre0z66grbk")
+                } else {
+                    XCTFail("This charge should have the deleted card value")
+                }
+            case let .fail(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testInternetBankingChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
