@@ -10,7 +10,7 @@ class AccountAndBalanceOperationsTest: LiveTest {
             
             switch result {
             case let .success(account):
-                XCTAssertEqual(account.email, "omise@chakrit.net")
+                XCTAssertEqual(account.email, "john.doe@example.com")
             case let .fail(err):
                 XCTFail("\(err)")
             }

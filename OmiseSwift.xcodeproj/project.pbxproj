@@ -162,6 +162,8 @@
 		8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
 		8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */; };
 		8AEDE7D51DDC701600DD9DF1 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = 229873591CCE0B5A00970F8C /* Fixtures */; };
+		8AF2219E21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */; };
+		8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */; };
 		8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */; };
 		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
 /* End PBXBuildFile section */
@@ -276,6 +278,7 @@
 		8AE11AF71ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountAndBalanceOperationsTest.swift; sourceTree = "<group>"; };
 		8AE84C461E2F6A1300A3BD56 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
+		8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargeOperationsTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -423,6 +426,7 @@
 				8A5880EE1F46EEB300647405 /* ReceiptsOperationFixtureTests.swift */,
 				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
 				8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */,
+				8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */,
 				8A1CF6AC1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift */,
 				8A07D2F91D741F430030B68D /* TransferOperationFixtureTests.swift */,
 			);
@@ -799,6 +803,7 @@
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
+				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */,
 				8A1CF6AE1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift in Sources */,
 				8A98759F1F0673C90090D56F /* DocumentOperationTest.swift in Sources */,
@@ -818,6 +823,7 @@
 				8AE11AF81ED846AD0015B16A /* AccountAndBalanceOperationsTest.swift in Sources */,
 				8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */,
 				8A2698A61D74417800515A0A /* DisputeOperationFixtureTests.swift in Sources */,
+				8AF2219E21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,

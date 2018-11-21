@@ -158,78 +158,64 @@ public struct UpdateTransferParams: APIJSONQuery {
 
 
 public struct TransferFilterParams: OmiseFilterParams {
-    public var created: DateComponents?
     public var amount: Double?
-    public var currency: Currency?
-    public var bankLastDigits: LastDigits?
+    public var created: DateComponents?
+    public var isDeleted: Bool?
     public var fee: Double?
     public var isPaid: Bool?
     public var paidDate: DateComponents?
     public var isSent: Bool?
     public var sentDate: DateComponents?
-    public var failureCode: String?
-    public var failureMessage: String?
     
     private enum CodingKeys: String, CodingKey {
-        case created
         case amount
+        case created
         case currency
-        case bankLastDigits = "bank_last_digits"
+        case isDeleted = "deleted"
         case fee
         case isPaid = "paid"
         case paidDate = "paid_at"
         case isSent = "sent"
         case sentDate = "sent_at"
-        case failureCode = "failure_code"
-        case failureMessage = "failure_message"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
-        currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
-        bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
-        fee = try container.decodeIfPresent(Double.self, forKey: .fee)
-        isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
+        isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
+        fee = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .fee)
+        isPaid = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isPaid)
         paidDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .paidDate)
-        isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
+        isSent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isSent)
         sentDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .sentDate)
-        failureCode = try container.decodeIfPresent(String.self, forKey: .failureCode)
-        failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
         try container.encodeIfPresent(amount, forKey: .amount)
-        try container.encodeIfPresent(currency, forKey: .currency)
-        try container.encodeIfPresent(bankLastDigits, forKey: .bankLastDigits)
+        try container.encodeIfPresent(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(fee, forKey: .fee)
         try container.encodeIfPresent(isPaid, forKey: .isPaid)
         try container.encodeOmiseDateComponentsIfPresent(paidDate, forKey: .paidDate)
         try container.encodeIfPresent(isSent, forKey: .isSent)
         try container.encodeOmiseDateComponentsIfPresent(sentDate, forKey: .sentDate)
-        try container.encodeIfPresent(failureCode, forKey: .failureCode)
-        try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
     }
     
-    public init(created: DateComponents? = nil, amount: Double? = nil, currency: Currency? = nil,
+    public init(amount: Double? = nil, created: DateComponents? = nil,
+                currency: Currency? = nil, isDeleted: Bool? = nil,
                 bankLastDigits: LastDigits? = nil, fee: Double? = nil,
                 isPaid: Bool? = nil, paidDate: DateComponents? = nil,
-                isSent: Bool? = nil, sentDate: DateComponents? = nil,
-                failureCode: String? = nil, failureMessage: String? = nil) {
-        self.created = created
+                isSent: Bool? = nil, sentDate: DateComponents? = nil) {
         self.amount = amount
-        self.currency = currency
-        self.bankLastDigits = bankLastDigits
+        self.created = created
+        self.isDeleted = isDeleted
         self.fee = fee
         self.isPaid = isPaid
         self.paidDate = paidDate
         self.isSent = isSent
         self.sentDate = sentDate
-        self.failureCode = failureCode
-        self.failureMessage = failureMessage
     }
 }
 

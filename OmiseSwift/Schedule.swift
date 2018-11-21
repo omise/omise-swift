@@ -315,7 +315,7 @@ public struct AnySchedulable: Schedulable {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
-        guard let createdDate = json["createdDate"] as? Date else {
+        guard let createdDate = json["created"] as? Date else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
         }

@@ -20,7 +20,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t5thveg40ali15h",
         "default_card": null,
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "Omise",
         "created": "2015-11-20T05:48:41Z",
         "cards": {
@@ -51,7 +51,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t5thveg40ali15h",
         "default_card": "card_test_5232t61x6yfv27f6dug",
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "Omise",
         "created": "2015-11-20T05:48:41Z",
         "cards": {
@@ -78,7 +78,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:42Z"
             }
@@ -100,7 +100,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t5thveg40ali15h",
         "default_card": "card_test_5232t61x6yfv27f6dug",
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "Omise",
         "created": "2015-11-20T05:48:41Z",
         "cards": {
@@ -127,7 +127,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:42Z"
             },
@@ -146,7 +146,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:42Z"
             }
@@ -209,7 +209,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t5thveg40ali15h",
         "default_card": "card_test_5232t63qvuqmcgijgn2",
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "Omise",
         "created": "2015-11-20T05:48:41Z",
         "cards": {
@@ -236,7 +236,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:42Z"
             }
@@ -272,7 +272,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t5thveg40ali15h",
         "default_card": null,
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "Omise",
         "created": "2015-11-20T05:48:41Z",
         "cards": {
@@ -354,7 +354,7 @@
           "expiration_month": 2,
           "expiration_year": 2016,
           "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-          "name": "Chakrit Wichian",
+          "name": "John Doe",
           "security_code_check": true,
           "created": "2015-11-20T05:48:44Z"
         },
@@ -414,7 +414,7 @@
           "expiration_month": 2,
           "expiration_year": 2016,
           "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-          "name": "Chakrit Wichian",
+          "name": "John Doe",
           "security_code_check": true,
           "created": "2015-11-20T05:48:44Z"
         },
@@ -474,7 +474,7 @@
           "expiration_month": 2,
           "expiration_year": 2016,
           "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-          "name": "Chakrit Wichian",
+          "name": "John Doe",
           "security_code_check": true,
           "created": "2015-11-20T05:48:45Z"
         },
@@ -534,7 +534,7 @@
           "expiration_month": 2,
           "expiration_year": 2016,
           "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-          "name": "Chakrit Wichian",
+          "name": "John Doe",
           "security_code_check": true,
           "created": "2015-11-20T05:48:45Z"
         },
@@ -557,7 +557,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t73plql7mkh8nv0",
         "default_card": "card_test_5232t720jr2pyhioeso",
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "I'm JACK",
         "created": "2015-11-20T05:48:47Z",
         "cards": {
@@ -584,7 +584,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:47Z"
             }
@@ -606,7 +606,7 @@
         "livemode": false,
         "location": "/customers/cust_test_5232t73plql7mkh8nv0",
         "default_card": "card_test_5232t720jr2pyhioeso",
-        "email": "chakrit@omise.co",
+        "email": "john.doe@example.com",
         "description": "I'm JOHN now.",
         "created": "2015-11-20T05:48:47Z",
         "cards": {
@@ -633,7 +633,7 @@
               "expiration_month": 2,
               "expiration_year": 2016,
               "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-              "name": "Chakrit Wichian",
+              "name": "John Doe",
               "security_code_check": true,
               "created": "2015-11-20T05:48:47Z"
             }
@@ -779,7 +779,7 @@
           "expiration_month": 2,
           "expiration_year": 2016,
           "fingerprint": "mJnCcSbRLzwfV62Do9MAmjpXlzDBVJ/hvu8go4JYyqU=",
-          "name": "Chakrit Wichian",
+          "name": "John Doe",
           "security_code_check": true,
           "created": "2015-11-20T05:48:48Z"
         },

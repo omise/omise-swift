@@ -199,6 +199,41 @@ extension KeyedDecodingContainerProtocol {
             try parsingDateComponentsValue(element, codingPath: codingPath + [key, ArrayIndexKey(index: index)])
         })
     }
+    
+    func decodeOmiseAPIValueIfPresent(_ type: Bool.Type, forKey key: Key) throws -> Bool? {
+        do {
+            return try decodeIfPresent(type, forKey: key)
+        } catch DecodingError.typeMismatch {
+            let stringValue = try decodeIfPresent(String.self, forKey: key)
+            guard let value = stringValue else {
+                return nil
+            }
+            
+            guard let boolValue = Bool(value) else {
+                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a boolean")
+            }
+            
+            return boolValue
+        }
+    }
+    
+    func decodeOmiseAPIValueIfPresent(_ type: Double.Type, forKey key: Key) throws -> Double? {
+        do {
+            return try decodeIfPresent(type, forKey: key)
+        } catch DecodingError.typeMismatch {
+            let stringValue = try decodeIfPresent(String.self, forKey: key)
+            guard let value = stringValue else {
+                return nil
+            }
+            
+            guard let doubleValue = Double(value) else {
+                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a double")
+            }
+            
+            return doubleValue
+        }
+    }
+
 }
 
 extension KeyedDecodingContainerProtocol {

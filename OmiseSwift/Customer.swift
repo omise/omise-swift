@@ -97,7 +97,7 @@ public struct CustomerParams: APIJSONQuery {
 
 public struct CustomerFilterParams: OmiseFilterParams {
 
-    public var created: DateComponents?
+    public var createdDate: DateComponents?
     
     private enum CodingKeys: String, CodingKey {
         case created
@@ -105,16 +105,16 @@ public struct CustomerFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .created)
     }
     
-    public init(created: DateComponents?) {
-        self.created = created
+    public init(createdDate: DateComponents?) {
+        self.createdDate = createdDate
     }
 }
 
