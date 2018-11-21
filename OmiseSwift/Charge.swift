@@ -409,7 +409,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     public var failureCode: ChargeFailure.Code?
     public var failureMessage: String?
     public var isRefunded: Bool?
-    public var refundedAmount: Double?
+    public var refundAmount: Double?
     public var isReversed: Bool?
     public var status: Charge.APIStatus?
     public var sourceOfFund: Charge.SourceOfFund?
@@ -428,7 +428,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
         case isRefunded = "refunded"
-        case refundedAmount = "refunded_amount"
+        case refundAmount = "refund_amount"
         case isReversed = "reversed"
         case status = "status"
         case sourceOfFund = "source_of_fund"
@@ -449,7 +449,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
         failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
         isRefunded = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isRefunded)
-        refundedAmount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .refundedAmount)
+        refundAmount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .refundAmount)
         isReversed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isReversed)
         status = try container.decodeIfPresent(Charge.APIStatus.self, forKey: .status)
         sourceOfFund = try container.decodeIfPresent(Charge.SourceOfFund.self, forKey: .sourceOfFund)
@@ -470,7 +470,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(failureCode, forKey: .failureCode)
         try container.encodeIfPresent(failureMessage, forKey: .failureMessage)
         try container.encodeIfPresent(isRefunded, forKey: .isRefunded)
-        try container.encodeIfPresent(refundedAmount, forKey: .refundedAmount)
+        try container.encodeIfPresent(refundAmount, forKey: .refundAmount)
         try container.encodeIfPresent(isReversed, forKey: .isReversed)
         try container.encodeIfPresent(status, forKey: .status)
         try container.encodeIfPresent(sourceOfFund, forKey: .sourceOfFund)
@@ -485,7 +485,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
                 isCustomerPresent: Bool? = nil,
                 isDisputed: Bool? = nil,
                 failureCode: ChargeFailure.Code? = nil, failureMessage: String? = nil,
-                isRefunded: Bool? = nil, refundedAmount: Double? = nil,
+                isRefunded: Bool? = nil, refundAmount: Double? = nil,
                 isReversed: Bool? = nil, status: Charge.APIStatus? = nil,
                 sourceOfFund: Charge.SourceOfFund? = nil, isVoided: Bool? = nil) {
         self.amount = amount
@@ -500,7 +500,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         self.failureCode = failureCode
         self.isRefunded = isRefunded
         self.failureMessage = failureMessage
-        self.refundedAmount = refundedAmount
+        self.refundAmount = refundAmount
         self.isReversed = isReversed
         self.status = status
         self.sourceOfFund = sourceOfFund
