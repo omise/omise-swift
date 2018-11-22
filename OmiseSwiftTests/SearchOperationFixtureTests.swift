@@ -20,7 +20,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             createdDate: SearchOperationFixtureTests.dateComponents, isCustomerPresent: true,
             isDisputed: true,
             failureCode: ChargeFailure.Code.amountMismatch, failureMessage: "Failure Message",
-            isRefunded: false, refundedAmount: 500.0,
+            isRefunded: false, refundAmount: 500.0,
             isReversed: nil, status: .successful,
             sourceOfFund: .card, isVoided: nil
         )
@@ -45,7 +45,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.failureCode, decodedChargeFilterParams.failureCode)
         XCTAssertEqual(filterParams.failureMessage, decodedChargeFilterParams.failureMessage)
         XCTAssertEqual(filterParams.isRefunded, decodedChargeFilterParams.isRefunded)
-        XCTAssertEqual(filterParams.refundedAmount, decodedChargeFilterParams.refundedAmount)
+        XCTAssertEqual(filterParams.refundAmount, decodedChargeFilterParams.refundAmount)
         XCTAssertEqual(filterParams.isReversed, decodedChargeFilterParams.isReversed)
         XCTAssertEqual(filterParams.status, decodedChargeFilterParams.status)
         XCTAssertEqual(filterParams.sourceOfFund, decodedChargeFilterParams.sourceOfFund)
