@@ -6,6 +6,7 @@ let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
 let virtualAccountPrefix = "virtual_account_"
 let barcodePrefix = "barcode_"
+let installmentPrefix = "installment_"
 
 
 public enum InternetBanking: RawRepresentable, Equatable {
@@ -55,6 +56,7 @@ public enum SourceType: Codable, Equatable {
     case billPayment(BillPayment)
     case virtualAccount(VirtualAccount)
     case barcode(Barcode)
+    case installment(InstallmentBrand)
     
     case unknown(String)
     
@@ -132,6 +134,50 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
+    public enum InstallmentBrand: RawRepresentable, Equatable, Codable {
+        case bay
+        case firstChoice
+        case bbl
+        case ktc
+        case kBank
+        case unknown(String)
+        
+        public init?(rawValue: String) {
+            switch rawValue {
+            case "bay":
+                self = .bay
+            case "first_choice":
+                self = .firstChoice
+            case "bbl":
+                self = .bbl
+            case "ktc":
+                self = .ktc
+            case "kbank":
+                self = .kBank
+            case let value:
+                self = .unknown(value)
+            }
+        }
+        
+        public var rawValue: String {
+            switch self {
+            case .bay:
+                return "bay"
+            case .firstChoice:
+                return "first_choice"
+            case .bbl:
+                return "bbl"
+            case .ktc:
+                return "ktc"
+            case .kBank:
+                return "kbank"
+                
+            case .unknown(let value):
+                return value
+            }
+        }
+    }
+    
     var value: String {
         let value: String
         switch self {
@@ -146,6 +192,8 @@ public enum SourceType: Codable, Equatable {
             value = virtualAccountPrefix + account.rawValue
         case .barcode(let barcodeType):
             value = barcodePrefix + barcodeType.rawValue
+        case .installment(let installmentBrand):
+            value = installmentPrefix + installmentBrand.rawValue
         case .unknown(let source):
             value = source
         }

@@ -111,182 +111,6 @@ public enum Source: SourceData {
 }
 
 
-public enum PaymentSourceInformation: Codable, Equatable {
-    case internetBanking(InternetBanking)
-    case alipay
-    case billPayment(SourceType.BillPayment)
-    case virtualAccount(SourceType.VirtualAccount)
-    case barcode(Barcode)
-    
-    case unknown(String)
-    
-    var sourceType: Omise.SourceType {
-        switch self {
-        case .internetBanking(let bank):
-            return Omise.SourceType.internetBanking(bank)
-        case .alipay:
-            return Omise.SourceType.alipay
-        case .billPayment(let billPayment):
-            let bill: Omise.SourceType.BillPayment
-            switch billPayment {
-            case .tescoLotus:
-                bill = Omise.SourceType.BillPayment.tescoLotus
-            case .unknown(let name):
-                bill = Omise.SourceType.BillPayment.unknown(name)
-            }
-            return Omise.SourceType.billPayment(bill)
-        case .virtualAccount(let account):
-            let virtualAccount: Omise.SourceType.VirtualAccount
-            switch account {
-            case .sinarmas:
-                virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
-            case .unknown(let name):
-                virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
-            }
-            return Omise.SourceType.virtualAccount(virtualAccount)
-        case .barcode(let barcodeInformation):
-            let barcode: Omise.SourceType.Barcode
-            switch barcodeInformation {
-            case .alipay:
-                barcode = .alipay
-            case .unknown(let name, _):
-                barcode = .unknown(name)
-            }
-            return .barcode(barcode)
-        case .unknown(name: let sourceName):
-            return Omise.SourceType.unknown(sourceName)
-        }
-    }
-    
-    var value: String {
-        return sourceType.value
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case type
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let typeValue = try container.decode(String.self, forKey: .type)
-        
-        if typeValue.hasPrefix(internetBankingPrefix),
-            let internetBankingOffsite = typeValue
-                .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(PaymentSourceInformation.internetBanking) {
-            self = internetBankingOffsite
-        } else if typeValue == alipayValue {
-            self = .alipay
-        } else if typeValue.hasPrefix(billPaymentPrefix),
-            let billPaymentOffline = typeValue
-                .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(SourceType.BillPayment.init(rawValue:)).map(PaymentSourceInformation.billPayment) {
-            self = billPaymentOffline
-        } else if typeValue.hasPrefix(virtualAccountPrefix),
-            let virtualAccountOffline = typeValue
-                .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(SourceType.VirtualAccount.init(rawValue:)).map(PaymentSourceInformation.virtualAccount) {
-            self = virtualAccountOffline
-        } else if typeValue.hasPrefix(barcodePrefix),
-            let barcodeValue = typeValue
-                .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch barcodeValue {
-            case SourceType.Barcode.alipay.rawValue:
-                let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
-                self = .barcode(.alipay(alipayBarcode))
-            case let barcodeType:
-                let parameters = try decoder.decodeJSONDictionary().filter({ (key, _) -> Bool in
-                    switch key {
-                    case PaymentSource.CodingKeys.id.stringValue,
-                         PaymentSource.CodingKeys.object.stringValue,
-                         PaymentSource.CodingKeys.isLive.stringValue,
-                         PaymentSource.CodingKeys.location.stringValue,
-                         PaymentSource.CodingKeys.currency.stringValue,
-                         PaymentSource.CodingKeys.amount.stringValue,
-                         PaymentSource.CodingKeys.flow.stringValue,
-                         PaymentSource.CodingKeys.type.stringValue:
-                        return false
-                    default: return true
-                    }
-                })
-                self = .barcode(.unknown(name: barcodeType, parameters: parameters))
-            }
-        } else {
-            self = .unknown(typeValue)
-        }
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(value, forKey: .type)
-        
-        if case .barcode(let barcodeInformation) = self {
-            try barcodeInformation.encode(to: encoder)
-        }
-    }
-}
-
-public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: nil, path: "sources")
-    public typealias PaymentInformation = PaymentSourceInformation
-    
-    public let id: String
-    public let object: String
-    public let isLive: Bool
-    public let location: String
-    
-    public let currency: Currency
-    public let amount: Int64
-    
-    public let flow: Flow
-    public let paymentInformation: PaymentSourceInformation
-    
-    public var sourceType: SourceType {
-        return paymentInformation.sourceType
-    }
-}
-
-extension PaymentSource {
-    fileprivate enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case isLive = "livemode"
-        case location
-        case currency
-        case amount
-        case flow
-        case type
-        case references
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        id = try container.decode(String.self, forKey: .id)
-        object = try container.decode(String.self, forKey: .object)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
-        location = try container.decode(String.self, forKey: .location)
-        currency = try container.decode(Currency.self, forKey: .currency)
-        amount = try container.decode(Int64.self, forKey: .amount)
-        flow = try container.decode(Flow.self, forKey: .flow)
-        paymentInformation = try PaymentSourceInformation(from: decoder)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(id, forKey: .id)
-        try container.encode(object, forKey: .object)
-        try container.encode(isLive, forKey: .isLive)
-        try container.encode(location, forKey: .location)
-        try container.encode(amount, forKey: .amount)
-        try container.encode(currency, forKey: .currency)
-        try container.encode(flow, forKey: .flow)
-        try paymentInformation.encode(to: encoder)
-    }
-}
-
-
 public enum Barcode: Codable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case type
@@ -421,101 +245,96 @@ public enum Barcode: Codable, Equatable {
 }
 
 
-public struct EnrolledSource: SourceData {
-    public typealias PaymentInformation = EnrolledSource.EnrolledPaymentInformation
+public struct Installment: Codable, Equatable {
+    /// The brand of the bank of the installment
+    public let brand: SourceType.InstallmentBrand
+    /// A number of terms to do the installment
+    public let numberOfTerms: Int
     
-    public enum EnrolledPaymentInformation: Codable, Equatable {
+    public let absorptionType: AbsorptionType
+    
+    public enum AbsorptionType: String, Codable {
+        case customer
+        case merchant
+    }
+    
+    fileprivate enum CodingKeys: String, CodingKey {
+        case type
+        case absorptionType = "absorption_type"
+        case installmentTerms = "installment_terms"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let typeValue = try container.decode(String.self, forKey: .type)
+        
+        guard typeValue.hasPrefix(installmentPrefix),
+            let installmentBrand = typeValue
+                .range(of: installmentPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(SourceType.InstallmentBrand.init(rawValue:)) else {
+                    throw DecodingError.dataCorruptedError(
+                        forKey: CodingKeys.type, in: container,
+                        debugDescription: "Invalid Installment Source Type value"
+                    )
+        }
+        
+        self.brand = installmentBrand
+        self.numberOfTerms = try container.decode(Int.self, forKey: .installmentTerms)
+        self.absorptionType = try container.decode(AbsorptionType.self, forKey: .absorptionType)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(installmentPrefix + brand.rawValue, forKey: .type)
+        try container.encode(numberOfTerms, forKey: .installmentTerms)
+        try container.encode(absorptionType, forKey: .absorptionType)
+    }
+    
+    
+    public static func availableTerms(for brand: SourceType.InstallmentBrand) -> IndexSet {
+        switch brand {
+        case .bay:
+            return IndexSet([ 3, 4, 6, 9, 10 ])
+        case .firstChoice:
+            return IndexSet([ 3, 4, 6, 9, 10, 12, 18, 24, 36 ])
+        case .bbl:
+            return IndexSet([ 4, 6, 8, 9, 10 ])
+        case .ktc:
+            return IndexSet([ 3, 4, 5, 6, 7, 8, 9, 10 ])
+        case .kBank:
+            return IndexSet([ 3, 4, 6, 10 ])
+        case .unknown:
+            return IndexSet(1...360) // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
+        }
+    }
+    
+    public struct CreateParameter: Codable, Equatable {
+        public let brand: SourceType.InstallmentBrand
+        public let numberOfTerms: Int
+    }
+}
+
+
+public typealias AlipayBarcodeParams = Barcode.AlipayBarcode
+
+public struct PaymentSourceParams: APIJSONQuery {
+    public let amount: Int64
+    public let currency: Currency
+    
+    public let sourceParameter: SourceParameter
+    
+    public enum SourceParameter: Encodable, Equatable {
         case internetBanking(InternetBanking)
         case alipay
-        case billPayment(BillPayment)
-        case virtualAccount(VirtualAccount)
+        case billPayment(SourceType.BillPayment)
+        case virtualAccount(SourceType.VirtualAccount)
         case barcode(Barcode)
+        case installment(Installment.CreateParameter)
         
-        case unknown(name: String, references: [String: Any]?)
-        
-        public enum BillPayment: Equatable {
-            
-            case tescoLotus(BillInformation)
-            case unknown(name: String, references: [String: Any])
-            
-            public struct BillInformation: Codable, Equatable {
-                let omiseTaxID: String
-                let referenceNumber1: String
-                let referenceNumber2: String
-                let barcodeURL: URL
-                let expired: Date
-                
-                private enum CodingKeys: String, CodingKey {
-                    case omiseTaxID = "omise_tax_id"
-                    case referenceNumber1 = "reference_number_1"
-                    case referenceNumber2 = "reference_number_2"
-                    case barcodeURL = "barcode"
-                    case expired = "expires_at"
-                }
-            }
-            
-            public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
-                switch (lhs, rhs) {
-                case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
-                    return lhsValue == rhsValue
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
-        public enum VirtualAccount: Equatable {
-            case sinarmas(vaCode: String)
-            case unknown(name: String, references: [String: Any])
-            
-            fileprivate enum SinarmasCodingKeys: String, CodingKey {
-                case vaCode = "va_code"
-            }
-            
-            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount, rhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount) -> Bool {
-                switch (lhs, rhs) {
-                case let (.sinarmas(lhsValue), .sinarmas(rhsValue)):
-                    return lhsValue == rhsValue
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
-        public enum Barcode: Equatable {
-            case alipay(AlipayBarcode)
-            case unknown(name: String, references: [String: Any])
-            
-            var value: String {
-                let value: String
-                switch self {
-                case .alipay:
-                    value = "alipay"
-                case .unknown(name: let name, references: _):
-                    value = name
-                }
-                return value
-            }
-            
-            public struct AlipayBarcode: Codable {
-                public let expired: Date
-                fileprivate enum CodingKeys: String, CodingKey {
-                    case expired = "expires_at"
-                }
-            }
-            
-            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.Barcode, rhs: EnrolledSource.EnrolledPaymentInformation.Barcode) -> Bool {
-                switch (lhs, rhs) {
-                case (.alipay, .alipay):
-                    return true
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
+        case unknown(String)
         
         var sourceType: Omise.SourceType {
             switch self {
@@ -528,7 +347,7 @@ public struct EnrolledSource: SourceData {
                 switch billPayment {
                 case .tescoLotus:
                     bill = Omise.SourceType.BillPayment.tescoLotus
-                case .unknown(let name, _):
+                case .unknown(let name):
                     bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
@@ -537,7 +356,7 @@ public struct EnrolledSource: SourceData {
                 switch account {
                 case .sinarmas:
                     virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
-                case .unknown(let name, _):
+                case .unknown(let name):
                     virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
                 }
                 return Omise.SourceType.virtualAccount(virtualAccount)
@@ -546,186 +365,37 @@ public struct EnrolledSource: SourceData {
                 switch barcodeInformation {
                 case .alipay:
                     barcode = .alipay
-                case .unknown(name: let name, references: _):
+                case .unknown(let name, _):
                     barcode = .unknown(name)
                 }
                 return .barcode(barcode)
-            case .unknown(name: let sourceName, references: _):
+                
+            case .installment(let installment):
+                return .installment(installment.brand)
+            case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
         }
         
-        public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation, rhs: EnrolledSource.EnrolledPaymentInformation) -> Bool {
-            switch (lhs, rhs) {
-            case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
-                return lhsValue == rhsValue
-            case (.alipay, .alipay):
-                return true
-            case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
-                return lhsValue == rhsValue
-            case (.virtualAccount(let lhsValue), .virtualAccount(let rhsValue)):
-                return lhsValue == rhsValue
-            case (.barcode(let lhsValue), .barcode(let rhsValue)):
-                return lhsValue == rhsValue
-            default: return false
-            }
+        
+        private enum CodingKeys: String, CodingKey {
+            case type
         }
-    }
-    
-    public let id: String
-    public let object: String
-    
-    public let currency: Currency
-    public let amount: Int64
-    
-    public let flow: Flow
-    public let paymentInformation: PaymentInformation
-    
-    public var sourceType: SourceType {
-        return paymentInformation.sourceType
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case currency
-        case amount
-        case flow
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        object = try container.decode(String.self, forKey: .object)
-        currency = try container.decode(Currency.self, forKey: .currency)
-        amount = try container.decode(Int64.self, forKey: .amount)
-        flow = try container.decode(Flow.self, forKey: .flow)
-        paymentInformation = try PaymentInformation.init(from: decoder)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(object, forKey: .object)
-        try container.encode(id, forKey: .id)
-        try container.encode(currency, forKey: .currency)
-        try container.encode(amount, forKey: .amount)
-        try container.encode(flow, forKey: .flow)
-        try paymentInformation.encode(to: encoder)
-    }
-}
-
-
-extension EnrolledSource.EnrolledPaymentInformation {
-    private enum CodingKeys: String, CodingKey {
-        case type
-        case references
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        let typeValue = try container.decode(String.self, forKey: .type)
-        
-        if typeValue.hasPrefix(internetBankingPrefix),
-            let internetBankingOffsite = typeValue
-                .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.internetBanking) {
-            self = internetBankingOffsite
-        } else if typeValue == alipayValue {
-            self = .alipay
-        } else if typeValue.hasPrefix(billPaymentPrefix),
-            let billPaymentValue = typeValue
-                .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch billPaymentValue {
-            case SourceType.BillPayment.tescoLotus.rawValue:
-                let billInformation = try container.decode(BillPayment.BillInformation.self, forKey: .references)
-                self = .billPayment(.tescoLotus(billInformation))
-            case let billPaymentType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .billPayment(.unknown(name: billPaymentType, references: references))
-            }
-        } else if typeValue.hasPrefix(virtualAccountPrefix),
-            let virtualAccountOffline = typeValue
-                .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch virtualAccountOffline {
-            case SourceType.VirtualAccount.sinarmas.rawValue:
-                let accountContainer = try container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
-                let vaCode = try accountContainer.decode(String.self, forKey: .vaCode)
-                self = .virtualAccount(.sinarmas(vaCode: vaCode))
-            case let virtualAccountType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .virtualAccount(.unknown(name: virtualAccountType, references: references))
-            }
-        } else if typeValue.hasPrefix(barcodePrefix),
-            let barcodeValue = typeValue
-                .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch barcodeValue {
-            case SourceType.Barcode.alipay.rawValue:
-                let alipayBarcode = try container.decode(Barcode.AlipayBarcode.self, forKey: .references)
-                self = .barcode(.alipay(alipayBarcode))
-            case let barcodeType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .barcode(.unknown(name: barcodeType, references: references))
-            }
-        } else {
-            let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
-            self = .unknown(name: typeValue, references: references)
-        }
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        switch self {
-        case .internetBanking(let bank):
-            try container.encode(internetBankingPrefix + bank.rawValue, forKey: .type)
-        case .alipay:
-            try container.encode(alipayValue, forKey: .type)
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(sourceType.value, forKey: .type)
             
-        case .billPayment(let billPayment):
-            switch billPayment {
-            case .tescoLotus(let bill):
-                try container.encode(billPaymentPrefix + SourceType.BillPayment.tescoLotus.rawValue, forKey: .type)
-                try container.encode(bill, forKey: .references)
-            case let .unknown(name: name, references: references):
-                try container.encode(billPaymentPrefix + name, forKey: .type)
-                try container.encode(references, forKey: .references)
+            switch self {
+            case .barcode(let barcodeInformation):
+                try barcodeInformation.encode(to: encoder)
+            case .installment(let parameter):
+                try parameter.encode(to: encoder)
+            default: break
             }
-        case .virtualAccount(let account):
-            switch account {
-            case .sinarmas(vaCode: let vaCode):
-                try container.encode(virtualAccountPrefix + SourceType.VirtualAccount.sinarmas.rawValue, forKey: .type)
-                var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
-                try accountContainer.encode(vaCode, forKey: .vaCode)
-            case let .unknown(name: name, references: references):
-                try container.encode(virtualAccountPrefix + name, forKey: .type)
-                try container.encode(references, forKey: .references)
-            }
-        case .barcode(let barcode):
-            switch barcode {
-            case .alipay(let alipayBarcode):
-                try container.encode(barcodePrefix + SourceType.Barcode.alipay.rawValue, forKey: .type)
-                try container.encode(alipayBarcode, forKey: .references)
-            case let .unknown(name: name, references: references):
-                try container.encode(barcodePrefix + name, forKey: .type)
-                try container.encode(references, forKey: .references)
-            }
-        case .unknown(name: let sourceType, references: let references):
-            try container.encode(sourceType, forKey: .type)
-            try container.encodeIfPresent(references, forKey: .references)
         }
     }
-}
 
-
-public typealias AlipayBarcodeParams = Barcode.AlipayBarcode
-
-public struct PaymentSourceParams: APIJSONQuery {
-    public let amount: Int64
-    public let currency: Currency
-    
-    public let type: PaymentSourceInformation
     
     private enum CodingKeys: String, CodingKey {
         case amount
@@ -736,19 +406,19 @@ public struct PaymentSourceParams: APIJSONQuery {
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
         
-        try type.encode(to: encoder)
+        try sourceParameter.encode(to: encoder)
     }
     
-    public init(amount: Int64, currency: Currency, type: PaymentSourceInformation) {
+    public init(amount: Int64, currency: Currency, type: SourceParameter) {
         self.amount = amount
         self.currency = currency
-        self.type = type
+        self.sourceParameter = type
     }
     
-    public init(value: Value, type: PaymentSourceInformation) {
+    public init(value: Value, type: SourceParameter) {
         self.amount = value.amount
         self.currency = value.currency
-        self.type = type
+        self.sourceParameter = type
     }
 }
 
