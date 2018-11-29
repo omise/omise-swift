@@ -158,7 +158,7 @@ private struct ArrayIndexKey: CodingKey {
     }
 }
 
-private struct JSONCodingKeys: CodingKey {
+struct JSONCodingKeys: CodingKey {
     var stringValue: String
     
     init?(stringValue: String) {
