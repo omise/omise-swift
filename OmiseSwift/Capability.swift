@@ -12,6 +12,16 @@ public struct Capability: OmiseLocatableObject, SingletonRetrievable {
     public let transferLimit: Limit
     
     public let supportedBackends: [Backend]
+    
+    private let backends: [Capability.Backend.Key: Backend]
+    
+    public var creditCardBackend: Capability.Backend? {
+        return backends[.card]
+    }
+    
+    public subscript(sourceType: SourceType) -> Capability.Backend? {
+        return backends[.source(sourceType)]
+    }
 }
 
 
@@ -38,6 +48,11 @@ extension Capability {
         
         public var range: ClosedRange<Int64> {
             return min...max
+        }
+        
+        public init(min: Int64, max: Int64) {
+            self.max = Swift.max(min, max)
+            self.min = Swift.min(min, max)
         }
     }
     
@@ -106,6 +121,8 @@ extension Capability {
             backends.append(try backendsContainer.decode(Capability.Backend.self))
         }
         self.supportedBackends = backends
+        
+        self.backends = Dictionary(uniqueKeysWithValues: zip(backends.map({ Capability.Backend.Key(payment: $0.payment) }), backends))
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -233,7 +250,7 @@ extension Capability.Backend {
 
 private let creditCardBackendTypeValue = "credit_card"
 extension Capability.Backend {
-    private enum Key : CodingKey {
+    fileprivate enum Key : CodingKey, Hashable {
         case card
         case source(SourceType)
         

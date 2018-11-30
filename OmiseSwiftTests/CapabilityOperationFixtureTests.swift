@@ -11,8 +11,29 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(capability):
-                XCTAssertEqual(capability.chargeLimit, Capability.Limit(max: 100000000, min: 2000))
+                XCTAssertEqual(capability.chargeLimit, Capability.Limit(min: 2000, max: 100000000))
+                XCTAssertEqual(capability.transferLimit, Capability.Limit(min: 3000, max: 10_000_000_00))
                 XCTAssertEqual(capability.supportedBackends.count, 6)
+                XCTAssertNil(capability[SourceType.virtualAccount(.sinarmas)])
+                
+                if let creditCardBackend = capability.creditCardBackend {
+                    XCTAssertEqual(creditCardBackend.payment, Capability.Backend.Payment.card([]))
+                    XCTAssertEqual(creditCardBackend.supportedCurrencies, [.thb, .jpy, .usd, .eur, .gbp, .sgd])
+                    XCTAssertNil(creditCardBackend.limit)
+                } else {
+                    XCTFail("Capability doesn't have the Credit Card backend")
+                }
+                
+                if let bayInstallmentBackend = capability[SourceType.installment(.bay)] {
+                    XCTAssertEqual(
+                        bayInstallmentBackend.payment,
+                        Capability.Backend.Payment.installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10))
+                    )
+                    XCTAssertEqual(bayInstallmentBackend.supportedCurrencies, [.thb])
+                    XCTAssertEqual(bayInstallmentBackend.limit, Capability.Limit(min: 20_00, max: 1_000_000_00))
+                } else {
+                    XCTFail("Capability doesn't have the BAY Installment backend")
+                }
             case let .fail(error):
                 XCTFail("\(error)")
             }
@@ -31,12 +52,22 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        do {
-            let decodedCapability = try decoder.decode(Capability.self, from: encodedData)
-            XCTAssertEqual(capability.chargeLimit, decodedCapability.chargeLimit)
-        } catch {
-            print(error)
-        }
+        let decodedCapability = try decoder.decode(Capability.self, from: encodedData)
+        XCTAssertEqual(capability.chargeLimit, decodedCapability.chargeLimit)
+        
+        XCTAssertEqual(capability.transferLimit, decodedCapability.transferLimit)
+        XCTAssertEqual(capability.supportedBackends.count, decodedCapability.supportedBackends.count)
+        XCTAssertNil(decodedCapability[SourceType.virtualAccount(.sinarmas)])
+        
+        XCTAssertEqual(capability.creditCardBackend?.payment, decodedCapability.creditCardBackend?.payment)
+        XCTAssertEqual(capability.creditCardBackend?.supportedCurrencies, decodedCapability.creditCardBackend?.supportedCurrencies)
+        XCTAssertNil(decodedCapability.creditCardBackend?.limit)
+        XCTAssertEqual(
+            capability[SourceType.installment(.bay)]?.payment,
+            decodedCapability[SourceType.installment(.bay)]?.payment
+        )
+        XCTAssertEqual(capability[SourceType.installment(.bay)]?.supportedCurrencies, decodedCapability[SourceType.installment(.bay)]?.supportedCurrencies)
+        XCTAssertEqual(capability[SourceType.installment(.bay)]?.limit, decodedCapability[SourceType.installment(.bay)]?.limit)
     }
 }
 
