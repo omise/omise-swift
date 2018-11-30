@@ -109,7 +109,21 @@ extension Capability {
     }
     
     public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
+        try container.encode(location, forKey: .location)
+        try container.encode(object, forKey: .object)
+        
+        try container.encode(supportedBanks, forKey: .supportedBanks)
+        
+        var limitsContainer = container.nestedContainer(keyedBy: LimitCodingKeys.self, forKey: .limits)
+        try limitsContainer.encode(chargeLimit, forKey: .charge)
+        try limitsContainer.encode(transferLimit, forKey: .transfer)
+        
+        var backendsContainer = container.nestedUnkeyedContainer(forKey: .paymentBackends)
+        try supportedBackends.forEach({ backend in
+            try backendsContainer.encode(backend)
+        })
     }
 }
 
@@ -149,11 +163,7 @@ extension Capability.Backend {
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
         case .source(SourceType.unknown(let type)):
-            let configurations = try container.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: sourceTypeKey).decodeJSONDictionary().filter({
-                $0.key != Capability.Backend.CodingKeys.limit.stringValue
-                    && $0.key != Capability.Backend.CodingKeys.supportedCurrencies.stringValue
-                    && $0.key != Capability.Backend.CodingKeys.type.stringValue
-            })
+            let configurations = try container.nestedContainer(keyedBy: SkippingKeyCodingKeys<Capability.Backend.CodingKeys>.self, forKey: sourceTypeKey).decodeJSONDictionary()
             self.payment = .unknownSource(type, configurations: configurations)
         case .source(SourceType.billPayment), .source(SourceType.virtualAccount), .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(
@@ -164,7 +174,59 @@ extension Capability.Backend {
     }
     
     public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Capability.Backend.Key.self)
         
+        let sourceTypeKey = Capability.Backend.Key(payment: self.payment)
+        
+        switch payment {
+        case .card(let brands):
+            var paymentConfigurations = container.nestedContainer(keyedBy: CombineCodingKeys<Capability.Backend.CodingKeys, Capability.Backend.ConfigurationCodingKeys>.self, forKey: sourceTypeKey)
+            try paymentConfigurations.encode(brands, forKey: .right(.brands))
+            
+            try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
+            try paymentConfigurations.encodeIfPresent(limit, forKey: .left(.limit))
+            try paymentConfigurations.encode(sourceTypeKey.type, forKey: .left(.type))
+        case .installment(_, availableNumberOfTerms: let availableNumberOfTerms):
+            var paymentConfigurations = container.nestedContainer(keyedBy: CombineCodingKeys<Capability.Backend.CodingKeys, Capability.Backend.ConfigurationCodingKeys>.self, forKey: sourceTypeKey)
+            try paymentConfigurations.encode(Array(availableNumberOfTerms), forKey: .right(.allowedInstallmentTerms))
+            
+            try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
+            try paymentConfigurations.encodeIfPresent(limit, forKey: .left(.limit))
+            try paymentConfigurations.encode(sourceTypeKey.type, forKey: .left(.type))
+        case .unknownSource(_, configurations: let configurations):
+            var configurationContainers = container.nestedContainer(keyedBy: CombineCodingKeys<Capability.Backend.CodingKeys, JSONCodingKeys>.self, forKey: sourceTypeKey)
+            try configurations.forEach({ (key, value) in
+                let key = JSONCodingKeys(key: key)
+                switch value {
+                case let value as Bool:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case let value as Int:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case let value as String:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case let value as Double:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case let value as Dictionary<String, Any>:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case let value as Array<Any>:
+                    try configurationContainers.encode(value, forKey: .right(key))
+                case Optional<Any>.none:
+                    try configurationContainers.encodeNil(forKey: .right(key))
+                default:
+                    throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: configurationContainers.codingPath + [key], debugDescription: "Invalid JSON value"))
+                }
+            })
+
+            try configurationContainers.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
+            try configurationContainers.encodeIfPresent(limit, forKey: .left(.limit))
+            try configurationContainers.encode(sourceTypeKey.type, forKey: .left(.type))
+        case .internetBanking, .alipay:
+            var backendConfigurations = container.nestedContainer(keyedBy: Capability.Backend.CodingKeys.self, forKey: sourceTypeKey)
+            
+            try backendConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try backendConfigurations.encodeIfPresent(limit, forKey: .limit)
+            try backendConfigurations.encode(sourceTypeKey.type, forKey: .type)
+        }
     }
 }
 
@@ -196,6 +258,21 @@ extension Capability.Backend {
         
         var intValue: Int? { return nil }
         init?(intValue: Int) { return nil }
+        
+        init(payment: Capability.Backend.Payment) {
+            switch payment {
+            case .card:
+                self = .card
+            case .alipay:
+                self = .source(.alipay)
+            case .installment(let brand, availableNumberOfTerms: _):
+                self = .source(.installment(brand))
+            case .internetBanking(let banking):
+                self = .source(.internetBanking(banking))
+            case .unknownSource(let sourceType, configurations: _):
+                self = .source(.unknown(sourceType))
+            }
+        }
         
         var type: String {
             switch self {

@@ -178,6 +178,94 @@ struct JSONCodingKeys: CodingKey {
 }
 
 
+struct JSONCombineCodingKeys<BasedKey: CodingKey> : CodingKey {
+    let basedKey: BasedKey?
+    let stringValue: String
+    let intValue: Int?
+    
+    init?(stringValue: String) {
+        self.basedKey = BasedKey(stringValue: stringValue)
+        
+        self.stringValue = stringValue
+        self.intValue = Int(stringValue)
+    }
+    
+    init?(intValue: Int) {
+        self.basedKey = BasedKey(intValue: intValue)
+
+        self.intValue = intValue
+        self.stringValue = String(intValue)
+    }
+}
+
+enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
+    var stringValue: String {
+        switch self {
+        case .left(let left):
+            return left.stringValue
+        case .right(let right):
+            return right.stringValue
+        }
+    }
+    
+    var intValue: Int? {
+        switch self {
+        case .left(let left):
+            return left.intValue
+        case .right(let right):
+            return right.intValue
+        }
+    }
+    
+    init?(stringValue: String) {
+        if let left = Left(stringValue: stringValue) {
+            self = .left(left)
+        } else if let right = Right(stringValue: stringValue) {
+            self = .right(right)
+        } else {
+            return nil
+        }
+    }
+    
+    init?(intValue: Int) {
+        if let left = Left(intValue: intValue) {
+            self = .left(left)
+        } else if let right = Right(intValue: intValue) {
+            self = .right(right)
+        } else {
+            return nil
+        }
+    }
+    
+    case left(Left)
+    case right(Right)
+}
+
+struct SkippingKeyCodingKeys<Key: CodingKey> : CodingKey {
+    let stringValue: String
+    
+    init?(stringValue: String) {
+        guard Key(stringValue: stringValue) == nil else {
+            return nil
+        }
+        
+        self.stringValue = stringValue
+        self.intValue = Int(stringValue)
+    }
+    
+    let intValue: Int?
+    
+    init?(intValue: Int) {
+        guard Key(intValue: intValue) == nil else {
+            return nil
+        }
+        
+        self.intValue = intValue
+        self.stringValue = String(intValue)
+    }
+}
+
+
 extension KeyedDecodingContainerProtocol {
     func decodeOmiseDateComponents(forKey key: Key) throws -> DateComponents {
         let dateComponentsValue = try decode(String.self, forKey: key)
@@ -233,8 +321,8 @@ extension KeyedDecodingContainerProtocol {
             return doubleValue
         }
     }
-
 }
+
 
 extension KeyedDecodingContainerProtocol {
     func decode(_ type: Dictionary<String, Any>.Type, forKey key: Key) throws -> Dictionary<String, Any> {
@@ -315,12 +403,6 @@ extension UnkeyedDecodingContainer {
     }
 }
 
-extension SingleValueDecodingContainer {
-//    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
-//        let nestedContainer = try  .nestedContainer(keyedBy: JSONCodingKeys.self)
-//        return try nestedContainer.decodeJSONDictionary()
-//    }
-}
 
 extension Encoder {
     func encodeOmiseDateComponents(_ dateComponents: DateComponents) throws {
@@ -353,6 +435,7 @@ extension KeyedEncodingContainerProtocol {
         try encode(dateComponentsValue, forKey: key)
     }
 }
+
 
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     mutating func encodeJSONDictionary(_ value: Dictionary<String, Any>) throws {

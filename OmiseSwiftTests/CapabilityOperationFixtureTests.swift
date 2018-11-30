@@ -21,5 +21,22 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
+    
+    func testEncodeCapabilityRetrieve() throws {
+        let capability = try fixturesObjectFor(type: Capability.self)
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(capability)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        do {
+            let decodedCapability = try decoder.decode(Capability.self, from: encodedData)
+            XCTAssertEqual(capability.chargeLimit, decodedCapability.chargeLimit)
+        } catch {
+            print(error)
+        }
+    }
 }
 
