@@ -25,18 +25,42 @@ public struct Capability: OmiseLocatableObject, SingletonRetrievable {
 }
 
 
-extension Capability: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case object
-        case location
-        case supportedBanks = "banks"
-        case limits
-        case paymentBackends = "payment_backends"
-    }
-    
-    private enum LimitCodingKeys: String, CodingKey {
-        case charge = "charge_amount"
-        case transfer = "transfer_amount"
+extension Capability {
+    public static func ~=(lhs: Capability, rhs: Charge.CreateParams) -> Bool {
+        func backend(from capability: Capability, for payment: Charge.CreateParams.Payment) -> Backend? {
+            switch payment {
+            case .card, .customer:
+                return capability.creditCardBackend
+            case .source(let source):
+                return capability[source.sourceType]
+            case .sourceType(let parameter):
+                return capability[parameter.sourceType]
+            }
+        }
+        
+        guard let backend = backend(from: lhs, for: rhs.payment) else {
+            return false
+        }
+        
+        let isValidValue = (backend.limit ?? lhs.chargeLimit) ~= rhs.value.amount
+            && backend.supportedCurrencies.contains(rhs.value.currency)
+        
+        let isPaymentValid: Bool
+        switch backend.payment {
+        case .installment(_, availableNumberOfTerms: let availableNumberofTerms):
+            if case .source(let source) = rhs.payment,
+                case .installment(let installment) = source.paymentInformation {
+                isPaymentValid = availableNumberofTerms.contains(installment.numberOfTerms)
+            } else if case .sourceType(.installment(let installmentParameter)) = rhs.payment {
+                isPaymentValid = availableNumberofTerms.contains(installmentParameter.numberOfTerms)
+            } else {
+                isPaymentValid = false
+            }
+        default:
+            isPaymentValid = true
+        }
+        
+        return isValidValue && isPaymentValid
     }
 }
 
@@ -54,6 +78,10 @@ extension Capability {
             self.max = Swift.max(min, max)
             self.min = Swift.min(min, max)
         }
+        
+        public static func ~=(lhs: Capability.Limit, rhs: Int64) -> Bool {
+            return lhs.min <= rhs && rhs <= lhs.max
+        }
     }
     
     public struct Backend: Codable, Equatable {
@@ -68,6 +96,22 @@ extension Capability {
             case alipay
             case unknownSource(String, configurations: JSONDictionary)
         }
+    }
+}
+
+
+extension Capability: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case supportedBanks = "banks"
+        case limits
+        case paymentBackends = "payment_backends"
+    }
+    
+    private enum LimitCodingKeys: String, CodingKey {
+        case charge = "charge_amount"
+        case transfer = "transfer_amount"
     }
 }
 
