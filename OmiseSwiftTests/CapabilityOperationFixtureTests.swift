@@ -13,7 +13,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             case let .success(capability):
                 XCTAssertEqual(capability.chargeLimit, Capability.Limit(min: 2000, max: 100000000))
                 XCTAssertEqual(capability.transferLimit, Capability.Limit(min: 3000, max: 10_000_000_00))
-                XCTAssertEqual(capability.supportedBackends.count, 6)
+                XCTAssertEqual(capability.supportedBackends.count, 8)
                 XCTAssertNil(capability[.virtualAccount(.sinarmas)])
                 
                 if let creditCardBackend = capability.creditCardBackend {
@@ -34,6 +34,18 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Capability doesn't have the BAY Installment backend")
                 }
+                
+                if let ktbInternetBankingBackend = capability[SourceType.internetBanking(.ktb)] {
+                    XCTAssertEqual(
+                        ktbInternetBankingBackend.payment,
+                        .internetBanking(.ktb)
+                    )
+                    XCTAssertEqual(ktbInternetBankingBackend.supportedCurrencies, [.thb])
+                    XCTAssertEqual(ktbInternetBankingBackend.limit, Capability.Limit(min: 5_000_00, max: 100_000_00))
+                } else {
+                    XCTFail("Capability doesn't have the BAY Installment backend")
+                }
+                XCTAssertNil(capability[SourceType.internetBanking(.bbl)])
                 
                 do {
                     let chargeParams = ChargeParams(

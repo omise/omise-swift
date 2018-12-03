@@ -162,6 +162,26 @@
           "max": 100000000
         }
       }
+    },
+    {
+      "internet_banking_scb": {
+        "type": "internet_banking",
+        "currencies": ["thb"],
+        "amount": {
+          "min": 500000,
+          "max": 10000000
+        }
+      }
+    },
+    {
+      "internet_banking_ktb": {
+        "type": "internet_banking",
+        "currencies": ["thb"],
+        "amount": {
+          "min": 500000,
+          "max": 10000000
+        }
+      }
     }
   ]
 }

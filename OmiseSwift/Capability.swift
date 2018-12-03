@@ -340,8 +340,12 @@ extension Capability.Backend {
             case .card:
                 return "card"
             case .source(let sourceType):
-                let sourceTypeValue = sourceType.value
-                return sourceTypeValue.firstIndex(of: "_").map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
+                let sourceTypeValue = sourceType.sourceTypePrefix
+                if sourceTypeValue.hasSuffix("_") {
+                    return sourceTypeValue.lastIndex(of: "_").map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
+                } else {
+                    return sourceTypeValue
+                }
             }
         }
     }

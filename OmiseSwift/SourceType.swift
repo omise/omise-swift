@@ -178,6 +178,26 @@ public enum SourceType: Codable, Equatable, Hashable {
         }
     }
     
+    var sourceTypePrefix: String {
+        switch self {
+        case .internetBanking:
+            return internetBankingPrefix
+        case .alipay:
+            return alipayValue
+            
+        case .billPayment:
+            return billPaymentPrefix
+        case .virtualAccount:
+            return virtualAccountPrefix
+        case .barcode:
+            return barcodePrefix
+        case .installment:
+            return installmentPrefix
+        case .unknown(let source):
+            return source
+        }
+    }
+    
     var value: String {
         let value: String
         switch self {
