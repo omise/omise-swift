@@ -124,7 +124,7 @@ public enum Barcode: Codable, Equatable {
             let alipayBarcode = try AlipayBarcode(from: decoder)
             self = .alipay(alipayBarcode)
         case let value:
-            let parameters = try decoder.decodeJSONDictionary().filter({ $0.key != "type" })
+            let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: CodingKeys.self)
             self = .unknown(name: value, parameters: parameters)
         }
     }
@@ -134,7 +134,7 @@ public enum Barcode: Codable, Equatable {
         case .alipay(let barcodeInformation):
             try barcodeInformation.encode(to: encoder)
         case .unknown(name: _, parameters: let parameters):
-            try encoder.encodeJSONDictionary(parameters.filter({ $0.key != "type" }))
+            try encoder.encodeJSONDictionary(parameters, skippingKeysBy: CodingKeys.self)
         }
     }
     
@@ -200,9 +200,21 @@ public enum Barcode: Codable, Equatable {
             case (nil, nil):
                 storeInformation = nil
             case (nil, .some):
-                throw DecodingError.keyNotFound(CodingKeys.storeID, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Barcode store name is present but store id informaiton is missing"))
+                throw DecodingError.keyNotFound(
+                    CodingKeys.storeID,
+                    DecodingError.Context(
+                        codingPath: container.codingPath,
+                        debugDescription: "Alipay Barcode store name is present but store id informaiton is missing"
+                    )
+                )
             case (.some, nil):
-                throw DecodingError.keyNotFound(CodingKeys.storeName, DecodingError.Context(codingPath: container.codingPath, debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"))
+                throw DecodingError.keyNotFound(
+                    CodingKeys.storeName,
+                    DecodingError.Context(
+                        codingPath: container.codingPath,
+                        debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"
+                    )
+                )
             }
             
             self.init(storeInformation: storeInformation, terminalID: terminalID, barcode: barcode)
