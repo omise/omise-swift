@@ -34,4 +34,29 @@ class FixtureTestCase: OmiseTestCase {
         
         return try decoder.decode(T.self, from: data)
     }
+    
+    
+    func fixturesObjectFor<T: OmiseLocatableObject & SingletonRetrievable>(type: T.Type, suffix: String? = nil) throws -> T {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
+        var dataIDComponent = String(T.resourceInfo.path.suffix(from: T.resourceInfo.path.index(where: { $0 != "/"}) ?? T.resourceInfo.path.startIndex))
+        
+        if let suffix = suffix {
+            dataIDComponent += "-\(suffix)"
+        }
+        dataIDComponent += "-get"
+        
+        fileURL.appendPathComponent(dataIDComponent)
+        fileURL.appendPathExtension("json")
+        
+        guard let data = try? Data(contentsOf: fileURL) else {
+            throw NSError(domain: URLError.errorDomain, code: URLError.fileDoesNotExist.rawValue, userInfo: [
+                NSURLErrorFailingURLErrorKey: fileURL,
+                ])
+        }
+        
+        return try decoder.decode(T.self, from: data)
+    }
 }

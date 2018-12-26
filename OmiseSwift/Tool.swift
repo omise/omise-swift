@@ -129,6 +129,11 @@ extension Decoder {
         let container = try self.container(keyedBy: JSONCodingKeys.self)
         return try container.decodeJSONDictionary()
     }
+    
+    func decodeJSONDictionary<SkippedKeys: CodingKey>(skippingKeysBy skippingKeys: SkippedKeys.Type) throws -> Dictionary<String, Any> {
+        let container = try self.container(keyedBy: SkippingKeyCodingKeys<SkippedKeys>.self)
+        return try container.decodeJSONDictionary()
+    }
 }
 
 private struct ArrayIndexKey: CodingKey {
@@ -158,7 +163,7 @@ private struct ArrayIndexKey: CodingKey {
     }
 }
 
-private struct JSONCodingKeys: CodingKey {
+struct JSONCodingKeys: CodingKey {
     var stringValue: String
     
     init?(stringValue: String) {
@@ -174,6 +179,74 @@ private struct JSONCodingKeys: CodingKey {
     init?(intValue: Int) {
         self.init(stringValue: "\(intValue)")
         self.intValue = intValue
+    }
+}
+
+
+enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
+    var stringValue: String {
+        switch self {
+        case .left(let left):
+            return left.stringValue
+        case .right(let right):
+            return right.stringValue
+        }
+    }
+    
+    var intValue: Int? {
+        switch self {
+        case .left(let left):
+            return left.intValue
+        case .right(let right):
+            return right.intValue
+        }
+    }
+    
+    init?(stringValue: String) {
+        if let left = Left(stringValue: stringValue) {
+            self = .left(left)
+        } else if let right = Right(stringValue: stringValue) {
+            self = .right(right)
+        } else {
+            return nil
+        }
+    }
+    
+    init?(intValue: Int) {
+        if let left = Left(intValue: intValue) {
+            self = .left(left)
+        } else if let right = Right(intValue: intValue) {
+            self = .right(right)
+        } else {
+            return nil
+        }
+    }
+    
+    case left(Left)
+    case right(Right)
+}
+
+struct SkippingKeyCodingKeys<Key: CodingKey> : CodingKey {
+    let stringValue: String
+    
+    init?(stringValue: String) {
+        guard Key(stringValue: stringValue) == nil else {
+            return nil
+        }
+        
+        self.stringValue = stringValue
+        self.intValue = Int(stringValue)
+    }
+    
+    let intValue: Int?
+    
+    init?(intValue: Int) {
+        guard Key(intValue: intValue) == nil else {
+            return nil
+        }
+        
+        self.intValue = intValue
+        self.stringValue = String(intValue)
     }
 }
 
@@ -233,8 +306,8 @@ extension KeyedDecodingContainerProtocol {
             return doubleValue
         }
     }
-
 }
+
 
 extension KeyedDecodingContainerProtocol {
     func decode(_ type: Dictionary<String, Any>.Type, forKey key: Key) throws -> Dictionary<String, Any> {
@@ -315,12 +388,6 @@ extension UnkeyedDecodingContainer {
     }
 }
 
-extension SingleValueDecodingContainer {
-//    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
-//        let nestedContainer = try  .nestedContainer(keyedBy: JSONCodingKeys.self)
-//        return try nestedContainer.decodeJSONDictionary()
-//    }
-}
 
 extension Encoder {
     func encodeOmiseDateComponents(_ dateComponents: DateComponents) throws {
@@ -331,6 +398,11 @@ extension Encoder {
     func encodeJSONDictionary(_ jsonDictionary: Dictionary<String, Any>) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
         try container.encodeJSONDictionary(jsonDictionary)
+    }
+    
+    func encodeJSONDictionary<SkippedKeys: CodingKey>(_ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type) throws  {
+        var container = self.container(keyedBy: JSONCodingKeys.self)
+        try container.encodeJSONDictionary(value, skippingKeysBy: skippingKeys)
     }
 }
 
@@ -354,9 +426,37 @@ extension KeyedEncodingContainerProtocol {
     }
 }
 
+
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     mutating func encodeJSONDictionary(_ value: Dictionary<String, Any>) throws {
         try value.forEach({ (key, value) in
+            let key = JSONCodingKeys(key: key)
+            switch value {
+            case let value as Bool:
+                try encode(value, forKey: key)
+            case let value as Int:
+                try encode(value, forKey: key)
+            case let value as String:
+                try encode(value, forKey: key)
+            case let value as Double:
+                try encode(value, forKey: key)
+            case let value as Dictionary<String, Any>:
+                try encode(value, forKey: key)
+            case let value as Array<Any>:
+                try encode(value, forKey: key)
+            case Optional<Any>.none:
+                try encodeNil(forKey: key)
+            default:
+                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + [key], debugDescription: "Invalid JSON value"))
+            }
+        })
+    }
+    
+    mutating func encodeJSONDictionary<SkippedKeys: CodingKey>(_ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type) throws  {
+        try value.forEach({ (key, value) in
+            guard SkippedKeys(stringValue: key) == nil else {
+                return
+            }
             let key = JSONCodingKeys(key: key)
             switch value {
             case let value as Bool:

@@ -9,7 +9,7 @@ let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
 
 
-public enum InternetBanking: RawRepresentable, Equatable {
+public enum InternetBanking: RawRepresentable, Equatable, Hashable {
     public init?(rawValue: String) {
         switch rawValue {
         case "bay":
@@ -50,7 +50,7 @@ public enum InternetBanking: RawRepresentable, Equatable {
 }
 
 
-public enum SourceType: Codable, Equatable {
+public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
     case alipay
     case billPayment(BillPayment)
@@ -60,7 +60,7 @@ public enum SourceType: Codable, Equatable {
     
     case unknown(String)
     
-    public enum BillPayment: RawRepresentable, Equatable {
+    public enum BillPayment: RawRepresentable, Equatable, Hashable {
         static private let tescoLotusValue = "tesco_lotus"
         case tescoLotus
         case unknown(String)
@@ -84,7 +84,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum VirtualAccount: RawRepresentable, Equatable {
+    public enum VirtualAccount: RawRepresentable, Equatable, Hashable {
         static private let sinarmasValue = "sinarmas"
         
         case sinarmas
@@ -109,7 +109,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum Barcode: RawRepresentable, Equatable {
+    public enum Barcode: RawRepresentable, Equatable, Hashable {
         static private let alipayValue = "alipay"
         
         case alipay
@@ -134,7 +134,7 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
-    public enum InstallmentBrand: RawRepresentable, Equatable, Codable {
+    public enum InstallmentBrand: RawRepresentable, Equatable, Codable, Hashable {
         case bay
         case firstChoice
         case bbl
@@ -178,6 +178,26 @@ public enum SourceType: Codable, Equatable {
         }
     }
     
+    var sourceTypePrefix: String {
+        switch self {
+        case .internetBanking:
+            return internetBankingPrefix
+        case .alipay:
+            return alipayValue
+            
+        case .billPayment:
+            return billPaymentPrefix
+        case .virtualAccount:
+            return virtualAccountPrefix
+        case .barcode:
+            return barcodePrefix
+        case .installment:
+            return installmentPrefix
+        case .unknown(let source):
+            return source
+        }
+    }
+    
     var value: String {
         let value: String
         switch self {
@@ -203,10 +223,7 @@ public enum SourceType: Codable, Equatable {
 
 
 extension SourceType {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        
-        let value = try container.decode(String.self)
+    init(apiSoureTypeValue value: String) {
         if value.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = value
                 .range(of: internetBankingPrefix).map({ String(value[$0.upperBound...]) })
@@ -219,6 +236,11 @@ extension SourceType {
                 .range(of: billPaymentPrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(BillPayment.init(rawValue:)).map(SourceType.billPayment) {
             self = billPaymentOffline
+        } else if value.hasPrefix(installmentPrefix),
+            let installment = value
+                .range(of: installmentPrefix).map({ String(value[$0.upperBound...]) })
+                .flatMap(InstallmentBrand.init(rawValue:)).map(SourceType.installment) {
+            self = installment
         } else if value.hasPrefix(virtualAccountPrefix),
             let virtualAccountOffline = value
                 .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
@@ -232,6 +254,12 @@ extension SourceType {
         } else {
             self = .unknown(value)
         }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        self = SourceType(apiSoureTypeValue: try container.decode(String.self))
     }
     
     public func encode(to encoder: Encoder) throws {

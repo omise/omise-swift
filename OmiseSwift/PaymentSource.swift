@@ -108,20 +108,7 @@ public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiable
                     let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
                 case let barcodeType:
-                    let parameters = try decoder.decodeJSONDictionary().filter({ (key, _) -> Bool in
-                        switch key {
-                        case PaymentSource.CodingKeys.id.stringValue,
-                             PaymentSource.CodingKeys.object.stringValue,
-                             PaymentSource.CodingKeys.isLive.stringValue,
-                             PaymentSource.CodingKeys.location.stringValue,
-                             PaymentSource.CodingKeys.currency.stringValue,
-                             PaymentSource.CodingKeys.amount.stringValue,
-                             PaymentSource.CodingKeys.flow.stringValue,
-                             PaymentSource.CodingKeys.type.stringValue:
-                            return false
-                        default: return true
-                        }
-                    })
+                    let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: PaymentSource.CodingKeys.self)
                     self = .barcode(.unknown(name: barcodeType, parameters: parameters))
                 }
             } else if typeValue.hasPrefix(installmentPrefix) {
