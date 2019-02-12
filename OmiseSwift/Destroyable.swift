@@ -17,17 +17,17 @@ extension DeletedObject {
 public protocol Destroyable {}
 
 public extension Destroyable where Self: OmiseResourceObject {
-    public typealias DestroyEndpoint = APIEndpoint<DeletedObject<Self>>
-    public typealias DestroyRequest = APIRequest<DeletedObject<Self>>
+    typealias DestroyEndpoint = APIEndpoint<DeletedObject<Self>>
+    typealias DestroyRequest = APIRequest<DeletedObject<Self>>
     
-    public static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
+    static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePathsWithParent(parent, id: id),
             parameter: .delete
         )
     }
     
-    public static func destroy(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
+    static func destroy(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
         guard Self.verifyParent(parent) else {
             return nil
         }

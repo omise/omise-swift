@@ -11,10 +11,10 @@ public struct RetrieveParams: APIJSONQuery {
 }
 
 public extension Retrievable where Self: OmiseLocatableObject & OmiseIdentifiableObject {
-    public typealias RetrieveEndpoint = APIEndpoint<Self>
-    public typealias RetrieveRequest = APIRequest<Self>
+    typealias RetrieveEndpoint = APIEndpoint<Self>
+    typealias RetrieveRequest = APIRequest<Self>
     
-    public static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
+    static func retrieveEndpointWith(parent: OmiseResourceObject?, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: makeResourcePathsWithParent(parent, id: id),
@@ -22,7 +22,7 @@ public extension Retrievable where Self: OmiseLocatableObject & OmiseIdentifiabl
         )
     }
     
-    public static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         guard verifyParent(parent) else {
             return nil
         }
