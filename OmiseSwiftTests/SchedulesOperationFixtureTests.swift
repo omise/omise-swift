@@ -34,7 +34,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(schedule.nextOccurrenceDates, nextOccurrences)
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -124,7 +124,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Failed to parse occurrences")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -213,7 +213,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -281,7 +281,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -349,7 +349,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -420,7 +420,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.parameter.value.amount, 3190000)
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -499,7 +499,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 }
                 XCTAssertEqual(parameter.recipientID, "recp_test_54oojsyzyqdswyjcmsp")
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -533,7 +533,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.parameter.value.amount, 36_900_00)
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

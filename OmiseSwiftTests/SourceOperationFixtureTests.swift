@@ -17,7 +17,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.sourceType, .alipay)
                 XCTAssertEqual(source.flow, Flow.redirect)
                 XCTAssertEqual(source.paymentInformation, .alipay)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -58,7 +58,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.sourceType, .billPayment(.tescoLotus))
                 XCTAssertEqual(source.flow, Flow.offline)
                 XCTAssertEqual(source.paymentInformation, .billPayment(.tescoLotus))
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -99,7 +99,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.sourceType, .internetBanking(.scb))
                 XCTAssertEqual(source.flow, Flow.redirect)
                 XCTAssertEqual(source.paymentInformation, .internetBanking(.scb))
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -147,7 +147,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Wrong payment information")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -189,7 +189,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.internetBanking(.scb))
                 XCTAssertEqual(source.flow, Flow.redirect)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -211,7 +211,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.alipay)
                 XCTAssertEqual(source.flow, Flow.redirect)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -233,7 +233,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.billPayment(.tescoLotus))
                 XCTAssertEqual(source.flow, Flow.offline)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -255,7 +255,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.billPayment(.unknown("papaya")))
                 XCTAssertEqual(source.flow, Flow.offline)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -277,7 +277,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.internetBanking(.unknown("oms")))
                 XCTAssertEqual(source.flow, Flow.redirect)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -319,7 +319,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 }
 
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -341,7 +341,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.unknown("omise"))
                 XCTAssertEqual(source.flow, Flow.redirect)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -372,7 +372,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Wrong payment information")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -415,7 +415,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Wrong Source Payment Information")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

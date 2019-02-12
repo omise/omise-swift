@@ -14,7 +14,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
             case let .success(link):
                 XCTAssertEqual(link.value.amount, 1990000)
                 XCTAssertEqual(link.charges.total, 3)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -107,7 +107,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
                 let linkSampleData = linksList.data.first
                 XCTAssertNotNil(linkSampleData)
                 XCTAssertEqual(linkSampleData?.value.amount, 1490000)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

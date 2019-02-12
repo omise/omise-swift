@@ -13,7 +13,7 @@ class LinkOperationTest: LiveTest {
             switch result {
             case let .success(link):
                 XCTAssertEqual(link.value.amount, 1490000)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -31,7 +31,7 @@ class LinkOperationTest: LiveTest {
             switch result {
             case let .success(linkList):
                 XCTAssertNotNil(linkList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -54,7 +54,7 @@ class LinkOperationTest: LiveTest {
             switch result {
             case let .success(link):
                 XCTAssertNotNil(link)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

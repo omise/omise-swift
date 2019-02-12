@@ -18,9 +18,9 @@ class FixtureClient: APIClient {
             let req: FixtureRequest<TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as NSError {
-            operationQueue.addOperation() { callback?(.fail(.other(err))) }
+            operationQueue.addOperation() { callback?(.failure(.other(err))) }
         } catch let err as OmiseError {
-            operationQueue.addOperation() { callback?(.fail(err)) }
+            operationQueue.addOperation() { callback?(.failure(err)) }
         }
         
         return nil
@@ -59,22 +59,22 @@ class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
         guard callback != nil else { return }
         
         if let err = error {
-            return performCallback(.fail(.other(err)))
+            return performCallback(.failure(.other(err)))
         }
         
         guard let data = data else {
-            return performCallback(.fail(.unexpected("empty response.")))
+            return performCallback(.failure(.unexpected("empty response.")))
         }
         
         do {
             let result: TResult = try deserializeData(data)
             return performCallback(.success(result))
         } catch let err as OmiseError {
-            return performCallback(.fail(err))
+            return performCallback(.failure(err))
         } catch let err as DecodingError {
-            return performCallback(.fail(.other(err)))
+            return performCallback(.failure(.other(err)))
         } catch let err as NSError {
-            return performCallback(.fail(.other(err)))
+            return performCallback(.failure(.other(err)))
         }
     }
     

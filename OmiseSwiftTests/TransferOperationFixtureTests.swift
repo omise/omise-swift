@@ -18,7 +18,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
                 XCTAssertEqual(transfer.paidDate, Date(timeIntervalSinceReferenceDate: 502046909.0))
                 XCTAssertFalse(transfer.shouldFailFast)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -53,7 +53,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -74,7 +74,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             case let .success(transfer):
                 XCTAssertNotNil(transfer)
                 XCTAssertTrue(transfer.shouldFailFast)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -93,7 +93,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfer):
                 XCTAssertEqual(transfer.value.amount, 192189)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -110,7 +110,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfer):
                 XCTAssertEqual(transfer.id, transferTestingID)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -135,7 +135,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail()
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

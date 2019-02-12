@@ -96,8 +96,8 @@ public extension List {
             case .success(let result):
                 let insertedData = list.insert(from: result)
                 callback(.success(insertedData))
-            case .fail(let error):
-                callback(.fail(error))
+            case .failure(let error):
+                callback(.failure(error))
             }
         }
         
@@ -130,8 +130,8 @@ public extension List where TItem: OmiseIdentifiableObject & OmiseCreatableObjec
             case .success(let result):
                 let refreshedData = list.setList(from: result)
                 callback(.success(refreshedData))
-            case .fail(let error):
-                callback(.fail(error))
+            case .failure(let error):
+                callback(.failure(error))
             }
         }
         
@@ -145,8 +145,8 @@ public extension List where TItem: OmiseResourceObject {
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
-            case .fail(let error):
-                callback(.fail(error))
+            case .failure(let error):
+                callback(.failure(error))
             }
         } as APIRequest?
     }
@@ -156,8 +156,8 @@ public extension List where TItem: OmiseResourceObject {
             switch result {
             case .success(let addedValues):
                 callback(.success(addedValues))
-            case .fail(let error):
-                callback(.fail(error))
+            case .failure(let error):
+                callback(.failure(error))
             }
         } as APIRequest?
     }
