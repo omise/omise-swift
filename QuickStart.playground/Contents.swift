@@ -14,7 +14,7 @@ PlaygroundPage.current.needsIndefiniteExecution = true
  
  You will also need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at [https://omise.co](https://omise.co) and check the Keys section to obtain your keys.
  */
-import Omise // <-- Make sure this works first.
+import Omise // <-- Make sure this works first by building the OmiseSwiftOSX target.
 
 let publicKey = "<#Your public key here#>" // <-- Change to your keys to see result in playground!
 let secretKey = "<#Your secret key here#>"
