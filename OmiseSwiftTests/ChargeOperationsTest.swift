@@ -13,7 +13,7 @@ class ChargeOperationsTest: LiveTest {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -37,7 +37,7 @@ class ChargeOperationsTest: LiveTest {
                 default:
                     XCTFail("Could not load charge's transaction data")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -65,11 +65,11 @@ class ChargeOperationsTest: LiveTest {
                         XCTAssertEqual(transfersList.data.count, 25)
                         XCTAssertEqual(transfersList.data.count, Set(transfersList.data.flatMap({ $0.id })).count)
                         XCTAssertEqual(transfersList.loadedIndices, 0..<25)
-                    case .fail(let error):
+                    case .failure(let error):
                         XCTFail("\(error)")
                     }
                 })
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
                 secondExpectation.fulfill()
             }
@@ -115,16 +115,16 @@ class ChargeOperationsTest: LiveTest {
                                 XCTAssertEqual(list.data.count, 25)
                                 XCTAssertEqual(transfersList.data.count, Set(transfersList.data.flatMap({ $0.id })).count)
                                 XCTAssertEqual(list.loadedIndices, 0..<25)
-                            case .fail(let error):
+                            case .failure(let error):
                                 XCTFail("\(error)")
                             }
                         })
-                    case .fail(let error):
+                    case .failure(let error):
                         XCTFail("\(error)")
                         secondExpectation.fulfill()
                     }
                 })
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
                 firstExpectation.fulfill()
                 secondExpectation.fulfill()

@@ -66,8 +66,8 @@ public class Search<TItem: Searchable & OmiseResourceObject> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.index(where: { $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
-        var indexOfLastUpdatedItem = self.data.index(where: { $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
+        var indexOfFirstUpdatedItem = self.data.firstIndex(where: { $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
+        var indexOfLastUpdatedItem = self.data.firstIndex(where: { $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
         
         if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
             swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)

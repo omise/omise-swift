@@ -13,7 +13,7 @@ class TransferOperationsTest: LiveTest {
             case let .success(transfer):
                 XCTAssertEqual(transfer.value.amount, 1_000_00)
                 XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -31,7 +31,7 @@ class TransferOperationsTest: LiveTest {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -50,7 +50,7 @@ class TransferOperationsTest: LiveTest {
             switch result {
             case let .success(transfer):
                 XCTAssertNotNil(transfer)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -69,7 +69,7 @@ class TransferOperationsTest: LiveTest {
             switch result {
             case let .success(transfer):
                 XCTAssertEqual(transfer.value.amount, 96094)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -86,7 +86,7 @@ class TransferOperationsTest: LiveTest {
             switch result {
             case let .success(transfer):
                 XCTAssertEqual(transfer.id, "trsf_test_54hktxphv9p7wv1tsed")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -112,11 +112,11 @@ class TransferOperationsTest: LiveTest {
                     switch result {
                     case let .success(deletedTransfer):
                         XCTAssertEqual(transfer.id, deletedTransfer.id)
-                    case let .fail(error):
+                    case let .failure(error):
                         XCTFail("\(error)")
                     }
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
                 deleteExpectaion.fulfill()
             }

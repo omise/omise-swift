@@ -30,3 +30,9 @@ extension LastDigits: Codable {
     }
 }
 
+extension LastDigits: CustomStringConvertible {
+    public var description: String {
+        return lastDigits
+    }
+}
+

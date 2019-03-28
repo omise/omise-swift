@@ -98,7 +98,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                     XCTAssertFalse(capability ~= chargeParams)
                 }
 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

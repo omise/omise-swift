@@ -11,6 +11,15 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
             return data.id
         }
     }
+    
+    public var detail: T? {
+        switch self {
+        case .loaded(let value):
+            return value
+        case .notLoaded:
+            return nil
+        }
+    }
 }
 
 extension DetailProperty: Equatable where T: Equatable {

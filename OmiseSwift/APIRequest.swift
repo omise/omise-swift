@@ -1,17 +1,17 @@
 import Foundation
 
 
-public class APIRequest<Result: OmiseObject> {
-    public typealias Endpoint = APIEndpoint<Result>
-    public typealias Callback = (Failable<Result>) -> Void
+public class APIRequest<RequestResult: OmiseObject> {
+    public typealias Endpoint = APIEndpoint<RequestResult>
+    public typealias Callback = (Failable<RequestResult>) -> Void
     
     let client: APIClient
-    let endpoint: APIEndpoint<Result>
+    let endpoint: APIEndpoint<RequestResult>
     let callback: APIRequest.Callback?
     
     var task: URLSessionTask?
     
-    init(client: APIClient, endpoint: APIEndpoint<Result>, callback: Callback?) {
+    init(client: APIClient, endpoint: APIEndpoint<RequestResult>, callback: Callback?) {
         self.client = client
         self.endpoint = endpoint
         self.callback = callback
@@ -36,44 +36,44 @@ public class APIRequest<Result: OmiseObject> {
         
         
         if let err = error {
-            performCallback(.fail(.other(err)))
+            performCallback(.failure(.other(err)))
             return
         }
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            performCallback(.fail(.unexpected("no error and no response.")))
+            performCallback(.failure(.unexpected("no error and no response.")))
             return
         }
         
         guard let data = data else {
-            performCallback(.fail(.unexpected("empty response.")))
+            performCallback(.failure(.unexpected("empty response.")))
             return
         }
         
-        let result: Failable<Result>
+        let result: Failable<RequestResult>
         do {
             switch httpResponse.statusCode {
             case 400..<600:
                 let err: APIError = try deserializeData(data)
-                result = .fail(.api(err))
+                result = .failure(.api(err))
                 
             case 200..<300:
                 result = .success(try endpoint.deserialize(data))
                 
             default:
-                result = .fail(.unexpected("unrecognized HTTP status code: \(httpResponse.statusCode)"))
+                result = .failure(.unexpected("unrecognized HTTP status code: \(httpResponse.statusCode)"))
             }
         } catch let err as OmiseError {
-            result = .fail(err)
+            result = .failure(err)
             
         } catch let err {
-            result = .fail(.other(err))
+            result = .failure(.other(err))
         }
         
         performCallback(result)
     }
     
-    fileprivate func performCallback(_ result: Failable<Result>) {
+    fileprivate func performCallback(_ result: Failable<RequestResult>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation({ cb(result) })
     }

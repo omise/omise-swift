@@ -15,7 +15,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             case let .success(dispute):
                 XCTAssertEqual(dispute.value.amount, 3190000)
                 XCTAssertEqual(dispute.responseMessage, "A dispute for testing purpose")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -82,7 +82,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(recentDocument.filename, "Screen Shot.png")
                 XCTAssertEqual(recentDocument.id, "docu_test_5dzhc60jm40sg1umiyg")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -152,7 +152,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 
                 XCTAssertEqual(recentDocument.filename, "Screenshot.png")
                 XCTAssertEqual(recentDocument.id, "docu_test_5dzhbe7mf4sg0eq1bzk")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -208,7 +208,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(DisputesList):
                 XCTAssertNotNil(DisputesList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -228,7 +228,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(dispute):
                 XCTAssertEqual(dispute.responseMessage, expectedMessage)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -248,7 +248,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 let disputeSampleData = disputesList.data.first
                 XCTAssertNotNil(disputeSampleData)
                 XCTAssertEqual(disputeSampleData?.status, .won)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -268,7 +268,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 let disputeSampleData = disputesList.data.first
                 XCTAssertNotNil(disputeSampleData)
                 XCTAssertEqual(disputeSampleData?.status, .open)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -288,7 +288,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 let disputeSampleData = disputesList.data.first
                 XCTAssertNotNil(disputeSampleData)
                 XCTAssertEqual(disputeSampleData?.status, .pending)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

@@ -14,7 +14,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(forex.to, .thb)
                 XCTAssertEqual(forex.from, .usd)
                 XCTAssertEqual(forex.rate, 32.84666705)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -57,7 +57,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(forex.to, .thb)
                 XCTAssertEqual(forex.from, .jpy)
                 XCTAssertEqual(forex.rate, 0.29617176959999997)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -100,7 +100,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(forex.to, .thb)
                 XCTAssertEqual(forex.from, .sgd)
                 XCTAssertEqual(forex.rate, 24.054176718999997)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -143,7 +143,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(forex.to, .thb)
                 XCTAssertEqual(forex.from, .eur)
                 XCTAssertEqual(forex.rate, 36.784682468599996)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -186,7 +186,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(forex.to, .thb)
                 XCTAssertEqual(forex.from, .gbp)
                 XCTAssertEqual(forex.rate, 42.8132877978)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

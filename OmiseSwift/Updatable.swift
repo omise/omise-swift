@@ -5,17 +5,16 @@ public protocol Updatable {
 }
 
 public extension Updatable where Self: OmiseResourceObject {
-    public typealias UpdateEndpoint = APIEndpoint<Self>
-    public typealias UpdateRequest = APIRequest<Self>
+    typealias UpdateEndpoint = APIEndpoint<Self>
+    typealias UpdateRequest = APIRequest<Self>
     
-    public static func updateEndpointWith(parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {
-        return UpdateEndpoint(
+    static func updateEndpointWith(parent: OmiseResourceObject?, id: String, params: UpdateParams) -> UpdateEndpoint {        return UpdateEndpoint(
             pathComponents: makeResourcePathsWithParent(parent, id: id),
             parameter: .patch(params)
         )
     }
     
-    public static func update(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, params: UpdateParams, callback: @escaping UpdateRequest.Callback) -> UpdateRequest? {
+    static func update(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, params: UpdateParams, callback: @escaping UpdateRequest.Callback) -> UpdateRequest? {
         guard verifyParent(parent) else {
             return nil
         }

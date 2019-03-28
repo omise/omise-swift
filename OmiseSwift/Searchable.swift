@@ -45,10 +45,10 @@ public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
 
 
 public extension Searchable where Self: OmiseResourceObject {
-    public typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
-    public typealias SearchRequest = APIRequest<SearchResult<Self>>
+    typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
+    typealias SearchRequest = APIRequest<SearchResult<Self>>
     
-    public static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
+    static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
@@ -56,7 +56,7 @@ public extension Searchable where Self: OmiseResourceObject {
         )
     }
     
-    public static func search(using client: APIClient, parent: OmiseResourceObject? = nil, params: SearchParams<FilterParams>? = nil, callback: SearchRequest.Callback?) -> SearchRequest? {
+    static func search(using client: APIClient, parent: OmiseResourceObject? = nil, params: SearchParams<FilterParams>? = nil, callback: SearchRequest.Callback?) -> SearchRequest? {
         guard verifyParent(parent) else {
             return nil
         }
@@ -66,7 +66,7 @@ public extension Searchable where Self: OmiseResourceObject {
     }
     
     @discardableResult
-    public static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (Failable<Search<Self>>) -> Void) -> SearchRequest? {
+    static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (Failable<Search<Self>>) -> Void) -> SearchRequest? {
         let endpoint = self.searchEndpointWithParams(params: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
@@ -77,7 +77,7 @@ public extension Searchable where Self: OmiseResourceObject {
         return client.requestToEndpoint(endpoint, callback: requestCallback)
     }
     
-    public static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
+    static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
         let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: 1) ?? 1, query: list.query, order: list.order, filter: list.filters)
         
         return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))
@@ -95,7 +95,7 @@ public extension Searchable where Self: OmiseResourceObject {
         return client.requestToEndpoint(operation, callback: requestCallback)
     }
     
-    public static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
+    static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
         let listParams = SearchParams(scope: list.scope, page:  list.loadedPages.last?.advanced(by: -1) ?? 1, query: list.query, order: list.order, filter: list.filters)
         
         return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))

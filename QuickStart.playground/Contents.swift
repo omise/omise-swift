@@ -14,7 +14,7 @@ PlaygroundPage.current.needsIndefiniteExecution = true
  
  You will also need a set of [API keys](https://dashboard.omise.co/test/api-keys) in order to talk to the [Omise API](https://www.omise.co/docs). If you have not done so already, please sign up at [https://omise.co](https://omise.co) and check the Keys section to obtain your keys.
  */
-import Omise // <-- Make sure this works first.
+import Omise // <-- Make sure this works first by building the OmiseSwiftOSX target.
 
 let publicKey = "<#Your public key here#>" // <-- Change to your keys to see result in playground!
 let secretKey = "<#Your secret key here#>"
@@ -37,7 +37,7 @@ let client = APIClient(
  
  ## Calling Omise APIs
  
- Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.success` and `.fail`. For example, to retrieve current account:
+ Use API methods on model classes to call Omise APIs. Supply a callback method to receive the result. API calls will result is an enum with two states, `.success` and `.failure`. For example, to retrieve current account:
  
  ````
  Account.retrieve(using: client) { (result) in
@@ -45,7 +45,7 @@ let client = APIClient(
     case let .success(account):
         // handle account
  
-    case let .fail(err):
+    case let .failure(err):
         // handle failure
     }
  }
@@ -55,7 +55,7 @@ Account.retrieve(using: client) { (result) in
     switch result {
     case let .success(account):
         print("account: \(account.email)")
-    case let .fail(err):
+    case let .failure(err):
         print("error: \(err)")
     }
 }
@@ -64,7 +64,7 @@ Balance.retrieve(using: client) { (result) in
     switch result {
     case let .success(balance):
         print("money: \(balance.available.amount)")
-    case let .fail(err):
+    case let .failure(err):
         print("error: \(err)")
     }
 }
@@ -91,7 +91,7 @@ func createToken() {
             print("created token: \(token.id)")
             createChargeWithToken(token)
             
-        case let .fail(err):
+        case let .failure(err):
             print("error: \(err)")
         }
     }
@@ -107,7 +107,7 @@ func createChargeWithToken(_ token: Token) {
             print("created charge: \(charge.id) - \(charge.value.amount)")
             createRefundOnCharge(charge, amount: currency.convert(toSubunit: 500.00))
             
-        case let .fail(err):
+        case let .failure(err):
             print("error: \(err)")
         }
     }
@@ -140,7 +140,7 @@ func createRefundOnCharge(_ charge: Charge, amount: Int64) {
         case let .success(refund):
             print("created refund: \(refund.id)")
             
-        case let .fail(err):
+        case let .failure(err):
             print("error: \(err)")
         }
     }
@@ -150,7 +150,7 @@ func createRefundOnCharge(_ charge: Charge, amount: Int64) {
         case let .success(result):
             print("created refund: \(result.id)")
             
-        case let .fail(err):
+        case let .failure(err):
             print("error: \(err)")
         }
     }

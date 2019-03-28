@@ -14,7 +14,7 @@ class RecipientOperationTest: LiveTest {
             case let .success(recipientList):
                 XCTAssertNotNil(recipientList.data)
                 XCTAssertGreaterThanOrEqual(recipientList.data.count, 1)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

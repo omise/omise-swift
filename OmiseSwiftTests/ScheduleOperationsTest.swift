@@ -25,7 +25,7 @@ class ScheduleOperationsTest: LiveTest {
                 XCTAssertEqual(schedule.parameter.value.amount, 36_900_00)
                 XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

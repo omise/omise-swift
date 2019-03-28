@@ -30,7 +30,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(refund):
                 XCTAssertEqual(refund.value.amount, 10000)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -71,7 +71,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(refundsList):
                 XCTAssertNotNil(refundsList.data)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -91,7 +91,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(refund):
                 XCTAssertNotNil(refund)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

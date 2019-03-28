@@ -27,7 +27,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.customer?.dataID, "cust_test_4yq6txdpfadhbaqnwp3")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2018-11-15T09:55:31Z"))
                 XCTAssertEqual(charge.card?.id, "card_test_5dxvbuja3f2n02o4wlg")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -115,7 +115,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_57v787szdbe4b2ala5p")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-05-05T08:17:33Z"))
                 XCTAssertEqual(charge.card?.id, "card_test_57v7856t6viu321t7h4")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -208,7 +208,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.dispute?.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(charge.dispute?.responseMessage, "This is a response message")
                 XCTAssertEqual(charge.dispute?.charge.dataID, "chrg_test_58qdpc54lq6a5enm88m")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -325,7 +325,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 
                 let expiredCharges = chargesList.data.filter({ .expired ~= $0.status })
                 XCTAssertEqual(expiredCharges.count, 6)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -351,7 +351,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.fundingValue.currency, .thb)
                 
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -373,7 +373,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation, .alipay)
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -397,7 +397,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation, .billPayment(.tescoLotus(billInformation)))
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -419,7 +419,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation, .internetBanking(.scb))
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -441,7 +441,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 1_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation, .barcode(.alipay(EnrolledSource.EnrolledPaymentInformation.Barcode.AlipayBarcode(expired: dateFormatter.date(from: "2018-11-20T11:48:22Z")!))))
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -471,7 +471,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.metadata["user-id"] as? String, "a-user-id")
                 XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["name"] as? String, "John Appleseed")
                 XCTAssertEqual((charge.metadata["user"] as? [String: Any])?["tel"] as? String, "08-xxxx-xxxx")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -503,7 +503,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("This charge should have the deleted card value")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -522,7 +522,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.internetBanking(.scb).sourceType)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -584,7 +584,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.alipay.sourceType)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -656,7 +656,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -729,7 +729,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.id, "src_test_5cs0totfv87k1i6y45l")
                 XCTAssertEqual(charge.source?.flow, .redirect)
                 XCTAssertEqual(charge.source?.paymentInformation, EnrolledSource.EnrolledPaymentInformation.installment(.kBank))
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -759,7 +759,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -943,7 +943,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 } else {
                     XCTFail("Cannot parse transaction data")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -1021,7 +1021,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 100000)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.internetBanking(.unknown("oms")).sourceType)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -1093,7 +1093,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                         ] as [String: String])
                 }
                 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -1177,7 +1177,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }

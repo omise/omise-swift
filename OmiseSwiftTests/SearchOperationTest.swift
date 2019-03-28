@@ -19,7 +19,7 @@ class SearchOperationTest: LiveTest {
                 XCTAssertEqual(charges.data.count, 30)
                 let samplingCharge = charges.data.first
                 XCTAssertEqual(samplingCharge?.value.amount, 1_000_00)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -50,7 +50,7 @@ class SearchOperationTest: LiveTest {
                 XCTAssertEqual(charges.data.count, 2)
                 let samplingCharge = charges.data.first
                 XCTAssertEqual(samplingCharge?.value.amount, 100000)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -81,7 +81,7 @@ class SearchOperationTest: LiveTest {
                 XCTAssertEqual(customer.data.count, 1)
                 let samplingCustomer = customer.data.first
                 XCTAssertEqual(samplingCustomer?.email, "john.doe@example.com")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })
@@ -107,7 +107,7 @@ class SearchOperationTest: LiveTest {
                 XCTAssertEqual(customer.data.count, 1)
                 let samplingCustomer = customer.data.first
                 XCTAssertEqual(samplingCustomer?.email, "john.doe@example.com")
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         })

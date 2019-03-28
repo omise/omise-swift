@@ -11,7 +11,7 @@ class AccountAndBalanceOperationsTest: LiveTest {
             switch result {
             case let .success(account):
                 XCTAssertEqual(account.email, "john.doe@example.com")
-            case let .fail(err):
+            case let .failure(err):
                 XCTFail("\(err)")
             }
         }
@@ -28,7 +28,7 @@ class AccountAndBalanceOperationsTest: LiveTest {
             switch result {
             case let .success(balance):
                 XCTAssertEqual(balance.available, 22118104)
-            case let .fail(err):
+            case let .failure(err):
                 XCTFail("\(err)")
             }
         }

@@ -21,13 +21,13 @@ class DocumentOperationTest: LiveTest {
                     switch documentResult {
                     case .success(let document):
                         print(document.filename)
-                    case let .fail(error):
+                    case let .failure(error):
                         XCTFail("\(error)")
                     }
                 })
                 
                 XCTAssertNotNil(documentRequest)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
                 expectation.fulfill()
             }

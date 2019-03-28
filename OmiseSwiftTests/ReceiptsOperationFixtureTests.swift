@@ -34,7 +34,7 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receipt.date, dateFormatter.date(from: "2017-07-13T16:59:59Z"))
                 XCTAssertEqual(receipt.currency, .thb)
                 XCTAssertFalse(receipt.isCreditNote)
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
@@ -110,7 +110,7 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receiptSampleData?.currency, .thb)
                 XCTAssertEqual(receiptSampleData?.isCreditNote, false)
 
-            case let .fail(error):
+            case let .failure(error):
                 XCTFail("\(error)")
             }
         }
