@@ -263,17 +263,12 @@ public struct Installment: Codable, Equatable {
     /// A number of terms to do the installment
     public let numberOfTerms: Int
     
-    public let absorptionType: AbsorptionType
-    
-    public enum AbsorptionType: String, Codable {
-        case customer
-        case merchant
-    }
+    public let isZeroInterests: Bool
     
     fileprivate enum CodingKeys: String, CodingKey {
         case type
-        case absorptionType = "absorption_type"
-        case installmentTerms = "installment_terms"
+        case isZeroInterests = "zero_interest_installments"
+        case installmentTerms = "installment_term"
     }
     
     public init(from decoder: Decoder) throws {
@@ -294,7 +289,7 @@ public struct Installment: Codable, Equatable {
         
         self.brand = installmentBrand
         self.numberOfTerms = try container.decode(Int.self, forKey: .installmentTerms)
-        self.absorptionType = try container.decode(AbsorptionType.self, forKey: .absorptionType)
+        self.isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -302,7 +297,7 @@ public struct Installment: Codable, Equatable {
         
         try container.encode(installmentPrefix + brand.rawValue, forKey: .type)
         try container.encode(numberOfTerms, forKey: .installmentTerms)
-        try container.encode(absorptionType, forKey: .absorptionType)
+        try container.encode(isZeroInterests, forKey: .isZeroInterests)
     }
     
     

@@ -24,14 +24,14 @@ public struct EnrolledSource: SourceData {
                 let referenceNumber1: String
                 let referenceNumber2: String
                 let barcodeURL: URL
-                let expired: Date
+                let expiredDate: Date
                 
                 private enum CodingKeys: String, CodingKey {
                     case omiseTaxID = "omise_tax_id"
                     case referenceNumber1 = "reference_number_1"
                     case referenceNumber2 = "reference_number_2"
                     case barcodeURL = "barcode"
-                    case expired = "expires_at"
+                    case expiredDate = "expires_at"
                 }
             }
             
@@ -81,9 +81,9 @@ public struct EnrolledSource: SourceData {
             }
             
             public struct AlipayBarcode: Codable {
-                public let expired: Date
+                public let expiredDate: Date
                 fileprivate enum CodingKeys: String, CodingKey {
-                    case expired = "expires_at"
+                    case expiredDate = "expires_at"
                 }
             }
             
