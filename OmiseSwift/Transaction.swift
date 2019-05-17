@@ -1,12 +1,6 @@
 import Foundation
 
 
-public enum TransactionType: String, Codable, Equatable {
-    case debit
-    case credit
-}
-
-
 public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/transactions")
@@ -14,11 +8,13 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
     
     public let object: String
     public let location: String
-
+    public let isLive: Bool
     public let id: String
     public var createdDate: Date
     
-    public let type: TransactionType
+    public let direction: Direction
+    public let key: String
+    
     public var value: Value {
         return Value(amount: amount, currency: currency)
     }
@@ -28,18 +24,25 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
     
     public let transferableDate: Date
     
-    public let source: DetailProperty<Source>
+    public let origin: DetailProperty<Source>
+    
+    public enum Direction: String, Codable, Equatable {
+        case debit
+        case credit
+    }
     
     private enum CodingKeys: String, CodingKey {
         case object
         case location
         case id
+        case isLive = "livemode"
         case createdDate = "created"
-        case type
+        case direction
+        case key
         case currency
         case amount
-        case transferableDate = "transferable"
-        case source
+        case transferableDate = "transferable_at"
+        case origin
     }
 }
 
