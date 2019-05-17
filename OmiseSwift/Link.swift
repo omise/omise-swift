@@ -10,14 +10,13 @@ public struct Link: OmiseResourceObject, Equatable {
     public let id: String
     public let isLive: Bool
     public let createdDate: Date
+    public let isDeleted: Bool
     
     public var value: Value {
         return Value(amount: amount, currency: currency)
     }
     public let amount: Int64
     public let currency: Currency
-    
-    public let isDeleted: Bool
     
     public let isUsed: Bool
     public let isMultiple: Bool
@@ -32,11 +31,10 @@ public struct Link: OmiseResourceObject, Equatable {
         case id
         case isLive = "livemode"
         case createdDate = "created"
+        case isDeleted = "deleted"
         
         case amount
         case currency
-        
-        case isDeleted = "deleted"
         
         case isUsed = "used"
         case isMultiple = "multiple"
