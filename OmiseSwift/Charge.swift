@@ -25,6 +25,29 @@ public struct Charge: OmiseResourceObject, Equatable {
         return Value(amount: fundingAmount, currency: fundingCurrency)
     }
     
+    public let feeAmount: Int64
+    public var feeValue: Value {
+        return Value(amount: feeAmount, currency: fundingCurrency)
+    }
+    public let feeVatAmount: Int64
+    public var feeVatValue: Value {
+        return Value(amount: feeVatAmount, currency: fundingCurrency)
+    }
+    
+    public let interestAmount: Int64
+    public var interestValue: Value {
+        return Value(amount: interestAmount, currency: fundingCurrency)
+    }
+    public let interestVatAmount: Int64
+    public var interestVatValue: Value {
+        return Value(amount: interestVatAmount, currency: fundingCurrency)
+    }
+    
+    public let netAmount: Int64
+    public var netValue: Value {
+        return Value(amount: netAmount, currency: fundingCurrency)
+    }
+    
     public var chargeDescription: String?
     
     public let isAutoCapture: Bool
@@ -34,7 +57,12 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let paidDate: Date?
     
     public let isReversed: Bool
+    public let reversedDate: Date?
     public let isVoided: Bool
+    
+    public let expectedEpiresDate: Date
+    public let isExpired: Bool
+    public let expiredDate: Date?
     
     public let isDisputable: Bool
     public let isCapturable: Bool
@@ -59,10 +87,13 @@ public struct Charge: OmiseResourceObject, Equatable {
         }
     }
     
-    public var refunded: Int64?
+    public var refundedAmount: Int64?
     public var refunds: ListProperty<Refund>?
     
     public var customer: DetailProperty<Customer>?
+    
+    public let schedule: DetailProperty<Schedule<Charge>>?
+    public let link: DetailProperty<Link>?
     
     public var ipAddress: String?
     public var dispute: Dispute?
@@ -118,7 +149,7 @@ extension Charge {
         case location
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case status
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
@@ -126,13 +157,22 @@ extension Charge {
         case currency
         case fundingAmount = "funding_amount"
         case fundingCurrency = "funding_currency"
+        case feeAmount = "fee"
+        case feeVatAmount = "fee_vat"
+        case interestAmount = "interest"
+        case interestVatAmount = "interest_vat"
+        case netAmount = "net"
         case paidDate = "paid_at"
         case isReversed = "reversed"
+        case reversedDate = "reversed_at"
         case chargeDescription = "description"
         case isAutoCapture = "capture"
         case isAuthorized = "authorized"
         case isPaid = "paid"
         case isVoided = "voided"
+        case expectedEpiresDate = "expires_at"
+        case isExpired = "expired"
+        case expiredDate = "expired_at"
         case isDisputable = "disputable"
         case isCapturable = "capturable"
         case isReversible = "reversible"
@@ -141,9 +181,11 @@ extension Charge {
         case transaction
         case card
         case source
-        case refunded
+        case refundedAmount = "refunded_amount"
         case refunds
         case customer
+        case schedule
+        case link
         case ipAddress = "ip"
         case dispute
         case returnURL = "return_uri"
@@ -162,27 +204,33 @@ extension Charge {
         currency = try container.decode(Currency.self, forKey: .currency)
         fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
         fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
+        feeAmount = try container.decode(Int64.self, forKey: .feeAmount)
+        feeVatAmount = try container.decode(Int64.self, forKey: .feeVatAmount)
+        interestAmount = try container.decode(Int64.self, forKey: .interestAmount)
+        interestVatAmount = try container.decode(Int64.self, forKey: .interestVatAmount)
+        netAmount = try container.decode(Int64.self, forKey: .netAmount)
         chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
         isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
         isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
-        do {
-            isPaid = try container.decode(Bool.self, forKey: .isCaptured)
-        } catch DecodingError.keyNotFound {
-            isPaid = try container.decode(Bool.self, forKey: .isPaid)
-        }
+        isPaid = try container.decode(Bool.self, forKey: .isPaid)
         paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
         isReversed = try container.decode(Bool.self, forKey: .isReversed)
+        reversedDate = try container.decodeIfPresent(Date.self, forKey: .reversedDate)
         isVoided = try container.decode(Bool.self, forKey: .isVoided)
+        expectedEpiresDate = try container.decode(Date.self, forKey: .expectedEpiresDate)
+        isExpired = try container.decode(Bool.self, forKey: .isExpired)
+        expiredDate = try container.decodeIfPresent(Date.self, forKey: .expiredDate)
         isDisputable = try container.decode(Bool.self, forKey: .isDisputable)
         isCapturable = try container.decode(Bool.self, forKey: .isCapturable)
         isReversible = try container.decode(Bool.self, forKey: .isReversible)
         isRefundable = try container.decode(Bool.self, forKey: .isRefundable)
-
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
-        refunded = try container.decodeIfPresent(Int64.self, forKey: .refunded)
+        refundedAmount = try container.decodeIfPresent(Int64.self, forKey: .refundedAmount)
         refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
         customer = try container.decodeIfPresent(DetailProperty<Customer>.self, forKey: .customer)
         ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress)
+        schedule = try container.decodeIfPresent(DetailProperty<Schedule<Charge>>.self, forKey: .schedule)
+        link = try container.decodeIfPresent(DetailProperty<Link>.self, forKey: .link)
         dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
         returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
         authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
@@ -241,25 +289,34 @@ extension Charge {
         try container.encode(currency, forKey: .currency)
         try container.encode(fundingAmount, forKey: .fundingAmount)
         try container.encode(fundingCurrency, forKey: .fundingCurrency)
+        try container.encode(feeAmount, forKey: .feeAmount)
+        try container.encode(feeVatAmount, forKey: .feeVatAmount)
+        try container.encode(interestAmount, forKey: .interestAmount)
+        try container.encode(interestVatAmount, forKey: .interestVatAmount)
+        try container.encode(netAmount, forKey: .netAmount)
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encode(isAutoCapture, forKey: .isAutoCapture)
         try container.encode(isAuthorized, forKey: .isAuthorized)
         try container.encode(isPaid, forKey: .isPaid)
         try container.encodeIfPresent(paidDate, forKey: .paidDate)
-
         try container.encode(isReversed, forKey: .isReversed)
+        try container.encodeIfPresent(reversedDate, forKey: .reversedDate)
         try container.encode(isVoided, forKey: .isVoided)
+        try container.encode(expectedEpiresDate, forKey: .expectedEpiresDate)
+        try container.encode(isExpired, forKey: .isExpired)
+        try container.encodeIfPresent(expiredDate, forKey: .expiredDate)
         try container.encode(isDisputable, forKey: .isDisputable)
         try container.encode(isCapturable, forKey: .isCapturable)
         try container.encode(isReversible, forKey: .isReversible)
         try container.encode(isRefundable, forKey: .isRefundable)
-
         try container.encodeIfPresent(transaction, forKey: .transaction)
-        try container.encodeIfPresent(refunded, forKey: .refunded)
+        try container.encodeIfPresent(refundedAmount, forKey: .refundedAmount)
         try container.encodeIfPresent(refunds, forKey: .refunds)
         try container.encodeIfPresent(customer, forKey: .customer)
         try container.encodeIfPresent(ipAddress, forKey: .ipAddress)
         try container.encodeIfPresent(dispute, forKey: .dispute)
+        try container.encodeIfPresent(schedule, forKey: .schedule)
+        try container.encodeIfPresent(link, forKey: .link)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
         try container.encodeIfPresent(authorizedURL, forKey: .authorizedURL)
         try container.encode(metadata, forKey: .metadata)

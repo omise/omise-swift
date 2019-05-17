@@ -56,7 +56,6 @@ public enum CardFinancing: RawRepresentable, Codable, Equatable {
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
-    case deleted(DeletedObject<CustomerCard>)
     
     public var object: String {
         switch self {
@@ -64,8 +63,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.object
         case .customer(let card):
             return card.object
-        case .deleted:
-            return "card"
         }
     }
     
@@ -75,19 +72,15 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.id
         case .customer(let card):
             return card.id
-        case .deleted(let card):
-            return card.id
         }
     }
     
-    public var isLive: Bool {
+    public var isLiveMode: Bool {
         switch self {
         case .tokenized(let card):
-            return card.isLive
+            return card.isLiveMode
         case .customer(let card):
-            return card.isLive
-        case .deleted(let card):
-            return card.isLive
+            return card.isLiveMode
         }
     }
     
@@ -97,8 +90,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.createdDate
         case .customer(let card):
             return card.createdDate
-        case .deleted:
-            return Date.distantPast
         }
     }
     
@@ -108,8 +99,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.countryCode
         case .customer(let card):
             return card.countryCode
-        case .deleted:
-            return nil
         }
     }
     
@@ -119,8 +108,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.city
         case .customer(let card):
             return card.city
-        case .deleted:
-            return nil
         }
     }
     
@@ -130,8 +117,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.postalCode
         case .customer(let card):
             return card.postalCode
-        case .deleted:
-            return nil
         }
     }
     
@@ -141,8 +126,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.bankName
         case .customer(let card):
             return card.bankName
-        case .deleted:
-            return nil
         }
     }
     
@@ -152,8 +135,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.lastDigits
         case .customer(let card):
             return card.lastDigits
-        case .deleted:
-            return LastDigits(lastDigitsString: "0000")!
         }
     }
     
@@ -163,8 +144,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.brand
         case .customer(let card):
             return card.brand
-        case .deleted:
-            return CardBrand.visa
         }
     }
     
@@ -174,8 +153,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.expiration
         case .customer(let card):
             return card.expiration
-        case .deleted:
-            return nil
         }
     }
     
@@ -185,8 +162,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.name
         case .customer(let card):
             return card.name
-        case .deleted:
-            return nil
         }
     }
     
@@ -196,8 +171,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.fingerPrint
         case .customer(let card):
             return card.fingerPrint
-        case .deleted:
-            return ""
         }
     }
     
@@ -207,8 +180,6 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
             return card.financing
         case .customer(let card):
             return card.financing
-        case .deleted:
-            return nil
         }
     }
 }
@@ -219,11 +190,7 @@ extension Card {
         do {
             self = .customer(try container.decode(CustomerCard.self))
         } catch let error where error is DecodingError {
-            do {
-                self = .tokenized(try container.decode(TokenizedCard.self))
-            } catch let error where error is DecodingError {
-                self = .deleted(try container.decode(DeletedObject<CustomerCard>.self))
-            }
+            self = .tokenized(try container.decode(TokenizedCard.self))
         }
     }
     
@@ -233,8 +200,6 @@ extension Card {
             try customerCard.encode(to: encoder)
         case .tokenized(let tokenizedCard):
             try tokenizedCard.encode(to: encoder)
-        case .deleted(let deletedCard):
-            try deletedCard.encode(to: encoder)
         }
     }
 }
@@ -245,6 +210,7 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
+    public let isDeleted: Bool
 
     public let countryCode: String?
     public let city: String?
@@ -260,6 +226,8 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     public let fingerPrint: String
     
     public let financing: CardFinancing?
+    
+    public let passSecurityCodeCheck: Bool
 }
 
 extension TokenizedCard {
@@ -268,6 +236,7 @@ extension TokenizedCard {
         case id
         case isLive = "livemode"
         case createdDate = "created"
+        case isDeleted = "deleted"
         case lastDigits = "last_digits"
         case brand
         case name
@@ -279,6 +248,7 @@ extension TokenizedCard {
         case fingerPrint = "fingerprint"
         case expirationMonth = "expiration_month"
         case expirationYear = "expiration_year"
+        case passSecurityCodeCheck = "security_code_check"
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -288,6 +258,7 @@ extension TokenizedCard {
         try container.encode(id, forKey: .id)
         try container.encode(isLive, forKey: .isLive)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isDeleted, forKey: .isDeleted)
         try container.encode(lastDigits, forKey: .lastDigits)
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
@@ -297,6 +268,7 @@ extension TokenizedCard {
         try container.encodeIfPresent(city, forKey: .city)
         try container.encodeIfPresent(financing, forKey: .financing)
         try container.encode(fingerPrint, forKey: .fingerPrint)
+        try container.encode(passSecurityCodeCheck, forKey: .passSecurityCodeCheck)
         try container.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
         try container.encodeIfPresent(expiration?.year, forKey: .expirationYear)
     }
@@ -308,6 +280,7 @@ extension TokenizedCard {
         id = try container.decode(String.self, forKey: .id)
         isLive = try container.decode(Bool.self, forKey: .isLive)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)
@@ -317,6 +290,7 @@ extension TokenizedCard {
         city = try container.decodeIfPresent(String.self, forKey: .city)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
         fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        passSecurityCodeCheck = try container.decode(Bool.self, forKey: .passSecurityCodeCheck)
         let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
         let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)
         if let expirationMonth = expirationMonth, let expirationYear = expirationYear {
@@ -374,6 +348,7 @@ extension CustomerCard {
         case fingerPrint = "fingerprint"
         case expirationMonth = "expiration_month"
         case expirationYear = "expiration_year"
+        case passSecurityCodeCheck = "security_code_check"
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -393,7 +368,7 @@ extension CustomerCard {
         try container.encodeIfPresent(city, forKey: .city)
         try container.encodeIfPresent(financing, forKey: .financing)
         try container.encode(fingerPrint, forKey: .fingerPrint)
-        try container.encode(passSecurityCodeCheck, forKey: .expirationYear)
+        try container.encode(passSecurityCodeCheck, forKey: .passSecurityCodeCheck)
         try container.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
         try container.encodeIfPresent(expiration?.year, forKey: .expirationYear)
     }
@@ -414,7 +389,7 @@ extension CustomerCard {
         city = try container.decodeIfPresent(String.self, forKey: .city)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
         fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
-        passSecurityCodeCheck = try container.decode(Bool.self, forKey: .fingerPrint)
+        passSecurityCodeCheck = try container.decode(Bool.self, forKey: .passSecurityCodeCheck)
         let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
         let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)
         if let expirationMonth = expirationMonth, let expirationYear = expirationYear {

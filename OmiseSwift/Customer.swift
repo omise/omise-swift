@@ -10,11 +10,11 @@ public struct Customer: OmiseResourceObject, Equatable {
     public let isLive: Bool
     public var createdDate: Date
     
-    public let defaultCard: DetailProperty<Card>?
+    public let defaultCard: DetailProperty<CustomerCard>?
     public let email: String
     
     public var customerDescription: String?
-    public var cards: ListProperty<Card>
+    public var cards: ListProperty<CustomerCard>
     
     public let metadata: JSONDictionary
 }
@@ -41,10 +41,10 @@ extension Customer {
         id = try container.decode(String.self, forKey: .id)
         isLive = try container.decode(Bool.self, forKey: .isLive)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        defaultCard = try container.decodeIfPresent(DetailProperty<Card>.self, forKey: .defaultCard)
+        defaultCard = try container.decodeIfPresent(DetailProperty<CustomerCard>.self, forKey: .defaultCard)
         email = try container.decode(String.self, forKey: .email)
         customerDescription = try container.decodeIfPresent(String.self, forKey: .customerDescription)
-        cards = try container.decode(ListProperty<Card>.self, forKey: .cards)
+        cards = try container.decode(ListProperty<CustomerCard>.self, forKey: .cards)
         metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
     }
     
