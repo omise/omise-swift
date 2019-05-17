@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
+public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/transactions")
     }
@@ -24,7 +24,7 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
     
     public let transferableDate: Date
     
-    public let origin: DetailProperty<Source>
+    public let origin: DetailProperty<Origin>
     
     public enum Direction: String, Codable, Equatable {
         case debit
