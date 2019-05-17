@@ -1,14 +1,6 @@
 import Foundation
 
 
-public enum TransferStatus {
-    case pending
-    case paid
-    case sent
-    case failed(TransferFailure)
-}
-
-
 public struct Transfer: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transfers")
     
@@ -17,9 +9,10 @@ public struct Transfer: OmiseResourceObject, Equatable {
     
     public let id: String
     public let isLive: Bool
+    public let isDeleted: Bool
     public var createdDate: Date
     
-    public var status: TransferStatus
+    public var status: Status
     public let shouldFailFast: Bool
     
     public let bankAccount: BankAccount
@@ -28,21 +21,37 @@ public struct Transfer: OmiseResourceObject, Equatable {
     public let sentDate: Date?
     public let isPaid: Bool
     public let paidDate: Date?
+    public let isSendable: Bool
     
+    public let amount: Int64
     public var value: Value {
         return Value(amount: amount, currency: currency)
     }
     
+    public let fee: Int64
     public var feeValue: Value {
         return Value(amount: fee, currency: currency)
     }
     
-    public let amount: Int64
-    public let fee: Int64
+    public let feeVat: Int64
+    public var feeVatValue: Value {
+        return Value(amount: feeVat, currency: currency)
+    }
+    
+    public let net: Int64
+    public var netValue: Value {
+        return Value(amount: net, currency: currency)
+    }
+    
+    public let totalFee: Int64
+    public var totalFeeValue: Value {
+        return Value(amount: totalFee, currency: currency)
+    }
+    
     public let currency: Currency
-        
-    public let recipient: DetailProperty<Recipient>
-    public let transaction: DetailProperty<Transaction<Transfer>>?
+    
+    public let recipientID: String
+    public let transactions: [Transaction<Transfer>]
     
     public let metadata: JSONDictionary
     
@@ -51,20 +60,32 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case location
         case id
         case isLive = "livemode"
+        case isDeleted = "deleted"
         case createdDate = "created"
         case bankAccount = "bank_account"
         case shouldFailFast = "fail_fast"
-        case fee
-        case amount
-        case currency
         case isSent = "sent"
         case isPaid = "paid"
         case sentDate = "sent_at"
         case paidDate = "paid_at"
-        case recipient
-        case transaction
+        case isSendable = "sendable"
+        case amount
+        case fee
+        case feeVat = "fee_vat"
+        case net
+        case totalFee = "total_fee"
+        case currency
+        case recipientID = "recipient"
+        case transactions
         case failureCode = "failure_code"
         case metadata
+    }
+    
+    public enum Status {
+        case pending
+        case paid
+        case sent
+        case failed(TransferFailure)
     }
     
     public init(from decoder: Decoder) throws {
@@ -73,18 +94,23 @@ public struct Transfer: OmiseResourceObject, Equatable {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
         isLive = try container.decode(Bool.self, forKey: .isLive)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        bankAccount = try container.decode(BankAccount.self, forKey: .bankAccount)
         shouldFailFast = try container.decode(Bool.self, forKey: .shouldFailFast)
-        fee = try container.decode(Int64.self, forKey: .fee)
-        amount = try container.decode(Int64.self, forKey: .amount)
-        currency = try container.decode(Currency.self, forKey: .currency)
+        bankAccount = try container.decode(BankAccount.self, forKey: .bankAccount)
         isSent = try container.decode(Bool.self, forKey: .isSent)
         isPaid = try container.decode(Bool.self, forKey: .isPaid)
         sentDate = try container.decodeIfPresent(Date.self, forKey: .sentDate)
         paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
-        recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
-        transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
+        isSendable = try container.decode(Bool.self, forKey: .isSendable)
+        fee = try container.decode(Int64.self, forKey: .fee)
+        amount = try container.decode(Int64.self, forKey: .amount)
+        currency = try container.decode(Currency.self, forKey: .currency)
+        feeVat = try container.decode(Int64.self, forKey: .feeVat)
+        net = try container.decode(Int64.self, forKey: .net)
+        totalFee = try container.decode(Int64.self, forKey: .totalFee)
+        recipientID = try container.decode(String.self, forKey: .recipientID)
+        transactions = try container.decode(Array<Transaction<Transfer>>.self, forKey: .transactions)
         
         let failureCode = try container.decodeIfPresent(TransferFailure.self, forKey: .failureCode)
         switch (isPaid, isSent, failureCode) {
@@ -109,18 +135,25 @@ public struct Transfer: OmiseResourceObject, Equatable {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLive, forKey: .isLive)
         
-        try container.encode(amount, forKey: .amount)
-        try container.encode(currency, forKey: .currency)
-        try container.encode(fee, forKey: .fee)
-        try container.encode(bankAccount, forKey: .bankAccount)
-        try container.encode(shouldFailFast, forKey: .shouldFailFast)
         
+        try container.encode(shouldFailFast, forKey: .shouldFailFast)
+        try container.encode(bankAccount, forKey: .bankAccount)
+        try container.encode(isDeleted, forKey: .isDeleted)
         try container.encode(isSent, forKey: .isSent)
         try container.encode(isPaid, forKey: .isPaid)
         try container.encodeIfPresent(sentDate, forKey: .sentDate)
         try container.encodeIfPresent(paidDate, forKey: .paidDate)
-        try container.encode(recipient, forKey: .recipient)
-        try container.encodeIfPresent(transaction, forKey: .transaction)
+        try container.encode(isSendable, forKey: .isSendable)
+        
+        try container.encode(amount, forKey: .amount)
+        try container.encode(fee, forKey: .fee)
+        try container.encode(feeVat, forKey: .feeVat)
+        try container.encode(net, forKey: .net)
+        try container.encode(totalFee, forKey: .totalFee)
+        try container.encode(currency, forKey: .currency)
+        
+        try container.encode(recipientID, forKey: .recipientID)
+        try container.encode(transactions, forKey: .transactions)
         try container.encode(metadata, forKey: .metadata)
         
         if case .failed(let failureCode) = status {
