@@ -1,24 +1,25 @@
 import Foundation
 
 
-public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
+public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatableObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/balance")
     
     public let object: String
     public let location: String
     public let isLive: Bool
+    public let createdDate: Date
     
     public let currency: Currency
-    public var available: Int64
-    public var total: Int64
+    public var transferableAmount: Int64
+    public var totalAmount: Int64
     public var reserveAmount: Int64
     
-    public var availableValue: Value {
-        return Value(amount: available, currency: currency)
+    public var transferableValue: Value {
+        return Value(amount: transferableAmount, currency: currency)
     }
     
     public var totalValue: Value {
-        return Value(amount: total, currency: currency)
+        return Value(amount: totalAmount, currency: currency)
     }
     
     public var reserveValue: Value {
@@ -28,11 +29,12 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject {
     private enum CodingKeys: String, CodingKey {
         case object
         case location
-        case isLive = "livemode"
-        case available
+        case isLiveMode = "livemode"
+        case createdDate = "created_at"
+        case transferableAmount = "transferable"
         case currency
-        case total
-        case reserveAmount = "reserve_amount"
+        case totalAmount = "total"
+        case reserveAmount = "reserve"
     }
 }
 

@@ -7,9 +7,17 @@ public struct BankAccount: OmiseObject {
     public let accountNumber: String?
     public let lastDigits: LastDigits
     public let name: String
+    
+    public let type: BankAccount.AccountType?
 }
 
 extension BankAccount {
+    
+    public enum AccountType: String, Codable {
+        case normal
+        case current
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case bankCode = "bank_code"
@@ -18,6 +26,7 @@ extension BankAccount {
         case accountNumber = "number"
         case lastDigits = "last_digits"
         case name
+        case type
     }
     
     public init(from decoder: Decoder) throws {
@@ -25,10 +34,11 @@ extension BankAccount {
         object = try container.decode(String.self, forKey: .object)
         name = try container.decode(String.self, forKey: .name)
         lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
-        accountNumber = try container.decodeIfPresent(String.self, forKey: .object)
+        accountNumber = try container.decodeIfPresent(String.self, forKey: .accountNumber)
+        type = try container.decodeIfPresent(BankAccount.AccountType.self, forKey: .type)
         
         let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
-         container.decode(String.self, forKey: .bankCode)
+            container.decode(String.self, forKey: .bankCode)
         let branchCode = try container.decodeIfPresent(String.self, forKey: .branchCode)
         let bank = Bank(bankID: bankID, branchCode: branchCode)
         self.bank = bank
