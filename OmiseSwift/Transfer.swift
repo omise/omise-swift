@@ -78,6 +78,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case recipientID = "recipient"
         case transactions
         case failureCode = "failure_code"
+        case failureMessage = "failure_message"
         case metadata
     }
     
@@ -112,13 +113,14 @@ public struct Transfer: OmiseResourceObject, Equatable {
         recipientID = try container.decode(String.self, forKey: .recipientID)
         transactions = try container.decode(Array<Transaction<Transfer>>.self, forKey: .transactions)
         
-        let failureCode = try container.decodeIfPresent(TransferFailure.self, forKey: .failureCode)
-        switch (isPaid, isSent, failureCode) {
-        case (_, _, let failure?):
-            self.status = .failed(failure)
-        case (true, true, nil):
+        let failureCode = try container.decodeIfPresent(TransferFailure.Code.self, forKey: .failureCode)
+        let failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
+        switch (isPaid, isSent, failureCode, failureMessage) {
+        case (_, _, let failureCode?, let failureMessage?):
+            self.status = .failed(TransferFailure(code: failureCode, message: failureMessage))
+        case (true, true, nil, nil):
             self.status = .paid
-        case (false, true, nil):
+        case (false, true, nil, nil):
             self.status = .sent
         default:
             self.status = .pending
@@ -156,8 +158,9 @@ public struct Transfer: OmiseResourceObject, Equatable {
         try container.encode(transactions, forKey: .transactions)
         try container.encode(metadata, forKey: .metadata)
         
-        if case .failed(let failureCode) = status {
-            try container.encode(failureCode, forKey: .failureCode)
+        if case .failed(let failure) = status {
+            try container.encode(failure.code, forKey: .failureCode)
+            try container.encode(failure.message, forKey: .failureMessage)
         }
     }
 }

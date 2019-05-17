@@ -166,43 +166,50 @@ extension ChargeFailure.Code {
 }
 
 
-public enum TransferFailure: Codable, Equatable {
-    /// Bank rejected the transfer request
-    case sentFailed
-    /// Bank cannot process request for transferring to bank account
-    case paidFailed
+public struct TransferFailure: Equatable {
     
-    case other(String)
+    public let code: Code
+    public let message: String
     
-    public var code: String {
-        switch self {
-        case .sentFailed:
-            return "transfer_send_failure"
-        case .paidFailed:
-            return "transfer_pay_failure"
-        case .other(let code):
-            return code
+    public enum Code: Codable, Equatable {
+        /// Bank rejected the transfer request
+        case sentFailed
+        /// Bank cannot process request for transferring to bank account
+        case paidFailed
+        
+        case other(String)
+        
+        
+        public var code: String {
+            switch self {
+            case .sentFailed:
+                return "transfer_send_failure"
+            case .paidFailed:
+                return "transfer_pay_failure"
+            case .other(let code):
+                return code
+            }
         }
-    }
-    
-    public init(code: String) {
-        switch code {
-        case "transfer_send_failure":
-            self = .sentFailed
-        case "transfer_pay_failure":
-            self = .paidFailed
-        case let code:
-            self = .other(code)
+        
+        public init(code: String) {
+            switch code {
+            case "transfer_send_failure":
+                self = .sentFailed
+            case "transfer_pay_failure":
+                self = .paidFailed
+            case let code:
+                self = .other(code)
+            }
         }
-    }
-    
-    public init(from decoder: Decoder) throws {
-        self.init(code: try decoder.singleValueContainer().decode(String.self))
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(code)
+        
+        public init(from decoder: Decoder) throws {
+            self.init(code: try decoder.singleValueContainer().decode(String.self))
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            try container.encode(code)
+        }
     }
 }
 
