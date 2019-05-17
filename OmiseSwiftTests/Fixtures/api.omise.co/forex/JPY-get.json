@@ -1,7 +1,8 @@
 {
   "object": "forex",
-  "from": "jpy",
-  "to": "thb",
+  "livemode": false,
+  "base": "jpy",
+  "quote": "thb",
   "rate": 0.29617176959999997,
   "location": "/forex/jpy"
 }

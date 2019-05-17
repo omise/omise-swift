@@ -18,11 +18,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_582oau15y3okc3bxy2b")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-24T10:54:52Z"))
-                XCTAssertEqual(schedule.status, Schedule<Transfer>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Transfer>.Status.running)
                 let expectedMonthlyRule = Period.MonthlyPeriodRule.daysOfMonth([27])
                 XCTAssertEqual(schedule.period, Period.monthly(expectedMonthlyRule))
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
                 
                 XCTAssertEqual(schedule.scheduleData.amount, TransferSchedulingParameter.Amount.percentageOfBalance(100))
                 XCTAssertEqual(schedule.scheduleData.recipientID, "recp_test_54oojsyzyqdswyjcmsp")
@@ -32,7 +32,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                     return gregorianCalendar.date(byAdding: .month, value: month, to: firstNextOccurrenceDate).flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
                 })
                 
-                XCTAssertEqual(schedule.nextOccurrenceDates, nextOccurrences)
+                XCTAssertEqual(schedule.nextOccurrencesOnDateComponents, nextOccurrences)
                 
             case let .failure(error):
                 XCTFail("\(error)")
@@ -60,8 +60,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
         XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
@@ -72,12 +72,12 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(decodedSchedule.scheduleData.recipientID, decodedSchedule.scheduleData.recipientID)
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrencesOnDateComponents.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrencesOnDateComponents.first else {
             XCTFail("Cannot get the recent next occurrence date")
             return
         }
         XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
     }
     
     func testEveryDayChargeScheduleRetrieve() {
@@ -94,11 +94,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_582o6x3rigzamtpkhpu")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-24T10:43:45Z"))
-                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.daily)
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 31_900_00)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
@@ -109,14 +109,14 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                     return gregorianCalendar.date(byAdding: .day, value: day, to: firstNextOccurrenceDate).flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
                 })
                 
-                XCTAssertEqual(schedule.nextOccurrenceDates, nextOccurrences)
+                XCTAssertEqual(schedule.nextOccurrencesOnDateComponents, nextOccurrences)
                 
                 let occurrences = schedule.occurrences
                 XCTAssertEqual(occurrences.total, 2)
                 if let firstOccurrence = occurrences.data.first {
                     XCTAssertEqual(firstOccurrence.id, "occu_test_582o6x3smr1taeb7mdg")
                     XCTAssertEqual(firstOccurrence.schedule.dataID, scheduleTestingID)
-                    XCTAssertEqual(firstOccurrence.scheduleDate, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
+                    XCTAssertEqual(firstOccurrence.scheduledOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2017, month: 5, day: 24))
                     XCTAssertEqual(firstOccurrence.status, .successful)
                     XCTAssertEqual(firstOccurrence.processedDate, dateFormatter.date(from: "2017-05-25T01:30:07Z"))
                     XCTAssertEqual(firstOccurrence.result.dataID, "chrg_test_582wuxps5hp238fh2lb")
@@ -150,8 +150,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.scheduleData.value.amount, decodedSchedule.scheduleData.value.amount)
         XCTAssertEqual(defaultSchedule.scheduleData.value.currency, decodedSchedule.scheduleData.value.currency)
@@ -159,12 +159,12 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrencesOnDateComponents.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrencesOnDateComponents.first else {
             XCTFail("Cannot get the recent next occurrence date")
             return
         }
         XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
         
         XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
         XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
@@ -203,11 +203,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_5830728kmmgobeli6ma")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:11:21Z"))
-                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.weekdayOfMonth(ordinal: .last, weekday: .friday)))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 8990000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
@@ -239,8 +239,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.scheduleData.value.amount, decodedSchedule.scheduleData.value.amount)
         XCTAssertEqual(defaultSchedule.scheduleData.value.currency, decodedSchedule.scheduleData.value.currency)
@@ -248,8 +248,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
-        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrencesOnDateComponents.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrencesOnDateComponents.first else {
             XCTFail("Cannot get the recent next occurrence date")
             return
         }
@@ -271,11 +271,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_5830784ijsp6ybzh161")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:11:49Z"))
-                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.weekdayOfMonth(ordinal: .first, weekday: .monday)))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 7490000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
@@ -307,8 +307,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.scheduleData.value.amount, decodedSchedule.scheduleData.value.amount)
         XCTAssertEqual(defaultSchedule.scheduleData.value.currency, decodedSchedule.scheduleData.value.currency)
@@ -316,8 +316,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultSchedule.createdDate, decodedSchedule.createdDate)
         
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
-        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrencesOnDateComponents.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrencesOnDateComponents.first else {
             XCTFail("Cannot get the recent next occurrence date")
             return
         }
@@ -339,11 +339,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, scheduleTestingID)
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_58306nhkn5goe12i4sx")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-25T07:10:12Z"))
-                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.weekly([.monday, .tuesday, .wednesday, .thursday, .friday]))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 3190000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
@@ -375,8 +375,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.scheduleData.value.amount, decodedSchedule.scheduleData.value.amount)
         XCTAssertEqual(defaultSchedule.scheduleData.value.currency, decodedSchedule.scheduleData.value.currency)
@@ -388,8 +388,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.occurrences.to, decodedSchedule.occurrences.to)
         XCTAssertEqual(defaultSchedule.occurrences.data.count, decodedSchedule.occurrences.data.count)
         
-        XCTAssertEqual(defaultSchedule.nextOccurrenceDates.count, decodedSchedule.nextOccurrenceDates.count)
-        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrenceDates.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrenceDates.first else {
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
+        guard let defaultRecentNextOccurrenceDate = defaultSchedule.nextOccurrencesOnDateComponents.first, let decodedRecentNextOccurrenceDate = decodedSchedule.nextOccurrencesOnDateComponents.first else {
             XCTFail("Cannot get the recent next occurrence date")
             return
         }
@@ -414,8 +414,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.deleted)
                 XCTAssertEqual(schedule.period, Period.weekly([.tuesday, .wednesday, .thursday, .friday, .saturday]))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 25))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 25))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 3190000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
@@ -446,8 +446,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSchedule.status, decodedSchedule.status)
         XCTAssertEqual(defaultSchedule.every, decodedSchedule.every)
         XCTAssertEqual(defaultSchedule.period, decodedSchedule.period)
-        XCTAssertEqual(defaultSchedule.startDate, decodedSchedule.startDate)
-        XCTAssertEqual(defaultSchedule.endDate, decodedSchedule.endDate)
+        XCTAssertEqual(defaultSchedule.startOnDateComponents, decodedSchedule.startOnDateComponents)
+        XCTAssertEqual(defaultSchedule.endOnDateComponents, decodedSchedule.endOnDateComponents)
         
         XCTAssertEqual(defaultSchedule.scheduleData.value.amount, decodedSchedule.scheduleData.value.amount)
         XCTAssertEqual(defaultSchedule.scheduleData.value.currency, decodedSchedule.scheduleData.value.currency)
@@ -484,8 +484,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.status, Schedule<AnySchedulable>.Status.deleted)
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([1, 27])))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 24))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 24))
                 
                 let scheduleData = schedule.scheduleData
                 if let percentage = scheduleData.json["percentage_of_balance"] as? Double {
@@ -520,11 +520,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.id, "schd_test_584zfswqzu5m40sycxc")
                 XCTAssertEqual(schedule.location, "/schedules/schd_test_584zfswqzu5m40sycxc")
                 XCTAssertEqual(schedule.createdDate, dateFormatter.date(from: "2017-05-30T08:37:10Z"))
-                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.active)
+                XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1, 16])))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.startDate, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 30))
-                XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 20))
+                XCTAssertEqual(schedule.startOnDateComponents, DateComponents(calendar: gregorianCalendar,year: 2017, month: 5, day: 30))
+                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 20))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 36_900_00)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)

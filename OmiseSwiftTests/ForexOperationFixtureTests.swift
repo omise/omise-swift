@@ -11,8 +11,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(forex):
-                XCTAssertEqual(forex.to, .thb)
-                XCTAssertEqual(forex.from, .usd)
+                XCTAssertEqual(forex.quote, .thb)
+                XCTAssertEqual(forex.base, .usd)
                 XCTAssertEqual(forex.rate, 32.84666705)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -25,8 +25,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
     func testEncodeUSDForex() throws {
         let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "USD")
         
-        XCTAssertEqual(defaultForex.from, .usd)
-        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.base, .usd)
+        XCTAssertEqual(defaultForex.quote, .thb)
         XCTAssertEqual(defaultForex.rate, 32.84666705)
         XCTAssertEqual(defaultForex.location, "/forex/usd")
         XCTAssertEqual(defaultForex.object, "forex")
@@ -39,8 +39,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         let decodedForex = try decoder.decode(Forex.self, from: encodedData)
         
-        XCTAssertEqual(defaultForex.from, decodedForex.from)
-        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.base, decodedForex.base)
+        XCTAssertEqual(defaultForex.quote, decodedForex.quote)
         XCTAssertEqual(defaultForex.rate, decodedForex.rate)
         XCTAssertEqual(defaultForex.location, decodedForex.location)
         XCTAssertEqual(defaultForex.object, decodedForex.object)
@@ -54,8 +54,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(forex):
-                XCTAssertEqual(forex.to, .thb)
-                XCTAssertEqual(forex.from, .jpy)
+                XCTAssertEqual(forex.quote, .thb)
+                XCTAssertEqual(forex.base, .jpy)
                 XCTAssertEqual(forex.rate, 0.29617176959999997)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -68,8 +68,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
     func testEncodeJYPForex() throws {
         let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "JPY")
         
-        XCTAssertEqual(defaultForex.from, .jpy)
-        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.base, .jpy)
+        XCTAssertEqual(defaultForex.quote, .thb)
         XCTAssertEqual(defaultForex.rate, 0.29617176959999997)
         XCTAssertEqual(defaultForex.location, "/forex/jpy")
         XCTAssertEqual(defaultForex.object, "forex")
@@ -82,8 +82,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         let decodedForex = try decoder.decode(Forex.self, from: encodedData)
         
-        XCTAssertEqual(defaultForex.from, decodedForex.from)
-        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.base, decodedForex.base)
+        XCTAssertEqual(defaultForex.quote, decodedForex.quote)
         XCTAssertEqual(defaultForex.rate, decodedForex.rate)
         XCTAssertEqual(defaultForex.location, decodedForex.location)
         XCTAssertEqual(defaultForex.object, decodedForex.object)
@@ -97,8 +97,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(forex):
-                XCTAssertEqual(forex.to, .thb)
-                XCTAssertEqual(forex.from, .sgd)
+                XCTAssertEqual(forex.quote, .thb)
+                XCTAssertEqual(forex.base, .sgd)
                 XCTAssertEqual(forex.rate, 24.054176718999997)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -111,8 +111,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
     func testEncodeSGDForex() throws {
         let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "SGD")
         
-        XCTAssertEqual(defaultForex.from, .sgd)
-        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.base, .sgd)
+        XCTAssertEqual(defaultForex.quote, .thb)
         XCTAssertEqual(defaultForex.rate, 24.054176718999997)
         XCTAssertEqual(defaultForex.location, "/forex/sgd")
         XCTAssertEqual(defaultForex.object, "forex")
@@ -125,8 +125,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         let decodedForex = try decoder.decode(Forex.self, from: encodedData)
         
-        XCTAssertEqual(defaultForex.from, decodedForex.from)
-        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.base, decodedForex.base)
+        XCTAssertEqual(defaultForex.quote, decodedForex.quote)
         XCTAssertEqual(defaultForex.rate, decodedForex.rate)
         XCTAssertEqual(defaultForex.location, decodedForex.location)
         XCTAssertEqual(defaultForex.object, decodedForex.object)
@@ -140,8 +140,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(forex):
-                XCTAssertEqual(forex.to, .thb)
-                XCTAssertEqual(forex.from, .eur)
+                XCTAssertEqual(forex.quote, .thb)
+                XCTAssertEqual(forex.base, .eur)
                 XCTAssertEqual(forex.rate, 36.784682468599996)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -154,8 +154,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
     func testEncodeEURForex() throws {
         let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "EUR")
         
-        XCTAssertEqual(defaultForex.from, .eur)
-        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.base, .eur)
+        XCTAssertEqual(defaultForex.quote, .thb)
         XCTAssertEqual(defaultForex.rate, 36.784682468599996)
         XCTAssertEqual(defaultForex.location, "/forex/eur")
         XCTAssertEqual(defaultForex.object, "forex")
@@ -168,8 +168,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         let decodedForex = try decoder.decode(Forex.self, from: encodedData)
         
-        XCTAssertEqual(defaultForex.from, decodedForex.from)
-        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.base, decodedForex.base)
+        XCTAssertEqual(defaultForex.quote, decodedForex.quote)
         XCTAssertEqual(defaultForex.rate, decodedForex.rate)
         XCTAssertEqual(defaultForex.location, decodedForex.location)
         XCTAssertEqual(defaultForex.object, decodedForex.object)
@@ -183,8 +183,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(forex):
-                XCTAssertEqual(forex.to, .thb)
-                XCTAssertEqual(forex.from, .gbp)
+                XCTAssertEqual(forex.quote, .thb)
+                XCTAssertEqual(forex.base, .gbp)
                 XCTAssertEqual(forex.rate, 42.8132877978)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -197,8 +197,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
     func testEncodeGBPForex() throws {
         let defaultForex = try fixturesObjectFor(type: Forex.self, dataID: "GBP")
         
-        XCTAssertEqual(defaultForex.from, .gbp)
-        XCTAssertEqual(defaultForex.to, .thb)
+        XCTAssertEqual(defaultForex.base, .gbp)
+        XCTAssertEqual(defaultForex.quote, .thb)
         XCTAssertEqual(defaultForex.rate, 42.8132877978)
         XCTAssertEqual(defaultForex.location, "/forex/gbp")
         XCTAssertEqual(defaultForex.object, "forex")
@@ -211,8 +211,8 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         let decodedForex = try decoder.decode(Forex.self, from: encodedData)
         
-        XCTAssertEqual(defaultForex.from, decodedForex.from)
-        XCTAssertEqual(defaultForex.to, decodedForex.to)
+        XCTAssertEqual(defaultForex.base, decodedForex.base)
+        XCTAssertEqual(defaultForex.quote, decodedForex.quote)
         XCTAssertEqual(defaultForex.rate, decodedForex.rate)
         XCTAssertEqual(defaultForex.location, decodedForex.location)
         XCTAssertEqual(defaultForex.object, decodedForex.object)

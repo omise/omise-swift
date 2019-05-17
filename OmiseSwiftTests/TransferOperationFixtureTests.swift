@@ -130,7 +130,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(transfer.value.amount, 300)
                 XCTAssertNotNil(transfer.sentDate)
                 XCTAssertNil(transfer.paidDate)
-                if case TransferStatus.failed(.other(let code)) = transfer.status {
+                if case Transfer.Status.failed(.other(let code)) = transfer.status {
                     XCTAssertEqual(code, "other")
                 } else {
                     XCTFail()
@@ -157,7 +157,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultTransfer.value.amount, decodedTransfer.value.amount)
         XCTAssertEqual(defaultTransfer.sentDate, decodedTransfer.sentDate)
         XCTAssertEqual(defaultTransfer.paidDate, decodedTransfer.paidDate)
-        if case TransferStatus.failed(.other(let transferFailedCode)) = defaultTransfer.status, case TransferStatus.failed(.other(let decodedTransferFailedCode)) = decodedTransfer.status {
+        if case Transfer.Status.failed(.other(let transferFailedCode)) = defaultTransfer.status, case Transfer.Status.failed(.other(let decodedTransferFailedCode)) = decodedTransfer.status {
             XCTAssertEqual(transferFailedCode, decodedTransferFailedCode)
         } else {
             XCTFail()
