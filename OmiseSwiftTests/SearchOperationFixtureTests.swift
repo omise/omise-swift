@@ -104,7 +104,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
         let filterParams = RecipientFilterParams(
             isActive: false, activatedDate: SearchOperationFixtureTests.dateComponents,
             bankLastDigits: LastDigits(lastDigitsString: "4242"),
-            isDeleted: true, type: RecipientType.individual
+            isDeleted: true, type: Recipient.RecipientType.individual
         )
         
         let encoder = JSONEncoder()
