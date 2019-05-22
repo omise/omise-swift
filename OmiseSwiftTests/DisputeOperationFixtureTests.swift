@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let disputeTestingID = "dspt_test_58utmxp85fm4x9mwde6"
+private let disputeTestingID = "dspt_test_5fzexd718s2izg1md4l"
 
 class DisputeOperationFixtureTests: FixtureTestCase {
     func testDisputeRetrieve() {
@@ -13,8 +13,8 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(dispute):
-                XCTAssertEqual(dispute.value.amount, 3190000)
-                XCTAssertEqual(dispute.responseMessage, "A dispute for testing purpose")
+                XCTAssertEqual(dispute.value.amount, 1000000)
+                XCTAssertNil(dispute.responseMessage)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -48,40 +48,28 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
         XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
         XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
-        
-        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
-            XCTFail("Cannot get the recent document")
-            return
-        }
-        
-        XCTAssertEqual(defaultDocument.object, decodedDocument.object)
-        XCTAssertEqual(defaultDocument.id, decodedDocument.id)
-        XCTAssertEqual(defaultDocument.isLiveMode, decodedDocument.isLiveMode)
-        XCTAssertEqual(defaultDocument.location, decodedDocument.location)
-        XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
-        XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
     }
     
     func testDisputeWithDocumentsRetrieve() {
         let expectation = self.expectation(description: "Dispute result")
         
-        let request = Dispute.retrieve(using: testClient, id: "dspt_test_5dzhbyswtur9eu7cgzz") { (result) in
+        let request = Dispute.retrieve(using: testClient, id: "dspt_test_5fqcgl9si4xqs3fi4hp") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(dispute):
-                XCTAssertEqual(dispute.value.amount, 2000)
+                XCTAssertEqual(dispute.value.amount, 20000)
                 XCTAssertNotNil(dispute.responseMessage)
                 XCTAssertEqual(dispute.reasonCode, Dispute.Reason.goodsOrServicesNotProvided)
                 XCTAssertEqual(dispute.reasonMessage, "Services not provided or Merchandise not received")
-                XCTAssertEqual(dispute.documents.total, 2)
+                XCTAssertEqual(dispute.documents.total, 1)
                 guard let recentDocument = dispute.documents.first else {
                     XCTFail("Cannot get the recent document")
                     return
                 }
                 
-                XCTAssertEqual(recentDocument.filename, "Screen Shot.png")
-                XCTAssertEqual(recentDocument.id, "docu_test_5dzhc60jm40sg1umiyg")
+                XCTAssertEqual(recentDocument.filename, "Omise_Fractureme.png")
+                XCTAssertEqual(recentDocument.id, "docu_test_5fzd34gdvxq7rwnktxd")
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -92,7 +80,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeDisputeWithDocumentsRetrieve() throws {
-        let defaultDispute = try fixturesObjectFor(type: Dispute.self, dataID: "dspt_test_5dzhbyswtur9eu7cgzz")
+        let defaultDispute = try fixturesObjectFor(type: Dispute.self, dataID: "dspt_test_5fqcgl9si4xqs3fi4hp")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -132,26 +120,19 @@ class DisputeOperationFixtureTests: FixtureTestCase {
     func testWonDisputeRetrieve() {
         let expectation = self.expectation(description: "Dispute result")
         
-        let request = Dispute.retrieve(using: testClient, id: "dspt_test_5dzhbclwha52lkgt6p4") { (result) in
+        let request = Dispute.retrieve(using: testClient, id: "dspt_test_5fqdufgovm3zvkfl62q") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(dispute):
-                XCTAssertEqual(dispute.value.amount, 2000)
-                XCTAssertEqual(dispute.responseMessage, "Here's an evidence")
+                XCTAssertEqual(dispute.value.amount, 100000)
+                XCTAssertEqual(dispute.responseMessage, "Hello")
                 XCTAssertEqual(dispute.reasonCode, Dispute.Reason.goodsOrServicesNotProvided)
                 XCTAssertEqual(dispute.reasonMessage, "Services not provided or Merchandise not received")
-                XCTAssertEqual(dispute.documents.total, 1)
+                XCTAssertEqual(dispute.documents.total, 0)
                 XCTAssertEqual(dispute.status, .won)
-                XCTAssertEqual(dispute.transactions.first?.id, "trxn_test_5dzhbcm7gkyg3hnexee")
-                XCTAssertEqual(dispute.closedDate, dateFormatter.date(from: "2018-11-19T12:45:57Z"))
-                guard let recentDocument = dispute.documents.first else {
-                    XCTFail("Cannot get the recent document")
-                    return
-                }
-                
-                XCTAssertEqual(recentDocument.filename, "Screenshot.png")
-                XCTAssertEqual(recentDocument.id, "docu_test_5dzhbe7mf4sg0eq1bzk")
+                XCTAssertEqual(dispute.transactions.first?.id, "trxn_test_5fqduj4pxa4yz6w5ygg")
+                XCTAssertEqual(dispute.closedDate, dateFormatter.date(from: "2019-04-29T08:33:06Z"))
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -162,7 +143,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeWonDisputeRetrieve() throws {
-        let defaultDispute = try fixturesObjectFor(type: Dispute.self, dataID: "dspt_test_5dzhbclwha52lkgt6p4")
+        let defaultDispute = try fixturesObjectFor(type: Dispute.self, dataID: "dspt_test_5fqdufgovm3zvkfl62q")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -185,18 +166,6 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultDispute.responseMessage, decodedDispute.responseMessage)
         XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
         XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
-        
-        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
-            XCTFail("Cannot get the recent document")
-            return
-        }
-        
-        XCTAssertEqual(defaultDocument.object, decodedDocument.object)
-        XCTAssertEqual(defaultDocument.id, decodedDocument.id)
-        XCTAssertEqual(defaultDocument.isLiveMode, decodedDocument.isLiveMode)
-        XCTAssertEqual(defaultDocument.location, decodedDocument.location)
-        XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
-        XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
     }
     
     func testDisputeList() {
@@ -219,7 +188,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
     func testDisputeUpdate() {
         let expectation = self.expectation(description: "Dispute update")
         
-        let expectedMessage = "Your dispute message"
+        let expectedMessage = "Your Dispute Message"
         let updateParams = DisputeParams(message: expectedMessage)
         
         let request = Dispute.update(using: testClient, id: disputeTestingID, params: updateParams) { (result) in
@@ -287,7 +256,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(disputesList.data)
                 let disputeSampleData = disputesList.data.first
                 XCTAssertNotNil(disputeSampleData)
-                XCTAssertEqual(disputeSampleData?.status, .pending)
+                XCTAssertEqual(disputeSampleData?.status, .open)
             case let .failure(error):
                 XCTFail("\(error)")
             }

@@ -1,0 +1,55 @@
+{
+  "object": "schedule",
+  "id": "schd_test_5fzoz616kap3j82u92b",
+  "livemode": false,
+  "deleted": false,
+  "location": "/schedules/schd_test_5fzoz616kap3j82u92b",
+  "created_at": "2019-05-23T03:45:47Z",
+  "status": "running",
+  "active": true,
+  "every": 1,
+  "period": "month",
+  "on": {
+    "weekday_of_month": "last_friday"
+  },
+  "in_words": "Every 1 month(s) on the last Friday",
+  "start_on": "2019-05-23",
+  "end_on": "2020-05-23",
+  "charge": {
+    "object": "scheduled_charge",
+    "id": "rchg_test_5fzoz614f4o119nxiqi",
+    "livemode": false,
+    "created_at": "2019-05-23T03:45:47Z",
+    "customer": "cust_test_5fz0olfpy32zadv96ek",
+    "default_card": true,
+    "card": "card_test_5fzbq7cypephj6fd3zq",
+    "description": "10,000 THB Charge on Every Last Friday",
+    "amount": 1000000,
+    "currency": "THB"
+  },
+  "occurrences": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2019-05-23T04:34:01Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": "chronological",
+    "location": "/schedules/schd_test_5fzoz616kap3j82u92b/occurrences",
+    "data": []
+  },
+  "next_occurrences_on": [
+    "2019-05-31",
+    "2019-06-28",
+    "2019-07-26",
+    "2019-08-30",
+    "2019-09-27",
+    "2019-10-25",
+    "2019-11-29",
+    "2019-12-27",
+    "2020-01-31",
+    "2020-02-28",
+    "2020-03-27",
+    "2020-04-24"
+  ]
+}

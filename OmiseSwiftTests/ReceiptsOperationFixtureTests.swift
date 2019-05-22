@@ -15,23 +15,23 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(receipt):
-                XCTAssertEqual(receipt.number, "1")
-                XCTAssertEqual(receipt.customerName, "John Doe")
-                XCTAssertEqual(receipt.customerTaxID, "Tax ID 1234")
-                XCTAssertEqual(receipt.customerEmail, "john@omise.co")
-                XCTAssertEqual(receipt.customerStatementName, "John")
+                XCTAssertEqual(receipt.number, "OMTH201903110001")
+                XCTAssertNil(receipt.customerName)
+                XCTAssertEqual(receipt.customerTaxID, "123456")
+                XCTAssertNil(receipt.customerEmail)
+                XCTAssertNil(receipt.customerStatementName)
                 
                 XCTAssertEqual(receipt.companyName, "Omise Company Limited")
                 XCTAssertEqual(receipt.companyTaxID, "0105556091152")
                 
-                XCTAssertEqual(receipt.chargeFee, 3650)
+                XCTAssertEqual(receipt.chargeFee, 0)
                 XCTAssertEqual(receipt.voidedFee, 0)
                 XCTAssertEqual(receipt.transferFee, 0)
-                XCTAssertEqual(receipt.feeSubtotal, 3650)
-                XCTAssertEqual(receipt.vat, 256)
+                XCTAssertEqual(receipt.feeSubtotal, 1460000)
+                XCTAssertEqual(receipt.vat, 102200)
                 XCTAssertEqual(receipt.wht, 0)
-                XCTAssertEqual(receipt.total, 3906)
-                XCTAssertEqual(receipt.issuedDateComponents, DateComponents(year: 2017, month: 7, day: 13))
+                XCTAssertEqual(receipt.total, 1562200)
+                XCTAssertEqual(receipt.issuedDateComponents, DateComponents(calendar: Calendar(identifier: .gregorian), year: 2019, month: 3, day: 11))
                 XCTAssertEqual(receipt.currency, .thb)
                 XCTAssertFalse(receipt.isCreditNote)
             case let .failure(error):
@@ -90,23 +90,23 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 let receiptSampleData = receiptsList.data.first
                 XCTAssertNotNil(receiptSampleData)
                 
-                XCTAssertEqual(receiptSampleData?.number, "1")
-                XCTAssertEqual(receiptSampleData?.customerName, "John Doe")
-                XCTAssertEqual(receiptSampleData?.customerTaxID, "Tax ID 1234")
-                XCTAssertEqual(receiptSampleData?.customerEmail, "john@omise.co")
-                XCTAssertEqual(receiptSampleData?.customerStatementName, "John")
+                XCTAssertEqual(receiptSampleData?.number, "OMTH201903110001")
+                XCTAssertNil(receiptSampleData?.customerName)
+                XCTAssertEqual(receiptSampleData?.customerTaxID, "123456")
+                XCTAssertNil(receiptSampleData?.customerEmail)
+                XCTAssertNil(receiptSampleData?.customerStatementName)
                 
                 XCTAssertEqual(receiptSampleData?.companyName, "Omise Company Limited")
                 XCTAssertEqual(receiptSampleData?.companyTaxID, "0105556091152")
                 
-                XCTAssertEqual(receiptSampleData?.chargeFee, 3650)
+                XCTAssertEqual(receiptSampleData?.chargeFee, 0)
                 XCTAssertEqual(receiptSampleData?.voidedFee, 0)
                 XCTAssertEqual(receiptSampleData?.transferFee, 0)
-                XCTAssertEqual(receiptSampleData?.feeSubtotal, 3650)
-                XCTAssertEqual(receiptSampleData?.vat, 256)
+                XCTAssertEqual(receiptSampleData?.feeSubtotal, 1460000)
+                XCTAssertEqual(receiptSampleData?.vat, 102200)
                 XCTAssertEqual(receiptSampleData?.wht, 0)
-                XCTAssertEqual(receiptSampleData?.total, 3906)
-                XCTAssertEqual(receiptSampleData?.issuedDateComponents, DateComponents(year: 2017, month: 7, day: 13))
+                XCTAssertEqual(receiptSampleData?.total, 1562200)
+                XCTAssertEqual(receiptSampleData?.issuedDateComponents, DateComponents(calendar: Calendar(identifier: .gregorian), year: 2019, month: 3, day: 11))
                 XCTAssertEqual(receiptSampleData?.currency, .thb)
                 XCTAssertEqual(receiptSampleData?.isCreditNote, false)
 

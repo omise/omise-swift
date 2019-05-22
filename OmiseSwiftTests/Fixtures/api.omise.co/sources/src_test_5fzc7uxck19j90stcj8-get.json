@@ -1,0 +1,12 @@
+{
+  "object": "source",
+  "id": "src_test_5fzc7uxck19j90stcj8",
+  "livemode": false,
+  "location": "/sources/src_test_5fzc7uxck19j90stcj8",
+  "type": "installment_bay",
+  "flow": "redirect",
+  "amount": 1000000,
+  "currency": "THB",
+  "installment_term": 6,
+  "zero_interest_installments": true
+}

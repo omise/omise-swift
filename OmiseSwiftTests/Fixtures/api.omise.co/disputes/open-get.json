@@ -1,43 +1,57 @@
 {
   "object": "list",
   "from": "1970-01-01T00:00:00Z",
-  "to": "2018-11-19T12:57:03Z",
+  "to": "2019-05-22T10:41:26Z",
   "offset": 0,
-  "limit": 60,
+  "limit": 20,
   "total": 1,
   "order": "chronological",
   "location": "/disputes/open",
   "data": [
     {
       "object": "dispute",
-      "id": "dspt_test_5dzhfcigvlt87hdivkv",
+      "id": "dspt_test_5fzexd718s2izg1md4l",
       "livemode": false,
-      "location": "/disputes/dspt_test_5dzhfcigvlt87hdivkv",
-      "amount": 2000,
-      "currency": "thb",
+      "location": "/disputes/dspt_test_5fzexd718s2izg1md4l",
+      "created_at": "2019-05-22T10:38:00Z",
+      "amount": 1000000,
+      "currency": "THB",
+      "funding_amount": 1000000,
+      "funding_currency": "THB",
       "status": "open",
-      "transaction": "trxn_test_5dzhfcipnfvxlxtcaxc",
       "message": null,
       "reason_code": "goods_or_services_not_provided",
       "reason_message": "Services not provided or Merchandise not received",
-      "charge": "chrg_test_5dy4hdmcdv0zv0lde84",
+      "admin_message": null,
+      "closed_at": null,
+      "charge": "chrg_test_5fzbppsjk5q9cxqjz0o",
+      "transactions": [
+        {
+          "object": "transaction",
+          "id": "trxn_test_5fzexd78n6tue5redq4",
+          "livemode": false,
+          "location": "/transactions/trxn_test_5fzexd78n6tue5redq4",
+          "created_at": "2019-05-22T10:38:00Z",
+          "direction": "debit",
+          "key": "dispute.started.debit",
+          "origin": "dspt_test_5fzexd718s2izg1md4l",
+          "amount": 1000000,
+          "currency": "THB",
+          "transferable_at": "2019-05-22T10:38:00Z"
+        }
+      ],
       "documents": {
         "object": "list",
         "from": "1970-01-01T00:00:00Z",
-        "to": "2018-11-19T12:57:03Z",
+        "to": "2019-05-22T10:41:26Z",
         "offset": 0,
         "limit": 20,
         "total": 0,
-        "order": null,
-        "location": "/disputes/dspt_test_5dzhfcigvlt87hdivkv/documents",
-        "data": [
-          
-        ]
+        "order": "chronological",
+        "location": "/disputes/dspt_test_5fzexd718s2izg1md4l/documents",
+        "data": []
       },
-      "created": "2018-11-19T12:56:57Z",
-      "closed_at": null,
-      "metadata": {
-      }
+      "metadata": {}
     }
   ]
 }

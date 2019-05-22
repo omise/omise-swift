@@ -1,10 +1,10 @@
 {
   "object": "source",
-  "id": "src_test_5929eggu29qfzi5vcfs",
+  "id": "src_test_5fzcswh68g4pg7gdcdc",
   "livemode": false,
-  "location": "/sources/src_test_5929eggu29qfzi5vcfs",
+  "location": "/sources/src_test_5fzcswh68g4pg7gdcdc",
   "type": "bill_payment_papaya",
   "flow": "offline",
-  "amount": 100000,
-  "currency": "thb"
+  "amount": 1000000,
+  "currency": "THB"
 }

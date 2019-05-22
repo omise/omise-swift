@@ -1,10 +1,10 @@
 {
   "object": "source",
-  "id": "src_test_5dzhlnlwy6uwqlxo2ry",
+  "id": "src_test_5fzct3pnfpque5wgtj5",
   "livemode": false,
-  "location": "/sources/src_test_5dzhlnlwy6uwqlxo2ry",
+  "location": "/sources/src_test_5fzct3pnfpque5wgtj5",
   "type": "internet_banking_scb",
   "flow": "redirect",
-  "amount": 100000,
-  "currency": "thb"
+  "amount": 1000000,
+  "currency": "THB"
 }

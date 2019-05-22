@@ -2,21 +2,21 @@ import XCTest
 import Omise
 
 
-private let transferTestingID = "trsf_test_4yqacz8t3cbipcj766u"
+private let transferTestingID = "trsf_test_5fqeuv5ozoo0kffs0ji"
 
 class TransferOperationFixtureTests: FixtureTestCase {
     
     func testTransferRetrieve() {
         let expectation = self.expectation(description: "transfer result")
         
-        let request = Transfer.retrieve(using: testClient, id: transferTestingID) { (result) in
+        let request = Transfer.retrieve(using: testClient, id: "trsf_test_5fzcod53tdr6vqdph0r") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 192188)
-                XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
-                XCTAssertEqual(transfer.paidDate, Date(timeIntervalSinceReferenceDate: 502046909.0))
+                XCTAssertEqual(transfer.value.amount, 1000000)
+                XCTAssertEqual(transfer.sentDate, dateFormatter.date(from: "2019-05-22T06:47:57Z"))
+                XCTAssertEqual(transfer.paidDate, dateFormatter.date(from: "2019-05-22T06:47:59Z"))
                 XCTAssertFalse(transfer.shouldFailFast)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -73,7 +73,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(transfer):
                 XCTAssertNotNil(transfer)
-                XCTAssertTrue(transfer.shouldFailFast)
+                XCTAssertFalse(transfer.shouldFailFast)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -92,7 +92,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 192189)
+                XCTAssertEqual(transfer.value.amount, 1000000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -122,13 +122,13 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferOtherFailureCode() {
         let expectation = self.expectation(description: "transfer result")
         
-        let request = Transfer.retrieve(using: testClient, id: "trsf_test_4yqacz8t3cbipcj272c") { (result) in
+        let request = Transfer.retrieve(using: testClient, id: "trsf_test_5fzp03ssdediv44ysmq") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 300)
-                XCTAssertNotNil(transfer.sentDate)
+                XCTAssertEqual(transfer.value.amount, 8000000)
+                XCTAssertNil(transfer.sentDate)
                 XCTAssertNil(transfer.paidDate)
                 if case Transfer.Status.failed(let failure) = transfer.status,
                     case .other(let code) = failure.code {
@@ -146,7 +146,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeTransferOtherFailureCode() throws {
-        let defaultTransfer = try fixturesObjectFor(type: Transfer.self, dataID: "trsf_test_4yqacz8t3cbipcj272c")
+        let defaultTransfer = try fixturesObjectFor(type: Transfer.self, dataID: "trsf_test_5fzp03ssdediv44ysmq")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
