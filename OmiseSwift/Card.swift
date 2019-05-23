@@ -287,6 +287,8 @@ public struct CustomerCard: OmiseResourceObject {
     public let isLiveMode: Bool
     public var createdDate: Date
     
+    public let isDeleted: Bool
+    
     public let billingAddress: BillingAddress
     
     public let bankName: String?
@@ -311,6 +313,7 @@ extension CustomerCard {
         case id
         case isLiveMode = "livemode"
         case createdDate = "created_at"
+        case isDeleted = "deleted"
         case lastDigits = "last_digits"
         case brand
         case name
@@ -330,6 +333,7 @@ extension CustomerCard {
         try container.encode(id, forKey: .id)
         try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isDeleted, forKey: .isDeleted)
         try container.encode(lastDigits, forKey: .lastDigits)
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
@@ -350,6 +354,7 @@ extension CustomerCard {
         id = try container.decode(String.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)

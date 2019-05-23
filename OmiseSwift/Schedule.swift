@@ -254,6 +254,7 @@ extension Schedule.Status: Codable {
 
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
+extension Schedule: Destroyable {}
 
 
 public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {

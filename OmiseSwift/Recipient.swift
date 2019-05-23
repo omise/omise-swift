@@ -147,7 +147,7 @@ extension Recipient: Creatable {
 }
 
 extension Recipient: Listable {}
-
+extension Recipient: Destroyable {}
 
 public struct RecipientFilterParams: OmiseFilterParams {
     public var isActive: Bool?

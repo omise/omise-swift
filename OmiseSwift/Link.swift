@@ -126,8 +126,8 @@ public struct LinkFilterParams: OmiseFilterParams {
 }
 
 extension Link: Listable {}
-
 extension Link: Retrievable {}
+extension Link: Destroyable {}
 
 extension Link: Creatable {
     public typealias CreateParams = LinkParams
