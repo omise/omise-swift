@@ -8,7 +8,7 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
     
     public let object: String
     public let location: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let id: String
     public var createdDate: Date
     
@@ -35,7 +35,7 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case createdDate = "created_at"
         case direction
         case key

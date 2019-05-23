@@ -9,7 +9,7 @@ public struct Recipient: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public var createdDate: Date
     public let isDeleted: Bool
     
@@ -44,7 +44,7 @@ public struct Recipient: OmiseResourceObject, Equatable {
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case createdDate = "created_at"
         case isDeleted = "deleted"
         case isVerified = "verified"
@@ -66,7 +66,7 @@ public struct Recipient: OmiseResourceObject, Equatable {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         isVerified = try container.decode(Bool.self, forKey: .isVerified)
@@ -89,7 +89,7 @@ public struct Recipient: OmiseResourceObject, Equatable {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(isDeleted, forKey: .isDeleted)
         try container.encode(isVerified, forKey: .isVerified)
         try container.encode(isActive, forKey: .isActive)

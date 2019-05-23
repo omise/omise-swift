@@ -8,7 +8,7 @@ public struct Link: OmiseResourceObject, Equatable {
     
     public let location: String
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     public let isDeleted: Bool
     
@@ -29,7 +29,7 @@ public struct Link: OmiseResourceObject, Equatable {
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case createdDate = "created_at"
         case isDeleted = "deleted"
         

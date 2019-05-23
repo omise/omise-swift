@@ -7,7 +7,7 @@ public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiable
     
     public let id: String
     public let object: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let location: String
     
     public let currency: Currency
@@ -137,7 +137,7 @@ extension PaymentSource {
     fileprivate enum CodingKeys: String, CodingKey {
         case id
         case object
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case location
         case currency
         case amount
@@ -151,7 +151,7 @@ extension PaymentSource {
         
         id = try container.decode(String.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         location = try container.decode(String.self, forKey: .location)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
@@ -164,7 +164,7 @@ extension PaymentSource {
         
         try container.encode(id, forKey: .id)
         try container.encode(object, forKey: .object)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(location, forKey: .location)
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)

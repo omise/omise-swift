@@ -6,7 +6,7 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatable
     
     public let object: String
     public let location: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     
     public let currency: Currency

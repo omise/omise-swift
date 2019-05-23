@@ -19,7 +19,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.chargeDescription, "Charge for order 3947")
                 XCTAssertEqual(charge.id, chargeTestingID)
                 XCTAssertEqual(charge.location, "/charges/chrg_test_5dxvbupj5e337skzplh")
-                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.fundingAmount, 3174194)
                 XCTAssertEqual(charge.fundingCurrency, .thb)
                 XCTAssertEqual(charge.refundedAmount, 10000)
@@ -48,7 +48,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -72,7 +72,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
         XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
         XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
         XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
@@ -109,7 +109,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.chargeDescription, "Test API Version 2014-07-27.")
                 XCTAssertEqual(charge.id, "chrg_test_57v787rzs4vr0dj1xc0")
                 XCTAssertEqual(charge.location, "/charges/chrg_test_57v787rzs4vr0dj1xc0")
-                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.isPaid, true)
                 XCTAssertEqual(charge.refundedAmount, 10000)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_57v787szdbe4b2ala5p")
@@ -135,7 +135,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -159,7 +159,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
         XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
         XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
         XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
@@ -196,7 +196,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNil(charge.chargeDescription)
                 XCTAssertEqual(charge.id, "chrg_test_58qdpc54lq6a5enm88m")
                 XCTAssertEqual(charge.location, "/charges/chrg_test_58qdpc54lq6a5enm88m")
-                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_58qdpcrr81jsqpoks6l")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-07-24T01:30:01Z"))
                 XCTAssertNotNil(charge.dispute)
@@ -228,7 +228,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -252,7 +252,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
         XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
         XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
         XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
@@ -278,7 +278,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertNotNil(decodedCharge.dispute)
         XCTAssertEqual(defaultCharge.dispute?.object, decodedCharge.dispute?.object)
         XCTAssertEqual(defaultCharge.dispute?.id, decodedCharge.dispute?.id)
-        XCTAssertEqual(defaultCharge.dispute?.isLive, decodedCharge.dispute?.isLive)
+        XCTAssertEqual(defaultCharge.dispute?.isLiveMode, decodedCharge.dispute?.isLiveMode)
         XCTAssertEqual(defaultCharge.dispute?.location, decodedCharge.dispute?.location)
         XCTAssertEqual(defaultCharge.dispute?.value.amount, decodedCharge.dispute?.value.amount)
         XCTAssertEqual(defaultCharge.dispute?.value.amountInUnit, decodedCharge.dispute?.value.amountInUnit)
@@ -299,7 +299,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultDocument.object, decodedDocument.object)
         XCTAssertEqual(defaultDocument.id, decodedDocument.id)
-        XCTAssertEqual(defaultDocument.isLive, decodedDocument.isLive)
+        XCTAssertEqual(defaultDocument.isLiveMode, decodedDocument.isLiveMode)
         XCTAssertEqual(defaultDocument.location, decodedDocument.location)
         XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
         XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
@@ -492,7 +492,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.chargeDescription, "WooCommerce Order id 22")
                 XCTAssertEqual(charge.id, "chrg_test_5atwzemytjyr1glskwt")
                 XCTAssertEqual(charge.location, "/charges/chrg_test_5atwzemytjyr1glskwt")
-                XCTAssertEqual(charge.isLive, false)
+                XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.refundedAmount, 0)
                 XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5atwzep0rd6fmqw5f3q")
                 XCTAssertEqual(charge.customer?.dataID, "cust_test_5atwzehn9asyv7ga6ya")
@@ -542,7 +542,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -604,7 +604,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -676,7 +676,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -779,7 +779,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -877,7 +877,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateSourceChargeParams() throws {
-        let source = PaymentSource(id: "src_test_12345", object: "source", isLive: false, location: "/sources/src_test_12345", currency: .thb, amount: 10_000_00, flow: .redirect, paymentInformation: .alipay)
+        let source = PaymentSource(id: "src_test_12345", object: "source", isLiveMode: false, location: "/sources/src_test_12345", currency: .thb, amount: 10_000_00, flow: .redirect, paymentInformation: .alipay)
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), source: source, chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
@@ -963,7 +963,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -987,7 +987,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
         XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
         XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
         XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
@@ -1041,7 +1041,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -1113,7 +1113,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -1197,7 +1197,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)

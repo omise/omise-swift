@@ -1,7 +1,7 @@
 import Foundation
 
 public struct DeletedObject<DeletedObjectType: Destroyable & OmiseResourceObject>: OmiseLiveModeObject, Equatable, Decodable {
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let object: String
     public let id: String
 }
@@ -10,7 +10,7 @@ extension DeletedObject {
     private enum CodingKeys: String, CodingKey {
         case object
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
     }
 }
 

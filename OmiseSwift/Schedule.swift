@@ -19,7 +19,7 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let isDeleted: Bool
     public let createdDate: Date
     
@@ -43,7 +43,7 @@ extension Schedule {
         case object
         case location
         case id
-        case isLive
+        case isLiveMode
         case isDeleted
         case createdDate
         
@@ -66,7 +66,7 @@ extension Schedule {
                 return "location"
             case .id:
                 return "id"
-            case .isLive:
+            case .isLiveMode:
                 return "livemode"
             case .isDeleted:
                 return "deleted"
@@ -103,7 +103,7 @@ extension Schedule {
             case "id":
                 self = .id
             case "livemode":
-                self = .isLive
+                self = .isLiveMode
             case "deleted":
                 self = .isDeleted
             case "created_at":
@@ -148,7 +148,7 @@ extension Schedule {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         
         status = try container.decode(Schedule.Status.self, forKey: .status)
@@ -188,7 +188,7 @@ extension Schedule {
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isDeleted, forKey: .isDeleted)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(status, forKey: .status)
         try container.encode(isActive, forKey: .isActive)
         try container.encode(every, forKey: .every)

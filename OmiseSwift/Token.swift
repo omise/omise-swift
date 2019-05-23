@@ -9,7 +9,7 @@ public struct Token: OmiseResourceObject, Equatable {
     
     public var id: String
     public var createdDate: Date
-    public var isLive: Bool
+    public var isLiveMode: Bool
     
     public var isUsed: Bool
     
@@ -20,7 +20,7 @@ public struct Token: OmiseResourceObject, Equatable {
         case location
         case id
         case createdDate = "created_at"
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case isUsed = "used"
         case card
     }

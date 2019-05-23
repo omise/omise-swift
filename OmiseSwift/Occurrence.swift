@@ -18,7 +18,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     
     public let schedule: DetailProperty<Schedule<Data>>
@@ -35,7 +35,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         case location
         case id
         case createdDate = "created_at"
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case schedule
         case status
         case message
@@ -52,7 +52,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)
         scheduledOnDateComponents = try container.decodeOmiseDateComponents(forKey: .scheduleDate)
         processedDate = try container.decode(Date.self, forKey: .processedDate)
@@ -82,7 +82,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(schedule, forKey: .schedule)
         try container.encodeOmiseDateComponents(scheduledOnDateComponents, forKey: .scheduleDate)
         try container.encode(processedDate, forKey: .processedDate)

@@ -6,7 +6,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     
     public let object: String
     public let location: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     
     public let id: String
     public var createdDate: Date
@@ -44,7 +44,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         status = try container.decode(Status.self, forKey: .status)
         amount = try container.decode(Int64.self, forKey: .amount)
@@ -63,7 +63,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         try container.encode(object, forKey: .object)
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(status, forKey: .status)
         try container.encode(amount, forKey: .amount)
@@ -81,7 +81,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         case location
         case id
         case createdDate = "created_at"
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case status
         case amount
         case currency

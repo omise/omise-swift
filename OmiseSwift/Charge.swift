@@ -8,7 +8,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     
     public var status: Charge.Status
@@ -148,7 +148,7 @@ extension Charge {
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case createdDate = "created_at"
         case status
         case failureCode = "failure_code"
@@ -198,7 +198,7 @@ extension Charge {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
@@ -283,7 +283,7 @@ extension Charge {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
 
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)

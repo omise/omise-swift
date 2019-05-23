@@ -19,7 +19,7 @@ public protocol OmiseCreatableObject: OmiseObject {
 }
 
 public protocol OmiseLiveModeObject: OmiseObject {
-    var isLive: Bool { get }
+    var isLiveMode: Bool { get }
 }
 
 

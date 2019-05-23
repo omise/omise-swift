@@ -8,7 +8,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let isDeleted: Bool
     public var createdDate: Date
     
@@ -59,7 +59,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case isDeleted = "deleted"
         case createdDate = "created_at"
         case bankAccount = "bank_account"
@@ -93,7 +93,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         shouldFailFast = try container.decode(Bool.self, forKey: .shouldFailFast)
@@ -133,7 +133,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         
         
         try container.encode(shouldFailFast, forKey: .shouldFailFast)

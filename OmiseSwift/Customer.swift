@@ -8,7 +8,7 @@ public struct Customer: OmiseResourceObject, Equatable {
     public let object: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public var createdDate: Date
     
     public let isDeleted: Bool
@@ -28,7 +28,7 @@ extension Customer {
         case object
         case location
         case id
-        case isLive = "livemode"
+        case isLiveMode = "livemode"
         case createdDate = "created_at"
         case isDeleted = "deleted"
         case defaultCard = "default_card"
@@ -43,7 +43,7 @@ extension Customer {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         defaultCard = try container.decodeIfPresent(DetailProperty<CustomerCard>.self, forKey: .defaultCard)
@@ -58,7 +58,7 @@ extension Customer {
         try container.encode(object, forKey: .object)
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(defaultCard, forKey: .defaultCard)
