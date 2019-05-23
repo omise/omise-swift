@@ -22,9 +22,9 @@ class ScheduleOperationsTest: LiveTest {
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.endDate, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 29))
                 
-                XCTAssertEqual(schedule.parameter.value.amount, 36_900_00)
-                XCTAssertEqual(schedule.parameter.value.currency, Currency.thb)
-                XCTAssertEqual(schedule.parameter.customerID, "cust_test_582o6hikunmz90lx0wl")
+                XCTAssertEqual(schedule.scheduleData.value.amount, 36_900_00)
+                XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
+                XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_582o6hikunmz90lx0wl")
             case let .failure(error):
                 XCTFail("\(error)")
             }

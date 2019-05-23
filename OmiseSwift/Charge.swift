@@ -565,48 +565,6 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
-public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
-    public let value: Value
-    public let customerID: String
-    public let cardID: String?
-    public let chargeDescription: String?
-    
-    public init(value: Value, customerID: String, cardID: String?, description: String?) {
-        self.value = value
-        self.customerID = customerID
-        self.cardID = cardID
-        self.chargeDescription = description
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case customerID = "customer"
-        case amount
-        case currency
-        case cardID = "card"
-        case chargeDescription = "description"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        cardID = try container.decodeIfPresent(String.self, forKey: .cardID)
-        let amount = try container.decode(Int64.self, forKey: .amount)
-        let currency = try container.decode(Currency.self, forKey: .currency)
-        
-        self.value = Value(amount: amount, currency: currency)
-        customerID = try container.decode(String.self, forKey: .customerID)
-        chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var keyedContainer = encoder.container(keyedBy: CodingKeys.self)
-        try keyedContainer.encode(customerID, forKey: .customerID)
-        try keyedContainer.encode(value.amount, forKey: .amount)
-        try keyedContainer.encode(value.currency, forKey: .currency)
-        try keyedContainer.encodeIfPresent(cardID, forKey: .cardID)
-        try keyedContainer.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
-    }
-}
-
 
 extension Charge: Listable {}
 extension Charge: Retrievable {}
@@ -622,10 +580,4 @@ extension Charge: Updatable {
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
-
-extension Charge: Schedulable, APISchedulable {
-    public typealias Parameter = ChargeSchedulingParameter
-    public typealias ScheduleDataParams = ChargeSchedulingParameter
-}
-
 

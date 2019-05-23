@@ -252,55 +252,6 @@ public struct TransferFilterParams: OmiseFilterParams {
     }
 }
 
-public struct TransferSchedulingParameter: SchedulingParameter, Equatable {
-    public enum Amount: Equatable {
-        case value(Value)
-        case percentageOfBalance(Double)
-        case unknown
-    }
-    
-    public let recipientID: String
-    public let amount: Amount
-    
-    private enum CodingKeys: String, CodingKey {
-        case recipientID = "recipient"
-        case percentageOfBalance = "percentage_of_balance"
-        case amount
-        case currency
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        recipientID = try container.decode(String.self, forKey: .recipientID)
-        let percentageOfBalance = try container.decodeIfPresent(Double.self, forKey: .percentageOfBalance)
-        let amount = try container.decodeIfPresent(Int64.self, forKey: .amount)
-        let currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
-        
-        switch (percentageOfBalance, amount, currency) {
-        case (let percentageOfBalance?, nil, _) where 0.0...100 ~= percentageOfBalance:
-            self.amount = .percentageOfBalance(percentageOfBalance)
-        case (nil, let amount?, let currency?):
-            self.amount = .value(Value(amount: amount, currency: currency))
-        default:
-            self.amount = .unknown
-        }
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(recipientID, forKey: .recipientID)
-        switch amount {
-        case .value(let value):
-            try container.encode(value.amount, forKey: .amount)
-            try container.encode(value.currency, forKey: .currency)
-        case .percentageOfBalance(let percentage):
-            try container.encode(percentage, forKey: .percentageOfBalance)
-        case .unknown: break
-        }
-    }
-}
-
 extension Transfer: Listable {}
 extension Transfer: Retrievable {}
 
@@ -316,9 +267,5 @@ extension Transfer: Destroyable {}
 
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams
-}
-
-extension Transfer: Schedulable {
-    public typealias Parameter = TransferSchedulingParameter
 }
 
