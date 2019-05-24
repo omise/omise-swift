@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatableObject, OmiseLiveModeObject {
+public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
     public let object: String
     public let id: String
     public let isLiveMode: Bool

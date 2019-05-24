@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatableObject, Equatable {
+public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatedObject, Equatable {
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/transactions")
     }

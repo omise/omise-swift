@@ -4,8 +4,7 @@ public struct BankAccount: OmiseObject {
     public let object: String
     
     public let bank: Bank
-    public let accountNumber: String?
-    public let lastDigits: LastDigits
+    public let accountNumberLastDigits: LastDigits
     public let name: String
     
     public let type: BankAccount.AccountType?
@@ -23,7 +22,6 @@ extension BankAccount {
         case bankCode = "bank_code"
         case bankBrand = "brand"
         case branchCode = "branch_code"
-        case accountNumber = "number"
         case lastDigits = "last_digits"
         case name
         case type
@@ -33,8 +31,7 @@ extension BankAccount {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         name = try container.decode(String.self, forKey: .name)
-        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
-        accountNumber = try container.decodeIfPresent(String.self, forKey: .accountNumber)
+        accountNumberLastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
         type = try container.decodeIfPresent(BankAccount.AccountType.self, forKey: .type)
         
         let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
@@ -49,8 +46,7 @@ extension BankAccount {
         
         try container.encode(object, forKey: .object)
         try container.encode(name, forKey: .name)
-        try container.encode(lastDigits, forKey: .lastDigits)
-        try container.encodeIfPresent(accountNumber, forKey: .accountNumber)
+        try container.encode(accountNumberLastDigits, forKey: .lastDigits)
         
         try container.encodeIfPresent(bank.bankID, forKey: .bankBrand)
         try container.encodeIfPresent(bank.branchCode, forKey: .branchCode)
@@ -72,15 +68,6 @@ public struct BankAccountParams: APIJSONQuery {
         self.brand = brand
         self.accountNumber = accountNumber
         self.name = name
-    }
-}
-
-
-extension BankAccountParams {
-    public init(createNewBankAccountWithBrand brand: String, accountNumber: String, name: String) {
-        self.brand = brand
-        self.name = name
-        self.accountNumber = accountNumber
     }
 }
 

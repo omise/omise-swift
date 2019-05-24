@@ -2,7 +2,7 @@ import Foundation
 
 
 
-public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatableObject, OmiseLiveModeObject {
+public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
     public let object: String
     public let id: String
     public let isLiveMode: Bool

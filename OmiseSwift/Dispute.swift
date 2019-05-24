@@ -26,6 +26,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let fundingAmount: Int64
     public let fundingCurrency: Currency
     public var status: DisputeStatus
+    
     public let reasonMessage: String
     public let reasonCode: Reason
     public var responseMessage: String?
@@ -38,7 +39,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public var metadata: JSONDictionary
 }
 
-    
+
 extension Dispute {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -87,7 +88,7 @@ extension Dispute {
         try container.encodeIfPresent(closedDate, forKey: .closedDate)
         try container.encode(metadata, forKey: .metadata)
     }
-
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location

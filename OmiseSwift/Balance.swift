@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatableObject {
+public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/balance")
     
     public let object: String

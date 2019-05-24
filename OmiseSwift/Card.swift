@@ -204,7 +204,7 @@ extension Card {
     }
 }
 
-public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {
+public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public let object: String
     
     public let id: String
