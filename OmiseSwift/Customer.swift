@@ -1,5 +1,6 @@
 import Foundation
 
+
 public struct Customer: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/customers")
     
@@ -9,6 +10,8 @@ public struct Customer: OmiseResourceObject, Equatable {
     public let id: String
     public let isLive: Bool
     public var createdDate: Date
+    
+    public let isDeleted: Bool
     
     public let defaultCard: DetailProperty<CustomerCard>?
     public let email: String
@@ -27,6 +30,7 @@ extension Customer {
         case id
         case isLive = "livemode"
         case createdDate = "created"
+        case isDeleted = "deleted"
         case defaultCard = "default_card"
         case email
         case customerDescription = "description"
@@ -41,6 +45,7 @@ extension Customer {
         id = try container.decode(String.self, forKey: .id)
         isLive = try container.decode(Bool.self, forKey: .isLive)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         defaultCard = try container.decodeIfPresent(DetailProperty<CustomerCard>.self, forKey: .defaultCard)
         email = try container.decode(String.self, forKey: .email)
         customerDescription = try container.decodeIfPresent(String.self, forKey: .customerDescription)
@@ -55,6 +60,7 @@ extension Customer {
         try container.encode(id, forKey: .id)
         try container.encode(isLive, forKey: .isLive)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(defaultCard, forKey: .defaultCard)
         try container.encode(email, forKey: .email)
         try container.encodeIfPresent(customerDescription, forKey: .customerDescription)
