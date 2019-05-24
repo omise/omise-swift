@@ -92,6 +92,10 @@
 		8A6079311EB1E395005684CC /* AnyAccessKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* AnyAccessKey.swift */; };
 		8A634A0D1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
 		8A634A0E1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
+		8A6785D02297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */; };
+		8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */; };
+		8A6785D32297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */; };
+		8A6785D42297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */; };
 		8A762C2121A6B84F00AC5C46 /* Capability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A762C2021A6B84F00AC5C46 /* Capability.swift */; };
 		8A762C2221A6B84F00AC5C46 /* Capability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A762C2021A6B84F00AC5C46 /* Capability.swift */; };
 		8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */; };
@@ -272,6 +276,8 @@
 		8A5BC2DD2012743400B55139 /* CurrencyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTest.swift; sourceTree = "<group>"; };
 		8A60792F1EB1E395005684CC /* AnyAccessKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyAccessKey.swift; sourceTree = "<group>"; };
 		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
+		8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOperationFixtureTests.swift; sourceTree = "<group>"; };
+		8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCardOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A762C2021A6B84F00AC5C46 /* Capability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capability.swift; sourceTree = "<group>"; };
 		8A7CBA481DE59A4700F83D21 /* LastDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigits.swift; sourceTree = "<group>"; };
 		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
@@ -449,6 +455,8 @@
 				8A149C82229537D300BF8E75 /* AccountAndBalanceOperationFixtureTests.swift */,
 				8A208DDA21A81247009104C0 /* CapabilityOperationFixtureTests.swift */,
 				8A07D2FE1D7436830030B68D /* ChargesOperationFixtureTests.swift */,
+				8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */,
+				8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */,
 				8A2698A41D74417800515A0A /* DisputeOperationFixtureTests.swift */,
 				8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */,
 				8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */,
@@ -861,11 +869,13 @@
 				8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
 				8A4469D31ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */,
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
+				8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */,
 				8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */,
+				8A6785D42297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */,
 				8A1CF6AE1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift in Sources */,
 				8A98759F1F0673C90090D56F /* DocumentOperationTest.swift in Sources */,
 				8A5880F01F46EEB300647405 /* ReceiptsOperationFixtureTests.swift in Sources */,
@@ -888,6 +898,7 @@
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,
+				8A6785D32297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */,
 				8A9B2AB41FB9B5C5002F42C7 /* DecoderTest.swift in Sources */,
 				8AEA41611EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
 				8A1039651EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
@@ -900,6 +911,7 @@
 				8A5880EF1F46EEB300647405 /* ReceiptsOperationFixtureTests.swift in Sources */,
 				8A5BC2DE2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8A07D3001D7436830030B68D /* ChargesOperationFixtureTests.swift in Sources */,
+				8A6785D02297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */,
 				8A4469D21ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */,
 				8A2BCAC41E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A07D2F51D73F5040030B68D /* FixtureClient.swift in Sources */,

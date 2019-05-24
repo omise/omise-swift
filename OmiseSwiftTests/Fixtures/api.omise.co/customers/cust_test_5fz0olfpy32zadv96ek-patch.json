@@ -1,0 +1,48 @@
+{
+  "object": "customer",
+  "id": "cust_test_5fz0olfpy32zadv96ek",
+  "livemode": false,
+  "location": "/customers/cust_test_5fz0olfpy32zadv96ek",
+  "created_at": "2019-05-21T10:21:20Z",
+  "deleted": false,
+  "default_card": "card_test_5fzbq7cypephj6fd3zq",
+  "email": "john.doe.the.second@example.com",
+  "description": "John Doe (id: 30)",
+  "metadata": {},
+  "cards": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2019-05-24T09:23:25Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 1,
+    "order": "chronological",
+    "location": "/customers/cust_test_5fz0olfpy32zadv96ek/cards",
+    "data": [
+      {
+        "object": "card",
+        "id": "card_test_5fzbq7cypephj6fd3zq",
+        "livemode": false,
+        "location": "/customers/cust_test_5fz0olfpy32zadv96ek/cards/card_test_5fzbq7cypephj6fd3zq",
+        "created_at": "2019-05-22T05:10:51Z",
+        "deleted": false,
+        "street1": null,
+        "street2": null,
+        "city": "Bangkok",
+        "state": null,
+        "postal_code": "10320",
+        "country": "gb",
+        "phone_number": null,
+        "financing": "credit",
+        "bank": "STRIPE PAYMENTS UK LIMITED",
+        "last_digits": "4242",
+        "brand": "Visa",
+        "expiration_month": 5,
+        "expiration_year": 2021,
+        "fingerprint": "TQvmcX2ChlW2YMcaPxWZpgyCN0K/f//pPDsKcalfOZk=",
+        "name": "JOHN DOE",
+        "security_code_check": true
+      }
+    ]
+  }
+}
