@@ -93,30 +93,12 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
         }
     }
     
-    public var countryCode: String? {
+    public var billingAddress: BillingAddress {
         switch self {
         case .tokenized(let card):
-            return card.countryCode
+            return card.billingAddress
         case .customer(let card):
-            return card.countryCode
-        }
-    }
-    
-    public var city: String? {
-        switch self {
-        case .tokenized(let card):
-            return card.city
-        case .customer(let card):
-            return card.city
-        }
-    }
-    
-    public var postalCode: String? {
-        switch self {
-        case .tokenized(let card):
-            return card.postalCode
-        case .customer(let card):
-            return card.postalCode
+            return card.billingAddress
         }
     }
     
@@ -210,12 +192,11 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     public let id: String
     public let isLiveMode: Bool
     public var createdDate: Date
-    public let isDeleted: Bool
-
-    public let countryCode: String?
-    public let city: String?
-    public let postalCode: String?
     
+    public let isDeleted: Bool
+    
+    public let billingAddress: BillingAddress
+
     public let bankName: String?
     
     public let lastDigits: LastDigits
@@ -241,9 +222,6 @@ extension TokenizedCard {
         case brand
         case name
         case bankName = "bank"
-        case postalCode = "postal_code"
-        case countryCode = "country"
-        case city
         case financing
         case fingerPrint = "fingerprint"
         case expirationMonth = "expiration_month"
@@ -262,15 +240,15 @@ extension TokenizedCard {
         try container.encode(lastDigits, forKey: .lastDigits)
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
+        
         try container.encodeIfPresent(bankName, forKey: .bankName)
-        try container.encodeIfPresent(postalCode, forKey: .postalCode)
-        try container.encodeIfPresent(countryCode, forKey: .countryCode)
-        try container.encodeIfPresent(city, forKey: .city)
         try container.encodeIfPresent(financing, forKey: .financing)
         try container.encode(fingerPrint, forKey: .fingerPrint)
         try container.encode(passSecurityCodeCheck, forKey: .passSecurityCodeCheck)
         try container.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
         try container.encodeIfPresent(expiration?.year, forKey: .expirationYear)
+        
+        try billingAddress.encode(to: encoder)
     }
     
     public init(from decoder: Decoder) throws {
@@ -285,9 +263,7 @@ extension TokenizedCard {
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)
         bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
-        postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
-        countryCode = try container.decodeIfPresent(String.self, forKey: .countryCode)
-        city = try container.decodeIfPresent(String.self, forKey: .city)
+        billingAddress = try BillingAddress(from: decoder)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
         fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
         passSecurityCodeCheck = try container.decode(Bool.self, forKey: .passSecurityCodeCheck)
@@ -311,9 +287,7 @@ public struct CustomerCard: OmiseResourceObject {
     public let isLiveMode: Bool
     public var createdDate: Date
     
-    public let countryCode: String?
-    public let city: String?
-    public let postalCode: String?
+    public let billingAddress: BillingAddress
     
     public let bankName: String?
     
@@ -341,9 +315,6 @@ extension CustomerCard {
         case brand
         case name
         case bankName = "bank"
-        case postalCode = "postal_code"
-        case countryCode = "country"
-        case city
         case financing
         case fingerPrint = "fingerprint"
         case expirationMonth = "expiration_month"
@@ -363,14 +334,13 @@ extension CustomerCard {
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
         try container.encodeIfPresent(bankName, forKey: .bankName)
-        try container.encodeIfPresent(postalCode, forKey: .postalCode)
-        try container.encodeIfPresent(countryCode, forKey: .countryCode)
-        try container.encodeIfPresent(city, forKey: .city)
         try container.encodeIfPresent(financing, forKey: .financing)
         try container.encode(fingerPrint, forKey: .fingerPrint)
         try container.encode(passSecurityCodeCheck, forKey: .passSecurityCodeCheck)
         try container.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
         try container.encodeIfPresent(expiration?.year, forKey: .expirationYear)
+        
+        try billingAddress.encode(to: encoder)
     }
     
     public init(from decoder: Decoder) throws {
@@ -384,9 +354,7 @@ extension CustomerCard {
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)
         bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
-        postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
-        countryCode = try container.decodeIfPresent(String.self, forKey: .countryCode)
-        city = try container.decodeIfPresent(String.self, forKey: .city)
+        billingAddress = try BillingAddress(from: decoder)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
         fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
         passSecurityCodeCheck = try container.decode(Bool.self, forKey: .passSecurityCodeCheck)

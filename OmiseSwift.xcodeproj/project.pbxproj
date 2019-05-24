@@ -49,6 +49,8 @@
 		8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */; };
 		8A3139312293B2370055F755 /* TransferSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3139302293B2370055F755 /* TransferSchedule.swift */; };
 		8A3139322293B2370055F755 /* TransferSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3139302293B2370055F755 /* TransferSchedule.swift */; };
+		8A38E78122968280005FD6F9 /* BillingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38E78022968280005FD6F9 /* BillingAddress.swift */; };
+		8A38E78222968280005FD6F9 /* BillingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38E78022968280005FD6F9 /* BillingAddress.swift */; };
 		8A3B90151E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
 		8A3B90161E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
 		8A4224AB1E4C8F8E00B11AF2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4224AA1E4C8F8E00B11AF2 /* Search.swift */; };
@@ -250,6 +252,7 @@
 		8A2BCAC01E5C083F0069577B /* banks.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = banks.json; sourceTree = "<group>"; };
 		8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientOperationTest.swift; sourceTree = "<group>"; };
 		8A3139302293B2370055F755 /* TransferSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferSchedule.swift; sourceTree = "<group>"; };
+		8A38E78022968280005FD6F9 /* BillingAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingAddress.swift; sourceTree = "<group>"; };
 		8A3938E51D8174C9007750AA /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		8A3B90141E360AD30074D6CD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		8A4224AA1E4C8F8E00B11AF2 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
@@ -495,6 +498,7 @@
 				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
 				8A762C2021A6B84F00AC5C46 /* Capability.swift */,
 				8ACB412C1E2793D4001793CD /* Card.swift */,
+				8A38E78022968280005FD6F9 /* BillingAddress.swift */,
 				8ACB41141E277B60001793CD /* Charge.swift */,
 				8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */,
 				8A56D41A1D78172D00F30D88 /* Currency.swift */,
@@ -732,6 +736,7 @@
 				8ACB41561E28A3C2001793CD /* Dispute.swift in Sources */,
 				8A4469D61ED5E13D00F07334 /* Period.swift in Sources */,
 				8ADE88B11ED4459100239263 /* Schedule.swift in Sources */,
+				8A38E78222968280005FD6F9 /* BillingAddress.swift in Sources */,
 				8A28BB431E28FDAE00EEBD55 /* OmiseAPIError.swift in Sources */,
 				8A028B381E2CBABF0008E010 /* Link.swift in Sources */,
 				8A84EF761E2E27C90041082E /* List.swift in Sources */,
@@ -800,6 +805,7 @@
 				8A4469D51ED5E13D00F07334 /* Period.swift in Sources */,
 				8ADE88B01ED4459100239263 /* Schedule.swift in Sources */,
 				8ACD572C1E2E3A9600FEE5A0 /* Object.swift in Sources */,
+				8A38E78122968280005FD6F9 /* BillingAddress.swift in Sources */,
 				8ACD57161E2E3A9600FEE5A0 /* Dispute.swift in Sources */,
 				8ACD57321E2E3A9600FEE5A0 /* Updatable.swift in Sources */,
 				8A98759B1F0647050090D56F /* Document.swift in Sources */,

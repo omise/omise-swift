@@ -56,5 +56,18 @@ class DecodeTests: XCTestCase {
             XCTFail(thrownError.localizedDescription)
         }
     }
+    
+    @available(iOS 11.0, *)
+    func testTokenParamEncoding() throws {
+        let params = TokenParams(number: "4242424242424242", name: "John Doe", expiration: (12, 2020), securityCode: "123", billingAddress: BillingAddress(street1: "123 Main Road", street2: nil, city: "Bangkok", state: nil, postalCode: "10240", countryCode: nil, phoneNumber: "7777777777"))
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+        
+        let encodedData = try encoder.encode(params)
+        
+        let jsonData = try self.jsonData(withFileName: "token-params")
+        XCTAssertEqual(jsonData, encodedData)
+    }
 }
 

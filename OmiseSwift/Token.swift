@@ -36,9 +36,7 @@ public struct TokenParams: APIJSONQuery {
     
     public var securityCode: String?
     
-    public var city: String?
-    
-    public var postalCode: String?
+    public var billingAddress: BillingAddress?
     
     private enum TokenCodingKeys: String, CodingKey {
         case card
@@ -49,31 +47,36 @@ public struct TokenParams: APIJSONQuery {
             case expirationMonth = "expiration_month"
             case expirationYear = "expiration_year"
             case securityCode = "security_code"
-            case city
-            case postalCode = "postal_code"
         }
     }
 
     public func encode(to encoder: Encoder) throws {
         var tokenContainer = encoder.container(keyedBy: TokenCodingKeys.self)
-        var cardContainer = tokenContainer.nestedContainer(keyedBy: TokenCodingKeys.CardCodingKeys.self, forKey: .card)
         
-        try cardContainer.encode(number, forKey: .number)
-        try cardContainer.encodeIfPresent(name, forKey: .name)
-        try cardContainer.encodeIfPresent(expiration?.month, forKey: .expirationMonth)
-        try cardContainer.encodeIfPresent(expiration?.year, forKey: .expirationYear)
-        try cardContainer.encodeIfPresent(securityCode, forKey: .securityCode)
-        try cardContainer.encodeIfPresent(city, forKey: .city)
-        try cardContainer.encodeIfPresent(postalCode, forKey: .postalCode)
+        var cardContainer = tokenContainer.nestedContainer(keyedBy: CombineCodingKeys<TokenCodingKeys.CardCodingKeys, BillingAddress.CodingKeys>.self, forKey: .card)
+        try cardContainer.encode(number, forKey: .left(.number))
+        try cardContainer.encodeIfPresent(name, forKey: .left(.name))
+        try cardContainer.encodeIfPresent(expiration?.month, forKey: .left(.expirationMonth))
+        try cardContainer.encodeIfPresent(expiration?.year, forKey: .left(.expirationYear))
+        try cardContainer.encodeIfPresent(securityCode, forKey: .left(.securityCode))
+        
+        try cardContainer.encodeIfPresent(billingAddress?.street1, forKey: .right(.street1))
+        try cardContainer.encodeIfPresent(billingAddress?.street2, forKey: .right(.street2))
+        try cardContainer.encodeIfPresent(billingAddress?.city, forKey: .right(.city))
+        try cardContainer.encodeIfPresent(billingAddress?.state, forKey: .right(.state))
+        try cardContainer.encodeIfPresent(billingAddress?.postalCode, forKey: .right(.postalCode))
+        try cardContainer.encodeIfPresent(billingAddress?.countryCode, forKey: .right(.countryCode))
+        try cardContainer.encodeIfPresent(billingAddress?.phoneNumber, forKey: .right(.phoneNumber))
     }
     
-    public init(number: String, name: String?, expiration: (month: Int, year: Int)?, securityCode: String?, city: String? = nil, postalCode: String? = nil) {
+    public init(number: String, name: String?,
+        expiration: (month: Int, year: Int)?, securityCode: String?,
+        billingAddress: BillingAddress? = nil) {
         self.number = number
         self.name = name
         self.expiration = expiration
         self.securityCode = securityCode
-        self.city = city
-        self.postalCode = postalCode
+        self.billingAddress = billingAddress
     }
 }
 

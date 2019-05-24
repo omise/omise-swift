@@ -80,7 +80,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
         XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.countryCode, decodedCharge.card?.billingAddress.countryCode)
         XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
         XCTAssertEqual(defaultCharge.card?.brand.rawValue, decodedCharge.card?.brand.rawValue)
         XCTAssertEqual(defaultCharge.card?.expiration?.month, decodedCharge.card?.expiration?.month)
