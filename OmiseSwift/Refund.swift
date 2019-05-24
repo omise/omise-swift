@@ -80,7 +80,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         case object
         case location
         case id
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isLive = "livemode"
         case status
         case amount
@@ -119,7 +119,7 @@ public struct RefundFilterParams: OmiseFilterParams {
     private enum CodingKeys: String, CodingKey {
         case amount
         case cardLastDigits = "card_last_digits"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isVoided = "voided"
     }
     

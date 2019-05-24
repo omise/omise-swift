@@ -20,7 +20,7 @@ public struct Account: OmiseResourceObject, Equatable {
         case location
         case id
         case isLiveMode = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case email
         case teamID = "team"
         case currency

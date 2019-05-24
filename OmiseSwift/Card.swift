@@ -235,7 +235,7 @@ extension TokenizedCard {
         case object
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isDeleted = "deleted"
         case lastDigits = "last_digits"
         case brand
@@ -336,7 +336,7 @@ extension CustomerCard {
         case location
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case lastDigits = "last_digits"
         case brand
         case name

@@ -36,7 +36,7 @@ public struct Transaction<Source: OmiseIdentifiableObject>: OmiseIdentifiableObj
         case location
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case direction
         case key
         case currency

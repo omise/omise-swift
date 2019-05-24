@@ -29,7 +29,7 @@ extension Customer {
         case location
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isDeleted = "deleted"
         case defaultCard = "default_card"
         case email

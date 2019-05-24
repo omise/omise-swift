@@ -93,7 +93,7 @@ extension Dispute {
         case location
         case id
         case isLive = "livemode"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case amount
         case currency
         case fundingAmount = "funding_amount"
@@ -245,7 +245,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
         case amount
         case cardLastDigits = "card_last_digits"
         case closedDate = "closed_at"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case currency
         case status
     }

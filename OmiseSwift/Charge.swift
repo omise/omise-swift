@@ -479,7 +479,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         case isCaptured = "captured"
         case capturedDate = "captured_at"
         case cardLastDigits = "card_last_digits"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isCustomerPresent = "customer_present"
         case isDisputed = "disputed"
         case failureCode = "failure_code"

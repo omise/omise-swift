@@ -34,7 +34,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         case object
         case location
         case id
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isLive = "livemode"
         case schedule
         case status

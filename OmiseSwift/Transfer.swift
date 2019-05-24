@@ -61,7 +61,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case id
         case isLive = "livemode"
         case isDeleted = "deleted"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case bankAccount = "bank_account"
         case shouldFailFast = "fail_fast"
         case isSent = "sent"
