@@ -125,6 +125,8 @@ public struct LinkFilterParams: OmiseFilterParams {
     }
 }
 
+
+extension Link: OmiseAPIPrimaryObject {}
 extension Link: Listable {}
 extension Link: Retrievable {}
 extension Link: Destroyable {}

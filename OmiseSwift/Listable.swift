@@ -18,35 +18,28 @@ public struct ListParams: APIJSONQuery {
     }
 }
 
-public extension Listable where Self: OmiseLocatableObject {
+public extension OmiseAPIPrimaryObject where Self: Listable {
     typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
     typealias ListRequest = APIRequest<ListProperty<Self>>
     
+
     @discardableResult
-    static func listEndpointWith(parent: OmiseResourceObject?, params: ListParams?) -> ListEndpoint {
+    static func listEndpointWith(params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
-            pathComponents: makeResourcePathsWithParent(parent),
+            pathComponents: makeResourcePaths(),
             parameter: .get(params)
         )
     }
     
     @discardableResult
-    static func list(using client: APIClient, parent: OmiseResourceObject? = nil, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
-        guard verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.listEndpointWith(parent: parent, params: params)
+    static func list(using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
+        let endpoint = self.listEndpointWith(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
     
     @discardableResult
-    static func list(using client: APIClient, parent: OmiseResourceObject? = nil, listParams: ListParams? = nil, callback: @escaping (Failable<List<Self>>) -> Void) -> ListRequest? {
-        guard verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.listEndpointWith(parent: parent, params: listParams)
+    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (Failable<List<Self>>) -> Void) -> ListRequest? {
+        let endpoint = self.listEndpointWith(params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
             let callbackResult = result.map({
@@ -60,7 +53,7 @@ public extension Listable where Self: OmiseLocatableObject {
 }
 
 
-public extension List {
+public extension List where TItem: OmiseAPIPrimaryObject {
     func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
         let listParams = ListParams(from: nil, to: nil, offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
@@ -87,7 +80,7 @@ public extension List {
     }
     
     @discardableResult
-    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
+    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> TItem.ListRequest? {
         let operation = makeLoadPreviousPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -105,7 +98,7 @@ public extension List {
     }
 }
 
-public extension List where TItem: OmiseIdentifiableObject & OmiseCreatedObject {
+public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
     func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
         let listParams: ListParams
         
@@ -138,29 +131,4 @@ public extension List where TItem: OmiseIdentifiableObject & OmiseCreatedObject 
         return client.requestToEndpoint(operation, callback: requestCallback)
     }
 }
-
-public extension List where TItem: OmiseResourceObject {
-    func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        _ = loadNextPage(using: client, count: count) { (result) in
-            switch result {
-            case .success(let addedValues):
-                callback(.success(addedValues))
-            case .failure(let error):
-                callback(.failure(error))
-            }
-        } as APIRequest?
-    }
-    
-    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) {
-        _ = loadPreviousPage(using: client, count: count) { (result) in
-            switch result {
-            case .success(let addedValues):
-                callback(.success(addedValues))
-            case .failure(let error):
-                callback(.failure(error))
-            }
-        } as APIRequest?
-    }
-}
-
 

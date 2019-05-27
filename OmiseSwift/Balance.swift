@@ -38,7 +38,7 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatedOb
     }
 }
 
-
+extension Balance: OmiseAPIPrimaryObject {}
 extension Balance: SingletonRetrievable {}
 
 

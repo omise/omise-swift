@@ -1,15 +1,15 @@
 import Foundation
 
 
-public struct Document: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: Dispute.self, path: "documents")
+public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject, Equatable {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "documents")
     
     public let object: String
     public let location: String
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     public let isDeleted: Bool
     
     public let filename: String
@@ -25,7 +25,6 @@ public struct Document: OmiseResourceObject, Equatable {
         case filename
         case downloadURL = "download_uri"
     }
-
 }
 
 
@@ -43,23 +42,11 @@ public struct DocumentParams: APIFileQuery {
     }
 }
 
+extension Document: ChildrenObject {
+    public typealias Parent = Dispute
+}
+
 extension Document: Creatable {
     public typealias CreateParams = DocumentParams
-    
-    public static func createEndpointWith(parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
-        return CreateEndpoint(
-            pathComponents: Document.makeResourcePathsWithParent(parent),
-            parameter: .post(params)
-        )
-    }
-    
-    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Document.verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.createEndpointWith(parent: parent, params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
-    }
 }
 

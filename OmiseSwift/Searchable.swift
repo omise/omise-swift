@@ -57,10 +57,6 @@ public extension Searchable where Self: OmiseResourceObject {
     }
     
     static func search(using client: APIClient, parent: OmiseResourceObject? = nil, params: SearchParams<FilterParams>? = nil, callback: SearchRequest.Callback?) -> SearchRequest? {
-        guard verifyParent(parent) else {
-            return nil
-        }
-        
         let endpoint = self.searchEndpointWithParams(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }

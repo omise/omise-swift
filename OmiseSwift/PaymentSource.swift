@@ -1,14 +1,15 @@
 import Foundation
 
 
-public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: nil, path: "sources")
+public struct PaymentSource: SourceData, OmiseResourceObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "sources")
     public typealias PaymentInformation = PaymentSourceInformation
     
     public let id: String
     public let object: String
     public let isLiveMode: Bool
     public let location: String
+    public let createdDate: Date
     
     public let currency: Currency
     public let amount: Int64
@@ -139,6 +140,7 @@ extension PaymentSource {
         case object
         case isLiveMode = "livemode"
         case location
+        case createdDate = "created_at"
         case currency
         case amount
         case flow
@@ -153,6 +155,7 @@ extension PaymentSource {
         object = try container.decode(String.self, forKey: .object)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         location = try container.decode(String.self, forKey: .location)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
@@ -166,6 +169,7 @@ extension PaymentSource {
         try container.encode(object, forKey: .object)
         try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(location, forKey: .location)
+        try container.encode(createdDate, forKey: .createdDate)
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
         try container.encode(flow, forKey: .flow)

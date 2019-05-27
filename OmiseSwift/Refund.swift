@@ -9,7 +9,7 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreate
     public let isLiveMode: Bool
     
     public let id: String
-    public var createdDate: Date
+    public let createdDate: Date
     
     public let status: Status
     
@@ -149,6 +149,7 @@ public struct RefundFilterParams: OmiseFilterParams {
 }
 
 
+extension Refund: OmiseAPIPrimaryObject {}
 extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
@@ -159,12 +160,12 @@ extension Refund: Searchable {
     public typealias FilterParams = RefundFilterParams
 }
 
+extension Refund: ChildrenObject {
+    public typealias Parent = Charge
+}
+
 
 extension Charge {
-    public func listRefunds(using client: APIClient, params: ListParams? = nil, callback: @escaping Refund.ListRequest.Callback) -> Refund.ListRequest? {
-        return Refund.list(using: client, parent: self, params: params, callback: callback)
-    }
-    
     public func retrieveRefund(using client: APIClient, id: String, callback: @escaping Refund.RetrieveRequest.Callback) -> Refund.RetrieveRequest? {
         return Refund.retrieve(using: client, parent: self, id: id, callback: callback)
     }

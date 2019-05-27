@@ -92,10 +92,14 @@
 		8A6079311EB1E395005684CC /* AnyAccessKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* AnyAccessKey.swift */; };
 		8A634A0D1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
 		8A634A0E1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
+		8A6785CD2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */; };
+		8A6785CE2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */; };
 		8A6785D02297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */; };
 		8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */; };
 		8A6785D32297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */; };
 		8A6785D42297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */; };
+		8A6785D62297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */; };
+		8A6785D72297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */; };
 		8A762C2121A6B84F00AC5C46 /* Capability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A762C2021A6B84F00AC5C46 /* Capability.swift */; };
 		8A762C2221A6B84F00AC5C46 /* Capability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A762C2021A6B84F00AC5C46 /* Capability.swift */; };
 		8A82A70B1D795DCC00A198A3 /* SearchOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */; };
@@ -276,8 +280,10 @@
 		8A5BC2DD2012743400B55139 /* CurrencyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTest.swift; sourceTree = "<group>"; };
 		8A60792F1EB1E395005684CC /* AnyAccessKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyAccessKey.swift; sourceTree = "<group>"; };
 		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
+		8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmiseAPIChildObject.swift; sourceTree = "<group>"; };
 		8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCardOperationFixtureTests.swift; sourceTree = "<group>"; };
+		8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmiseAPIRequestObjectTest.swift; sourceTree = "<group>"; };
 		8A762C2021A6B84F00AC5C46 /* Capability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capability.swift; sourceTree = "<group>"; };
 		8A7CBA481DE59A4700F83D21 /* LastDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigits.swift; sourceTree = "<group>"; };
 		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
@@ -428,6 +434,7 @@
 				8A9B2AB31FB9B5C5002F42C7 /* DecoderTest.swift */,
 				8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */,
 				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
+				8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -504,9 +511,9 @@
 				8ACD573C1E2E570600FEE5A0 /* Balance.swift */,
 				8A2BCABD1E5C039B0069577B /* Bank.swift */,
 				8ACB413D1E27A3F4001793CD /* BankAccount.swift */,
+				8A38E78022968280005FD6F9 /* BillingAddress.swift */,
 				8A762C2021A6B84F00AC5C46 /* Capability.swift */,
 				8ACB412C1E2793D4001793CD /* Card.swift */,
-				8A38E78022968280005FD6F9 /* BillingAddress.swift */,
 				8ACB41141E277B60001793CD /* Charge.swift */,
 				8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */,
 				8A56D41A1D78172D00F30D88 /* Currency.swift */,
@@ -522,6 +529,7 @@
 				8ACB41321E279730001793CD /* ListProperty.swift */,
 				8ACB41121E277607001793CD /* Object.swift */,
 				8ADE88B21ED4619A00239263 /* Occurrence.swift */,
+				8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */,
 				8A28BB421E28FDAE00EEBD55 /* OmiseAPIError.swift */,
 				22A0F9951D22372400CA3D35 /* Ordering.swift */,
 				8A4469D41ED5E13D00F07334 /* Period.swift */,
@@ -749,6 +757,7 @@
 				8A028B381E2CBABF0008E010 /* Link.swift in Sources */,
 				8A84EF761E2E27C90041082E /* List.swift in Sources */,
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
+				8A6785CE2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
 				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
@@ -818,6 +827,7 @@
 				8ACD57321E2E3A9600FEE5A0 /* Updatable.swift in Sources */,
 				8A98759B1F0647050090D56F /* Document.swift in Sources */,
 				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
+				8A6785CD2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,
@@ -882,6 +892,7 @@
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A9B2AB51FB9B5C5002F42C7 /* DecoderTest.swift in Sources */,
 				8A1CF6B11F8BC1D8003EDB38 /* LastDigitsTest.swift in Sources */,
+				8A6785D72297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -897,6 +908,7 @@
 				8AF2219E21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				22BF9BA11CD1F76900CD3CAD /* LiveTest.swift in Sources */,
 				8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */,
+				8A6785D62297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */,
 				8A2698A31D743A2100515A0A /* RefundOperationFixtureTests.swift in Sources */,
 				8A6785D32297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift in Sources */,
 				8A9B2AB41FB9B5C5002F42C7 /* DecoderTest.swift in Sources */,

@@ -9,7 +9,7 @@ public struct Customer: OmiseResourceObject, Equatable {
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     
     public let isDeleted: Bool
     
@@ -124,6 +124,7 @@ public struct CustomerFilterParams: OmiseFilterParams {
     }
 }
 
+extension Customer: OmiseAPIPrimaryObject {}
 extension Customer: Listable {}
 extension Customer: Retrievable {}
 

@@ -566,6 +566,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
 }
 
 
+extension Charge: OmiseAPIPrimaryObject {}
 extension Charge: Listable {}
 extension Charge: Retrievable {}
 

@@ -11,7 +11,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     }
     
     public static var resourceInfo: ResourceInfo {
-        return ResourceInfo(parentType: Schedule<Data>.self, path: "/occurrences")
+        return ResourceInfo(path: "/occurrences")
     }
     
     public let object: String
@@ -106,3 +106,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     }
 }
 
+
+
+extension Occurrence: OmiseAPIPrimaryObject {}
+extension Occurrence: Retrievable {}

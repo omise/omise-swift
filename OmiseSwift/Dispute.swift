@@ -16,7 +16,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     
     public var value: Value {
         return Value(amount: amount, currency: currency)
@@ -283,6 +283,8 @@ public struct DisputeFilterParams: OmiseFilterParams {
     }
 }
 
+
+extension Dispute: OmiseAPIPrimaryObject {}
 extension Dispute: Listable {}
 extension Dispute: Retrievable {}
 
@@ -296,7 +298,7 @@ extension Dispute: Searchable {
 
 
 extension Dispute {
-    public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping Dispute.ListRequest.Callback) -> Dispute.ListRequest? {
+    public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping ListRequest.Callback) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourceInfo.path, state.rawValue],
             parameter: .get(nil)

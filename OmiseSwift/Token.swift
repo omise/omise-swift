@@ -8,7 +8,7 @@ public struct Token: OmiseResourceObject, Equatable {
     public var location: String
     
     public var id: String
-    public var createdDate: Date
+    public let createdDate: Date
     public var isLiveMode: Bool
     
     public var isUsed: Bool
@@ -80,23 +80,21 @@ public struct TokenParams: APIJSONQuery {
     }
 }
 
+
+extension Token: OmiseAPIPrimaryObject {}
 extension Token: Creatable {
     public typealias CreateParams = TokenParams
     
-    public static func createEndpointWith(parent: OmiseResourceObject?, usingKey key: AccessKey, params: CreateParams) -> CreateEndpoint {
+    public static func createEndpoint(usingKey key: AccessKey, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
-            pathComponents: Token.makeResourcePathsWithParent(parent),
+            pathComponents: Token.makeResourcePaths(),
             parameter: .post(params)
         )
     }
     
-    public static func create(using client: APIClient, parent: OmiseResourceObject? = nil, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Token.verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.createEndpointWith(parent: parent, usingKey: key, params: params)
+    public static func create(using client: APIClient, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+        let endpoint = self.createEndpoint(usingKey: key, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
     

@@ -3,6 +3,8 @@ import Foundation
 public struct ListProperty<Item: OmiseObject>: OmiseObject {
     public let object: String
     
+    public let location: String
+    
     public var from: Date
     public var to: Date
     

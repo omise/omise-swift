@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject, Equatable {
+public struct Receipt: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/receipts")
     
     public let location: String
@@ -124,6 +124,7 @@ public struct Receipt: OmiseLocatableObject, OmiseIdentifiableObject, Equatable 
 }
 
 
+extension Receipt: OmiseAPIPrimaryObject {}
 extension Receipt: Listable {}
 extension Receipt: Retrievable {}
 

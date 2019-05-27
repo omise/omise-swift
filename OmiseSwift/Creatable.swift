@@ -4,23 +4,19 @@ public protocol Creatable {
     associatedtype CreateParams: APIQuery
 }
 
-public extension Creatable where Self: OmiseLocatableObject {
+public extension OmiseAPIPrimaryObject where Self: Creatable {
     typealias CreateEndpoint = APIEndpoint<Self>
     typealias CreateRequest = APIRequest<Self>
     
-    static func createEndpointWith(parent: OmiseResourceObject?, params: CreateParams) -> CreateEndpoint {
+    static func createEndpointWith(params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
-            pathComponents: Self.makeResourcePathsWithParent(parent),
+            pathComponents: Self.makeResourcePaths(),
             parameter: .post(params)
         )
     }
     
-    static func create(using client: APIClient, parent: OmiseResourceObject? = nil, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        guard Self.verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.createEndpointWith(parent: parent, params: params)
+    static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+        let endpoint = self.createEndpointWith(params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

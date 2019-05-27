@@ -10,7 +10,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
     public let id: String
     public let isLiveMode: Bool
     public let isDeleted: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     
     public var status: Status
     public let shouldFailFast: Bool
@@ -255,6 +255,8 @@ public struct TransferFilterParams: OmiseFilterParams {
     }
 }
 
+
+extension Transfer: OmiseAPIPrimaryObject {}
 extension Transfer: Listable {}
 extension Transfer: Retrievable {}
 

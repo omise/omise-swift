@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObject, OmiseLocatableObject, OmiseCreatedObject, Equatable {
+public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseResourceObject, Equatable {
     public static var resourceInfo: ResourceInfo {
         return ResourceInfo(path: "/transactions")
     }
@@ -10,7 +10,7 @@ public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObj
     public let location: String
     public let isLiveMode: Bool
     public let id: String
-    public var createdDate: Date
+    public let createdDate: Date
     
     public let direction: Direction
     public let key: String
@@ -47,6 +47,7 @@ public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseIdentifiableObj
 }
 
 
+extension Transaction: OmiseAPIPrimaryObject {}
 extension Transaction: Listable {}
 extension Transaction: Retrievable {}
 

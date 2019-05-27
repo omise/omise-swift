@@ -1,7 +1,6 @@
 import Foundation
 
 
-
 public struct Recipient: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/recipients")
     
@@ -10,7 +9,7 @@ public struct Recipient: OmiseResourceObject, Equatable {
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     public let isDeleted: Bool
     
     public let isVerified: Bool
@@ -146,6 +145,7 @@ extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
+extension Recipient: OmiseAPIPrimaryObject {}
 extension Recipient: Listable {}
 extension Recipient: Destroyable {}
 

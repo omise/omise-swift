@@ -26,7 +26,6 @@ private let customer: Customer = {
 class CustomerCardOperationFixtureTests: FixtureTestCase {
     func testCustomerRetrieve() {
         let expectation = self.expectation(description: "Customer result")
-        
         let request = CustomerCard.retrieve(using: testClient, parent: customer, id: cardTestingID) { (result) in
             defer { expectation.fulfill() }
             

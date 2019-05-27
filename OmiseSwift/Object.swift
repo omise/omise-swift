@@ -25,6 +25,8 @@ public protocol OmiseLiveModeObject: OmiseObject {
 
 public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {}
 
+public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
+
 extension OmiseIdentifiableObject where Self: Equatable {
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
@@ -43,13 +45,9 @@ extension OmiseIdentifiableObject where Self: OmiseLocatableObject & Equatable {
     }
 }
 
-extension OmiseLocatableObject {
-    static func makeResourcePathsWithParent(_ parent: OmiseResourceObject? = nil, id: String? = nil) -> [String] {
+extension OmiseAPIPrimaryObject {
+    static func makeResourcePaths(id: String? = nil) -> [String] {
         var paths = [String]()
-        
-        if let parent = parent {
-            paths = [type(of: parent).resourceInfo.path, parent.id]
-        }
         
         paths.append(self.resourceInfo.path)
         if let id = id {
@@ -57,15 +55,6 @@ extension OmiseLocatableObject {
         }
         
         return paths
-    }
-    
-    static func verifyParent(_ parent: OmiseResourceObject?) -> Bool {
-        if let parentType = resourceInfo.parentType,
-            let parent = parent, parentType != type(of: parent) {
-            return false
-        }
-        
-        return true
     }
 }
 

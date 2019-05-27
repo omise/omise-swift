@@ -6,19 +6,16 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
     typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
     typealias RetrieveRequest = APIRequest<Self>
     
-    static func retrieveEndpointWithParent(_ parent: OmiseResourceObject?) -> SingletonRetrieveEndpoint {
+    static func retrieveEndpoint() -> SingletonRetrieveEndpoint {
+        let retrieveParams = RetrieveParams(isExpanded: true)
         return SingletonRetrieveEndpoint(
-            pathComponents: makeResourcePathsWithParent(parent),
-            parameter: .get(nil)
+            pathComponents: [Self.resourceInfo.path],
+            parameter: .get(retrieveParams)
         )
     }
     
-    static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, callback: RetrieveRequest.Callback?) -> RetrieveRequest? {
-        guard verifyParent(parent) else {
-            return nil
-        }
-        
-        let endpoint = self.retrieveEndpointWithParent(parent)
+    static func retrieve(using client: APIClient, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+        let endpoint = self.retrieveEndpoint()
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }

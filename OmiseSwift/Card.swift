@@ -191,7 +191,7 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     
     public let isDeleted: Bool
     
@@ -277,15 +277,15 @@ extension TokenizedCard {
     }
 }
 
-public struct CustomerCard: OmiseResourceObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(parentType: Customer.self, path: "/cards")
+public struct CustomerCard: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
+    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/cards")
     
     public let location: String
     public let object: String
     
     public let id: String
     public let isLiveMode: Bool
-    public var createdDate: Date
+    public let createdDate: Date
     
     public let isDeleted: Bool
     
@@ -407,10 +407,14 @@ extension CustomerCard: Updatable {
     public typealias UpdateParams = CardParams
 }
 
+extension CustomerCard: ChildrenObject {
+    public typealias Parent = Customer
+}
+
 
 extension Customer {
     public func listCards(using client: APIClient, params: ListParams? = nil, callback: @escaping CustomerCard.ListRequest.Callback) -> CustomerCard.ListRequest? {
-        return CustomerCard.list(using: client, parent: self, params: params, callback: callback)
+        return self.list(keyPath: \.cards, using: client, params: params, callback: callback)
     }
     
     public func retrieveCard(using client: APIClient, id: String, callback: @escaping CustomerCard.RetrieveRequest.Callback) -> CustomerCard.RetrieveRequest? {

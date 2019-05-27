@@ -252,6 +252,7 @@ extension Schedule.Status: Codable {
 }
 
 
+extension Schedule: OmiseAPIPrimaryObject {}
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
 extension Schedule: Destroyable {}

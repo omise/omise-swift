@@ -429,6 +429,8 @@ public struct PaymentSourceParams: APIJSONQuery {
     }
 }
 
+
+extension PaymentSource: OmiseAPIPrimaryObject {}
 extension PaymentSource: Retrievable {}
 
 extension PaymentSource: Creatable {
