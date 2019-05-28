@@ -43,7 +43,7 @@ public class APIClient: NSObject {
     }
     
     @discardableResult
-    public func requestToEndpoint<TResult>(_ endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
+    public func requestToEndpoint<TResult>(_ endpoint: APIEndpoint<TResult>, callback: (APIRequest<TResult>.Callback)?) -> APIRequest<TResult>? {
         do {
             let req: APIRequest<TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()

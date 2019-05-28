@@ -35,30 +35,17 @@ extension Charge {
     }
     
     public static func listScheduleEndpointWithParams(_ params: ListParams?) -> ScheduleListEndpoint {
-        return ScheduleListEndpoint(
-            pathComponents: [ Charge.resourceInfo.path, Schedule<Charge>.resourceInfo.path ],
-            parameter: .get(nil)
-        )
+        return Schedule<Charge>.listDataScheduleEndpointWithParams(params)
     }
     
     @discardableResult
     public static func listSchedule(using client: APIClient, params: ListParams? = nil, callback: ScheduleListRequest.Callback?) -> ScheduleListRequest? {
-        let endpoint = self.listScheduleEndpointWithParams(params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return Schedule<Charge>.listDataSchedule(using: client, params: params, callback: callback)
     }
     
     @discardableResult
-    public static func listSchedule(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (Failable<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
-        let endpoint = self.listScheduleEndpointWithParams(listParams)
-        
-        let requestCallback: ScheduleListRequest.Callback = { result in
-            let callbackResult = result.map({
-                List(endpoint: endpoint.endpoint, paths: endpoint.pathComponents, order: listParams?.order, list: $0)
-            })
-            callback(callbackResult)
-        }
-        
-        return client.requestToEndpoint(endpoint, callback: requestCallback)
+    public static func listSchedule(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+        return Schedule<Charge>.listDataSchedule(using: client, listParams: listParams, callback: callback)
     }
 }
 

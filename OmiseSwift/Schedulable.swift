@@ -10,10 +10,6 @@ public protocol Schedulable: OmiseIdentifiableObject, OmiseCreatedObject {
     static var parameterKey: String { get }
 }
 
-public protocol APISchedulable: Schedulable {
-    associatedtype ScheduleDataParams: APIJSONQuery
-}
-
 extension Schedulable {
     public static var parameterKey: String {
         return String(describing: self).lowercased()

@@ -62,7 +62,7 @@ public extension Searchable where Self: OmiseResourceObject {
     }
     
     @discardableResult
-    static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (Failable<Search<Self>>) -> Void) -> SearchRequest? {
+    static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (APIResult<Search<Self>>) -> Void) -> SearchRequest? {
         let endpoint = self.searchEndpointWithParams(params: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
@@ -80,7 +80,7 @@ public extension Searchable where Self: OmiseResourceObject {
     }
     
     @discardableResult
-    static func loadNextPage(list: Search<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
+    static func loadNextPage(list: Search<Self>, using client: APIClient, callback: @escaping (APIResult<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(list: list)
         
         let requestCallback: SearchRequest.Callback = { result in
@@ -98,7 +98,7 @@ public extension Searchable where Self: OmiseResourceObject {
     }
     
     @discardableResult
-    static func loadPreviousPage(list: Search<Self>, using client: APIClient, callback: @escaping (Failable<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
+    static func loadPreviousPage(list: Search<Self>, using client: APIClient, callback: @escaping (APIResult<[Self]>) -> Void) -> APIRequest<SearchEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(list: list)
         
         let requestCallback: SearchRequest.Callback = { result in

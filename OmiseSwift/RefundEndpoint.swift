@@ -20,7 +20,7 @@ public extension Refund {
     }
     
     @discardableResult
-    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (Failable<List<Refund>>) -> Void) -> ListRequest? {
+    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Refund>>) -> Void) -> ListRequest? {
         let endpoint = self.listEndpointWith(params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in

@@ -54,7 +54,7 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCustomer.id, decodedCustomer.id)
         XCTAssertEqual(defaultCustomer.location, decodedCustomer.location)
         XCTAssertEqual(defaultCustomer.email, decodedCustomer.email)
-        XCTAssertEqual(defaultCustomer.defaultCard?.dataID, decodedCustomer.defaultCard?.dataID)
+        XCTAssertEqual(defaultCustomer.defaultCard?.id, decodedCustomer.defaultCard?.id)
         XCTAssertEqual(defaultCustomer.isLiveMode, decodedCustomer.isLiveMode)
         XCTAssertEqual(defaultCustomer.isDeleted, decodedCustomer.isDeleted)
         XCTAssertEqual(defaultCustomer.createdDate, decodedCustomer.createdDate)

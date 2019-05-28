@@ -1,17 +1,17 @@
 import Foundation
 
 
-public class APIRequest<RequestResult: OmiseObject> {
-    public typealias Endpoint = APIEndpoint<RequestResult>
-    public typealias Callback = (Failable<RequestResult>) -> Void
+public class APIRequest<ResultType: OmiseObject> {
+    public typealias Endpoint = APIEndpoint<ResultType>
+    public typealias Callback = (APIResult<ResultType>) -> Void
     
     let client: APIClient
-    let endpoint: APIEndpoint<RequestResult>
+    let endpoint: APIEndpoint<ResultType>
     let callback: APIRequest.Callback?
     
     var task: URLSessionTask?
     
-    init(client: APIClient, endpoint: APIEndpoint<RequestResult>, callback: Callback?) {
+    init(client: APIClient, endpoint: APIEndpoint<ResultType>, callback: Callback?) {
         self.client = client
         self.endpoint = endpoint
         self.callback = callback
@@ -50,7 +50,7 @@ public class APIRequest<RequestResult: OmiseObject> {
             return
         }
         
-        let result: Failable<RequestResult>
+        let result: APIResult<ResultType>
         do {
             switch httpResponse.statusCode {
             case 400..<600:
@@ -73,7 +73,7 @@ public class APIRequest<RequestResult: OmiseObject> {
         performCallback(result)
     }
     
-    fileprivate func performCallback(_ result: Failable<RequestResult>) {
+    fileprivate func performCallback(_ result: APIResult<ResultType>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation({ cb(result) })
     }
@@ -86,7 +86,7 @@ public class APIRequest<RequestResult: OmiseObject> {
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.parameter.method
         request.cachePolicy = .useProtocolCachePolicy
-        request.timeoutInterval = 6.0
+        request.timeoutInterval = 10.0
         request.addValue(auth, forHTTPHeaderField: "Authorization")
         request.addValue(client.config.apiVersion, forHTTPHeaderField: "Omise-Version")
         

@@ -57,8 +57,8 @@ class RefundOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultRefund.location, decodedRefund.location)
         XCTAssertEqual(defaultRefund.amount, decodedRefund.amount)
         XCTAssertEqual(defaultRefund.currency, decodedRefund.currency)
-        XCTAssertEqual(defaultRefund.charge.dataID, decodedRefund.charge.dataID)
-        XCTAssertEqual(defaultRefund.transaction.dataID, decodedRefund.transaction.dataID)
+        XCTAssertEqual(defaultRefund.charge.id, decodedRefund.charge.id)
+        XCTAssertEqual(defaultRefund.transaction.id, decodedRefund.transaction.id)
         XCTAssertEqual(defaultRefund.createdDate, decodedRefund.createdDate)
     }
     

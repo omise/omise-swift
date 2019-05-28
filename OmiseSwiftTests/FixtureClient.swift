@@ -78,7 +78,7 @@ class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
         }
     }
     
-    fileprivate func performCallback(_ result: Failable<TResult>) {
+    fileprivate func performCallback(_ result: APIResult<TResult>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation { cb(result) }
     }

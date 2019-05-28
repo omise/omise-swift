@@ -18,7 +18,7 @@ extension Customer {
     }
     
     @discardableResult
-    public static func listScheduleChargingCustomer(using client: APIClient, customerID: String, listParams: ListParams? = nil, callback: @escaping (Failable<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+    public static func listScheduleChargingCustomer(using client: APIClient, customerID: String, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
         let endpoint = self.listScheduleEndpointChargingCustomerWith(customerID: customerID, params: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in

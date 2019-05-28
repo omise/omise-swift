@@ -70,7 +70,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.isPaid, decodedCharge.isPaid)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)

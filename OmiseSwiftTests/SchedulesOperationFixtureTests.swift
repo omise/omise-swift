@@ -115,11 +115,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(occurrences.total, 1)
                 if let firstOccurrence = occurrences.data.first {
                     XCTAssertEqual(firstOccurrence.id, "occu_test_5fzoyq0ejt05zhr38h7")
-                    XCTAssertEqual(firstOccurrence.schedule.dataID, scheduleTestingID)
+                    XCTAssertEqual(firstOccurrence.schedule.id, scheduleTestingID)
                     XCTAssertEqual(firstOccurrence.scheduledOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                     XCTAssertEqual(firstOccurrence.status, .successful)
                     XCTAssertEqual(firstOccurrence.processedDate, dateFormatter.date(from: "2019-05-23T03:44:32Z"))
-                    XCTAssertEqual(firstOccurrence.result.dataID, "chrg_test_5fzoyq12bpn53cybws0")
+                    XCTAssertEqual(firstOccurrence.result.id, "chrg_test_5fzoyq12bpn53cybws0")
                     XCTAssertEqual(firstOccurrence.createdDate, dateFormatter.date(from: "2019-05-23T03:44:31Z"))
                 } else {
                     XCTFail("Failed to parse occurrences")
@@ -182,10 +182,10 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultRecentOccurrenceDate.isLiveMode, decodedRecentOccurrenceDate.isLiveMode)
         XCTAssertEqual(defaultRecentOccurrenceDate.id, decodedRecentOccurrenceDate.id)
         XCTAssertEqual(defaultRecentOccurrenceDate.location, decodedRecentOccurrenceDate.location)
-        XCTAssertEqual(defaultRecentOccurrenceDate.schedule.dataID, decodedRecentOccurrenceDate.schedule.dataID)
+        XCTAssertEqual(defaultRecentOccurrenceDate.schedule.id, decodedRecentOccurrenceDate.schedule.id)
         XCTAssertEqual(defaultRecentOccurrenceDate.processedDate, decodedRecentOccurrenceDate.processedDate)
         XCTAssertEqual(defaultRecentOccurrenceDate.status, decodedRecentOccurrenceDate.status)
-        XCTAssertEqual(defaultRecentOccurrenceDate.result.dataID, decodedRecentOccurrenceDate.result.dataID)
+        XCTAssertEqual(defaultRecentOccurrenceDate.result.id, decodedRecentOccurrenceDate.result.id)
         XCTAssertEqual(defaultRecentOccurrenceDate.createdDate, decodedRecentOccurrenceDate.createdDate)
     }
     

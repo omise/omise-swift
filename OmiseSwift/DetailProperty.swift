@@ -3,7 +3,7 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
     case notLoaded(String)
     indirect case loaded(T)
     
-    public var dataID: String {
+    public var id: String {
         switch self {
         case .notLoaded(let dataID):
             return dataID
@@ -24,7 +24,7 @@ public enum DetailProperty<T: OmiseIdentifiableObject> {
 
 extension DetailProperty: Equatable where T: Equatable {
     public static func == (lhs: DetailProperty<T>, rhs: DetailProperty<T>) -> Bool {
-        return lhs.dataID == rhs.dataID
+        return lhs.id == rhs.id
     }
 }
 

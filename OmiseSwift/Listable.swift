@@ -38,7 +38,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     }
     
     @discardableResult
-    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (Failable<List<Self>>) -> Void) -> ListRequest? {
+    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>) -> Void) -> ListRequest? {
         let endpoint = self.listEndpointWith(params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
@@ -61,7 +61,7 @@ public extension List where TItem: OmiseAPIPrimaryObject {
     }
     
     @discardableResult
-    func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
+    func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (APIResult<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -80,7 +80,7 @@ public extension List where TItem: OmiseAPIPrimaryObject {
     }
     
     @discardableResult
-    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (Failable<[TItem]>) -> Void) -> TItem.ListRequest? {
+    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (APIResult<[TItem]>) -> Void) -> TItem.ListRequest? {
         let operation = makeLoadPreviousPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -114,7 +114,7 @@ public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
     }
     
     @discardableResult
-    func refreshData(using client: APIClient, callback: @escaping (Failable<[TItem]>) -> Void) -> TItem.ListRequest? {
+    func refreshData(using client: APIClient, callback: @escaping (APIResult<[TItem]>) -> Void) -> TItem.ListRequest? {
         let operation = makeRefreshCurrentDataOperation()
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -129,6 +129,12 @@ public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
         }
         
         return client.requestToEndpoint(operation, callback: requestCallback)
+    }
+}
+
+public extension APIClient {
+    func list<T: OmiseAPIPrimaryObject & Listable>(_ type: T.Type, callback: @escaping T.ListRequest.Callback) -> T.ListRequest? {
+        return T.list(using: self, callback: callback)
     }
 }
 

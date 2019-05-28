@@ -97,7 +97,7 @@ public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listabl
     }
     
     @discardableResult
-    static func list(using client: APIClient, parent: Parent, listParams: ListParams? = nil, callback: @escaping (Failable<List<Self>>) -> Void) -> ListRequest? {
+    static func list(using client: APIClient, parent: Parent, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>) -> Void) -> ListRequest? {
         let endpoint = self.listEndpointWith(parent: parent, params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in

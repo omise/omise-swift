@@ -23,8 +23,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.fundingAmount, 10_000_00)
                 XCTAssertEqual(charge.fundingCurrency, .thb)
                 XCTAssertEqual(charge.refundedAmount, 0)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzbppuzeobh8evajc2")
-                XCTAssertNil(charge.customer?.dataID)
+                XCTAssertEqual(charge.transaction?.id, "trxn_test_5fzbppuzeobh8evajc2")
+                XCTAssertNil(charge.customer?.id)
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-05-22T05:09:28Z"))
                 XCTAssertEqual(charge.card?.id, "card_test_5fzbppot4s4ozksb0f9")
             case let .failure(error):
@@ -56,7 +56,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
@@ -86,7 +86,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.card?.name, decodedCharge.card?.name)
         XCTAssertEqual(defaultCharge.card?.createdDate, decodedCharge.card?.createdDate)
         
-        XCTAssertEqual(defaultCharge.customer?.dataID, decodedCharge.customer?.dataID)
+        XCTAssertEqual(defaultCharge.customer?.id, decodedCharge.customer?.id)
         XCTAssertEqual(defaultCharge.ipAddress, decodedCharge.ipAddress)
         XCTAssertEqual(defaultCharge.dispute?.amount, decodedCharge.dispute?.amount)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
@@ -110,7 +110,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.id, "chrg_test_disputed")
                 XCTAssertEqual(charge.location, "/charges/chrg_test_disputed")
                 XCTAssertEqual(charge.isLiveMode, false)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5flpmtfvna92r53pzuh")
+                XCTAssertEqual(charge.transaction?.id, "trxn_test_5flpmtfvna92r53pzuh")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-04-17T09:50:17Z"))
                 XCTAssertNotNil(charge.dispute)
                 
@@ -120,7 +120,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.dispute?.reasonCode, .goodsOrServicesNotProvided)
                 XCTAssertEqual(charge.dispute?.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(charge.dispute?.responseMessage, "This is a response message")
-                XCTAssertEqual(charge.dispute?.charge.dataID, "chrg_test_disputed")
+                XCTAssertEqual(charge.dispute?.charge.id, "chrg_test_disputed")
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -149,7 +149,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
@@ -179,7 +179,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.card?.name, decodedCharge.card?.name)
         XCTAssertEqual(defaultCharge.card?.createdDate, decodedCharge.card?.createdDate)
         
-        XCTAssertEqual(defaultCharge.customer?.dataID, decodedCharge.customer?.dataID)
+        XCTAssertEqual(defaultCharge.customer?.id, decodedCharge.customer?.id)
         XCTAssertEqual(defaultCharge.ipAddress, decodedCharge.ipAddress)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
@@ -201,7 +201,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.dispute?.reasonCode, decodedCharge.dispute?.reasonCode)
         XCTAssertEqual(defaultCharge.dispute?.reasonMessage, decodedCharge.dispute?.reasonMessage)
         XCTAssertEqual(defaultCharge.dispute?.responseMessage, decodedCharge.dispute?.responseMessage)
-        XCTAssertEqual(defaultCharge.dispute?.charge.dataID, decodedCharge.dispute?.charge.dataID)
+        XCTAssertEqual(defaultCharge.dispute?.charge.id, decodedCharge.dispute?.charge.id)
         XCTAssertEqual(defaultCharge.dispute?.documents.total, decodedCharge.dispute?.documents.total)
         XCTAssertEqual(defaultCharge.dispute?.createdDate, decodedCharge.dispute?.createdDate)
         
@@ -407,10 +407,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.location, "/charges/chrg_test_deleted_customer")
                 XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.refundedAmount, 0)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzc99osk6yqddb4msq")
+                XCTAssertEqual(charge.transaction?.id, "trxn_test_5fzc99osk6yqddb4msq")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-05-22T06:05:00Z"))
                 XCTAssertNil(charge.chargeDescription)
-                XCTAssertNil(charge.customer?.dataID)
+                XCTAssertNil(charge.customer?.id)
                 if case .tokenized(let deletedCard)? = charge.card {
                     XCTAssertEqual(deletedCard.id, "card_test_5fz0od4o3fn29wp14t4")
                 } else {
@@ -463,7 +463,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -525,7 +525,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -597,7 +597,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -699,7 +699,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -841,7 +841,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 10_000_00)
                 
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzbqf7um91u0xrb5k7")
+                XCTAssertEqual(charge.transaction?.id, "trxn_test_5fzbqf7um91u0xrb5k7")
                 
                 if case .loaded(let customer)? = charge.customer {
                     XCTAssertNotNil(customer.customerDescription)
@@ -883,7 +883,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
@@ -913,7 +913,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.card?.name, decodedCharge.card?.name)
         XCTAssertEqual(defaultCharge.card?.createdDate, decodedCharge.card?.createdDate)
         
-        XCTAssertEqual(defaultCharge.customer?.dataID, decodedCharge.customer?.dataID)
+        XCTAssertEqual(defaultCharge.customer?.id, decodedCharge.customer?.id)
         
         XCTAssertEqual(defaultCharge.ipAddress, decodedCharge.ipAddress)
         XCTAssertEqual(defaultCharge.dispute?.amount, decodedCharge.dispute?.amount)
@@ -961,7 +961,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -1034,7 +1034,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
@@ -1119,7 +1119,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.status, decodedCharge.status)
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
