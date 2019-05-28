@@ -88,7 +88,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     }
     
     public var refundedAmount: Int64?
-    public var refunds: ListProperty<Refund>?
+    public var refunds: ListProperty<Refund>
     
     public var customer: DetailProperty<Customer>?
     
@@ -226,7 +226,7 @@ extension Charge {
         isRefundable = try container.decode(Bool.self, forKey: .isRefundable)
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
         refundedAmount = try container.decodeIfPresent(Int64.self, forKey: .refundedAmount)
-        refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
+        refunds = try container.decode(ListProperty<Refund>.self, forKey: .refunds)
         customer = try container.decodeIfPresent(DetailProperty<Customer>.self, forKey: .customer)
         ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress)
         schedule = try container.decodeIfPresent(DetailProperty<Schedule<Charge>>.self, forKey: .schedule)
@@ -311,7 +311,7 @@ extension Charge {
         try container.encode(isRefundable, forKey: .isRefundable)
         try container.encodeIfPresent(transaction, forKey: .transaction)
         try container.encodeIfPresent(refundedAmount, forKey: .refundedAmount)
-        try container.encodeIfPresent(refunds, forKey: .refunds)
+        try container.encode(refunds, forKey: .refunds)
         try container.encodeIfPresent(customer, forKey: .customer)
         try container.encodeIfPresent(ipAddress, forKey: .ipAddress)
         try container.encodeIfPresent(dispute, forKey: .dispute)

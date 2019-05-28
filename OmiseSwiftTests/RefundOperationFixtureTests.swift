@@ -48,7 +48,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
         decoder.dateDecodingStrategy = .iso8601
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
-        guard let defaultRefund = defaultCharge.refunds?.first, let decodedRefund = decodedCharge.refunds?.first else {
+        guard let defaultRefund = defaultCharge.refunds.first, let decodedRefund = decodedCharge.refunds.first else {
             XCTFail("Cannot get the recent refund")
             return
         }

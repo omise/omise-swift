@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatedObject, Equatable {
+public struct Refund: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/refunds")
     
     public let object: String
@@ -149,7 +149,6 @@ public struct RefundFilterParams: OmiseFilterParams {
 }
 
 
-extension Refund: OmiseAPIPrimaryObject {}
 extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
@@ -160,7 +159,7 @@ extension Refund: Searchable {
     public typealias FilterParams = RefundFilterParams
 }
 
-extension Refund: ChildrenObject {
+extension Refund: OmiseAPIChildObject {
     public typealias Parent = Charge
 }
 

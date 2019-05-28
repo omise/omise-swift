@@ -145,8 +145,14 @@ extension Recipient: Creatable {
     public typealias CreateParams = RecipientParams
 }
 
+extension Recipient: Updatable {
+    public typealias UpdateParams = RecipientParams
+}
+
+
 extension Recipient: OmiseAPIPrimaryObject {}
 extension Recipient: Listable {}
+extension Recipient: Retrievable {}
 extension Recipient: Destroyable {}
 
 public struct RecipientFilterParams: OmiseFilterParams {

@@ -42,7 +42,7 @@ public struct DocumentParams: APIFileQuery {
     }
 }
 
-extension Document: ChildrenObject {
+extension Document: OmiseAPIChildObject {
     public typealias Parent = Dispute
 }
 

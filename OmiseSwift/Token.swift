@@ -81,14 +81,36 @@ public struct TokenParams: APIJSONQuery {
 }
 
 
-extension Token: OmiseAPIPrimaryObject {}
+extension Token {}
+
+extension Token: Retrievable {
+    public typealias RetrieveEndpoint = APIEndpoint<Token>
+    public typealias RetrieveRequest = APIRequest<Token>
+
+    static func retrieveEndpointWith(usingKey key: AccessKey, id: String) -> RetrieveEndpoint {
+        let retrieveParams = RetrieveParams(isExpanded: true)
+        return RetrieveEndpoint(
+            endpoint: .vault(key),
+            pathComponents: [Token.resourceInfo.path, id],
+            parameter: .get(retrieveParams)
+        )
+    }
+    
+    static func retrieve(using client: APIClient, usingKey key: AccessKey, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+        let endpoint = self.retrieveEndpointWith(usingKey: key, id: id)
+        return client.requestToEndpoint(endpoint, callback: callback)
+    }
+}
+
 extension Token: Creatable {
     public typealias CreateParams = TokenParams
+    public typealias CreateEndpoint = APIEndpoint<Token>
+    public typealias CreateRequest = APIRequest<Token>
     
     public static func createEndpoint(usingKey key: AccessKey, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
-            pathComponents: Token.makeResourcePaths(),
+            pathComponents: [Token.resourceInfo.path],
             parameter: .post(params)
         )
     }

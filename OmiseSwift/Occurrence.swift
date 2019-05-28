@@ -107,6 +107,8 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
 }
 
 
-
-extension Occurrence: OmiseAPIPrimaryObject {}
+extension Occurrence: OmiseAPIChildObject {
+    public typealias Parent = Schedule<Data>
+}
+extension Occurrence: Listable {}
 extension Occurrence: Retrievable {}

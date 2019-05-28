@@ -407,7 +407,7 @@ extension CustomerCard: Updatable {
     public typealias UpdateParams = CardParams
 }
 
-extension CustomerCard: ChildrenObject {
+extension CustomerCard: OmiseAPIChildObject {
     public typealias Parent = Customer
 }
 

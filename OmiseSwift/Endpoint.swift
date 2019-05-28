@@ -20,7 +20,7 @@ public enum ServerEndpoint {
     
     func url(withComponents components: [String]) -> URL {
         return components.reduce(url, { (url, segment) -> URL in
-            return url.appendingPathComponent(segment)
+            return url.appendingPathComponent(segment, isDirectory: false)
         })
     }
 }
