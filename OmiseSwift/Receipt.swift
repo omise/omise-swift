@@ -2,14 +2,15 @@ import Foundation
 
 
 public struct Receipt: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/receipts")
+    public static let idPrefix: String = "rcpt"
+    public static let resourcePath = "/receipts"
     
     public let location: String
     public let object: String
     
     public let isLiveMode: Bool
     public let createdDate: Date
-    public let id: String
+    public let id: DataID<Receipt>
     public let issuedDateComponents: DateComponents
     
     public let number: String
@@ -69,7 +70,7 @@ public struct Receipt: OmiseResourceObject, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Receipt>.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         issuedDateComponents = try container.decodeOmiseDateComponents(forKey: .issuedDateComponents)

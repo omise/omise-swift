@@ -25,7 +25,9 @@ public struct AnySchedulable: Schedulable {
     public typealias ScheduleData = AnyScheduleData
     public typealias Parameter = AnySchedulingParameter
     
-    public let id: String
+    public static let idPrefix: String = ""
+    
+    public let id: DataID<AnySchedulable>
     public let createdDate: Date
     public let object: String
     
@@ -46,7 +48,7 @@ public struct AnySchedulable: Schedulable {
             throw DecodingError.keyNotFound(CodingKeys.object, context)
         }
         
-        guard let id = json[CodingKeys.id.stringValue] as? String else {
+        guard let id = (json[CodingKeys.id.stringValue] as? String).flatMap(DataID<AnySchedulable>.init(idString:)) else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
@@ -69,12 +71,22 @@ public struct AnySchedulable: Schedulable {
         try encoder.encodeJSONDictionary(jsonValue)
     }
     
+    public static func validate(id: String) -> Bool {
+        return Charge.validate(id: id) || Transfer.validate(id: id)
+    }
+    
     public static func isValidParameterKey(_ key: String) -> Bool {
         return key == Charge.parameterKey || key == Transfer.parameterKey
     }
     
     public struct AnyScheduleData: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
-        public let id: String
+        public static let idPrefix: String = "r"
+        
+        public static func validate(id: String) -> Bool {
+            return ChargeSchedule.validate(id: id) || TransferSchedule.validate(id: id)
+        }
+        
+        public let id: DataID<AnyScheduleData>
         public let createdDate: Date
         public let object: String
         public let isLiveMode: Bool
@@ -89,7 +101,7 @@ public struct AnySchedulable: Schedulable {
                 throw DecodingError.keyNotFound(CodingKeys.object, context)
             }
             
-            guard let id = json[CodingKeys.id.stringValue] as? String else {
+            guard let id = (json[CodingKeys.id.stringValue] as? String).flatMap(DataID<AnyScheduleData>.init(idString:)) else {
                 let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
                 throw DecodingError.keyNotFound(CodingKeys.id, context)
             }

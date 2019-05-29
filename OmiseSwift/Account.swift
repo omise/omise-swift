@@ -1,11 +1,12 @@
 import Foundation
 
 public struct Account: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/account")
+    public static let resourcePath = "/account"
+    public static let idPrefix: String = "account"
     
     public let object: String
     public let location: String
-    public let id: String
+    public let id: DataID<Account>
     public let isLiveMode: Bool
     public let createdDate: Date
     

@@ -85,7 +85,7 @@ class TransferOperationsTest: LiveTest {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.id, "trsf_test_54hktxphv9p7wv1tsed")
+                XCTAssertEqual(transfer.id.idString, "trsf_test_54hktxphv9p7wv1tsed")
             case let .failure(error):
                 XCTFail("\(error)")
             }

@@ -1,8 +1,8 @@
 import Foundation
 
 public struct SearchResult<Item: Searchable & OmiseObject>: OmiseLocatableObject {
-    public static var resourceInfo: ResourceInfo {
-        return ResourceInfo(path: "/search")
+    public static var resourcePath: String {
+        return "/search"
     }
     
     public let object: String

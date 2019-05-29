@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Link: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/links")
+    public static let resourcePath = "/links"
+    public static let idPrefix: String = "link"
     
     public let object: String
     
     public let location: String
-    public let id: String
+    public let id: DataID<Link>
     public let isLiveMode: Bool
     public let createdDate: Date
     public let isDeleted: Bool

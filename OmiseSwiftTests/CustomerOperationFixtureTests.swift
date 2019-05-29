@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let customerTestingID = "cust_test_5fz0olfpy32zadv96ek"
+private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
 
 
 class CustomerOperationFixtureTests: FixtureTestCase {

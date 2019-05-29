@@ -2,8 +2,10 @@ import Foundation
 
 
 public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
+    public static let idPrefix: String = "rchg"
+    
     public let object: String
-    public let id: String
+    public let id: DataID<ChargeSchedule>
     public let isLiveMode: Bool
     public let createdDate: Date
     

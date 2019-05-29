@@ -2,8 +2,8 @@ import XCTest
 import Omise
 
 
-private let cardTestingID = "card_test_5fzbq7cypephj6fd3zq"
-private let customerTestingID = "cust_test_5fz0olfpy32zadv96ek"
+private let cardTestingID = DataID<CustomerCard>(idString: "card_test_5fzbq7cypephj6fd3zq")!
+private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
 
 private let customer: Customer = {
     let bundle = Bundle(for: OmiseTestCase.self)

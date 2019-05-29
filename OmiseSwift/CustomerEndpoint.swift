@@ -6,7 +6,7 @@ extension Customer {
     
     public static func listScheduleEndpointChargingCustomerWith(customerID: String, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
-            pathComponents: [ Customer.resourceInfo.path, customerID, Schedule<Charge>.resourceInfo.path ],
+            pathComponents: [ Customer.resourcePath, customerID, Schedule<Charge>.resourcePath ],
             parameter: .get(params)
         )
     }

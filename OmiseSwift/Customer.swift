@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Customer: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/customers")
+    public static let resourcePath = "/customers"
+    public static let idPrefix: String = "cust"
     
     public let location: String
     public let object: String
     
-    public let id: String
+    public let id: DataID<Customer>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -42,7 +43,7 @@ extension Customer {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Customer>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)

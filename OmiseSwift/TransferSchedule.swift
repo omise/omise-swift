@@ -3,8 +3,10 @@ import Foundation
 
 
 public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
+    public static let idPrefix: String = "rtrf"
+    
     public let object: String
-    public let id: String
+    public let id: DataID<TransferSchedule>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -27,7 +29,7 @@ public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omi
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<TransferSchedule>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         

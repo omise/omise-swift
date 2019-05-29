@@ -177,6 +177,8 @@
 		8ACE2358229D1CDC008AA15E /* TransferEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE2356229D1CDC008AA15E /* TransferEndpoint.swift */; };
 		8ACE235A229D2711008AA15E /* ScheduleEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE2359229D2711008AA15E /* ScheduleEndpoint.swift */; };
 		8ACE235B229D2711008AA15E /* ScheduleEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE2359229D2711008AA15E /* ScheduleEndpoint.swift */; };
+		8ACE235D229D7890008AA15E /* DataID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE235C229D7890008AA15E /* DataID.swift */; };
+		8ACE235E229D7890008AA15E /* DataID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE235C229D7890008AA15E /* DataID.swift */; };
 		8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
 		8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
 		8AD58423228EC5C5008F3BF6 /* ChargeSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */; };
@@ -316,6 +318,7 @@
 		8ACE2353229D17C1008AA15E /* RefundEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundEndpoint.swift; sourceTree = "<group>"; };
 		8ACE2356229D1CDC008AA15E /* TransferEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferEndpoint.swift; sourceTree = "<group>"; };
 		8ACE2359229D2711008AA15E /* ScheduleEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEndpoint.swift; sourceTree = "<group>"; };
+		8ACE235C229D7890008AA15E /* DataID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataID.swift; sourceTree = "<group>"; };
 		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeSchedule.swift; sourceTree = "<group>"; };
@@ -540,6 +543,7 @@
 				8A3938E51D8174C9007750AA /* List.swift */,
 				8ACB41321E279730001793CD /* ListProperty.swift */,
 				8ACB41121E277607001793CD /* Object.swift */,
+				8ACE235C229D7890008AA15E /* DataID.swift */,
 				8ADE88B21ED4619A00239263 /* Occurrence.swift */,
 				8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */,
 				8A28BB421E28FDAE00EEBD55 /* OmiseAPIError.swift */,
@@ -754,6 +758,7 @@
 				8ACE235B229D2711008AA15E /* ScheduleEndpoint.swift in Sources */,
 				8ACB41551E28A3C2001793CD /* Value.swift in Sources */,
 				8A242A4F1E2E0B020068BB5D /* APIError.swift in Sources */,
+				8ACE235E229D7890008AA15E /* DataID.swift in Sources */,
 				8A242A4E1E2E0A6A0068BB5D /* OmiseError.swift in Sources */,
 				8A028B431E2CDB6F0008E010 /* Tool.swift in Sources */,
 				8A3139322293B2370055F755 /* TransferSchedule.swift in Sources */,
@@ -827,6 +832,7 @@
 				8ACE235A229D2711008AA15E /* ScheduleEndpoint.swift in Sources */,
 				8ACD57211E2E3A9600FEE5A0 /* Ordering.swift in Sources */,
 				8ACD570C1E2E3A9600FEE5A0 /* Destroyable.swift in Sources */,
+				8ACE235D229D7890008AA15E /* DataID.swift in Sources */,
 				8AA2BF241F54144F0083F8A6 /* URLQueryItemEncoder.swift in Sources */,
 				8ACD57301E2E3A9600FEE5A0 /* BankAccount.swift in Sources */,
 				8A3139312293B2370055F755 /* TransferSchedule.swift in Sources */,

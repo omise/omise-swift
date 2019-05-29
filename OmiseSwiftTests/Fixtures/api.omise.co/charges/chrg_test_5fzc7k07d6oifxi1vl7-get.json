@@ -1,9 +1,9 @@
 {
   "object": "charge",
-  "id": "chrg_test_internet_banking",
+  "id": "chrg_test_5fzc7k07d6oifxi1vl7",
   "livemode": false,
-  "location": "/charges/chrg_test_internet_banking",
-  "created_at": "2019-05-22T06:01:12Z",
+  "location": "/charges/chrg_test_5fzc7k07d6oifxi1vl7",
+  "created_at": "2019-05-22T06:00:09Z",
   "amount": 1000000,
   "currency": "THB",
   "funding_amount": 1000000,
@@ -21,7 +21,7 @@
   "schedule": null,
   "reversed": false,
   "reversed_at": null,
-  "expires_at": "2019-05-29T06:01:12Z",
+  "expires_at": "2019-05-29T06:00:08Z",
   "expired": false,
   "expired_at": null,
   "voided": false,
@@ -32,12 +32,12 @@
   "refunds": {
     "object": "list",
     "from": "1970-01-01T00:00:00Z",
-    "to": "2019-05-22T07:06:34Z",
+    "to": "2019-05-22T07:03:33Z",
     "offset": 0,
     "limit": 20,
     "total": 0,
     "order": "chronological",
-    "location": "/charges/chrg_test_internet_banking/refunds",
+    "location": "/charges/chrg_test_5fzc7k07d6oifxi1vl7/refunds",
     "data": []
   },
   "link": null,
@@ -50,10 +50,10 @@
   "dispute": null,
   "source": {
     "object": "source",
-    "id": "src_test_5fzc7x8h93oaztcy5l6",
+    "id": "src_test_5fzc7jmrfctb9po6lqy",
     "livemode": false,
-    "location": "/sources/src_test_5fzc7x8h93oaztcy5l6",
-    "type": "internet_banking_scb",
+    "location": "/sources/src_test_5fzc7jmrfctb9po6lqy",
+    "type": "alipay",
     "flow": "redirect",
     "amount": 1000000,
     "currency": "THB"
@@ -62,5 +62,5 @@
   "capturable": false,
   "reversible": false,
   "refundable": false,
-  "authorize_uri": "https://pay.omise.co/offsites/ofsp_test_5fzc7xc68vesgbny8kk/pay"
+  "authorize_uri": "https://pay.omise.co/offsites/ofsp_test_5fzc7k0bqpfeut99t0f/pay"
 }

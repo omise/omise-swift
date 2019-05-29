@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Charge: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/charges")
+    public static let resourcePath = "/charges"
+    public static let idPrefix: String = "chrg"
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Charge>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -197,7 +198,7 @@ extension Charge {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Charge>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)

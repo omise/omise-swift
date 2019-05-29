@@ -9,12 +9,13 @@ public enum DisputeStatus: String, Codable, Equatable {
 
 
 public struct Dispute: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/disputes")
+    public static let resourcePath = "/disputes"
+    public static let idPrefix: String = "dspt"
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Dispute>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -46,7 +47,7 @@ extension Dispute {
         
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Dispute>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
@@ -300,7 +301,7 @@ extension Dispute: Searchable {
 extension Dispute {
     public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping ListRequest.Callback) -> ListRequest? {
         let endpoint = ListEndpoint(
-            pathComponents: [resourceInfo.path, state.rawValue],
+            pathComponents: [resourcePath, state.rawValue],
             parameter: .get(nil)
         )
         

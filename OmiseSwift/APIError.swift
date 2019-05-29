@@ -147,7 +147,7 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
         }
     }
     
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/api-errors")
+    public static let resourcePath = "/api-errors"
     
     public let object: String
     public let location: String

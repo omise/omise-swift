@@ -1,8 +1,8 @@
 {
   "object": "charge",
-  "id": "chrg_test_retrieve",
+  "id": "chrg_test_5fzbppsjk5q9cxqjz0o",
   "livemode": false,
-  "location": "/charges/chrg_test_retrieve",
+  "location": "/charges/chrg_test_5fzbppsjk5q9cxqjz0o",
   "created_at": "2019-05-22T05:09:28Z",
   "amount": 1000000,
   "currency": "THB",
@@ -13,14 +13,8 @@
   "interest": 0,
   "interest_vat": 0,
   "net": 960945,
-  "description": "Charge for order 3947 (XXL)",
-  "metadata": {
-    "user-id": "a-user-id",
-    "user": {
-      "name": "John Appleseed",
-      "tel": "08-xxxx-xxxx"
-    }
-  },
+  "description": null,
+  "metadata": {},
   "status": "successful",
   "capture": true,
   "authorized": true,
@@ -43,7 +37,7 @@
     "limit": 20,
     "total": 0,
     "order": "chronological",
-    "location": "/charges/chrg_test_retrieve/refunds",
+    "location": "/charges/chrg_test_5fzbppsjk5q9cxqjz0o/refunds",
     "data": []
   },
   "link": null,
@@ -84,4 +78,3 @@
   "refundable": true,
   "authorize_uri": null
 }
-

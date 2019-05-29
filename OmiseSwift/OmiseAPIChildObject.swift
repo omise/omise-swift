@@ -9,7 +9,7 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
     typealias RetrieveEndpoint = APIEndpoint<Self>
     typealias RetrieveRequest = APIRequest<Self>
     
-    static func retrieveEndpointWith(parent: Parent, id: String) -> RetrieveEndpoint {
+    static func retrieveEndpointWith(parent: Parent, id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
@@ -17,42 +17,42 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
         )
     }
     
-    static func retrieve(using client: APIClient, parent: Parent, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
 
-public extension OmiseAPIChildObject where Self: Destroyable {
+public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiableObject {
     typealias DestroyEndpoint = APIEndpoint<Self>
     typealias DestroyRequest = APIRequest<Self>
     
-    static func destroyEndpointWith(parent: Parent, id: String) -> DestroyEndpoint {
+    static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
             parameter: .delete
         )
     }
     
-    static func destroy(using client: APIClient, parent: Parent, id: String, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
+    static func destroy(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
         let endpoint = self.destroyEndpointWith(parent: parent, id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
 
 
-public extension OmiseAPIChildObject where Self: Updatable {
+public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {
     typealias UpdateEndpoint = APIEndpoint<Self>
     typealias UpdateRequest = APIRequest<Self>
     
-    static func updateEndpointWith(parent: Parent, id: String, params: UpdateParams) -> UpdateEndpoint {
+    static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
             parameter: .patch(params)
         )
     }
     
-    static func update(using client: APIClient, parent: Parent, id: String, params: UpdateParams, callback: @escaping UpdateRequest.Callback) -> UpdateRequest? {
+    static func update(using client: APIClient, parent: Parent, id: DataID<Self>, params: UpdateParams, callback: @escaping UpdateRequest.Callback) -> UpdateRequest? {
         let endpoint = self.updateEndpointWith(parent: parent, id: id, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
@@ -153,21 +153,21 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         (parent: Self, keyPath: KeyPath<Self, ListProperty<Children>>) -> [String] {
         var paths = [String]()
         
-        paths = [Self.resourceInfo.path, parent.id]
-        paths.append(Children.resourceInfo.path)
+        paths = [Self.resourcePath, parent.id.idString]
+        paths.append(Children.resourcePath)
         return paths
     }
 }
 
 
 extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject {
-    static func makeResourcePathsWith(parent: Parent, id: String? = nil) -> [String] {
+    static func makeResourcePathsWith(parent: Parent, id: DataID<Self>? = nil) -> [String] {
         var paths = [String]()
         
-        paths = [type(of: parent).resourceInfo.path, parent.id]
-        paths.append(self.resourceInfo.path)
+        paths = [type(of: parent).resourcePath, parent.id.idString]
+        paths.append(self.resourcePath)
         if let id = id {
-            paths.append(id)
+            paths.append(id.idString)
         }
         
         return paths

@@ -2,14 +2,17 @@ import Foundation
 
 
 public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseResourceObject, Equatable {
-    public static var resourceInfo: ResourceInfo {
-        return ResourceInfo(path: "/transactions")
+    public static var resourcePath: String {
+        return "/transactions"
+    }
+    public static var idPrefix: String {
+        return "trxn"
     }
     
     public let object: String
     public let location: String
     public let isLiveMode: Bool
-    public let id: String
+    public let id: DataID<Transaction<Origin>>
     public let createdDate: Date
     
     public let direction: Direction

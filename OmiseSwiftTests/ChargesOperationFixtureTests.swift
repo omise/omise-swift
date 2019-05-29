@@ -6,7 +6,7 @@ private let defaultReturnURL = URL(string: "https://omise.co")!
 
 class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeRetrieve() {
-        let chargeTestingID = "chrg_test_retrieve"
+        let chargeTestingID: DataID<Charge>  = "chrg_test_5fzbppsjk5q9cxqjz0o"
         let expectation = self.expectation(description: "Charge result")
         
         let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
@@ -18,7 +18,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.value.currency, .thb)
                 XCTAssertNil(charge.chargeDescription)
                 XCTAssertEqual(charge.id, chargeTestingID)
-                XCTAssertEqual(charge.location, "/charges/chrg_test_retrieve")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_5fzbppsjk5q9cxqjz0o")
                 XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.fundingAmount, 10_000_00)
                 XCTAssertEqual(charge.fundingCurrency, .thb)
@@ -37,7 +37,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_retrieve")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzbppsjk5q9cxqjz0o")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -99,7 +99,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testDisputedChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_disputed") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5flpmtdmcibefxk7bxc") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -107,8 +107,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.value.amount, 2_00_00)
                 XCTAssertEqual(charge.value.currency.code, "THB")
                 XCTAssertEqual(charge.chargeDescription, "John Doe")
-                XCTAssertEqual(charge.id, "chrg_test_disputed")
-                XCTAssertEqual(charge.location, "/charges/chrg_test_disputed")
+                XCTAssertEqual(charge.id, "chrg_test_5flpmtdmcibefxk7bxc")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_5flpmtdmcibefxk7bxc")
                 XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.transaction?.id, "trxn_test_5flpmtfvna92r53pzuh")
                 XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-04-17T09:50:17Z"))
@@ -120,7 +120,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.dispute?.reasonCode, .goodsOrServicesNotProvided)
                 XCTAssertEqual(charge.dispute?.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(charge.dispute?.responseMessage, "This is a response message")
-                XCTAssertEqual(charge.dispute?.charge.id, "chrg_test_disputed")
+                XCTAssertEqual(charge.dispute?.charge.id, "chrg_test_5flpmtdmcibefxk7bxc")
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -131,7 +131,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeDisputedCharge() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_disputed")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5flpmtdmcibefxk7bxc")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -376,7 +376,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)", metadata: metadata)
         
-        let request = Charge.update(using: testClient, id: "chrg_test_retrieve", params: updateParams) { (result) in
+        let request = Charge.update(using: testClient, id: "chrg_test_5fzbppsjk5q9cxqjz0o", params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -396,15 +396,15 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testDeletedCardChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_deleted_customer") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc99n9gvnqvlmcior") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.value.currency.code, "THB")
-                XCTAssertEqual(charge.id, "chrg_test_deleted_customer")
-                XCTAssertEqual(charge.location, "/charges/chrg_test_deleted_customer")
+                XCTAssertEqual(charge.id, "chrg_test_5fzc99n9gvnqvlmcior")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_5fzc99n9gvnqvlmcior")
                 XCTAssertEqual(charge.isLiveMode, false)
                 XCTAssertEqual(charge.refundedAmount, 0)
                 XCTAssertEqual(charge.transaction?.id, "trxn_test_5fzc99osk6yqddb4msq")
@@ -428,7 +428,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testInternetBankingChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_internet_banking") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc7xbzon56ydkdl5k") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -445,7 +445,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeInternetBankingChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_internet_banking")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzc7xbzon56ydkdl5k")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -490,7 +490,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testAlipayChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_alipay") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc7k07d6oifxi1vl7") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -507,7 +507,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeAlipayChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_alipay")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzc7k07d6oifxi1vl7")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -551,7 +551,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testTestcoLotusBillPaymentChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_bill_payment") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc7srreh7yj3oh6k0") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -565,7 +565,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                     XCTAssertEqual(bill.omiseTaxID, "0105556091152")
                     XCTAssertEqual(bill.referenceNumber1, "068263727885787840")
                     XCTAssertEqual(bill.referenceNumber2, "060028266962275319")
-                    XCTAssertEqual(bill.barcodeURL, URL(string: "https://api.omise.co/charges/chrg_test_bill_payment/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012")!)
+                    XCTAssertEqual(bill.barcodeURL, URL(string: "https://api.omise.co/charges/chrg_test_5fzc7srreh7yj3oh6k0/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012")!)
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
@@ -579,7 +579,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeTestcoLotusBillPaymentChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_bill_payment")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzc7srreh7yj3oh6k0")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -630,7 +630,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testInstallmentKBankChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_installment") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc7v0ce9ukmm02al2") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -654,7 +654,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testBarcodeAlipayChargeRetrieve() throws {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_barcode_alipay") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzc7olqr3su9mscg9i") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -681,7 +681,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeBarcodeAlipayCharge() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_barcode_alipay")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzc7olqr3su9mscg9i")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -834,7 +834,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeWithLoadedCustomer() throws {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_loaded_customer") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzbqf68stewg2nkzil") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -865,7 +865,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeChargeWithLoadedCustomer() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_loaded_customer")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzbqf68stewg2nkzil")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -926,7 +926,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testResilientInternetBankingChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_resilient_with_internet_banking_oms_source") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzcfhae1s2u9qcoqew") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -943,7 +943,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeResilientInternetBankingChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_resilient_with_internet_banking_oms_source")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzcfhae1s2u9qcoqew")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -988,7 +988,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testResilientSourceChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_resilient_with_omise_source") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzbagmkeikty9pdkgh") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -1002,7 +1002,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                         "expires_at": "2019-05-23T06:00:50Z",
                         "reference": "025821267592373884",
                         "key": "237000400584228075",
-                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_omise_source/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
+                        "barcode": "https://api.omise.co/charges/chrg_test_5fzbagmkeikty9pdkgh/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
                         ] as [String: String])
                 }
                 
@@ -1016,7 +1016,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeResilientSourceChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_resilient_with_omise_source")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzbagmkeikty9pdkgh")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -1069,7 +1069,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testResilientBillPaymentChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_resilient_with_bill_payment_papaya_source") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5fzcfas8shggyzje7gw") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -1086,7 +1086,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                         "expires_at": "2019-05-23T06:00:50Z",
                         "reference_1": "025821267592373884",
                         "key": "237000400584228075",
-                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_bill_payment_papaya_source/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
+                        "barcode": "https://api.omise.co/charges/chrg_test_5fzcfas8shggyzje7gw/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
                         ] as [String: String])
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
@@ -1101,7 +1101,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeResilientBillPaymentChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_resilient_with_bill_payment_papaya_source")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzcfas8shggyzje7gw")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -1156,7 +1156,7 @@ extension ChargeParams: AdditionalFixtureData {
         case .card(let id), .customer(customerID: let id, cardID: _):
             return id
         case .source(let source):
-            return source.id
+            return source.id.idString
         case .sourceType(let sourceType):
             return sourceType.sourceType.value
         }

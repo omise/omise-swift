@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let disputeTestingID = "dspt_test_5fzexd718s2izg1md4l"
+private let disputeTestingID: DataID<Dispute> = "dspt_test_5fzexd718s2izg1md4l"
 
 class DisputeOperationFixtureTests: FixtureTestCase {
     func testDisputeRetrieve() {
@@ -69,7 +69,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
                 }
                 
                 XCTAssertEqual(recentDocument.filename, "Omise_Fractureme.png")
-                XCTAssertEqual(recentDocument.id, "docu_test_5fzd34gdvxq7rwnktxd")
+                XCTAssertEqual(recentDocument.id.idString, "docu_test_5fzd34gdvxq7rwnktxd")
             case let .failure(error):
                 XCTFail("\(error)")
             }

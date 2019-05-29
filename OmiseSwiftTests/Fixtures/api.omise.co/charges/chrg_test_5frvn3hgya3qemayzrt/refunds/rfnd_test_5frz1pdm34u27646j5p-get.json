@@ -2,7 +2,7 @@
   "object": "refund",
   "id": "rfnd_test_5frz1pdm34u27646j5p",
   "livemode": false,
-  "location": "/charges/chrg_test_refunded/refunds/rfnd_test_5frz1pdm34u27646j5p",
+  "location": "/charges/chrg_test_5frvn3hgya3qemayzrt/refunds/rfnd_test_5frz1pdm34u27646j5p",
   "created_at": "2019-05-03T10:02:42Z",
   "status": "closed",
   "amount": 100000,
@@ -10,7 +10,7 @@
   "funding_amount": 100000,
   "funding_currency": "THB",
   "voided": true,
-  "charge": "chrg_test_refunded",
+  "charge": "chrg_test_5frvn3hgya3qemayzrt",
   "transaction": "trxn_test_5frz1pdv42v4xsorr6z",
   "metadata": {
   }

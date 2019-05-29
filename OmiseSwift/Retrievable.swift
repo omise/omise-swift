@@ -10,11 +10,11 @@ public struct RetrieveParams: APIJSONQuery {
     }
 }
 
-public extension Retrievable where Self: OmiseAPIPrimaryObject {
+public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiableObject {
     typealias RetrieveEndpoint = APIEndpoint<Self>
     typealias RetrieveRequest = APIRequest<Self>
     
-    static func retrieveEndpointWith(id: String) -> RetrieveEndpoint {
+    static func retrieveEndpointWith(id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
@@ -22,7 +22,7 @@ public extension Retrievable where Self: OmiseAPIPrimaryObject {
         )
     }
     
-    static func retrieve(using client: APIClient, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(using client: APIClient, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }

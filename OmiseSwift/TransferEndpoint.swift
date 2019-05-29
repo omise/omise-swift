@@ -10,7 +10,7 @@ extension Transfer {
     
     public static func markAsSentEndpointWithID(_ id: String) -> MarkEndpoint {
         return MarkEndpoint(
-            pathComponents: [resourceInfo.path, id, "mark_as_sent"],
+            pathComponents: [resourcePath, id, "mark_as_sent"],
             parameter: .post(nil)
         )
     }
@@ -24,7 +24,7 @@ extension Transfer {
     
     public static func markAsPaidEndpointWithID(_ id: String) -> MarkEndpoint {
         return MarkEndpoint(
-            pathComponents: [resourceInfo.path, id, "mark_as_paid"],
+            pathComponents: [resourcePath, id, "mark_as_paid"],
             parameter: .post(nil)
         )
     }

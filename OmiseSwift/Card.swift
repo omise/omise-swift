@@ -57,6 +57,8 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
     
+    public static let idPrefix: String = "card"
+    
     public var object: String {
         switch self {
         case .tokenized(let card):
@@ -66,12 +68,12 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
         }
     }
     
-    public var id: String {
+    public var id: DataID<Card> {
         switch self {
         case .tokenized(let card):
-            return card.id
+            return DataID<Card>(idString: card.id.idString)!
         case .customer(let card):
-            return card.id
+            return DataID<Card>(idString: card.id.idString)!
         }
     }
     
@@ -187,9 +189,11 @@ extension Card {
 }
 
 public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
+    public static let idPrefix: String = "card"
+    
     public let object: String
     
-    public let id: String
+    public let id: DataID<TokenizedCard>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -255,7 +259,7 @@ extension TokenizedCard {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         object = try container.decode(String.self, forKey: .object)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<TokenizedCard>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
@@ -278,12 +282,13 @@ extension TokenizedCard {
 }
 
 public struct CustomerCard: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/cards")
+    public static let resourcePath = "/cards"
+    public static let idPrefix: String = "card"
     
     public let location: String
     public let object: String
     
-    public let id: String
+    public let id: DataID<CustomerCard>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -351,7 +356,7 @@ extension CustomerCard {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<CustomerCard>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
@@ -417,15 +422,15 @@ extension Customer {
         return self.list(keyPath: \.cards, using: client, params: params, callback: callback)
     }
     
-    public func retrieveCard(using client: APIClient, id: String, callback: @escaping CustomerCard.RetrieveRequest.Callback) -> CustomerCard.RetrieveRequest? {
+    public func retrieveCard(using client: APIClient, id: DataID<CustomerCard>, callback: @escaping CustomerCard.RetrieveRequest.Callback) -> CustomerCard.RetrieveRequest? {
         return CustomerCard.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     
-    public func updateCard(using client: APIClient, id: String, params: CardParams, callback: @escaping CustomerCard.UpdateRequest.Callback) -> CustomerCard.UpdateRequest? {
+    public func updateCard(using client: APIClient, id: DataID<CustomerCard>, params: CardParams, callback: @escaping CustomerCard.UpdateRequest.Callback) -> CustomerCard.UpdateRequest? {
         return CustomerCard.update(using: client, parent: self, id: id, params: params, callback: callback)
     }
     
-    public func destroyCard(using client: APIClient, id: String, callback: @escaping CustomerCard.DestroyRequest.Callback) -> CustomerCard.DestroyRequest? {
+    public func destroyCard(using client: APIClient, id: DataID<CustomerCard>, callback: @escaping CustomerCard.DestroyRequest.Callback) -> CustomerCard.DestroyRequest? {
         return CustomerCard.destroy(using: client, parent: self, id: id, callback: callback)
     }
 }

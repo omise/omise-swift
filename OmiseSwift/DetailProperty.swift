@@ -1,9 +1,9 @@
 
 public enum DetailProperty<T: OmiseIdentifiableObject> {
-    case notLoaded(String)
+    case notLoaded(DataID<T>)
     indirect case loaded(T)
     
-    public var id: String {
+    public var id: DataID<T> {
         switch self {
         case .notLoaded(let dataID):
             return dataID
@@ -34,7 +34,7 @@ extension DetailProperty: Codable {
         do {
             self = .loaded(try container.decode(T.self))
         } catch DecodingError.typeMismatch {
-            self = .notLoaded(try container.decode(String.self))
+            self = .notLoaded(try container.decode(DataID<T>.self))
         }
     }
     

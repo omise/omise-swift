@@ -2,7 +2,7 @@ import Foundation
 
 
 public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject, SingletonRetrievable {
-    public static var resourceInfo: ResourceInfo = ResourceInfo(path: "capability")
+    public static var resourcePath: String = "capability"
     
     public let location: String
     public let object: String

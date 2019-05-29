@@ -2,10 +2,12 @@ import Foundation
 
 
 public struct PaymentSource: SourceData, OmiseResourceObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "sources")
+    public static let resourcePath = "sources"
+    public static let idPrefix: String = "src"
+    
     public typealias PaymentInformation = PaymentSourceInformation
     
-    public let id: String
+    public let id: DataID<PaymentSource>
     public let object: String
     public let isLiveMode: Bool
     public let location: String
@@ -151,7 +153,7 @@ extension PaymentSource {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<PaymentSource>.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         location = try container.decode(String.self, forKey: .location)

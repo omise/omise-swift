@@ -157,7 +157,8 @@ public struct EnrolledSource: SourceData {
         }
     }
     
-    public let id: String
+    public static let idPrefix: String = "src"
+    public let id: DataID<EnrolledSource>
     public let object: String
     
     public let currency: Currency
@@ -180,7 +181,7 @@ public struct EnrolledSource: SourceData {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<EnrolledSource>.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)

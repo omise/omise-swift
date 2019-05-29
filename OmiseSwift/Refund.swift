@@ -2,13 +2,14 @@ import Foundation
 
 
 public struct Refund: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/refunds")
+    public static let resourcePath = "/refunds"
+    public static let idPrefix: String = "rfnd"
     
     public let object: String
     public let location: String
     public let isLiveMode: Bool
     
-    public let id: String
+    public let id: DataID<Refund>
     public let createdDate: Date
     
     public let status: Status
@@ -43,7 +44,7 @@ public struct Refund: OmiseResourceObject, Equatable {
         
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Refund>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         status = try container.decode(Status.self, forKey: .status)
@@ -165,7 +166,7 @@ extension Refund: OmiseAPIChildObject {
 
 
 extension Charge {
-    public func retrieveRefund(using client: APIClient, id: String, callback: @escaping Refund.RetrieveRequest.Callback) -> Refund.RetrieveRequest? {
+    public func retrieveRefund(using client: APIClient, id: DataID<Refund>, callback: @escaping Refund.RetrieveRequest.Callback) -> Refund.RetrieveRequest? {
         return Refund.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     

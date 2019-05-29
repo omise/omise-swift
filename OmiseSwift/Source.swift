@@ -29,6 +29,8 @@ extension SourceData {
 
 
 public enum Source: SourceData {
+    public static let idPrefix: String = "src"
+    
     case enrolled(EnrolledSource)
     case source(PaymentSource)
     
@@ -74,12 +76,12 @@ public enum Source: SourceData {
     
     public typealias PaymentInformation = SourceType
     
-    public var id: String {
+    public var id: DataID<Source> {
         switch self {
         case .enrolled(let source):
-            return source.id
+            return DataID<Source>(idString: source.id.idString)!
         case .source(let source):
-            return source.id
+            return DataID<Source>(idString: source.id.idString)!
         }
     }
     

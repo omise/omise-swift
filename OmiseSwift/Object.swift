@@ -6,12 +6,15 @@ public protocol OmiseObject: Codable {
 }
 
 public protocol OmiseLocatableObject: OmiseObject {
-    static var resourceInfo: ResourceInfo { get }
+    static var resourcePath: String { get }
     var location: String { get }
 }
 
 public protocol OmiseIdentifiableObject: OmiseObject {
-    var id: String { get }
+    var id: DataID<Self> { get }
+    static var idPrefix: String { get }
+    
+    static func validate(id: String) -> Bool
 }
 
 public protocol OmiseCreatedObject: OmiseObject {
@@ -27,31 +30,46 @@ public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObje
 
 public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
 
-extension OmiseIdentifiableObject where Self: Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+
+public extension OmiseIdentifiableObject {
+    static func validate(id: String) -> Bool {
+        return id.range(of: #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#, options: [.regularExpression, .anchored]) != nil
+    }
+}
+
+public extension OmiseIdentifiableObject where Self: Equatable {
+    static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
-extension OmiseLocatableObject where Self: Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+public extension OmiseLocatableObject where Self: Equatable {
+    static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.location == rhs.location
     }
 }
 
-extension OmiseIdentifiableObject where Self: OmiseLocatableObject & Equatable {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+public extension OmiseIdentifiableObject where Self: OmiseLocatableObject & Equatable {
+    static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
 }
 
 extension OmiseAPIPrimaryObject {
-    static func makeResourcePaths(id: String? = nil) -> [String] {
+    static func makeResourcePaths() -> [String] {
+        var paths = [String]()
+        paths.append(self.resourcePath)
+        return paths
+    }
+}
+
+extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
+    static func makeResourcePaths(id: DataID<Self>? = nil) -> [String] {
         var paths = [String]()
         
-        paths.append(self.resourceInfo.path)
+        paths.append(self.resourcePath)
         if let id = id {
-            paths.append(id)
+            paths.append(id.idString)
         }
         
         return paths

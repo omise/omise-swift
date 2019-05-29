@@ -12,7 +12,7 @@ extension Charge {
     
     public static func captureEndpointWithID(_ id: String) -> CaptureEndpoint {
         return CaptureEndpoint(
-            pathComponents: [resourceInfo.path, id, "capture"],
+            pathComponents: [resourcePath, id, "capture"],
             parameter: .post(nil)
         )
     }
@@ -24,7 +24,7 @@ extension Charge {
     
     public static func reverseEndpointWithID(_ id: String) -> ReverseEndpoint {
         return ReverseEndpoint(
-            pathComponents: [resourceInfo.path, id, "reverse"],
+            pathComponents: [resourcePath, id, "reverse"],
             parameter: .post(nil)
         )
     }

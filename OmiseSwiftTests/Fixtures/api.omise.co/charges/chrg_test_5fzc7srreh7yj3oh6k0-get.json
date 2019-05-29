@@ -1,8 +1,8 @@
 {
   "object": "charge",
-  "id": "chrg_test_bill_payment",
+  "id": "chrg_test_5fzc7srreh7yj3oh6k0",
   "livemode": false,
-  "location": "/charges/chrg_test_bill_payment",
+  "location": "/charges/chrg_test_5fzc7srreh7yj3oh6k0",
   "created_at": "2019-05-22T06:00:50Z",
   "amount": 1000000,
   "currency": "THB",
@@ -37,7 +37,7 @@
     "limit": 20,
     "total": 0,
     "order": "chronological",
-    "location": "/charges/chrg_test_bill_payment/refunds",
+    "location": "/charges/chrg_test_5fzc7srreh7yj3oh6k0/refunds",
     "data": []
   },
   "link": null,
@@ -57,7 +57,7 @@
       "omise_tax_id": "0105556091152",
       "reference_number_1": "068263727885787840",
       "reference_number_2": "060028266962275319",
-      "barcode": "https://api.omise.co/charges/chrg_test_bill_payment/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012",
+      "barcode": "https://api.omise.co/charges/chrg_test_5fzc7srreh7yj3oh6k0/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012",
       "expires_at": "2019-05-23T06:00:50Z"
     },
     "type": "bill_payment_tesco_lotus",

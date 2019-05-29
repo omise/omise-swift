@@ -1,7 +1,7 @@
 import XCTest
 import Omise
 
-private let linkTestingID = "link_test_5bh0ji63ctfk4gug2d5"
+private let linkTestingID = DataID<Link>(idString: "link_test_5bh0ji63ctfk4gug2d5")!
 
 class LinkOperationFixtureTest: FixtureTestCase {
     func testLinkRetrieve() {

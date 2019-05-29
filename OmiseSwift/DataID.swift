@@ -1,0 +1,34 @@
+import Foundation
+
+
+public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
+    public let idString: String
+    
+    public init?(idString: String) {
+        guard Data.validate(id: idString) else {
+            return nil
+        }
+        self.idString = idString
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let idString = try container.decode(String.self)
+        if let id = DataID<Data>.init(idString: idString) {
+            self = id
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid data ID value")
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(idString)
+    }
+}
+
+extension DataID: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(idString: value)!
+    }
+}

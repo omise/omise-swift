@@ -6,7 +6,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzpgks1yf8me0wabse"
+        let scheduleTestingID: DataID<Schedule<Charge>> = "schd_test_5fzpgks1yf8me0wabse"
         
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
@@ -83,7 +83,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testEveryDayChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzoyq0dpywer0738br"
+        let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzoyq0dpywer0738br"
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -192,7 +192,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testEveryLastFridayOfMonthChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzoz616kap3j82u92b"
+        let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzoz616kap3j82u92b"
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -260,7 +260,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testEveryFirstMondayOfMonthChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzozh3os3a2lnjyni0"
+        let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzozh3os3a2lnjyni0"
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -328,7 +328,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testEveryWeekdaysChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzoznrnfbwhyxx2slg"
+        let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzoznrnfbwhyxx2slg"
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -400,7 +400,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
     func testDeletedChargeScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
-        let scheduleTestingID = "schd_test_5fzcqxg53hhuhz49e73"
+        let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzcqxg53hhuhz49e73"
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             

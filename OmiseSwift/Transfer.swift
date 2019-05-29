@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Transfer: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/transfers")
+    public static let resourcePath = "/transfers"
+    public static let idPrefix: String = "trsf"
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Transfer>
     public let isLiveMode: Bool
     public let isDeleted: Bool
     public let createdDate: Date
@@ -93,7 +94,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Transfer>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         createdDate = try container.decode(Date.self, forKey: .createdDate)

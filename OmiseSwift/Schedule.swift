@@ -11,14 +11,17 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
         case unknown(String)
     }
     
-    public static var resourceInfo: ResourceInfo {
-        return ResourceInfo(path: "/schedules")
+    public static var idPrefix: String {
+        return "schd"
+    }
+    public static var resourcePath: String {
+        return "/schedules"
     }
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Schedule<Data>>
     public let isLiveMode: Bool
     public let isDeleted: Bool
     public let createdDate: Date
@@ -146,7 +149,7 @@ extension Schedule {
         
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Schedule<Data>>.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)

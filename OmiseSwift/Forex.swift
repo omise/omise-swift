@@ -1,7 +1,7 @@
 import Foundation
 
 public struct Forex: OmiseLocatableObject, OmiseLiveModeObject, OmiseAPIPrimaryObject {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "forex")
+    public static let resourcePath = "forex"
     public let object: String
     public let location: String
     public let isLiveMode: Bool

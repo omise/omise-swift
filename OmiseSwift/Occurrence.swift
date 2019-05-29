@@ -10,14 +10,17 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         case unknown(status: String, message: String?)
     }
     
-    public static var resourceInfo: ResourceInfo {
-        return ResourceInfo(path: "/occurrences")
+    public static var idPrefix: String {
+        return "occu"
+    }
+    public static var resourcePath: String{
+        return "/occurrences"
     }
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Occurrence>
     public let isLiveMode: Bool
     public let createdDate: Date
     
@@ -50,7 +53,7 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
-        id = try container.decode(String.self, forKey: .id)
+        id = try container.decode(DataID<Occurrence<Data>>.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)

@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Token: OmiseResourceObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/tokens")
+    public static let resourcePath = "/tokens"
+    public static let idPrefix: String = "tokn"
     
     public var object: String
     public var location: String
     
-    public var id: String
+    public let id: DataID<Token>
     public let createdDate: Date
     public var isLiveMode: Bool
     
@@ -91,12 +92,12 @@ extension Token: Retrievable {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             endpoint: .vault(key),
-            pathComponents: [Token.resourceInfo.path, id],
+            pathComponents: [Token.resourcePath, id],
             parameter: .get(retrieveParams)
         )
     }
     
-    static func retrieve(using client: APIClient, usingKey key: AccessKey, parent: OmiseResourceObject? = nil, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(usingKey: key, id: id)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
@@ -110,7 +111,7 @@ extension Token: Creatable {
     public static func createEndpoint(usingKey key: AccessKey, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
-            pathComponents: [Token.resourceInfo.path],
+            pathComponents: [Token.resourcePath],
             parameter: .post(params)
         )
     }

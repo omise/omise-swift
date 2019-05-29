@@ -2,12 +2,13 @@ import Foundation
 
 
 public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject, Equatable {
-    public static let resourceInfo: ResourceInfo = ResourceInfo(path: "documents")
+    public static let resourcePath = "documents"
+    public static let idPrefix: String = "docu"
     
     public let object: String
     public let location: String
     
-    public let id: String
+    public let id: DataID<Document>
     public let isLiveMode: Bool
     public let createdDate: Date
     public let isDeleted: Bool
