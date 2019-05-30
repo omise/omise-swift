@@ -27,7 +27,6 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
         case internetBanking(InternetBanking)
         case alipay
         case billPayment(SourceType.BillPayment)
-        case virtualAccount(SourceType.VirtualAccount)
         case barcode(Barcode)
         case installment(Installment)
         
@@ -48,15 +47,6 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                     bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
-            case .virtualAccount(let account):
-                let virtualAccount: Omise.SourceType.VirtualAccount
-                switch account {
-                case .sinarmas:
-                    virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
-                case .unknown(let name):
-                    virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
-                }
-                return Omise.SourceType.virtualAccount(virtualAccount)
             case .barcode(let barcodeInformation):
                 let barcode: Omise.SourceType.Barcode
                 switch barcodeInformation {
@@ -98,11 +88,6 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                     .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) })
                     .flatMap(SourceType.BillPayment.init(rawValue:)).map(PaymentSourceInformation.billPayment) {
                 self = billPaymentOffline
-            } else if typeValue.hasPrefix(virtualAccountPrefix),
-                let virtualAccountOffline = typeValue
-                    .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) })
-                    .flatMap(SourceType.VirtualAccount.init(rawValue:)).map(PaymentSourceInformation.virtualAccount) {
-                self = virtualAccountOffline
             } else if typeValue.hasPrefix(barcodePrefix),
                 let barcodeValue = typeValue
                     .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {

@@ -12,7 +12,6 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(capability):
                 XCTAssertEqual(capability.supportedMethods.count, 6)
-                XCTAssertNil(capability[.virtualAccount(.sinarmas)])
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))
@@ -88,7 +87,6 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
         let decodedCapability = try decoder.decode(Capability.self, from: encodedData)
         
         XCTAssertEqual(capability.supportedMethods.count, decodedCapability.supportedMethods.count)
-        XCTAssertNil(decodedCapability[SourceType.virtualAccount(.sinarmas)])
         
         XCTAssertEqual(capability.creditCardMethod?.payment, decodedCapability.creditCardMethod?.payment)
         XCTAssertEqual(capability.creditCardMethod?.supportedCurrencies,

@@ -343,7 +343,6 @@ public struct PaymentSourceParams: APIJSONQuery {
         case internetBanking(InternetBanking)
         case alipay
         case billPayment(SourceType.BillPayment)
-        case virtualAccount(SourceType.VirtualAccount)
         case barcode(Barcode)
         case installment(Installment.CreateParameter)
         
@@ -364,15 +363,6 @@ public struct PaymentSourceParams: APIJSONQuery {
                     bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
-            case .virtualAccount(let account):
-                let virtualAccount: Omise.SourceType.VirtualAccount
-                switch account {
-                case .sinarmas:
-                    virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
-                case .unknown(let name):
-                    virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
-                }
-                return Omise.SourceType.virtualAccount(virtualAccount)
             case .barcode(let barcodeInformation):
                 let barcode: Omise.SourceType.Barcode
                 switch barcodeInformation {

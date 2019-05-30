@@ -198,7 +198,7 @@ extension Capability.Method {
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decodeJSONDictionary()
             self.payment = .unknownSource(type, configurations: configurations)
-        case .source(SourceType.billPayment), .source(SourceType.virtualAccount), .source(SourceType.barcode):
+        case .source(SourceType.billPayment), .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(
                 forKey: Capability.Method.CodingKeys.name, in: methodConfigurations,
                 debugDescription: "Invalid payment method type value"

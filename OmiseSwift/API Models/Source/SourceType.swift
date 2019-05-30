@@ -4,7 +4,6 @@ import Foundation
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
-let virtualAccountPrefix = "virtual_account_"
 let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
 
@@ -54,7 +53,6 @@ public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
     case alipay
     case billPayment(BillPayment)
-    case virtualAccount(VirtualAccount)
     case barcode(Barcode)
     case installment(InstallmentBrand)
     
@@ -78,31 +76,6 @@ public enum SourceType: Codable, Equatable, Hashable {
             switch rawValue {
             case BillPayment.tescoLotusValue:
                 self = .tescoLotus
-            case let value:
-                self = .unknown(value)
-            }
-        }
-    }
-    
-    public enum VirtualAccount: RawRepresentable, Equatable, Hashable {
-        static private let sinarmasValue = "sinarmas"
-        
-        case sinarmas
-        case unknown(String)
-        
-        public var rawValue: String {
-            switch self {
-            case .sinarmas:
-                return VirtualAccount.sinarmasValue
-            case .unknown(let value):
-                return value
-            }
-        }
-        
-        public init?(rawValue: String) {
-            switch rawValue {
-            case VirtualAccount.sinarmasValue:
-                self = .sinarmas
             case let value:
                 self = .unknown(value)
             }
@@ -187,8 +160,6 @@ public enum SourceType: Codable, Equatable, Hashable {
             
         case .billPayment:
             return billPaymentPrefix
-        case .virtualAccount:
-            return virtualAccountPrefix
         case .barcode:
             return barcodePrefix
         case .installment:
@@ -208,8 +179,6 @@ public enum SourceType: Codable, Equatable, Hashable {
             
         case .billPayment(let bill):
             value = billPaymentPrefix + bill.rawValue
-        case .virtualAccount(let account):
-            value = virtualAccountPrefix + account.rawValue
         case .barcode(let barcodeType):
             value = barcodePrefix + barcodeType.rawValue
         case .installment(let installmentBrand):
@@ -241,11 +210,6 @@ extension SourceType {
                 .range(of: installmentPrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(InstallmentBrand.init(rawValue:)).map(SourceType.installment) {
             self = installment
-        } else if value.hasPrefix(virtualAccountPrefix),
-            let virtualAccountOffline = value
-                .range(of: virtualAccountPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(VirtualAccount.init(rawValue:)).map(SourceType.virtualAccount) {
-            self = virtualAccountOffline
         } else if value.hasPrefix(barcodePrefix),
             let barcodeValue = value
                 .range(of: barcodePrefix).map({ String(value[$0.upperBound...]) })

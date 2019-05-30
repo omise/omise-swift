@@ -8,7 +8,6 @@ public struct EnrolledSource: SourceData {
         case internetBanking(InternetBanking)
         case alipay
         case billPayment(BillPayment)
-        case virtualAccount(VirtualAccount)
         case barcode(Barcode)
         case installment(SourceType.InstallmentBrand)
         
@@ -38,25 +37,6 @@ public struct EnrolledSource: SourceData {
             public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
                 switch (lhs, rhs) {
                 case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
-                    return lhsValue == rhsValue
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
-        public enum VirtualAccount: Equatable {
-            case sinarmas(vaCode: String)
-            case unknown(name: String, references: [String: Any])
-            
-            fileprivate enum SinarmasCodingKeys: String, CodingKey {
-                case vaCode = "va_code"
-            }
-            
-            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount, rhs: EnrolledSource.EnrolledPaymentInformation.VirtualAccount) -> Bool {
-                switch (lhs, rhs) {
-                case let (.sinarmas(lhsValue), .sinarmas(rhsValue)):
                     return lhsValue == rhsValue
                 case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
                     return lhsName == rhsName
@@ -113,15 +93,6 @@ public struct EnrolledSource: SourceData {
                     bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
-            case .virtualAccount(let account):
-                let virtualAccount: Omise.SourceType.VirtualAccount
-                switch account {
-                case .sinarmas:
-                    virtualAccount = Omise.SourceType.VirtualAccount.sinarmas
-                case .unknown(let name, _):
-                    virtualAccount = Omise.SourceType.VirtualAccount.unknown(name)
-                }
-                return Omise.SourceType.virtualAccount(virtualAccount)
             case .barcode(let barcodeInformation):
                 let barcode: Omise.SourceType.Barcode
                 switch barcodeInformation {
@@ -145,8 +116,6 @@ public struct EnrolledSource: SourceData {
             case (.alipay, .alipay):
                 return true
             case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
-                return lhsValue == rhsValue
-            case (.virtualAccount(let lhsValue), .virtualAccount(let rhsValue)):
                 return lhsValue == rhsValue
             case (.barcode(let lhsValue), .barcode(let rhsValue)):
                 return lhsValue == rhsValue
@@ -231,18 +200,6 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
                 self = .billPayment(.unknown(name: billPaymentType, references: references))
             }
-        } else if typeValue.hasPrefix(virtualAccountPrefix),
-            let virtualAccountOffline = typeValue
-                .range(of: virtualAccountPrefix).map({ String(typeValue[$0.upperBound...]) }) {
-            switch virtualAccountOffline {
-            case SourceType.VirtualAccount.sinarmas.rawValue:
-                let accountContainer = try container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
-                let vaCode = try accountContainer.decode(String.self, forKey: .vaCode)
-                self = .virtualAccount(.sinarmas(vaCode: vaCode))
-            case let virtualAccountType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .virtualAccount(.unknown(name: virtualAccountType, references: references))
-            }
         } else if typeValue.hasPrefix(barcodePrefix),
             let barcodeValue = typeValue
                 .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
@@ -280,16 +237,6 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 try container.encode(bill, forKey: .references)
             case let .unknown(name: name, references: references):
                 try container.encode(billPaymentPrefix + name, forKey: .type)
-                try container.encode(references, forKey: .references)
-            }
-        case .virtualAccount(let account):
-            switch account {
-            case .sinarmas(vaCode: let vaCode):
-                try container.encode(virtualAccountPrefix + SourceType.VirtualAccount.sinarmas.rawValue, forKey: .type)
-                var accountContainer = container.nestedContainer(keyedBy: EnrolledSource.PaymentInformation.VirtualAccount.SinarmasCodingKeys.self, forKey: .references)
-                try accountContainer.encode(vaCode, forKey: .vaCode)
-            case let .unknown(name: name, references: references):
-                try container.encode(virtualAccountPrefix + name, forKey: .type)
                 try container.encode(references, forKey: .references)
             }
         case .barcode(let barcode):
