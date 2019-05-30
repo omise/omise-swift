@@ -18,13 +18,13 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     
     public let schedule: DetailProperty<Schedule<Data>>
-    public let scheduleDate: DateComponents
+    public let scheduledOnDateComponents: DateComponents
     
-    public let retryDate: DateComponents?
+    public let retryOnDateComponents: DateComponents?
     public let processedDate: Date
     
     public let status: Status
@@ -34,15 +34,15 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         case object
         case location
         case id
-        case createdDate = "created"
-        case isLive = "livemode"
+        case createdDate = "created_at"
+        case isLiveMode = "livemode"
         case schedule
         case status
         case message
-        case scheduleDate = "schedule_date"
+        case scheduleDate = "scheduled_on"
         case processedDate = "processed_at"
         case result
-        case retryDate = "retry_date"
+        case retryDate = "retry_on"
     }
     
     public init(from decoder: Decoder) throws {
@@ -52,13 +52,13 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)
-        scheduleDate = try container.decodeOmiseDateComponents(forKey: .scheduleDate)
+        scheduledOnDateComponents = try container.decodeOmiseDateComponents(forKey: .scheduleDate)
         processedDate = try container.decode(Date.self, forKey: .processedDate)
         result = try container.decode(DetailProperty<Data>.self, forKey: .result)
         
-        retryDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .retryDate)
+        retryOnDateComponents = try container.decodeOmiseDateComponentsIfPresent(forKey: .retryDate)
         
         let status = try container.decode(String.self, forKey: .status)
         let message = try container.decodeIfPresent(String.self, forKey: .message)
@@ -82,13 +82,13 @@ public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(schedule, forKey: .schedule)
-        try container.encodeOmiseDateComponents(scheduleDate, forKey: .scheduleDate)
+        try container.encodeOmiseDateComponents(scheduledOnDateComponents, forKey: .scheduleDate)
         try container.encode(processedDate, forKey: .processedDate)
         
         try container.encode(result, forKey: .result)
-        try container.encodeOmiseDateComponentsIfPresent(retryDate, forKey: .retryDate)
+        try container.encodeOmiseDateComponentsIfPresent(retryOnDateComponents, forKey: .retryDate)
         
         switch status {
         case .successful:

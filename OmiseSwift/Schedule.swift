@@ -1,10 +1,9 @@
 import Foundation
-import EventKit
 
 
 public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public enum Status: Equatable {
-        case active
+        case running
         case expiring
         case expired
         case deleted
@@ -20,21 +19,23 @@ public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
+    public let isDeleted: Bool
     public let createdDate: Date
     
     public let status: Status
+    public let isActive: Bool
     
     public let every: Int
     public let period: Period
     
-    public let startDate: DateComponents
-    public let endDate: DateComponents
+    public let startOnDateComponents: DateComponents
+    public let endOnDateComponents: DateComponents
     
     public let occurrences: ListProperty<Occurrence<Data>>
-    public let nextOccurrenceDates: [DateComponents]
+    public let nextOccurrencesOnDateComponents: [DateComponents]
     
-    public let parameter: Data.Parameter
+    public let scheduleData: Data.ScheduleData
 }
 
 extension Schedule {
@@ -42,10 +43,13 @@ extension Schedule {
         case object
         case location
         case id
-        case isLive
+        case isLiveMode
+        case isDeleted
         case createdDate
         
         case status
+        case isActive
+        
         case every
         case period
         case startDate
@@ -62,25 +66,29 @@ extension Schedule {
                 return "location"
             case .id:
                 return "id"
-            case .isLive:
+            case .isLiveMode:
                 return "livemode"
+            case .isDeleted:
+                return "deleted"
             case .createdDate:
-                return "created"
+                return "created_at"
                 
             case .status:
                 return "status"
+            case .isActive:
+                return "active"
             case .every:
                 return "every"
             case .period:
                 return "period"
             case .startDate:
-                return "start_date"
+                return "start_on"
             case .endDate:
-                return "end_date"
+                return "end_on"
             case .occurrences:
                 return "occurrences"
             case .nextOccurrenceDates:
-                return "next_occurrence_dates"
+                return "next_occurrences_on"
             case .parameter(let parameterKey):
                 return parameterKey
             }
@@ -95,23 +103,27 @@ extension Schedule {
             case "id":
                 self = .id
             case "livemode":
-                self = .isLive
-            case "created":
+                self = .isLiveMode
+            case "deleted":
+                self = .isDeleted
+            case "created_at":
                 self = .createdDate
                 
             case "status":
                 self = .status
+            case "active":
+                self = .isActive
             case "every":
                 self = .every
             case "period":
                 self = .period
-            case "start_date":
+            case "start_on":
                 self = .startDate
-            case "end_date":
+            case "end_on":
                 self = .endDate
             case "occurrences":
                 self = .occurrences
-            case "next_occurrence_dates":
+            case "next_occurrences_on":
                 self = .nextOccurrenceDates
             case let value where Data.isValidParameterKey(value):
                 self = .parameter(value)
@@ -136,18 +148,20 @@ extension Schedule {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         
         status = try container.decode(Schedule.Status.self, forKey: .status)
+        isActive = try container.decode(Bool.self, forKey: .isActive)
         
         every = try container.decode(Int.self, forKey: .every)
         period = try Period.init(from: decoder)
         
-        startDate = try container.decodeOmiseDateComponents(forKey: .startDate)
-        endDate = try container.decodeOmiseDateComponents(forKey: .endDate)
+        startOnDateComponents = try container.decodeOmiseDateComponents(forKey: .startDate)
+        endOnDateComponents = try container.decodeOmiseDateComponents(forKey: .endDate)
         
         occurrences = try container.decode(ListProperty<Occurrence<Data>>.self, forKey: .occurrences)
-        nextOccurrenceDates = try container.decodeOmiseDateComponentsArray(forKey: .nextOccurrenceDates)
+        nextOccurrencesOnDateComponents = try container.decodeOmiseDateComponentsArray(forKey: .nextOccurrenceDates)
         
         let parameterKey = container.allKeys.first(where: { (key) -> Bool in
             if case .parameter = key {
@@ -157,7 +171,7 @@ extension Schedule {
             }
         })
         if let parameterKey = parameterKey {
-            parameter = try container.decode(Data.Parameter.self, forKey: parameterKey)
+            scheduleData = try container.decode(Data.ScheduleData.self, forKey: parameterKey)
         } else {
             throw DecodingError.keyNotFound(
                 Schedule<Data>.CodingKeys.parameter("parameter"),
@@ -173,46 +187,26 @@ extension Schedule {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isDeleted, forKey: .isDeleted)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(status, forKey: .status)
+        try container.encode(isActive, forKey: .isActive)
         try container.encode(every, forKey: .every)
         
         try period.encode(to: encoder)
         
-        try container.encodeOmiseDateComponents(startDate, forKey: .startDate)
-        try container.encodeOmiseDateComponents(endDate, forKey: .endDate)
+        try container.encodeOmiseDateComponents(startOnDateComponents, forKey: .startDate)
+        try container.encodeOmiseDateComponents(endOnDateComponents, forKey: .endDate)
         try container.encode(occurrences, forKey: .occurrences)
-        try container.encodeOmiseDateComponentsArray(nextOccurrenceDates, forKey: .nextOccurrenceDates)
-        try container.encode(parameter, forKey: .parameter(Data.parameterKey))
+        try container.encodeOmiseDateComponentsArray(nextOccurrencesOnDateComponents, forKey: .nextOccurrenceDates)
+        try container.encode(scheduleData, forKey: .parameter(Data.parameterKey))
     }
 }
 
 extension Calendar {
-    public static var scheduleAPICalendar: Calendar {
+    public static let scheduleAPICalendar: Calendar = {
         return Calendar(identifier: .gregorian)
-    }
-}
-
-public protocol SchedulingParameter: Codable {}
-
-public protocol Schedulable: OmiseIdentifiableObject, OmiseCreatableObject {
-    associatedtype Parameter: SchedulingParameter
-    static func isValidParameterKey(_ key: String) -> Bool
-    static var parameterKey: String { get }
-}
-
-public protocol APISchedulable: Schedulable {
-    associatedtype ScheduleDataParams: APIJSONQuery
-}
-
-extension Schedulable {
-    public static var parameterKey: String {
-        return String(describing: self).lowercased()
-    }
-    
-    public static func isValidParameterKey(_ key: String) -> Bool {
-        return parameterKey == key
-    }
+    }()
 }
 
 
@@ -221,8 +215,8 @@ extension Schedule.Status: Codable {
         let container = try decoder.singleValueContainer()
         let status = try container.decode(String.self)
         switch status {
-        case "active":
-            self = .active
+        case "running":
+            self = .running
         case "expiring":
             self = .expiring
         case "expired":
@@ -240,8 +234,8 @@ extension Schedule.Status: Codable {
         var container = encoder.singleValueContainer()
         let status: String
         switch self {
-        case .active:
-            status = "active"
+        case .running:
+            status = "running"
         case .expiring:
             status = "expiring"
         case .expired:
@@ -258,89 +252,18 @@ extension Schedule.Status: Codable {
 }
 
 
-public struct AnySchedulable: Schedulable {
-    public enum AnySchedulingParameter: SchedulingParameter {
-        case charge(ChargeSchedulingParameter)
-        case transfer(TransferSchedulingParameter)
-        case other(json: [String: Any])
-        
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            
-            if let chargeParameter = try? container.decode(ChargeSchedulingParameter.self) {
-                self = .charge(chargeParameter)
-            } else if let transferParameter = try? container.decode(TransferSchedulingParameter.self) {
-                self = .transfer(transferParameter)
-            } else {
-                let json = try decoder.decodeJSONDictionary()
-                self = .other(json: json)
-            }
-        }
-        
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            switch self {
-            case .charge(let parameter):
-                try container.encode(parameter)
-            case .transfer(let parameter):
-                try container.encode(parameter)
-            case .other(json: let parameter):
-                try encoder.encodeJSONDictionary(parameter)
-            }
-        }
-    }
-    
-    public typealias Parameter = AnySchedulingParameter
-    public let id: String
-    public let createdDate: Date
-    public let object: String
-    
-    public let json: [String: Any]
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case createdDate = "created"
-        case object
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let json = try decoder.decodeJSONDictionary()
-        
-        guard let object = json["object"] as? String else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
-            throw DecodingError.keyNotFound(CodingKeys.object, context)
-        }
-        
-        guard let id = json["id"] as? String else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
-            throw DecodingError.keyNotFound(CodingKeys.id, context)
-        }
-        guard let createdDate = json["created"] as? Date else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
-            throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
-        }
-        
-        (self.object, self.id, self.createdDate) = (object, id, createdDate)
-        self.json = json
-    }
-    
-    public static func isValidParameterKey(_ key: String) -> Bool {
-        return key == Charge.parameterKey || key == Transfer.parameterKey
-    }
-}
-
-
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
+extension Schedule: Destroyable {}
 
 
-public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
+public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {
     public let every: Int
     public let period: Period
     public let endDate: DateComponents
     public let startDate: DateComponents?
     
-    public let scheduleData: Data.ScheduleDataParams
+    public let scheduleData: Data.Parameter
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Schedule<Data>.CodingKeys.self)
@@ -355,7 +278,7 @@ public struct ScheduleParams<Data: APISchedulable>: APIJSONQuery {
     }
 }
 
-extension Schedule : Creatable where Data : Creatable & APISchedulable {
+extension Schedule : Creatable where Data : Creatable & Schedulable {
     public typealias CreateParams = ScheduleParams<Data>
 }
 

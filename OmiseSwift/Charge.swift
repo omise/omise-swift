@@ -8,7 +8,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public let createdDate: Date
     
     public var status: Charge.Status
@@ -25,6 +25,29 @@ public struct Charge: OmiseResourceObject, Equatable {
         return Value(amount: fundingAmount, currency: fundingCurrency)
     }
     
+    public let feeAmount: Int64
+    public var feeValue: Value {
+        return Value(amount: feeAmount, currency: fundingCurrency)
+    }
+    public let feeVatAmount: Int64
+    public var feeVatValue: Value {
+        return Value(amount: feeVatAmount, currency: fundingCurrency)
+    }
+    
+    public let interestAmount: Int64
+    public var interestValue: Value {
+        return Value(amount: interestAmount, currency: fundingCurrency)
+    }
+    public let interestVatAmount: Int64
+    public var interestVatValue: Value {
+        return Value(amount: interestVatAmount, currency: fundingCurrency)
+    }
+    
+    public let netAmount: Int64
+    public var netValue: Value {
+        return Value(amount: netAmount, currency: fundingCurrency)
+    }
+    
     public var chargeDescription: String?
     
     public let isAutoCapture: Bool
@@ -34,7 +57,12 @@ public struct Charge: OmiseResourceObject, Equatable {
     public let paidDate: Date?
     
     public let isReversed: Bool
+    public let reversedDate: Date?
     public let isVoided: Bool
+    
+    public let expectedEpiresDate: Date
+    public let isExpired: Bool
+    public let expiredDate: Date?
     
     public let isDisputable: Bool
     public let isCapturable: Bool
@@ -59,10 +87,13 @@ public struct Charge: OmiseResourceObject, Equatable {
         }
     }
     
-    public var refunded: Int64?
+    public var refundedAmount: Int64?
     public var refunds: ListProperty<Refund>?
     
     public var customer: DetailProperty<Customer>?
+    
+    public let schedule: DetailProperty<Schedule<Charge>>?
+    public let link: DetailProperty<Link>?
     
     public var ipAddress: String?
     public var dispute: Dispute?
@@ -117,8 +148,8 @@ extension Charge {
         case object
         case location
         case id
-        case isLive = "livemode"
-        case createdDate = "created"
+        case isLiveMode = "livemode"
+        case createdDate = "created_at"
         case status
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
@@ -126,13 +157,22 @@ extension Charge {
         case currency
         case fundingAmount = "funding_amount"
         case fundingCurrency = "funding_currency"
+        case feeAmount = "fee"
+        case feeVatAmount = "fee_vat"
+        case interestAmount = "interest"
+        case interestVatAmount = "interest_vat"
+        case netAmount = "net"
         case paidDate = "paid_at"
         case isReversed = "reversed"
+        case reversedDate = "reversed_at"
         case chargeDescription = "description"
         case isAutoCapture = "capture"
         case isAuthorized = "authorized"
         case isPaid = "paid"
         case isVoided = "voided"
+        case expectedEpiresDate = "expires_at"
+        case isExpired = "expired"
+        case expiredDate = "expired_at"
         case isDisputable = "disputable"
         case isCapturable = "capturable"
         case isReversible = "reversible"
@@ -141,9 +181,11 @@ extension Charge {
         case transaction
         case card
         case source
-        case refunded
+        case refundedAmount = "refunded_amount"
         case refunds
         case customer
+        case schedule
+        case link
         case ipAddress = "ip"
         case dispute
         case returnURL = "return_uri"
@@ -156,33 +198,39 @@ extension Charge {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
         fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
         fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
+        feeAmount = try container.decode(Int64.self, forKey: .feeAmount)
+        feeVatAmount = try container.decode(Int64.self, forKey: .feeVatAmount)
+        interestAmount = try container.decode(Int64.self, forKey: .interestAmount)
+        interestVatAmount = try container.decode(Int64.self, forKey: .interestVatAmount)
+        netAmount = try container.decode(Int64.self, forKey: .netAmount)
         chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
         isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
         isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
-        do {
-            isPaid = try container.decode(Bool.self, forKey: .isCaptured)
-        } catch DecodingError.keyNotFound {
-            isPaid = try container.decode(Bool.self, forKey: .isPaid)
-        }
+        isPaid = try container.decode(Bool.self, forKey: .isPaid)
         paidDate = try container.decodeIfPresent(Date.self, forKey: .paidDate)
         isReversed = try container.decode(Bool.self, forKey: .isReversed)
+        reversedDate = try container.decodeIfPresent(Date.self, forKey: .reversedDate)
         isVoided = try container.decode(Bool.self, forKey: .isVoided)
+        expectedEpiresDate = try container.decode(Date.self, forKey: .expectedEpiresDate)
+        isExpired = try container.decode(Bool.self, forKey: .isExpired)
+        expiredDate = try container.decodeIfPresent(Date.self, forKey: .expiredDate)
         isDisputable = try container.decode(Bool.self, forKey: .isDisputable)
         isCapturable = try container.decode(Bool.self, forKey: .isCapturable)
         isReversible = try container.decode(Bool.self, forKey: .isReversible)
         isRefundable = try container.decode(Bool.self, forKey: .isRefundable)
-
         transaction = try container.decodeIfPresent(DetailProperty<Transaction>.self, forKey: .transaction)
-        refunded = try container.decodeIfPresent(Int64.self, forKey: .refunded)
+        refundedAmount = try container.decodeIfPresent(Int64.self, forKey: .refundedAmount)
         refunds = try container.decodeIfPresent(ListProperty<Refund>.self, forKey: .refunds)
         customer = try container.decodeIfPresent(DetailProperty<Customer>.self, forKey: .customer)
         ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress)
+        schedule = try container.decodeIfPresent(DetailProperty<Schedule<Charge>>.self, forKey: .schedule)
+        link = try container.decodeIfPresent(DetailProperty<Link>.self, forKey: .link)
         dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
         returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
         authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
@@ -235,31 +283,40 @@ extension Charge {
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
 
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
         try container.encode(fundingAmount, forKey: .fundingAmount)
         try container.encode(fundingCurrency, forKey: .fundingCurrency)
+        try container.encode(feeAmount, forKey: .feeAmount)
+        try container.encode(feeVatAmount, forKey: .feeVatAmount)
+        try container.encode(interestAmount, forKey: .interestAmount)
+        try container.encode(interestVatAmount, forKey: .interestVatAmount)
+        try container.encode(netAmount, forKey: .netAmount)
         try container.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
         try container.encode(isAutoCapture, forKey: .isAutoCapture)
         try container.encode(isAuthorized, forKey: .isAuthorized)
         try container.encode(isPaid, forKey: .isPaid)
         try container.encodeIfPresent(paidDate, forKey: .paidDate)
-
         try container.encode(isReversed, forKey: .isReversed)
+        try container.encodeIfPresent(reversedDate, forKey: .reversedDate)
         try container.encode(isVoided, forKey: .isVoided)
+        try container.encode(expectedEpiresDate, forKey: .expectedEpiresDate)
+        try container.encode(isExpired, forKey: .isExpired)
+        try container.encodeIfPresent(expiredDate, forKey: .expiredDate)
         try container.encode(isDisputable, forKey: .isDisputable)
         try container.encode(isCapturable, forKey: .isCapturable)
         try container.encode(isReversible, forKey: .isReversible)
         try container.encode(isRefundable, forKey: .isRefundable)
-
         try container.encodeIfPresent(transaction, forKey: .transaction)
-        try container.encodeIfPresent(refunded, forKey: .refunded)
+        try container.encodeIfPresent(refundedAmount, forKey: .refundedAmount)
         try container.encodeIfPresent(refunds, forKey: .refunds)
         try container.encodeIfPresent(customer, forKey: .customer)
         try container.encodeIfPresent(ipAddress, forKey: .ipAddress)
         try container.encodeIfPresent(dispute, forKey: .dispute)
+        try container.encodeIfPresent(schedule, forKey: .schedule)
+        try container.encodeIfPresent(link, forKey: .link)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
         try container.encodeIfPresent(authorizedURL, forKey: .authorizedURL)
         try container.encode(metadata, forKey: .metadata)
@@ -422,7 +479,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         case isCaptured = "captured"
         case capturedDate = "captured_at"
         case cardLastDigits = "card_last_digits"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isCustomerPresent = "customer_present"
         case isDisputed = "disputed"
         case failureCode = "failure_code"
@@ -508,48 +565,6 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
-public struct ChargeSchedulingParameter: SchedulingParameter, APIJSONQuery {
-    public let value: Value
-    public let customerID: String
-    public let cardID: String?
-    public let chargeDescription: String?
-    
-    public init(value: Value, customerID: String, cardID: String?, description: String?) {
-        self.value = value
-        self.customerID = customerID
-        self.cardID = cardID
-        self.chargeDescription = description
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case customerID = "customer"
-        case amount
-        case currency
-        case cardID = "card"
-        case chargeDescription = "description"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        cardID = try container.decodeIfPresent(String.self, forKey: .cardID)
-        let amount = try container.decode(Int64.self, forKey: .amount)
-        let currency = try container.decode(Currency.self, forKey: .currency)
-        
-        self.value = Value(amount: amount, currency: currency)
-        customerID = try container.decode(String.self, forKey: .customerID)
-        chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var keyedContainer = encoder.container(keyedBy: CodingKeys.self)
-        try keyedContainer.encode(customerID, forKey: .customerID)
-        try keyedContainer.encode(value.amount, forKey: .amount)
-        try keyedContainer.encode(value.currency, forKey: .currency)
-        try keyedContainer.encodeIfPresent(cardID, forKey: .cardID)
-        try keyedContainer.encodeIfPresent(chargeDescription, forKey: .chargeDescription)
-    }
-}
-
 
 extension Charge: Listable {}
 extension Charge: Retrievable {}
@@ -565,10 +580,4 @@ extension Charge: Updatable {
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
-
-extension Charge: Schedulable, APISchedulable {
-    public typealias Parameter = ChargeSchedulingParameter
-    public typealias ScheduleDataParams = ChargeSchedulingParameter
-}
-
 

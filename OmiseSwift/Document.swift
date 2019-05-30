@@ -8,18 +8,22 @@ public struct Document: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public var createdDate: Date
+    public let isDeleted: Bool
     
     public let filename: String
+    public let downloadURL: URL?
     
     private enum CodingKeys: String, CodingKey {
         case object
         case location
         case id
-        case isLive = "livemode"
-        case createdDate = "created"
+        case isLiveMode = "livemode"
+        case createdDate = "created_at"
+        case isDeleted = "deleted"
         case filename
+        case downloadURL = "download_uri"
     }
 
 }

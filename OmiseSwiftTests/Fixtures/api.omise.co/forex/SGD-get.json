@@ -1,7 +1,8 @@
 {
   "object": "forex",
-  "from": "sgd",
-  "to": "thb",
+  "livemode": false,
+  "base": "sgd",
+  "quote": "thb",
   "rate": 24.054176718999997,
   "location": "/forex/sgd"
 }

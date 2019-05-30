@@ -1,0 +1,57 @@
+{
+  "object": "schedule",
+  "id": "schd_test_5fzcqxg53hhuhz49e73",
+  "livemode": false,
+  "deleted": true,
+  "location": "/schedules/schd_test_5fzcqxg53hhuhz49e73",
+  "created_at": "2019-05-22T06:55:11Z",
+  "status": "deleted",
+  "active": true,
+  "every": 1,
+  "period": "month",
+  "on": {
+    "days_of_month": [
+      25
+    ]
+  },
+  "in_words": "Every 1 month(s) on the 25th",
+  "start_on": "2019-05-22",
+  "end_on": "2020-05-22",
+  "charge": {
+    "object": "scheduled_charge",
+    "id": "rchg_test_5fzcqxg2busab7egoqc",
+    "livemode": false,
+    "created_at": "2019-05-22T06:55:11Z",
+    "customer": "cust_test_5fz0olfpy32zadv96ek",
+    "default_card": true,
+    "card": "card_test_5fzbq7cypephj6fd3zq",
+    "description": "Deleted Charge Schedule",
+    "amount": 1000000,
+    "currency": "THB"
+  },
+  "occurrences": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2019-05-23T05:08:30Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": "chronological",
+    "location": "/schedules/schd_test_5fzcqxg53hhuhz49e73/occurrences",
+    "data": []
+  },
+  "next_occurrences_on": [
+    "2019-05-25",
+    "2019-06-25",
+    "2019-07-25",
+    "2019-08-25",
+    "2019-09-25",
+    "2019-10-25",
+    "2019-11-25",
+    "2019-12-25",
+    "2020-01-25",
+    "2020-02-25",
+    "2020-03-25",
+    "2020-04-25"
+  ]
+}

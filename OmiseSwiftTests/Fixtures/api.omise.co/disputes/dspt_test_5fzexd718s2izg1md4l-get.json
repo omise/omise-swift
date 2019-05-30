@@ -1,0 +1,45 @@
+{
+  "object": "dispute",
+  "id": "dspt_test_5fzexd718s2izg1md4l",
+  "livemode": false,
+  "location": "/disputes/dspt_test_5fzexd718s2izg1md4l",
+  "created_at": "2019-05-22T10:38:00Z",
+  "amount": 1000000,
+  "currency": "THB",
+  "funding_amount": 1000000,
+  "funding_currency": "THB",
+  "status": "open",
+  "message": null,
+  "reason_code": "goods_or_services_not_provided",
+  "reason_message": "Services not provided or Merchandise not received",
+  "admin_message": null,
+  "closed_at": null,
+  "charge": "chrg_test_5fzbppsjk5q9cxqjz0o",
+  "transactions": [
+    {
+      "object": "transaction",
+      "id": "trxn_test_5fzexd78n6tue5redq4",
+      "livemode": false,
+      "location": "/transactions/trxn_test_5fzexd78n6tue5redq4",
+      "created_at": "2019-05-22T10:38:00Z",
+      "direction": "debit",
+      "key": "dispute.started.debit",
+      "origin": "dspt_test_5fzexd718s2izg1md4l",
+      "amount": 1000000,
+      "currency": "THB",
+      "transferable_at": "2019-05-22T10:38:00Z"
+    }
+  ],
+  "documents": {
+    "object": "list",
+    "from": "1970-01-01T00:00:00Z",
+    "to": "2019-05-22T10:40:07Z",
+    "offset": 0,
+    "limit": 20,
+    "total": 0,
+    "order": "chronological",
+    "location": "/disputes/dspt_test_5fzexd718s2izg1md4l/documents",
+    "data": []
+  },
+  "metadata": {}
+}

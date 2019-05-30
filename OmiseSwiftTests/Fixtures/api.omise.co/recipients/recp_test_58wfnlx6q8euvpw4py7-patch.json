@@ -1,0 +1,29 @@
+{
+  "object": "recipient",
+  "id": "recp_test_58wfnlx6q8euvpw4py7",
+  "livemode": false,
+  "location": "/recipients/recp_test_58wfnlx6q8euvpw4py7",
+  "created_at": "2017-08-08T12:59:22Z",
+  "deleted": false,
+  "verified": true,
+  "default": true,
+  "active": true,
+  "name": "mobile.omise+th@gmail.com",
+  "email": "mobile.omise+th@gmail.com",
+  "description": "Default recipient",
+  "type": "individual",
+  "tax_id": "",
+  "bank_account": {
+    "object": "bank_account",
+    "livemode": false,
+    "created_at": "2019-05-22T06:52:15Z",
+    "last_digits": "6789",
+    "name": "DEFAULT BANK ACCOUNT",
+    "type": null,
+    "brand": "test",
+    "bank_code": "TEST - Test Bank",
+    "branch_code": null
+  },
+  "failure_code": null,
+  "metadata": {}
+}

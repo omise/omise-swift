@@ -14,16 +14,16 @@ public protocol OmiseIdentifiableObject: OmiseObject {
     var id: String { get }
 }
 
-public protocol OmiseCreatableObject: OmiseObject {
+public protocol OmiseCreatedObject: OmiseObject {
     var createdDate: Date { get }
 }
 
 public protocol OmiseLiveModeObject: OmiseObject {
-    var isLive: Bool { get }
+    var isLiveMode: Bool { get }
 }
 
 
-public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatableObject {}
+public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {}
 
 extension OmiseIdentifiableObject where Self: Equatable {
     public static func ==(lhs: Self, rhs: Self) -> Bool {

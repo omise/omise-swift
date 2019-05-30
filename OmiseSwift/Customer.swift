@@ -1,5 +1,6 @@
 import Foundation
 
+
 public struct Customer: OmiseResourceObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/customers")
     
@@ -7,14 +8,16 @@ public struct Customer: OmiseResourceObject, Equatable {
     public let object: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public var createdDate: Date
     
-    public let defaultCard: DetailProperty<Card>?
+    public let isDeleted: Bool
+    
+    public let defaultCard: DetailProperty<CustomerCard>?
     public let email: String
     
     public var customerDescription: String?
-    public var cards: ListProperty<Card>
+    public var cards: ListProperty<CustomerCard>
     
     public let metadata: JSONDictionary
 }
@@ -25,8 +28,9 @@ extension Customer {
         case object
         case location
         case id
-        case isLive = "livemode"
-        case createdDate = "created"
+        case isLiveMode = "livemode"
+        case createdDate = "created_at"
+        case isDeleted = "deleted"
         case defaultCard = "default_card"
         case email
         case customerDescription = "description"
@@ -39,12 +43,13 @@ extension Customer {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
-        defaultCard = try container.decodeIfPresent(DetailProperty<Card>.self, forKey: .defaultCard)
+        isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
+        defaultCard = try container.decodeIfPresent(DetailProperty<CustomerCard>.self, forKey: .defaultCard)
         email = try container.decode(String.self, forKey: .email)
         customerDescription = try container.decodeIfPresent(String.self, forKey: .customerDescription)
-        cards = try container.decode(ListProperty<Card>.self, forKey: .cards)
+        cards = try container.decode(ListProperty<CustomerCard>.self, forKey: .cards)
         metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
     }
     
@@ -53,8 +58,9 @@ extension Customer {
         try container.encode(object, forKey: .object)
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(defaultCard, forKey: .defaultCard)
         try container.encode(email, forKey: .email)
         try container.encodeIfPresent(customerDescription, forKey: .customerDescription)

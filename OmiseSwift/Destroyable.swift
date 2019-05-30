@@ -1,24 +1,13 @@
 import Foundation
 
-public struct DeletedObject<DeletedObjectType: Destroyable & OmiseResourceObject>: OmiseLiveModeObject, Equatable, Decodable {
-    public let isLive: Bool
-    public let object: String
-    public let id: String
-}
 
-extension DeletedObject {
-    private enum CodingKeys: String, CodingKey {
-        case object
-        case id
-        case isLive = "livemode"
-    }
+public protocol Destroyable {
+    var isDeleted: Bool { get }
 }
-
-public protocol Destroyable {}
 
 public extension Destroyable where Self: OmiseResourceObject {
-    typealias DestroyEndpoint = APIEndpoint<DeletedObject<Self>>
-    typealias DestroyRequest = APIRequest<DeletedObject<Self>>
+    typealias DestroyEndpoint = APIEndpoint<Self>
+    typealias DestroyRequest = APIRequest<Self>
     
     static func destroyEndpointWith(parent: OmiseResourceObject?, id: String) -> DestroyEndpoint {
         return DestroyEndpoint(

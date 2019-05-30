@@ -6,7 +6,7 @@ private let defaultReturnURL = URL(string: "https://omise.co")!
 
 class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeRetrieve() {
-        let chargeTestingID = "chrg_test_5dxvbupj5e337skzplh"
+        let chargeTestingID = "chrg_test_retrieve"
         let expectation = self.expectation(description: "Charge result")
         
         let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
@@ -14,19 +14,19 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
-                XCTAssertEqual(charge.value.currency, .usd)
-                XCTAssertEqual(charge.chargeDescription, "Charge for order 3947")
+                XCTAssertEqual(charge.value.amount, 10_000_00)
+                XCTAssertEqual(charge.value.currency, .thb)
+                XCTAssertNil(charge.chargeDescription)
                 XCTAssertEqual(charge.id, chargeTestingID)
-                XCTAssertEqual(charge.location, "/charges/chrg_test_5dxvbupj5e337skzplh")
-                XCTAssertEqual(charge.isLive, false)
-                XCTAssertEqual(charge.fundingAmount, 3174194)
+                XCTAssertEqual(charge.location, "/charges/chrg_test_retrieve")
+                XCTAssertEqual(charge.isLiveMode, false)
+                XCTAssertEqual(charge.fundingAmount, 10_000_00)
                 XCTAssertEqual(charge.fundingCurrency, .thb)
-                XCTAssertEqual(charge.refunded, 10000)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5dxvbusat651hoatw00")
-                XCTAssertEqual(charge.customer?.dataID, "cust_test_4yq6txdpfadhbaqnwp3")
-                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2018-11-15T09:55:31Z"))
-                XCTAssertEqual(charge.card?.id, "card_test_5dxvbuja3f2n02o4wlg")
+                XCTAssertEqual(charge.refundedAmount, 0)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzbppuzeobh8evajc2")
+                XCTAssertNil(charge.customer?.dataID)
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-05-22T05:09:28Z"))
+                XCTAssertEqual(charge.card?.id, "card_test_5fzbppot4s4ozksb0f9")
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -37,7 +37,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_57v787rzs4vr0dj1xc0")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_retrieve")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -48,7 +48,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -58,7 +58,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -72,10 +72,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
-        XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
-        XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.countryCode, decodedCharge.card?.billingAddress.countryCode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.city, decodedCharge.card?.billingAddress.city)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.postalCode, decodedCharge.card?.billingAddress.postalCode)
         XCTAssertEqual(defaultCharge.card?.financing, decodedCharge.card?.financing)
         XCTAssertEqual(defaultCharge.card?.bankName, decodedCharge.card?.bankName)
         XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
@@ -96,118 +96,31 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.value.currency, defaultCharge.value.currency)
     }
     
-    func testCharge2014APIRetrieve() {
+    func testDisputedChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_57v787rzs4vr0dj1xc0") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_disputed") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 2_00_00)
                 XCTAssertEqual(charge.value.currency.code, "THB")
-                XCTAssertEqual(charge.chargeDescription, "Test API Version 2014-07-27.")
-                XCTAssertEqual(charge.id, "chrg_test_57v787rzs4vr0dj1xc0")
-                XCTAssertEqual(charge.location, "/charges/chrg_test_57v787rzs4vr0dj1xc0")
-                XCTAssertEqual(charge.isLive, false)
-                XCTAssertEqual(charge.isPaid, true)
-                XCTAssertEqual(charge.refunded, 10000)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_57v787szdbe4b2ala5p")
-                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-05-05T08:17:33Z"))
-                XCTAssertEqual(charge.card?.id, "card_test_57v7856t6viu321t7h4")
-            case let .failure(error):
-                XCTFail("\(error)")
-            }
-        }
-        
-        XCTAssertNotNil(request)
-        waitForExpectations(timeout: 15.0, handler: nil)
-    }
-    
-    func testEncodeCharge2014APIRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_57v787rzs4vr0dj1xc0")
-        
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        let encodedData = try encoder.encode(defaultCharge)
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
-        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
-        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
-        XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
-        XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
-        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
-        XCTAssertEqual(defaultCharge.status, decodedCharge.status)
-        XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
-        XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
-        
-        XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
-        XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
-        XCTAssertEqual(defaultCharge.refunds?.to, decodedCharge.refunds?.to)
-        XCTAssertEqual(defaultCharge.refunds?.offset, decodedCharge.refunds?.offset)
-        XCTAssertEqual(defaultCharge.refunds?.limit, decodedCharge.refunds?.limit)
-        XCTAssertEqual(defaultCharge.refunds?.total, decodedCharge.refunds?.total)
-        
-        XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
-        
-        XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
-        XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
-        XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
-        XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
-        XCTAssertEqual(defaultCharge.card?.financing, decodedCharge.card?.financing)
-        XCTAssertEqual(defaultCharge.card?.bankName, decodedCharge.card?.bankName)
-        XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
-        XCTAssertEqual(defaultCharge.card?.brand, decodedCharge.card?.brand)
-        XCTAssertEqual(defaultCharge.card?.expiration?.month, decodedCharge.card?.expiration?.month)
-        XCTAssertEqual(defaultCharge.card?.expiration?.year, decodedCharge.card?.expiration?.year)
-        XCTAssertEqual(defaultCharge.card?.fingerPrint, decodedCharge.card?.fingerPrint)
-        XCTAssertEqual(defaultCharge.card?.name, decodedCharge.card?.name)
-        XCTAssertEqual(defaultCharge.card?.createdDate, decodedCharge.card?.createdDate)
-        
-        XCTAssertEqual(defaultCharge.customer?.dataID, decodedCharge.customer?.dataID)
-        XCTAssertEqual(defaultCharge.ipAddress, decodedCharge.ipAddress)
-        XCTAssertEqual(defaultCharge.dispute?.amount, decodedCharge.dispute?.amount)
-        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
-        
-        XCTAssertEqual(defaultCharge.value.amount, decodedCharge.value.amount)
-        XCTAssertEqual(defaultCharge.value.amountInUnit, decodedCharge.value.amountInUnit)
-        XCTAssertEqual(defaultCharge.value.currency, defaultCharge.value.currency)
-    }
-    
-    func testDisputedCharge() {
-        let expectation = self.expectation(description: "Charge result")
-        
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_58qdpc54lq6a5enm88m") { (result) in
-            defer { expectation.fulfill() }
-            
-            switch result {
-            case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 31_900_00)
-                XCTAssertEqual(charge.value.currency.code, "THB")
-                XCTAssertNil(charge.chargeDescription)
-                XCTAssertEqual(charge.id, "chrg_test_58qdpc54lq6a5enm88m")
-                XCTAssertEqual(charge.location, "/charges/chrg_test_58qdpc54lq6a5enm88m")
-                XCTAssertEqual(charge.isLive, false)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_58qdpcrr81jsqpoks6l")
-                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2017-07-24T01:30:01Z"))
+                XCTAssertEqual(charge.chargeDescription, "John Doe")
+                XCTAssertEqual(charge.id, "chrg_test_disputed")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_disputed")
+                XCTAssertEqual(charge.isLiveMode, false)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5flpmtfvna92r53pzuh")
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-04-17T09:50:17Z"))
                 XCTAssertNotNil(charge.dispute)
                 
-                XCTAssertEqual(charge.dispute?.id, "dspt_test_58qhpee050f4qo36rnp")
-                XCTAssertEqual(charge.dispute?.value.amount, 3190000)
+                XCTAssertEqual(charge.dispute?.id, "dspt_test_5fqcgl9si4xqs3fi4hp")
+                XCTAssertEqual(charge.dispute?.value.amount, 200_00)
                 XCTAssertEqual(charge.dispute?.status, .pending)
                 XCTAssertEqual(charge.dispute?.reasonCode, .goodsOrServicesNotProvided)
                 XCTAssertEqual(charge.dispute?.reasonMessage, "Services not provided or Merchandise not received")
                 XCTAssertEqual(charge.dispute?.responseMessage, "This is a response message")
-                XCTAssertEqual(charge.dispute?.charge.dataID, "chrg_test_58qdpc54lq6a5enm88m")
+                XCTAssertEqual(charge.dispute?.charge.dataID, "chrg_test_disputed")
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -218,7 +131,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeDisputedCharge() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_58qdpc54lq6a5enm88m")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_disputed")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -228,7 +141,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -238,7 +151,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -252,10 +165,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
-        XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
-        XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.countryCode, decodedCharge.card?.billingAddress.countryCode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.city, decodedCharge.card?.billingAddress.city)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.postalCode, decodedCharge.card?.billingAddress.postalCode)
         XCTAssertEqual(defaultCharge.card?.financing, decodedCharge.card?.financing)
         XCTAssertEqual(defaultCharge.card?.bankName, decodedCharge.card?.bankName)
         XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
@@ -278,13 +191,13 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertNotNil(decodedCharge.dispute)
         XCTAssertEqual(defaultCharge.dispute?.object, decodedCharge.dispute?.object)
         XCTAssertEqual(defaultCharge.dispute?.id, decodedCharge.dispute?.id)
-        XCTAssertEqual(defaultCharge.dispute?.isLive, decodedCharge.dispute?.isLive)
+        XCTAssertEqual(defaultCharge.dispute?.isLiveMode, decodedCharge.dispute?.isLiveMode)
         XCTAssertEqual(defaultCharge.dispute?.location, decodedCharge.dispute?.location)
         XCTAssertEqual(defaultCharge.dispute?.value.amount, decodedCharge.dispute?.value.amount)
         XCTAssertEqual(defaultCharge.dispute?.value.amountInUnit, decodedCharge.dispute?.value.amountInUnit)
         XCTAssertEqual(defaultCharge.dispute?.value.currency, decodedCharge.dispute?.value.currency)
         XCTAssertEqual(defaultCharge.dispute?.status, decodedCharge.dispute?.status)
-        XCTAssertEqual(defaultCharge.dispute?.transaction.dataID, decodedCharge.dispute?.transaction.dataID)
+        XCTAssertEqual(defaultCharge.dispute?.transactions.first?.id, decodedCharge.dispute?.transactions.first?.id)
         XCTAssertEqual(defaultCharge.dispute?.reasonCode, decodedCharge.dispute?.reasonCode)
         XCTAssertEqual(defaultCharge.dispute?.reasonMessage, decodedCharge.dispute?.reasonMessage)
         XCTAssertEqual(defaultCharge.dispute?.responseMessage, decodedCharge.dispute?.responseMessage)
@@ -299,7 +212,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultDocument.object, decodedDocument.object)
         XCTAssertEqual(defaultDocument.id, decodedDocument.id)
-        XCTAssertEqual(defaultDocument.isLive, decodedDocument.isLive)
+        XCTAssertEqual(defaultDocument.isLiveMode, decodedDocument.isLiveMode)
         XCTAssertEqual(defaultDocument.location, decodedDocument.location)
         XCTAssertEqual(defaultDocument.filename, decodedDocument.filename)
         XCTAssertEqual(defaultDocument.createdDate, decodedDocument.createdDate)
@@ -314,17 +227,16 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(chargesList):
                 XCTAssertNotNil(chargesList.data)
-                XCTAssertEqual(chargesList.data.count, 60)
+                XCTAssertEqual(chargesList.data.count, 20)
                 let chargeSampleData = chargesList.data.first
                 XCTAssertNotNil(chargeSampleData)
-                XCTAssertEqual(chargeSampleData?.value.amount, 2000)
-                XCTAssertEqual(chargeSampleData?.value.currency, .usd)
-                XCTAssertEqual(chargeSampleData?.fundingValue.amount, 63754)
+                XCTAssertEqual(chargeSampleData?.value.amount, 1000000)
+                XCTAssertEqual(chargeSampleData?.value.currency, .thb)
+                XCTAssertEqual(chargeSampleData?.fundingValue.amount, 1000000)
                 XCTAssertEqual(chargeSampleData?.fundingValue.currency, .thb)
                 
-                
-                let expiredCharges = chargesList.data.filter({ .expired ~= $0.status })
-                XCTAssertEqual(expiredCharges.count, 6)
+                let pendingCharges = chargesList.data.filter({ .pending ~= $0.status })
+                XCTAssertEqual(pendingCharges.count, 14)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -336,7 +248,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testCustomerChargeCreate() {
         let expectation = self.expectation(description: "Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), customerID: "cust_test_5dzgpes169hkk7n1b4n")
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), customerID: "cust_test_customer")
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -344,10 +256,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 100000)
-                XCTAssertEqual(charge.value.currency, .usd)
-                
-                XCTAssertEqual(charge.fundingValue.amount, 3165630)
+                XCTAssertEqual(charge.fundingValue.amount, 10_000_00)
                 XCTAssertEqual(charge.fundingValue.currency, .thb)
                 
                 
@@ -362,7 +271,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testAlipayChargeCreate() {
         let expectation = self.expectation(description: "Alipay Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .alipay, returnURL: defaultReturnURL)
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .alipay, returnURL: defaultReturnURL)
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -370,7 +279,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation, .alipay)
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
             case let .failure(error):
@@ -384,17 +293,22 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testBillPaymentChargeCreate() {
         let expectation = self.expectation(description: "Bill Payment Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .billPayment(.tescoLotus), returnURL: defaultReturnURL)
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .billPayment(.tescoLotus), returnURL: defaultReturnURL)
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
             
-            let billInformation = EnrolledSource.EnrolledPaymentInformation.BillPayment.BillInformation(omiseTaxID: "0105556091152", referenceNumber1: "128971730818814014", referenceNumber2: "464538863396896659", barcodeURL: URL(string: "https://api.omise.co/charges/chrg_test_5dzgra4ne1hzlxxvkuf/documents/docu_test_5dzgra5sq6w6myznkv8/downloads/5CD761E748448EEA")!, expired: dateFormatter.date(from: "2018-11-20T11:48:35Z")!)
+            let billInformation = EnrolledSource.EnrolledPaymentInformation.BillPayment.BillInformation(
+                omiseTaxID: "0105556091152",
+                referenceNumber1: "072069591314674529",
+                referenceNumber2: "973863183337739418",
+                barcodeURL: URL(string: "https://api.omise.co/charges/chrg_test_5fz0fjxkigm3hytmr0s/documents/docu_test_5fz0fjysdfl69m8on9k/downloads/A20EAA1FA45FAFEC")!,
+                expiredDate: dateFormatter.date(from: "2019-05-22T09:55:39Z")!)
             
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 1_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation, .billPayment(.tescoLotus(billInformation)))
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
             case let .failure(error):
@@ -408,7 +322,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testInternetBankingChargeCreate() {
         let expectation = self.expectation(description: "Internet Banking SCB Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .internetBanking(.scb), returnURL: defaultReturnURL)
+        let createParams = ChargeParams(value: Value(amount: 100_00, currency: .thb), sourceType: .internetBanking(.scb), returnURL: defaultReturnURL)
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -416,7 +330,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation, .internetBanking(.scb))
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
             case let .failure(error):
@@ -431,7 +345,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Barcode Alipay Charge create")
         
         let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
-        let createParams = ChargeParams(value: Value(amount: 1_000_00, currency: .thb), sourceType: .barcode(.alipay(alipayBarcode)))
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .barcode(.alipay(alipayBarcode)))
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -439,8 +353,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 1_000_00)
-                XCTAssertEqual(charge.source?.paymentInformation, .barcode(.alipay(EnrolledSource.EnrolledPaymentInformation.Barcode.AlipayBarcode(expired: dateFormatter.date(from: "2018-11-20T11:48:22Z")!))))
+                XCTAssertEqual(charge.value.amount, 10_000_00)
+                XCTAssertEqual(charge.source?.paymentInformation, .barcode(.alipay(EnrolledSource.EnrolledPaymentInformation.Barcode.AlipayBarcode(expiredDate: dateFormatter.date(from: "2018-11-20T11:48:22Z")!))))
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -462,7 +376,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)", metadata: metadata)
         
-        let request = Charge.update(using: testClient, id: "chrg_test_5dxvbupj5e337skzplh", params: updateParams) { (result) in
+        let request = Charge.update(using: testClient, id: "chrg_test_retrieve", params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -482,24 +396,23 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testDeletedCardChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5atwzemytjyr1glskwt") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_deleted_customer") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 10700)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.value.currency.code, "THB")
-                XCTAssertEqual(charge.chargeDescription, "WooCommerce Order id 22")
-                XCTAssertEqual(charge.id, "chrg_test_5atwzemytjyr1glskwt")
-                XCTAssertEqual(charge.location, "/charges/chrg_test_5atwzemytjyr1glskwt")
-                XCTAssertEqual(charge.isLive, false)
-                XCTAssertEqual(charge.refunded, 0)
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5atwzep0rd6fmqw5f3q")
-                XCTAssertEqual(charge.customer?.dataID, "cust_test_5atwzehn9asyv7ga6ya")
-                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2018-02-02T04:23:13Z"))
-                XCTAssertEqual(charge.card?.id, "card_test_5atwze9ckre0z66grbk")
-                if case .deleted(let deletedCard)? = charge.card {
-                    XCTAssertEqual(deletedCard.id, "card_test_5atwze9ckre0z66grbk")
+                XCTAssertEqual(charge.id, "chrg_test_deleted_customer")
+                XCTAssertEqual(charge.location, "/charges/chrg_test_deleted_customer")
+                XCTAssertEqual(charge.isLiveMode, false)
+                XCTAssertEqual(charge.refundedAmount, 0)
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzc99osk6yqddb4msq")
+                XCTAssertEqual(charge.createdDate, dateFormatter.date(from: "2019-05-22T06:05:00Z"))
+                XCTAssertNil(charge.chargeDescription)
+                XCTAssertNil(charge.customer?.dataID)
+                if case .tokenized(let deletedCard)? = charge.card {
+                    XCTAssertEqual(deletedCard.id, "card_test_5fz0od4o3fn29wp14t4")
                 } else {
                     XCTFail("This charge should have the deleted card value")
                 }
@@ -515,12 +428,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testInternetBankingChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5dzgrh693mzqifqi7hn") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_internet_banking") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 1000000)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.internetBanking(.scb).sourceType)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -532,7 +445,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeInternetBankingChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dzgrh693mzqifqi7hn")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_internet_banking")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -542,7 +455,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -551,7 +464,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -577,12 +490,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testAlipayChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5dzgr2er2lfpks4fzwq") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_alipay") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.alipay.sourceType)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -594,7 +507,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeAlipayChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dzgr2er2lfpks4fzwq")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_alipay")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -604,7 +517,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -613,7 +526,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -638,21 +551,21 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testTestcoLotusBillPaymentChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5dzgra4ne1hzlxxvkuf") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_bill_payment") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.amount, charge.amount)
-                XCTAssertEqual(charge.source?.id, "src_test_5dzgra1hjrajmcvawuc")
+                XCTAssertEqual(charge.source?.id, "src_test_5fzc7socrzb7an79lj9")
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let bill))?:
                     XCTAssertEqual(bill.omiseTaxID, "0105556091152")
-                    XCTAssertEqual(bill.referenceNumber1, "128971730818814014")
-                    XCTAssertEqual(bill.referenceNumber2, "464538863396896659")
-                    XCTAssertEqual(bill.barcodeURL, URL(string: "https://api.omise.co/charges/chrg_test_5dzgra4ne1hzlxxvkuf/documents/docu_test_5dzgra5sq6w6myznkv8/downloads/5CD761E748448EEA")!)
+                    XCTAssertEqual(bill.referenceNumber1, "068263727885787840")
+                    XCTAssertEqual(bill.referenceNumber2, "060028266962275319")
+                    XCTAssertEqual(bill.barcodeURL, URL(string: "https://api.omise.co/charges/chrg_test_bill_payment/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012")!)
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
@@ -666,7 +579,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeTestcoLotusBillPaymentChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dzgra4ne1hzlxxvkuf")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_bill_payment")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -676,7 +589,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -685,7 +598,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -708,7 +621,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             XCTAssertEqual(bill.referenceNumber1, decodedBill.referenceNumber1)
             XCTAssertEqual(bill.referenceNumber2, decodedBill.referenceNumber2)
             XCTAssertEqual(bill.barcodeURL, decodedBill.barcodeURL)
-            XCTAssertEqual(bill.expired, decodedBill.expired)
+            XCTAssertEqual(bill.expiredDate, decodedBill.expiredDate)
         default:
             XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
         }
@@ -717,18 +630,18 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testInstallmentKBankChargeRetrieve() {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5czuxmgzinn6qq1tz5u") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_installment") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.amount, 5_000_00)
+                XCTAssertEqual(charge.amount, 1000000)
                 XCTAssertEqual(charge.currency, .thb)
                 XCTAssertEqual(charge.source?.amount, charge.amount)
                 XCTAssertEqual(charge.source?.currency, charge.currency)
-                XCTAssertEqual(charge.source?.id, "src_test_5cs0totfv87k1i6y45l")
+                XCTAssertEqual(charge.source?.id, "src_test_5fzc7uxck19j90stcj8")
                 XCTAssertEqual(charge.source?.flow, .redirect)
-                XCTAssertEqual(charge.source?.paymentInformation, EnrolledSource.EnrolledPaymentInformation.installment(.kBank))
+                XCTAssertEqual(charge.source?.paymentInformation, EnrolledSource.EnrolledPaymentInformation.installment(.bay))
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -741,21 +654,20 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testBarcodeAlipayChargeRetrieve() throws {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5dzgr7e4ydljy6sgiyr") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_barcode_alipay") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.amount, 100000)
+                XCTAssertEqual(charge.amount, 10_000_00)
                 XCTAssertEqual(charge.currency, .thb)
                 XCTAssertEqual(charge.source?.amount, charge.amount)
                 XCTAssertEqual(charge.source?.currency, charge.currency)
-                XCTAssertEqual(charge.source?.id, "src_test_5dzgr7axod948i6c9uz")
+                XCTAssertEqual(charge.source?.id, "src_test_5fzc7ogbj2wkx75kq1o")
                 XCTAssertEqual(charge.source?.flow, .offline)
-                XCTAssertEqual(charge.metadata["invoice_id"] as? String, "inv-1234567890")
                 switch charge.source?.paymentInformation {
                 case .barcode(.alipay(let alipayBarcode))?:
-                    XCTAssertEqual(alipayBarcode.expired, dateFormatter.date(from: "2018-11-20T11:48:22Z"))
+                    XCTAssertEqual(alipayBarcode.expiredDate, dateFormatter.date(from: "2019-05-23T06:00:30Z"))
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
@@ -769,7 +681,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeBarcodeAlipayCharge() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dzgr7e4ydljy6sgiyr")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_barcode_alipay")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -779,7 +691,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -788,7 +700,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -877,7 +789,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateSourceChargeParams() throws {
-        let source = PaymentSource(id: "src_test_12345", object: "source", isLive: false, location: "/sources/src_test_12345", currency: .thb, amount: 10_000_00, flow: .redirect, paymentInformation: .alipay)
+        let source = PaymentSource(id: "src_test_12345", object: "source", isLiveMode: false, location: "/sources/src_test_12345", currency: .thb, amount: 10_000_00, flow: .redirect, paymentInformation: .alipay)
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), source: source, chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
@@ -922,24 +834,24 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeWithLoadedCustomer() throws {
         let expectation = self.expectation(description: "Charge result")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5dzgq88ehh6gavj0h59") { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_loaded_customer") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 
-                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5dzgq8b5uhhh89j8sxf")
+                XCTAssertEqual(charge.transaction?.dataID, "trxn_test_5fzbqf7um91u0xrb5k7")
                 
                 if case .loaded(let customer)? = charge.customer {
                     XCTAssertNotNil(customer.customerDescription)
-                    XCTAssertEqual(customer.id, "cust_test_5dzgpes169hkk7n1b4n")
+                    XCTAssertEqual(customer.id, "cust_test_5fz0olfpy32zadv96ek")
                     XCTAssertEqual(customer.email, "john.doe@example.com")
                 } else {
                     XCTFail("Cannot parse transaction data")
                 }
                 if case .loaded(let transaction)? = charge.transaction {
-                    XCTAssertEqual(transaction.amount, 3041997)
+                    XCTAssertEqual(transaction.amount, 960945)
                 } else {
                     XCTFail("Cannot parse transaction data")
                 }
@@ -953,7 +865,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeChargeWithLoadedCustomer() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5dzgq88ehh6gavj0h59")
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_loaded_customer")
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -963,7 +875,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -973,7 +885,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -987,10 +899,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
-        XCTAssertEqual(defaultCharge.card?.city, decodedCharge.card?.city)
-        XCTAssertEqual(defaultCharge.card?.postalCode, decodedCharge.card?.postalCode)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.countryCode, decodedCharge.card?.billingAddress.countryCode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.city, decodedCharge.card?.billingAddress.city)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.postalCode, decodedCharge.card?.billingAddress.postalCode)
         XCTAssertEqual(defaultCharge.card?.financing, decodedCharge.card?.financing)
         XCTAssertEqual(defaultCharge.card?.bankName, decodedCharge.card?.bankName)
         XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
@@ -1019,7 +931,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.internetBanking(.unknown("oms")).sourceType)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -1041,7 +953,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -1050,7 +962,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -1081,15 +993,16 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 
                 if case let .unknown(name: name, references: references)? = charge.source?.paymentInformation {
                     XCTAssertEqual(name, "omise")
                     XCTAssertEqual((references as? [String: String]) ?? [:], [
                         "account_id": "0105556091152",
+                        "expires_at": "2019-05-23T06:00:50Z",
                         "reference": "025821267592373884",
                         "key": "237000400584228075",
-                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_omise_source/documents/docu_test_5929fjznrj5nsr0fqhu/download"
+                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_omise_source/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
                         ] as [String: String])
                 }
                 
@@ -1113,7 +1026,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -1122,7 +1035,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
@@ -1161,18 +1074,19 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(charge):
-                XCTAssertEqual(charge.value.amount, 100000)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
                 XCTAssertEqual(charge.source?.amount, charge.amount)
-                XCTAssertEqual(charge.source?.id, "src_test_5dzgra1hjrajmcvawuc")
+                XCTAssertEqual(charge.source?.id, "src_test_5fzc7socrzb7an79lj9")
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case EnrolledSource.EnrolledPaymentInformation.billPayment(.unknown(name: let name, references: let references))?:
                     XCTAssertEqual(name, "papaya")
                     XCTAssertEqual((references as? [String: String]) ?? [:], [
-                        "omise_id": "0105556091152",
+                        "omise_tax_id": "0105556091152",
+                        "expires_at": "2019-05-23T06:00:50Z",
                         "reference_1": "025821267592373884",
                         "key": "237000400584228075",
-                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_bill_payment_papaya_source/documents/docu_test_5929fjznrj5nsr0fqhu/download"
+                        "barcode": "https://api.omise.co/charges/chrg_test_resilient_with_bill_payment_papaya_source/documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012"
                         ] as [String: String])
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
@@ -1197,7 +1111,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -1206,7 +1120,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
-        XCTAssertEqual(defaultCharge.refunded, decodedCharge.refunded)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
         
         XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
         XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)

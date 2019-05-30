@@ -1,7 +1,7 @@
 import XCTest
 import Omise
 
-private let linkTestingID = "link_test_573u5l7fabtjnos5hdi"
+private let linkTestingID = "link_test_5bh0ji63ctfk4gug2d5"
 
 class LinkOperationFixtureTest: FixtureTestCase {
     func testLinkRetrieve() {
@@ -12,8 +12,8 @@ class LinkOperationFixtureTest: FixtureTestCase {
             
             switch result {
             case let .success(link):
-                XCTAssertEqual(link.value.amount, 1990000)
-                XCTAssertEqual(link.charges.total, 3)
+                XCTAssertEqual(link.value.amount, 120000)
+                XCTAssertEqual(link.charges.total, 1)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -35,7 +35,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         let decodedLink = try decoder.decode(Link.self, from: encodedData)
         XCTAssertEqual(defaultLink.object, decodedLink.object)
         XCTAssertEqual(defaultLink.id, decodedLink.id)
-        XCTAssertEqual(defaultLink.isLive, decodedLink.isLive)
+        XCTAssertEqual(defaultLink.isLiveMode, decodedLink.isLiveMode)
         XCTAssertEqual(defaultLink.location, decodedLink.location)
         XCTAssertEqual(defaultLink.amount, decodedLink.amount)
         XCTAssertEqual(defaultLink.currency, decodedLink.currency)
@@ -61,7 +61,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         
         XCTAssertEqual(defaultCharge.object, decodedCharge.object)
         XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLive, decodedCharge.isLive)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
         XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
@@ -79,8 +79,8 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultCharge.card, decodedCharge.card)
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
-        XCTAssertEqual(defaultCharge.card?.isLive, decodedCharge.card?.isLive)
-        XCTAssertEqual(defaultCharge.card?.countryCode, decodedCharge.card?.countryCode)
+        XCTAssertEqual(defaultCharge.card?.isLiveMode, decodedCharge.card?.isLiveMode)
+        XCTAssertEqual(defaultCharge.card?.billingAddress.countryCode, decodedCharge.card?.billingAddress.countryCode)
         XCTAssertEqual(defaultCharge.card?.lastDigits, decodedCharge.card?.lastDigits)
         XCTAssertEqual(defaultCharge.card?.brand.rawValue, decodedCharge.card?.brand.rawValue)
         XCTAssertEqual(defaultCharge.card?.expiration?.month, decodedCharge.card?.expiration?.month)
@@ -103,10 +103,10 @@ class LinkOperationFixtureTest: FixtureTestCase {
             switch result {
             case let .success(linksList):
                 XCTAssertNotNil(linksList.data)
-                XCTAssertEqual(linksList.data.count, 3)
+                XCTAssertEqual(linksList.data.count, 6)
                 let linkSampleData = linksList.data.first
                 XCTAssertNotNil(linkSampleData)
-                XCTAssertEqual(linkSampleData?.value.amount, 1490000)
+                XCTAssertEqual(linkSampleData?.value.amount, 20000)
             case let .failure(error):
                 XCTFail("\(error)")
             }

@@ -1,0 +1,13 @@
+{
+  "card" : {
+    "city" : "Bangkok",
+    "expiration_month" : 12,
+    "expiration_year" : 2020,
+    "name" : "John Doe",
+    "number" : "4242424242424242",
+    "phone_number" : "7777777777",
+    "postal_code" : "10240",
+    "security_code" : "123",
+    "street1" : "123 Main Road"
+  }
+}

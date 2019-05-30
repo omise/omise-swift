@@ -1,14 +1,17 @@
 import Foundation
 
 
-public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatableObject, Equatable {
+public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreatedObject, Equatable {
     public static let resourceInfo: ResourceInfo = ResourceInfo(path: "/refunds")
     
     public let object: String
     public let location: String
+    public let isLiveMode: Bool
     
     public let id: String
     public var createdDate: Date
+    
+    public let status: Status
     
     public var value: Value {
         return Value(amount: amount, currency: currency)
@@ -17,6 +20,12 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     public let amount: Int64
     public let currency: Currency
     
+    public let fundingAmount: Int64
+    public let fundingCurrency: Currency
+    public var fundingValue: Value {
+        return Value(amount: fundingAmount, currency: fundingCurrency)
+    }
+    
     public let isVoided: Bool
     
     public let charge: DetailProperty<Charge>
@@ -24,15 +33,24 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
     
     public let metadata: JSONDictionary
     
+    public enum Status: String, Codable {
+        case pending
+        case closed
+    }
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
+        status = try container.decode(Status.self, forKey: .status)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
+        fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
+        fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
         isVoided = try container.decode(Bool.self, forKey: .isVoided)
         charge = try container.decode(DetailProperty<Charge>.self, forKey: .charge)
         transaction = try container.decode(DetailProperty<Transaction>.self, forKey: .transaction)
@@ -45,9 +63,13 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         try container.encode(object, forKey: .object)
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(status, forKey: .status)
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
+        try container.encode(fundingAmount, forKey: .fundingAmount)
+        try container.encode(fundingCurrency, forKey: .fundingCurrency)
         try container.encode(isVoided, forKey: .isVoided)
         try container.encode(charge, forKey: .charge)
         try container.encode(transaction, forKey: .transaction)
@@ -58,9 +80,13 @@ public struct Refund: OmiseLocatableObject, OmiseIdentifiableObject, OmiseCreata
         case object
         case location
         case id
-        case createdDate = "created"
+        case createdDate = "created_at"
+        case isLiveMode = "livemode"
+        case status
         case amount
         case currency
+        case fundingAmount = "funding_amount"
+        case fundingCurrency = "funding_currency"
         case isVoided = "voided"
         case charge
         case transaction
@@ -93,7 +119,7 @@ public struct RefundFilterParams: OmiseFilterParams {
     private enum CodingKeys: String, CodingKey {
         case amount
         case cardLastDigits = "card_last_digits"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case isVoided = "voided"
     }
     

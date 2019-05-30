@@ -20,7 +20,7 @@ class DecodeTests: XCTestCase {
     
     func jsonData(withFileName name: String) throws -> Data {
         let bundle = Bundle(for: FixtureClient.self)
-        let directoryURL = bundle.url(forResource: "Fixtures/objects", withExtension: nil)!
+        let directoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
         let filePath = (name as NSString).appendingPathExtension("json")! as String
         let fixtureFileURL = directoryURL.appendingPathComponent(filePath)
         return try Data(contentsOf: fixtureFileURL)
@@ -55,6 +55,19 @@ class DecodeTests: XCTestCase {
         } catch let thrownError {
             XCTFail(thrownError.localizedDescription)
         }
+    }
+    
+    @available(iOS 11.0, *)
+    func testTokenParamEncoding() throws {
+        let params = TokenParams(number: "4242424242424242", name: "John Doe", expiration: (12, 2020), securityCode: "123", billingAddress: BillingAddress(street1: "123 Main Road", street2: nil, city: "Bangkok", state: nil, postalCode: "10240", countryCode: nil, phoneNumber: "7777777777"))
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+        
+        let encodedData = try encoder.encode(params)
+        
+        let jsonData = try self.jsonData(withFileName: "token-params")
+        XCTAssertEqual(jsonData, encodedData)
     }
 }
 

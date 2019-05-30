@@ -15,7 +15,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let location: String
     
     public let id: String
-    public let isLive: Bool
+    public let isLiveMode: Bool
     public var createdDate: Date
     
     public var value: Value {
@@ -23,20 +23,23 @@ public struct Dispute: OmiseResourceObject, Equatable {
     }
     public let amount: Int64
     public let currency: Currency
+    public let fundingAmount: Int64
+    public let fundingCurrency: Currency
     public var status: DisputeStatus
+    
     public let reasonMessage: String
     public let reasonCode: Reason
     public var responseMessage: String?
-    public let transaction: DetailProperty<Transaction<Dispute>>
+    public let adminMessage: String?
+    public let transactions: [Transaction<Dispute>]
     public let charge: DetailProperty<Charge>
     public let documents: ListProperty<Document>
     public let closedDate: Date?
     
     public var metadata: JSONDictionary
-    
 }
 
-    
+
 extension Dispute {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -44,15 +47,18 @@ extension Dispute {
         object = try container.decode(String.self, forKey: .object)
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(String.self, forKey: .id)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
+        isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
+        fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
+        fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
         status = try container.decode(DisputeStatus.self, forKey: .status)
         reasonMessage = try container.decode(String.self, forKey: .reasonMessage)
         reasonCode = try container.decode(Reason.self, forKey: .reasonCode)
         responseMessage = try container.decodeIfPresent(String.self, forKey: .responseMessage)
-        transaction = try container.decode(DetailProperty<Transaction>.self, forKey: .transaction)
+        adminMessage = try container.decodeIfPresent(String.self, forKey: .adminMessage)
+        transactions = try container.decode(Array<Transaction<Dispute>>.self, forKey: .transactions)
         charge = try container.decode(DetailProperty<Charge>.self, forKey: .charge)
         documents = try container.decode(ListProperty<Document>.self, forKey: .documents)
         closedDate = try container.decodeIfPresent(Date.self, forKey: .closedDate)
@@ -65,34 +71,40 @@ extension Dispute {
         try container.encode(object, forKey: .object)
         try container.encode(location, forKey: .location)
         try container.encode(id, forKey: .id)
-        try container.encode(isLive, forKey: .isLive)
+        try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
+        try container.encode(fundingAmount, forKey: .fundingAmount)
+        try container.encode(fundingCurrency, forKey: .fundingCurrency)
         try container.encode(status, forKey: .status)
         try container.encode(reasonMessage, forKey: .reasonMessage)
         try container.encode(reasonCode, forKey: .reasonCode)
-        try container.encode(responseMessage, forKey: .responseMessage)
-        try container.encode(transaction, forKey: .transaction)
+        try container.encodeIfPresent(responseMessage, forKey: .responseMessage)
+        try container.encodeIfPresent(adminMessage, forKey: .adminMessage)
+        try container.encode(transactions, forKey: .transactions)
         try container.encode(charge, forKey: .charge)
         try container.encode(documents, forKey: .documents)
-        try container.encode(closedDate, forKey: .closedDate)
+        try container.encodeIfPresent(closedDate, forKey: .closedDate)
         try container.encode(metadata, forKey: .metadata)
     }
-
+    
     private enum CodingKeys: String, CodingKey {
         case object
         case location
         case id
-        case isLive = "livemode"
-        case createdDate = "created"
+        case isLiveMode = "livemode"
+        case createdDate = "created_at"
         case amount
         case currency
+        case fundingAmount = "funding_amount"
+        case fundingCurrency = "funding_currency"
         case status
         case reasonMessage = "reason_message"
         case reasonCode = "reason_code"
         case responseMessage = "message"
-        case transaction
+        case adminMessage = "admin_message"
+        case transactions
         case charge
         case documents
         case closedDate = "closed_at"
@@ -234,7 +246,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
         case amount
         case cardLastDigits = "card_last_digits"
         case closedDate = "closed_at"
-        case createdDate = "created"
+        case createdDate = "created_at"
         case currency
         case status
     }
