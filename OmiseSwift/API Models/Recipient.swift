@@ -39,7 +39,9 @@ public struct Recipient: OmiseResourceObject, Equatable {
         case accountNotFound = "account_not_found"
         case bankNotFound = "bank_not_found"
     }
-    
+}
+
+extension Recipient {
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -59,7 +61,6 @@ public struct Recipient: OmiseResourceObject, Equatable {
         case bankAccount = "bank_account"
         case metadata
     }
-    
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

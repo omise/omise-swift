@@ -15,7 +15,9 @@ public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLive
     
     public let filename: String
     public let downloadURL: URL?
-    
+}
+
+extension Document {
     private enum CodingKeys: String, CodingKey {
         case object
         case location

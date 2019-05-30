@@ -34,7 +34,9 @@ public struct Receipt: OmiseResourceObject, Equatable {
     public let vat: Int64
     public let wht: Int64
     public let total: Int64
-    
+}
+
+extension Receipt {
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -128,5 +130,4 @@ public struct Receipt: OmiseResourceObject, Equatable {
 extension Receipt: OmiseAPIPrimaryObject {}
 extension Receipt: Listable {}
 extension Receipt: Retrievable {}
-
 

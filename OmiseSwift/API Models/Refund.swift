@@ -38,6 +38,25 @@ public struct Refund: OmiseResourceObject, Equatable {
         case pending
         case closed
     }
+}
+
+extension Refund {
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case location
+        case id
+        case createdDate = "created_at"
+        case isLiveMode = "livemode"
+        case status
+        case amount
+        case currency
+        case fundingAmount = "funding_amount"
+        case fundingCurrency = "funding_currency"
+        case isVoided = "voided"
+        case charge
+        case transaction
+        case metadata
+    }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -75,23 +94,6 @@ public struct Refund: OmiseResourceObject, Equatable {
         try container.encode(charge, forKey: .charge)
         try container.encode(transaction, forKey: .transaction)
         try container.encode(metadata, forKey: .metadata)
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case object
-        case location
-        case id
-        case createdDate = "created_at"
-        case isLiveMode = "livemode"
-        case status
-        case amount
-        case currency
-        case fundingAmount = "funding_amount"
-        case fundingCurrency = "funding_currency"
-        case isVoided = "voided"
-        case charge
-        case transaction
-        case metadata
     }
 }
 

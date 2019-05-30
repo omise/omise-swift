@@ -56,6 +56,15 @@ public struct Transfer: OmiseResourceObject, Equatable {
     
     public let metadata: JSONDictionary
     
+    public enum Status {
+        case pending
+        case paid
+        case sent
+        case failed(TransferFailure)
+    }
+}
+
+extension Transfer {
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -81,13 +90,6 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
         case metadata
-    }
-    
-    public enum Status {
-        case pending
-        case paid
-        case sent
-        case failed(TransferFailure)
     }
     
     public init(from decoder: Decoder) throws {

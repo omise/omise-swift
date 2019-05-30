@@ -94,6 +94,9 @@ public enum Source: SourceData {
         }
     }
     
+}
+
+extension Source {
     public init(from decoder: Decoder) throws {
         do {
             self = .enrolled(try EnrolledSource.init(from: decoder))
@@ -114,32 +117,6 @@ public enum Source: SourceData {
 
 
 public enum Barcode: Codable, Equatable {
-    private enum CodingKeys: String, CodingKey {
-        case type
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let typeValue = try container.decode(String.self, forKey: .type)
-        switch typeValue {
-        case SourceType.Barcode.alipay.rawValue:
-            let alipayBarcode = try AlipayBarcode(from: decoder)
-            self = .alipay(alipayBarcode)
-        case let value:
-            let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: CodingKeys.self)
-            self = .unknown(name: value, parameters: parameters)
-        }
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        switch self {
-        case .alipay(let barcodeInformation):
-            try barcodeInformation.encode(to: encoder)
-        case .unknown(name: _, parameters: let parameters):
-            try encoder.encodeJSONDictionary(parameters, skippingKeysBy: CodingKeys.self)
-        }
-    }
-    
     case alipay(AlipayBarcode)
     case unknown(name: String, parameters: [String: Any])
     
@@ -256,6 +233,33 @@ public enum Barcode: Codable, Equatable {
         default: return false
         }
     }
+    
+    private enum CodingKeys: String, CodingKey {
+        case type
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let typeValue = try container.decode(String.self, forKey: .type)
+        switch typeValue {
+        case SourceType.Barcode.alipay.rawValue:
+            let alipayBarcode = try AlipayBarcode(from: decoder)
+            self = .alipay(alipayBarcode)
+        case let value:
+            let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: CodingKeys.self)
+            self = .unknown(name: value, parameters: parameters)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case .alipay(let barcodeInformation):
+            try barcodeInformation.encode(to: encoder)
+        case .unknown(name: _, parameters: let parameters):
+            try encoder.encodeJSONDictionary(parameters, skippingKeysBy: CodingKeys.self)
+        }
+    }
+    
 }
 
 

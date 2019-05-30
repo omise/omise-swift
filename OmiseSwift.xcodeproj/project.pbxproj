@@ -427,8 +427,8 @@
 				8A5BC2DD2012743400B55139 /* CurrencyTest.swift */,
 				8A9B2AB31FB9B5C5002F42C7 /* DecoderTest.swift */,
 				8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */,
-				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 				8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */,
+				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";

@@ -80,7 +80,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             closedDate: SearchOperationFixtureTests.dateComponents,
             createdDate: SearchOperationFixtureTests.dateComponents,
             currency: .thb,
-            status: DisputeStatus.open
+            status: Dispute.Status.open
         )
         
         let encoder = JSONEncoder()

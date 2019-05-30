@@ -33,7 +33,9 @@ public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseResourceObject,
         case debit
         case credit
     }
-    
+}
+
+extension Transaction {
     private enum CodingKeys: String, CodingKey {
         case object
         case location

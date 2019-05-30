@@ -19,6 +19,10 @@ public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omise
     public var value: Value {
         return Value(amount: amount, currency: currency)
     }
+}
+
+
+extension ChargeSchedule {
     
     private enum CodingKeys: String, CodingKey {
         case object

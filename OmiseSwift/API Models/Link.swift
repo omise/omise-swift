@@ -25,7 +25,10 @@ public struct Link: OmiseResourceObject, Equatable {
     public let linkDescription: String
     public let charges: ListProperty<Charge>
     public let paymentURL: URL
-    
+}
+
+
+extension Link {
     private enum CodingKeys: String, CodingKey {
         case object
         case location
@@ -44,7 +47,6 @@ public struct Link: OmiseResourceObject, Equatable {
         case charges
         case paymentURL = "payment_uri"
     }
-
 }
 
 

@@ -1,12 +1,5 @@
 import Foundation
 
-public enum DisputeStatus: String, Codable, Equatable {
-    case open
-    case pending
-    case won
-    case lost
-}
-
 
 public struct Dispute: OmiseResourceObject, Equatable {
     public static let resourcePath = "/disputes"
@@ -26,7 +19,7 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let currency: Currency
     public let fundingAmount: Int64
     public let fundingCurrency: Currency
-    public var status: DisputeStatus
+    public var status: Dispute.Status
     
     public let reasonMessage: String
     public let reasonCode: Reason
@@ -38,6 +31,13 @@ public struct Dispute: OmiseResourceObject, Equatable {
     public let closedDate: Date?
     
     public var metadata: JSONDictionary
+    
+    public enum Status: String, Codable, Equatable {
+        case open
+        case pending
+        case won
+        case lost
+    }
 }
 
 
@@ -54,7 +54,7 @@ extension Dispute {
         currency = try container.decode(Currency.self, forKey: .currency)
         fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
         fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
-        status = try container.decode(DisputeStatus.self, forKey: .status)
+        status = try container.decode(Dispute.Status.self, forKey: .status)
         reasonMessage = try container.decode(String.self, forKey: .reasonMessage)
         reasonCode = try container.decode(Reason.self, forKey: .reasonCode)
         responseMessage = try container.decodeIfPresent(String.self, forKey: .responseMessage)
@@ -241,7 +241,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     public var closedDate: DateComponents?
     public var createdDate: DateComponents?
     public var currency: Currency?
-    public var status: DisputeStatus?
+    public var status: Dispute.Status?
     
     private enum CodingKeys: String, CodingKey {
         case amount
@@ -254,7 +254,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     
     public init(amount: Double? = nil, cardLastDigits: LastDigits? = nil,
                 closedDate: DateComponents? = nil, createdDate: DateComponents? = nil,
-                currency: Currency? = nil, status: DisputeStatus? = nil) {
+                currency: Currency? = nil, status: Dispute.Status? = nil) {
         self.amount = amount
         self.cardLastDigits = cardLastDigits
         self.closedDate = closedDate
@@ -270,7 +270,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
         closedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .closedDate)
         createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
         currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
-        status = try container.decodeIfPresent(DisputeStatus.self, forKey: .status)
+        status = try container.decodeIfPresent(Dispute.Status.self, forKey: .status)
     }
     
     public func encode(to encoder: Encoder) throws {

@@ -15,7 +15,9 @@ public struct Token: OmiseResourceObject, Equatable {
     public var isUsed: Bool
     
     public var card: Card
-    
+}
+
+extension Token {
     private enum CodingKeys: String, CodingKey {
         case object
         case location

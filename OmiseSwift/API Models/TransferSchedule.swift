@@ -12,8 +12,10 @@ public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omi
     
     public let recipientID: String
     public let amount: TransferSchedulingParameter.Amount
-    
-    
+}
+
+
+extension TransferSchedule {
     private enum CodingKeys: String, CodingKey {
         case object
         case id

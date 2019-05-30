@@ -12,6 +12,11 @@ public enum CardBrand: String, Codable, Equatable {
 
 
 public enum CardFinancing: RawRepresentable, Codable, Equatable {
+    
+    case credit
+    case debit
+    case unknown(String)
+    
     public var rawValue: String {
         switch self {
         case .credit:
@@ -22,10 +27,6 @@ public enum CardFinancing: RawRepresentable, Codable, Equatable {
             return value
         }
     }
-    
-    case credit
-    case debit
-    case unknown(String)
     
     public init?(rawValue: String) {
         switch rawValue {
