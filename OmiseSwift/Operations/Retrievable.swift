@@ -27,3 +27,11 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
+
+
+public extension APIClient {
+    func retrieve<T: OmiseAPIPrimaryObject & Retrievable>(dataID: DataID<T>, callback: @escaping T.RetrieveRequest.Callback) -> T.RetrieveRequest? {
+        return T.retrieve(using: self, id: dataID, callback: callback)
+    }
+}
+

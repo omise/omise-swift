@@ -1,7 +1,7 @@
 import Foundation
 
 
-public class Search<TItem: Searchable & OmiseResourceObject> {
+public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     
     public let scope: String
     public let query: String?

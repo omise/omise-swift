@@ -21,3 +21,9 @@ public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiab
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
+
+public extension APIClient {
+    func delete<T: OmiseAPIPrimaryObject & Destroyable>(dataID: DataID<T>, callback: @escaping T.DestroyRequest.Callback) -> T.DestroyRequest? {
+        return T.destroy(using: self, id: dataID, callback: callback)
+    }
+}

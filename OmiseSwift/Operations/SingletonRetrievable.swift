@@ -4,7 +4,7 @@ public protocol SingletonRetrievable {}
 
 public extension SingletonRetrievable where Self: OmiseLocatableObject {
     typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
-    typealias RetrieveRequest = APIRequest<Self>
+    typealias SingletonRetrieveRequest = APIRequest<Self>
     
     static func retrieveEndpoint() -> SingletonRetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
@@ -14,8 +14,16 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
         )
     }
     
-    static func retrieve(using client: APIClient, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(using client: APIClient, callback: @escaping SingletonRetrieveRequest.Callback) -> SingletonRetrieveRequest? {
         let endpoint = self.retrieveEndpoint()
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
+
+
+public extension APIClient {
+    func retrieve<T: OmiseAPIPrimaryObject & SingletonRetrievable>(_ type: T.Type, callback: @escaping T.SingletonRetrieveRequest.Callback) -> T.SingletonRetrieveRequest? {
+        return T.retrieve(using: self, callback: callback)
+    }
+}
+

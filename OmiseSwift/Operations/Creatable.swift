@@ -21,3 +21,10 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     }
 }
 
+
+public extension APIClient {
+    func create<T: OmiseAPIPrimaryObject & Creatable>(params: T.CreateParams, callback: @escaping T.CreateRequest.Callback) -> T.CreateRequest? {
+        return T.create(using: self, params: params, callback: callback)
+    }
+}
+

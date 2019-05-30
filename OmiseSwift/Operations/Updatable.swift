@@ -19,3 +19,11 @@ public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiable
         return client.requestToEndpoint(endpoint, callback: callback)
     }
 }
+
+
+public extension APIClient {
+    func update<T: OmiseAPIPrimaryObject & Updatable>(dataID: DataID<T>, params: T.UpdateParams, callback: @escaping T.UpdateRequest.Callback) -> T.UpdateRequest? {
+        return T.update(using: self, id: dataID, params: params, callback: callback)
+    }
+}
+

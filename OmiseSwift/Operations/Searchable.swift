@@ -44,7 +44,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
 public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
 
 
-public extension Searchable where Self: OmiseResourceObject {
+public extension OmiseAPIPrimaryObject where Self: Searchable {
     typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
     typealias SearchRequest = APIRequest<SearchResult<Self>>
     
@@ -109,3 +109,11 @@ public extension Searchable where Self: OmiseResourceObject {
         return client.requestToEndpoint(operation, callback: requestCallback)
     }
 }
+
+
+public extension APIClient {
+    func create<T: OmiseAPIPrimaryObject & Searchable>(params: SearchParams<T.FilterParams>, callback: @escaping T.SearchRequest.Callback) -> T.SearchRequest? {
+        return T.search(using: self, params: params, callback: callback)
+    }
+}
+
