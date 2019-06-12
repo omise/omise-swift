@@ -4,6 +4,10 @@ import Foundation
 public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public let idString: String
     
+    public var isLiveMode: Bool {
+        return idString.contains("_test_")
+    }
+    
     public init?(idString: String) {
         guard Data.validate(id: idString) else {
             return nil
@@ -32,3 +36,10 @@ extension DataID: ExpressibleByStringLiteral {
         self.init(idString: value)!
     }
 }
+
+extension DataID: CustomStringConvertible {
+    public var description: String {
+        return idString
+    }
+}
+

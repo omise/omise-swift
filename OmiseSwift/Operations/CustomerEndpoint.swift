@@ -4,21 +4,21 @@ extension Customer {
     public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Charge>>>
     public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Charge>>>
     
-    public static func listScheduleEndpointChargingCustomerWith(customerID: String, params: ListParams?) -> ScheduleListEndpoint {
+    public static func listScheduleEndpointChargingCustomerWith(customerID: DataID<Customer>, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
-            pathComponents: [ Customer.resourcePath, customerID, Schedule<Charge>.resourcePath ],
+            pathComponents: [ Customer.resourcePath, customerID.idString, Schedule<Charge>.resourcePath ],
             parameter: .get(params)
         )
     }
     
     @discardableResult
-    public static func listScheduleChargingCustomer(using client: APIClient, customerID: String, params: ListParams? = nil, callback: ScheduleListRequest.Callback?) -> ScheduleListRequest? {
+    public static func listScheduleChargingCustomer(using client: APIClient, customerID: DataID<Customer>, params: ListParams? = nil, callback: ScheduleListRequest.Callback?) -> ScheduleListRequest? {
         let endpoint = self.listScheduleEndpointChargingCustomerWith(customerID: customerID, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
     
     @discardableResult
-    public static func listScheduleChargingCustomer(using client: APIClient, customerID: String, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+    public static func listScheduleChargingCustomer(using client: APIClient, customerID: DataID<Customer>, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
         let endpoint = self.listScheduleEndpointChargingCustomerWith(customerID: customerID, params: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in

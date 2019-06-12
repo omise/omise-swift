@@ -53,6 +53,8 @@
 		8A38E78222968280005FD6F9 /* BillingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38E78022968280005FD6F9 /* BillingAddress.swift */; };
 		8A3B90151E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
 		8A3B90161E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
+		8A3BCB6022B0F4C400569A93 /* RecipientEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BCB5F22B0F4C400569A93 /* RecipientEndpoint.swift */; };
+		8A3BCB6122B0F4C400569A93 /* RecipientEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BCB5F22B0F4C400569A93 /* RecipientEndpoint.swift */; };
 		8A4224AB1E4C8F8E00B11AF2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4224AA1E4C8F8E00B11AF2 /* Search.swift */; };
 		8A4224AC1E4C8F8E00B11AF2 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4224AA1E4C8F8E00B11AF2 /* Search.swift */; };
 		8A4469D21ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */; };
@@ -270,6 +272,7 @@
 		8A38E78022968280005FD6F9 /* BillingAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingAddress.swift; sourceTree = "<group>"; };
 		8A3938E51D8174C9007750AA /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		8A3B90141E360AD30074D6CD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		8A3BCB5F22B0F4C400569A93 /* RecipientEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientEndpoint.swift; sourceTree = "<group>"; };
 		8A4224AA1E4C8F8E00B11AF2 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A4469D41ED5E13D00F07334 /* Period.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
@@ -565,11 +568,12 @@
 				8ACE2353229D17C1008AA15E /* RefundEndpoint.swift */,
 				22A0F9881D215D3700CA3D35 /* Retrievable.swift */,
 				8AE654A22296B82E00246410 /* Schedulable.swift */,
+				8ACE2359229D2711008AA15E /* ScheduleEndpoint.swift */,
 				8A82A7061D7942E800A198A3 /* Searchable.swift */,
 				22338DAF1D211D7E00811363 /* SingletonRetrievable.swift */,
 				8ACE2356229D1CDC008AA15E /* TransferEndpoint.swift */,
 				225C4E4C1D223FF700A62F2C /* Updatable.swift */,
-				8ACE2359229D2711008AA15E /* ScheduleEndpoint.swift */,
+				8A3BCB5F22B0F4C400569A93 /* RecipientEndpoint.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -794,6 +798,7 @@
 				8ACE2355229D17C1008AA15E /* RefundEndpoint.swift in Sources */,
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
 				8A6785CE2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
+				8A3BCB6122B0F4C400569A93 /* RecipientEndpoint.swift in Sources */,
 				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
@@ -868,6 +873,7 @@
 				8ACE2354229D17C1008AA15E /* RefundEndpoint.swift in Sources */,
 				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8A6785CD2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
+				8A3BCB6022B0F4C400569A93 /* RecipientEndpoint.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,

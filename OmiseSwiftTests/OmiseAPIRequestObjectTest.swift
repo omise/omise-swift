@@ -10,6 +10,18 @@ class OmiseAPIRequestObjectTest: FixtureTestCase {
             let request = Charge.listEndpointWith(params: nil)
             XCTAssertEqual(request.pathComponents, [Charge.resourcePath])
         }
+        
+        do {
+            let chargeID: DataID<Charge> = "chrg_test_5frvn3hgya3qemayzrt"
+            let request = Charge.captureEndpointWithID(chargeID)
+            XCTAssertEqual(request.pathComponents, [Charge.resourcePath, chargeID.idString, "capture"])
+        }
+        
+        do {
+            let chargeID: DataID<Charge> = "chrg_test_5frvn3hgya3qemayzrt"
+            let request = Charge.reverseEndpointWithID(chargeID)
+            XCTAssertEqual(request.pathComponents, [Charge.resourcePath, chargeID.idString, "reverse"])
+        }
     }
     
     func testCustomerRequest() {

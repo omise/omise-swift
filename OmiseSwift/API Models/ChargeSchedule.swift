@@ -9,9 +9,9 @@ public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omise
     public let isLiveMode: Bool
     public let createdDate: Date
     
-    public let customerID: String
+    public let customerID: DataID<Customer>
     public let isDefaultCard: Bool
-    public let cardID: String
+    public let cardID: DataID<CustomerCard>
     public let chargeDescription: String?
     public let amount: Int64
     public let currency: Currency

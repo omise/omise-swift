@@ -149,8 +149,9 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
         return client.requestToEndpoint(endpoint, callback: callback)
     }
-    static func makeResourcePathsWith<Children: OmiseLocatableObject>
-        (parent: Self, keyPath: KeyPath<Self, ListProperty<Children>>) -> [String] {
+    static func makeResourcePathsWith<Children: OmiseLocatableObject>(
+        parent: Self, keyPath: KeyPath<Self, ListProperty<Children>>
+        ) -> [String] {
         var paths = [String]()
         
         paths = [Self.resourcePath, parent.id.idString]

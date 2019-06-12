@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject, SingletonRetrievable {
+public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
     public static var resourcePath: String = "capability"
     
     public let location: String
@@ -320,4 +320,6 @@ extension Capability.Method {
         }
     }
 }
+
+extension Capability: SingletonRetrievable {}
 

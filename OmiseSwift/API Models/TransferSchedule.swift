@@ -10,7 +10,7 @@ public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omi
     public let isLiveMode: Bool
     public let createdDate: Date
     
-    public let recipientID: String
+    public let recipientID: DataID<Recipient>
     public let amount: TransferSchedulingParameter.Amount
 }
 
@@ -35,7 +35,7 @@ extension TransferSchedule {
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         
-        recipientID = try container.decode(String.self, forKey: .recipientID)
+        recipientID = try container.decode(DataID<Recipient>.self, forKey: .recipientID)
         let percentageOfBalance = try container.decodeIfPresent(Double.self, forKey: .percentageOfBalance)
         let amount = try container.decodeIfPresent(Int64.self, forKey: .amount)
         let currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
