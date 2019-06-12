@@ -48,7 +48,7 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
     typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
     typealias SearchRequest = APIRequest<SearchResult<Self>>
     
-    static func searchEndpointWithParams(params: SearchParams<FilterParams>?) -> SearchEndpoint {
+    static func searchEndpoint(with params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
@@ -57,20 +57,20 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
     }
     
     static func search(using client: APIClient, params: SearchParams<FilterParams>? = nil, callback: SearchRequest.Callback?) -> SearchRequest? {
-        let endpoint = self.searchEndpointWithParams(params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.searchEndpoint(with: params)
+        return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
     static func search(using client: APIClient, searchParams: SearchParams<FilterParams>? = nil, callback: @escaping (APIResult<Search<Self>>) -> Void) -> SearchRequest? {
-        let endpoint = self.searchEndpointWithParams(params: searchParams)
+        let endpoint = self.searchEndpoint(with: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
             let callbackResult = result.map({ Search(result: $0, order: searchParams?.order ?? .chronological) })
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(endpoint, callback: requestCallback)
+        return client.request(to: endpoint, callback: requestCallback)
     }
     
     static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
@@ -88,7 +88,7 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(operation, callback: requestCallback)
+        return client.request(to: operation, callback: requestCallback)
     }
     
     static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
@@ -106,7 +106,7 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(operation, callback: requestCallback)
+        return client.request(to: operation, callback: requestCallback)
     }
 }
 

@@ -21,7 +21,7 @@ public struct AnySchedulable: Schedulable {
     }
     
     public init(from decoder: Decoder) throws {
-        let json = try decoder.decodeJSONDictionary()
+        let json = try decoder.decode(as: Dictionary<String, Any>.self)
         
         guard let object = json[CodingKeys.object.stringValue] as? String else {
             let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
@@ -48,7 +48,7 @@ public struct AnySchedulable: Schedulable {
         jsonValue[CodingKeys.id.stringValue] = id
         jsonValue[CodingKeys.createdDate.stringValue] = createdDate
         jsonValue[CodingKeys.object.stringValue] = object
-        try encoder.encodeJSONDictionary(jsonValue)
+        try encoder.encode(jsonValue)
     }
     
     public static func validate(id: String) -> Bool {
@@ -74,7 +74,7 @@ public struct AnySchedulable: Schedulable {
         public let json: [String: Any]
         
         public init(from decoder: Decoder) throws {
-            let json = try decoder.decodeJSONDictionary()
+            let json = try decoder.decode(as: Dictionary<String, Any>.self)
             
             guard let object = json[CodingKeys.object.stringValue] as? String else {
                 let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
@@ -106,7 +106,7 @@ public struct AnySchedulable: Schedulable {
             jsonValue[CodingKeys.createdDate.stringValue] = createdDate
             jsonValue[CodingKeys.object.stringValue] = object
             jsonValue[CodingKeys.isLiveMode.stringValue] = isLiveMode
-            try encoder.encodeJSONDictionary(jsonValue)
+            try encoder.encode(jsonValue)
         }
     }
     
@@ -123,7 +123,7 @@ public struct AnySchedulable: Schedulable {
             case .transfer(let parameter):
                 try container.encode(parameter)
             case .other(json: let parameter):
-                try encoder.encodeJSONDictionary(parameter)
+                try encoder.encode(parameter)
             }
         }
     }

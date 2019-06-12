@@ -101,7 +101,7 @@ extension Token: Retrievable {
     
     static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(usingKey: key, id: id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 
@@ -120,7 +120,7 @@ extension Token: Creatable {
     
     public static func create(using client: APIClient, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
         let endpoint = self.createEndpoint(usingKey: key, params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
     
 }

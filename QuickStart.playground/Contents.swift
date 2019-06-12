@@ -27,8 +27,7 @@ let secretKey = "<#Your secret key here#>"
  */
 let client = APIClient(
     config: APIConfiguration(
-        publicKey: publicKey,
-        secretKey: secretKey
+        key: AnyAccessKey(secretKey)
     )
 )
 
@@ -63,7 +62,7 @@ Account.retrieve(using: client) { (result) in
 Balance.retrieve(using: client) { (result) in
     switch result {
     case let .success(balance):
-        print("money: \(balance.available.amount)")
+        print("money: \(balance.transferableValue.amount)")
     case let .failure(err):
         print("error: \(err)")
     }
@@ -85,11 +84,11 @@ Balance.retrieve(using: client) { (result) in
 func createToken() {
     let params = TokenParams(number: "4242424242424242", name: "Omise Appleseed", expiration: (10, 2020), securityCode: "123")
     
-    Token.create(using: client, params: params) { (result) in
+    Token.create(using: client, usingKey: AnyAccessKey(publicKey), params: params) { (result) in
         switch result {
         case let .success(token):
             print("created token: \(token.id)")
-            createChargeWithToken(token)
+            createCharge(with: token)
             
         case let .failure(err):
             print("error: \(err)")
@@ -97,9 +96,9 @@ func createToken() {
     }
 }
 
-func createChargeWithToken(_ token: Token) {
+func createCharge(with token: Token) {
     let currency = Currency.thb
-    let params = ChargeParams(value: Value(amount: currency.convert(toSubunit: 1000.00), currency: currency), cardID: token.id)
+    let params = ChargeParams(value: Value(amount: currency.convert(toSubunit: 1000.00), currency: currency), cardID: token.id.idString)
     
     Charge.create(using: client, params: params) { (result) in
         switch result {

@@ -60,11 +60,11 @@ extension Occurrence {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         schedule = try container.decode(DetailProperty<Schedule<Data>>.self, forKey: .schedule)
-        scheduledOnDateComponents = try container.decodeOmiseDateComponents(forKey: .scheduleDate)
+        scheduledOnDateComponents = try container.decode(DateComponents.self, forKey: .scheduleDate)
         processedDate = try container.decode(Date.self, forKey: .processedDate)
         result = try container.decode(DetailProperty<Data>.self, forKey: .result)
         
-        retryOnDateComponents = try container.decodeOmiseDateComponentsIfPresent(forKey: .retryDate)
+        retryOnDateComponents = try container.decodeIfPresent(DateComponents.self, forKey: .retryDate)
         
         let status = try container.decode(String.self, forKey: .status)
         let message = try container.decodeIfPresent(String.self, forKey: .message)
@@ -90,11 +90,11 @@ extension Occurrence {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(schedule, forKey: .schedule)
-        try container.encodeOmiseDateComponents(scheduledOnDateComponents, forKey: .scheduleDate)
+        try container.encode(scheduledOnDateComponents, forKey: .scheduleDate)
         try container.encode(processedDate, forKey: .processedDate)
         
         try container.encode(result, forKey: .result)
-        try container.encodeOmiseDateComponentsIfPresent(retryOnDateComponents, forKey: .retryDate)
+        try container.encodeIfPresent(retryOnDateComponents, forKey: .retryDate)
         
         switch status {
         case .successful:

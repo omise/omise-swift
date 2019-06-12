@@ -8,7 +8,7 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     typealias CreateEndpoint = APIEndpoint<Self>
     typealias CreateRequest = APIRequest<Self>
     
-    static func createEndpointWith(params: CreateParams) -> CreateEndpoint {
+    static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: Self.makeResourcePaths(),
             parameter: .post(params)
@@ -16,8 +16,8 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     }
     
     static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
-        let endpoint = self.createEndpointWith(params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.createEndpoint(with: params)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

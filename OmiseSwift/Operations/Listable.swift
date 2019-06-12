@@ -22,7 +22,6 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
     typealias ListRequest = APIRequest<ListProperty<Self>>
     
-
     @discardableResult
     static func listEndpointWith(params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
@@ -34,7 +33,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     @discardableResult
     static func list(using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
         let endpoint = self.listEndpointWith(params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
@@ -48,7 +47,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(endpoint, callback: requestCallback)
+        return client.request(to: endpoint, callback: requestCallback)
     }
 }
 
@@ -70,7 +69,7 @@ public extension List where TItem: OmiseAPIPrimaryObject {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(operation, callback: requestCallback)
+        return client.request(to: operation, callback: requestCallback)
     }
     
     func makeLoadPreviousPageOperation(count: Int?) -> TItem.ListEndpoint {
@@ -94,7 +93,7 @@ public extension List where TItem: OmiseAPIPrimaryObject {
             }
         }
         
-        return client.requestToEndpoint(operation, callback: requestCallback)
+        return client.request(to: operation, callback: requestCallback)
     }
 }
 
@@ -128,7 +127,7 @@ public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
             }
         }
         
-        return client.requestToEndpoint(operation, callback: requestCallback)
+        return client.request(to: operation, callback: requestCallback)
     }
 }
 

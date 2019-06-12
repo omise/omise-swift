@@ -81,7 +81,7 @@ public class APIRequest<ResultType: OmiseObject> {
     func makeURLRequest() throws -> URLRequest {
         let requestURL = endpoint.makeURL()
         
-        let auth = try client.preferredEncodedKeyForServerEndpoint(endpoint.endpoint)
+        let auth = try client.preferredEncodedKey(for: endpoint.endpoint)
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.parameter.method

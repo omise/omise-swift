@@ -196,7 +196,7 @@ extension Capability.Method {
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
         case .source(SourceType.unknown(let type)):
-            let configurations = try decoder.container(keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decodeJSONDictionary()
+            let configurations = try decoder.container(keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
             self.payment = .unknownSource(type, configurations: configurations)
         case .source(SourceType.billPayment), .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(

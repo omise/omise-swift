@@ -112,12 +112,12 @@ public struct CustomerFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
+        createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .created)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .created)
+        try container.encodeIfPresent(createdDate, forKey: .created)
     }
     
     public init(createdDate: DateComponents?) {

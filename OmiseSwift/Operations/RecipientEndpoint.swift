@@ -4,8 +4,8 @@ extension Recipient {
     public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Transfer>>>
     public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Transfer>>>
     
-    public static func listScheduleEndpointTransferingRecipientWith(
-        recipientID: DataID<Recipient>, params: ListParams?) -> ScheduleListEndpoint {
+    public static func listScheduleEndpointTransferingRecipient(
+        with recipientID: DataID<Recipient>, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Recipient.resourcePath, recipientID.idString, Schedule<Transfer>.resourcePath ],
             parameter: .get(params)
@@ -17,8 +17,8 @@ extension Recipient {
         using client: APIClient, recipientID: DataID<Recipient>,
         params: ListParams? = nil, callback: ScheduleListRequest.Callback?
         ) -> ScheduleListRequest? {
-        let endpoint = self.listScheduleEndpointTransferingRecipientWith(recipientID: recipientID, params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.listScheduleEndpointTransferingRecipient(with: recipientID, params: params)
+        return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
@@ -26,7 +26,7 @@ extension Recipient {
         using client: APIClient, recipientID: DataID<Recipient>,
         listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Transfer>>>) -> Void
         ) -> ScheduleListRequest? {
-        let endpoint = self.listScheduleEndpointTransferingRecipientWith(recipientID: recipientID, params: listParams)
+        let endpoint = self.listScheduleEndpointTransferingRecipient(with: recipientID, params: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in
             let callbackResult = result.map({
@@ -35,7 +35,7 @@ extension Recipient {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(endpoint, callback: requestCallback)
+        return client.request(to: endpoint, callback: requestCallback)
     }
 }
 

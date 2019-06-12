@@ -246,7 +246,7 @@ public enum Barcode: Codable, Equatable {
             let alipayBarcode = try AlipayBarcode(from: decoder)
             self = .alipay(alipayBarcode)
         case let value:
-            let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: CodingKeys.self)
+            let parameters = try decoder.decode(as: Dictionary<String, Any>.self, skippingKeys: CodingKeys.self)
             self = .unknown(name: value, parameters: parameters)
         }
     }
@@ -256,7 +256,7 @@ public enum Barcode: Codable, Equatable {
         case .alipay(let barcodeInformation):
             try barcodeInformation.encode(to: encoder)
         case .unknown(name: _, parameters: let parameters):
-            try encoder.encodeJSONDictionary(parameters, skippingKeysBy: CodingKeys.self)
+            try encoder.encode(parameters, skippingKeysBy: CodingKeys.self)
         }
     }
     
@@ -444,7 +444,7 @@ extension PaymentSource: Creatable {
     
     public static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
         let endpoint = self.createEndpointWith(params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

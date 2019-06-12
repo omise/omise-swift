@@ -96,7 +96,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                     let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
                 case let barcodeType:
-                    let parameters = try decoder.decodeJSONDictionary(skippingKeysBy: PaymentSource.CodingKeys.self)
+                    let parameters = try decoder.decode(as: Dictionary<String, Any>.self, skippingKeys: PaymentSource.CodingKeys.self)
                     self = .barcode(.unknown(name: barcodeType, parameters: parameters))
                 }
             } else if typeValue.hasPrefix(installmentPrefix) {

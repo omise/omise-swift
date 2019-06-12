@@ -9,7 +9,7 @@ public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiab
     typealias DestroyEndpoint = APIEndpoint<Self>
     typealias DestroyRequest = APIRequest<Self>
     
-    static func destroyEndpointWith(id: DataID<Self>) -> DestroyEndpoint {
+    static func destroyEndpoint(with id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
             parameter: .delete
@@ -17,8 +17,8 @@ public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiab
     }
     
     static func destroy(using client: APIClient, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
-        let endpoint = self.destroyEndpointWith(id: id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.destroyEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

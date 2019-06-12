@@ -8,7 +8,7 @@ extension Transfer {
     public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Transfer>>>
     public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Transfer>>>
     
-    public static func markAsSentEndpointWithID(_ id: DataID<Transfer>) -> MarkEndpoint {
+    public static func markAsSentEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_sent"],
             parameter: .post(nil)
@@ -18,11 +18,11 @@ extension Transfer {
     public static func markAsSent(
         using client: APIClient, id: DataID<Transfer>, callback: @escaping MarkRequest.Callback
         ) -> MarkRequest? {
-        let endpoint = markAsSentEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = markAsSentEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsPaidEndpointWithID(_ id: DataID<Transfer>) -> MarkEndpoint {
+    public static func markAsPaidEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
             parameter: .post(nil)
@@ -32,13 +32,13 @@ extension Transfer {
     public static func markAsPaid(
         using client: APIClient, id: DataID<Transfer>, callback: @escaping MarkRequest.Callback
         ) -> MarkRequest? {
-        let endpoint = markAsPaidEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = markAsPaidEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
     
-    public static func listScheduleEndpointWithParams(_ params: ListParams?) -> ScheduleListEndpoint {
-        return Schedule<Transfer>.listDataScheduleEndpointWithParams(params)
+    public static func listScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
+        return Schedule<Transfer>.listDataScheduleEndpoint(with: params)
     }
     
     @discardableResult

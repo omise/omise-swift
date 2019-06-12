@@ -14,7 +14,7 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
     typealias RetrieveEndpoint = APIEndpoint<Self>
     typealias RetrieveRequest = APIRequest<Self>
     
-    static func retrieveEndpointWith(id: DataID<Self>) -> RetrieveEndpoint {
+    static func retrieveEndpoint(with id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
@@ -23,8 +23,8 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
     }
     
     static func retrieve(using client: APIClient, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
-        let endpoint = self.retrieveEndpointWith(id: id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.retrieveEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

@@ -184,10 +184,10 @@ public struct RecipientFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        isActive = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isActive)
-        activatedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .activatedDate)
+        isActive = try container.decodeIfPresent(Bool.self, forKey: .isActive)
+        activatedDate = try container.decodeIfPresent(DateComponents.self, forKey: .activatedDate)
         bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
-        isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
+        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted)
         type = try container.decodeIfPresent(Recipient.RecipientType.self, forKey: .type)
     }
     
@@ -195,7 +195,7 @@ public struct RecipientFilterParams: OmiseFilterParams {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(isActive, forKey: .isActive)
         try container.encodeIfPresent(bankLastDigits, forKey: .bankLastDigits)
-        try container.encodeOmiseDateComponentsIfPresent(activatedDate, forKey: .activatedDate)
+        try container.encodeIfPresent(activatedDate, forKey: .activatedDate)
         try container.encodeIfPresent(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(type, forKey: .type)
     }

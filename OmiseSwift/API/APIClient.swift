@@ -24,7 +24,7 @@ public class APIClient: NSObject {
         )
     }
     
-    func preferredKeyForServerEndpoint(_ endpoint: ServerEndpoint) -> String {
+    func preferredKey(for endpoint: ServerEndpoint) -> String {
         switch endpoint {
         case .api:
             return config.accessKey.key
@@ -33,8 +33,8 @@ public class APIClient: NSObject {
         }
     }
     
-    func preferredEncodedKeyForServerEndpoint(_ endpoint: ServerEndpoint) throws -> String {
-        let data = preferredKeyForServerEndpoint(endpoint).data(using: .utf8, allowLossyConversion: false)
+    func preferredEncodedKey(for endpoint: ServerEndpoint) throws -> String {
+        let data = preferredKey(for: endpoint).data(using: .utf8, allowLossyConversion: false)
         guard let encodedKey = data?.base64EncodedString() else {
             throw OmiseError.configuration("bad API key (encoding failed.)")
         }
@@ -43,7 +43,7 @@ public class APIClient: NSObject {
     }
     
     @discardableResult
-    public func requestToEndpoint<TResult>(_ endpoint: APIEndpoint<TResult>, callback: (APIRequest<TResult>.Callback)?) -> APIRequest<TResult>? {
+    public func request<TResult>(to endpoint: APIEndpoint<TResult>, callback: (APIRequest<TResult>.Callback)?) -> APIRequest<TResult>? {
         do {
             let req: APIRequest<TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()

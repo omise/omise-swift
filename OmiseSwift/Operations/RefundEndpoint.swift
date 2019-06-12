@@ -6,7 +6,7 @@ public extension Refund {
     typealias ListRequest = APIRequest<ListProperty<Refund>>
     
     @discardableResult
-    static func listEndpointWith(params: ListParams?) -> ListEndpoint {
+    static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: [Refund.resourcePath],
             parameter: .get(params)
@@ -15,13 +15,13 @@ public extension Refund {
     
     @discardableResult
     static func list(using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
-        let endpoint = self.listEndpointWith(params: params)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = self.listEndpoint(with: params)
+        return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
     static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Refund>>) -> Void) -> ListRequest? {
-        let endpoint = self.listEndpointWith(params: listParams)
+        let endpoint = self.listEndpoint(with: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
             let callbackResult = result.map({
@@ -30,6 +30,6 @@ public extension Refund {
             callback(callbackResult)
         }
         
-        return client.requestToEndpoint(endpoint, callback: requestCallback)
+        return client.request(to: endpoint, callback: requestCallback)
     }
 }

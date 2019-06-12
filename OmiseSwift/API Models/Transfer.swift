@@ -220,26 +220,26 @@ public struct TransferFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
-        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
-        isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
-        fee = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .fee)
-        isPaid = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isPaid)
-        paidDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .paidDate)
-        isSent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isSent)
-        sentDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .sentDate)
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        created = try container.decodeIfPresent(DateComponents.self, forKey: .created)
+        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted)
+        fee = try container.decodeIfPresent(Double.self, forKey: .fee)
+        isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
+        paidDate = try container.decodeIfPresent(DateComponents.self, forKey: .paidDate)
+        isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
+        sentDate = try container.decodeIfPresent(DateComponents.self, forKey: .sentDate)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(created, forKey: .created)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(isDeleted, forKey: .isDeleted)
         try container.encodeIfPresent(fee, forKey: .fee)
         try container.encodeIfPresent(isPaid, forKey: .isPaid)
-        try container.encodeOmiseDateComponentsIfPresent(paidDate, forKey: .paidDate)
+        try container.encodeIfPresent(paidDate, forKey: .paidDate)
         try container.encodeIfPresent(isSent, forKey: .isSent)
-        try container.encodeOmiseDateComponentsIfPresent(sentDate, forKey: .sentDate)
+        try container.encodeIfPresent(sentDate, forKey: .sentDate)
     }
     
     public init(amount: Double? = nil, created: DateComponents? = nil,

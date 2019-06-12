@@ -101,20 +101,20 @@ public struct LinkFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
-        created = try container.decodeOmiseDateComponentsIfPresent(forKey: .created)
-        isMultiple = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isMultiple)
-        isUsed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isUsed)
-        usedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .usedDate)
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        created = try container.decodeIfPresent(DateComponents.self, forKey: .created)
+        isMultiple = try container.decodeIfPresent(Bool.self, forKey: .isMultiple)
+        isUsed = try container.decodeIfPresent(Bool.self, forKey: .isUsed)
+        usedDate = try container.decodeIfPresent(DateComponents.self, forKey: .usedDate)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(amount, forKey: .amount)
-        try container.encodeOmiseDateComponentsIfPresent(created, forKey: .created)
+        try container.encodeIfPresent(created, forKey: .created)
         try container.encodeIfPresent(isMultiple, forKey: .isMultiple)
         try container.encodeIfPresent(isUsed, forKey: .isUsed)
-        try container.encodeOmiseDateComponentsIfPresent(usedDate, forKey: .usedDate)
+        try container.encodeIfPresent(usedDate, forKey: .usedDate)
     }
     
     public init(amount: Double? = nil, created: DateComponents? = nil,

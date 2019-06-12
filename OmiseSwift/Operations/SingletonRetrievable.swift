@@ -16,7 +16,7 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
     
     static func retrieve(using client: APIClient, callback: @escaping SingletonRetrieveRequest.Callback) -> SingletonRetrieveRequest? {
         let endpoint = self.retrieveEndpoint()
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

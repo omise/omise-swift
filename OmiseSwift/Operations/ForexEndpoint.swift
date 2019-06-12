@@ -14,7 +14,7 @@ extension Forex {
     
     public static func retrieve(using client: APIClient, exchangeFrom currency: Currency, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
         let endpoint = retrieveEndpoint(exchangeFrom: currency)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
 }
 

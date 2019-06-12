@@ -17,7 +17,7 @@ extension Charge {
     public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Charge>>>
     public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Charge>>>
     
-    public static func captureEndpointWithID(_ id: DataID<Charge>) -> CaptureEndpoint {
+    public static func captureEndpoint(with id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(
             pathComponents: [resourcePath, id.idString, "capture"],
             parameter: .post(nil)
@@ -25,11 +25,11 @@ extension Charge {
     }
     
     public static func capture(using client: APIClient, id: DataID<Charge>, callback: @escaping CaptureRequest.Callback) -> CaptureRequest? {
-        let endpoint = captureEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = captureEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func reverseEndpointWithID(_ id: DataID<Charge>) -> ReverseEndpoint {
+    public static func reverseEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "reverse"],
             parameter: .post(nil)
@@ -37,11 +37,11 @@ extension Charge {
     }
     
     public static func reverse(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = reverseEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = reverseEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func expireEndpointWithID(_ id: DataID<Charge>) -> ReverseEndpoint {
+    public static func expireEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "expire"],
             parameter: .post(nil)
@@ -49,11 +49,11 @@ extension Charge {
     }
     
     public static func expire(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = expireEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = expireEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsPaidEndpointWithID(_ id: DataID<Charge>) -> ReverseEndpoint {
+    public static func markAsPaidEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         precondition(!id.isLiveMode, "Marking Charge API is available only on the test charge")
         
         return ReverseEndpoint(
@@ -63,11 +63,11 @@ extension Charge {
     }
     
     public static func markAsPaid(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = markAsPaidEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = markAsPaidEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsFailedEndpointWithID(_ id: DataID<Charge>) -> ReverseEndpoint {
+    public static func markAsFailedEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         precondition(!id.isLiveMode, "Marking Charge API is available only on the test charge")
         
         return ReverseEndpoint(
@@ -77,12 +77,12 @@ extension Charge {
     }
     
     public static func markAsFailed(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = markAsFailedEndpointWithID(id)
-        return client.requestToEndpoint(endpoint, callback: callback)
+        let endpoint = markAsFailedEndpoint(with: id)
+        return client.request(to: endpoint, callback: callback)
     }
     
-    public static func listScheduleEndpointWithParams(_ params: ListParams?) -> ScheduleListEndpoint {
-        return Schedule<Charge>.listDataScheduleEndpointWithParams(params)
+    public static func listScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
+        return Schedule<Charge>.listDataScheduleEndpoint(with: params)
     }
     
     @discardableResult

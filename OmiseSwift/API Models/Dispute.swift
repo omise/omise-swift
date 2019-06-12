@@ -265,10 +265,10 @@ public struct DisputeFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
+        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
-        closedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .closedDate)
-        createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
+        closedDate = try container.decodeIfPresent(DateComponents.self, forKey: .closedDate)
+        createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .createdDate)
         currency = try container.decodeIfPresent(Currency.self, forKey: .currency)
         status = try container.decodeIfPresent(Dispute.Status.self, forKey: .status)
     }
@@ -277,8 +277,8 @@ public struct DisputeFilterParams: OmiseFilterParams {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(cardLastDigits, forKey: .cardLastDigits)
-        try container.encodeOmiseDateComponentsIfPresent(closedDate, forKey: .closedDate)
-        try container.encodeOmiseDateComponentsIfPresent(createdDate, forKey: .createdDate)
+        try container.encodeIfPresent(closedDate, forKey: .closedDate)
+        try container.encodeIfPresent(createdDate, forKey: .createdDate)
         try container.encodeIfPresent(currency, forKey: .currency)
         try container.encodeIfPresent(status, forKey: .status)
     }
@@ -305,6 +305,6 @@ extension Dispute {
             parameter: .get(nil)
         )
         
-        return client.requestToEndpoint(endpoint, callback: callback)
+        return client.request(to: endpoint, callback: callback)
     }
 }
