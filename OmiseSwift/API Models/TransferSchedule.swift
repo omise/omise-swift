@@ -79,7 +79,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, APIJSONQuery, Eq
         case unknown
     }
     
-    public let recipientID: String
+    public let recipientID: DataID<Recipient>
     public let amount: Amount
     
     private enum CodingKeys: String, CodingKey {
@@ -91,7 +91,7 @@ public struct TransferSchedulingParameter: SchedulingParameter, APIJSONQuery, Eq
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        recipientID = try container.decode(String.self, forKey: .recipientID)
+        recipientID = try container.decode(DataID<Recipient>.self, forKey: .recipientID)
         let percentageOfBalance = try container.decodeIfPresent(Double.self, forKey: .percentageOfBalance)
         let amount = try container.decodeIfPresent(Int64.self, forKey: .amount)
         let currency = try container.decodeIfPresent(Currency.self, forKey: .currency)

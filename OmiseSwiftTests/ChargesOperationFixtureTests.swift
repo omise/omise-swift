@@ -724,7 +724,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "card_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -737,7 +737,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[1].name, "currency")
         XCTAssertEqual(items[1].value, "THB")
         XCTAssertEqual(items[2].name, "card")
-        XCTAssertEqual(items[2].value, "crd_test_12345")
+        XCTAssertEqual(items[2].value, "card_test_12345")
         XCTAssertEqual(items[3].name, "description")
         XCTAssertEqual(items[3].value, "Hello")
         XCTAssertEqual(items[4].name, "metadata[customer id]")
@@ -1153,8 +1153,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
 extension ChargeParams: AdditionalFixtureData {
     var fixtureFileSuffix: String? {
         switch payment {
-        case .card(let id), .customer(customerID: let id, cardID: _):
-            return id
+        case .card(let id):
+            return id.idString
+        case .customer(customerID: let id, cardID: _):
+            return id.idString
         case .source(let source):
             return source.id.idString
         case .sourceType(let sourceType):

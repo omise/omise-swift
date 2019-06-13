@@ -353,8 +353,8 @@ extension Charge {
 public struct ChargeParams: APIJSONQuery {
     
     public enum Payment {
-        case card(cardID: String)
-        case customer(customerID: String, cardID: String?)
+        case card(cardID: DataID<Card>)
+        case customer(customerID: DataID<Customer>, cardID: DataID<Card>?)
         case source(PaymentSource)
         case sourceType(PaymentSourceParams.SourceParameter)
     }
@@ -414,11 +414,11 @@ public struct ChargeParams: APIJSONQuery {
         self.metadata = metadata
     }
     
-    public init(value: Value, customerID: String, cardID: String? = nil, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, customerID: DataID<Customer>, cardID: DataID<Card>? = nil, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.init(value: value, payment: .customer(customerID: customerID, cardID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, cardID: String, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
+    public init(value: Value, cardID: DataID<Card>, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
         self.init(value: value, payment: .card(cardID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
     }
     

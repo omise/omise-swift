@@ -73,7 +73,7 @@ extension Customer {
 public struct CustomerParams: APIJSONQuery {
     public var email: String?
     public var customerDescription: String?
-    public var cardID: String?
+    public var cardID: DataID<Card>?
     public var metadata: [String: Any]?
     
     private enum CodingKeys: String, CodingKey {
@@ -94,7 +94,10 @@ public struct CustomerParams: APIJSONQuery {
         }
     }
     
-    public init(email: String? = nil, customerDescription: String? = nil, cardID: String? = nil, metadata: [String: Any]? = nil) {
+    public init(
+        email: String? = nil, customerDescription: String? = nil, cardID: DataID<Card>? = nil,
+        metadata: [String: Any]? = nil
+        ) {
         self.email = email
         self.customerDescription = customerDescription
         self.cardID = cardID

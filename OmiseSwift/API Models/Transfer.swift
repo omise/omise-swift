@@ -171,7 +171,7 @@ extension Transfer {
 
 public struct TransferParams: APIJSONQuery {
     public var amount: Int64
-    public var recipientID: String?
+    public var recipientID: DataID<Recipient>?
     public var failFast: Bool?
     
     private enum CodingKeys: String, CodingKey {
@@ -180,7 +180,7 @@ public struct TransferParams: APIJSONQuery {
         case failFast = "fail_fast"
     }
     
-    public init(amount: Int64, recipientID: String? = nil, failFast: Bool? = nil) {
+    public init(amount: Int64, recipientID: DataID<Recipient>? = nil, failFast: Bool? = nil) {
         self.amount = amount
         self.recipientID = recipientID
         self.failFast = failFast
