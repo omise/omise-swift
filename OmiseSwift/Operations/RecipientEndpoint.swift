@@ -30,7 +30,7 @@ extension Recipient {
         
         let requestCallback: ScheduleListRequest.Callback = { result in
             let callbackResult = result.map({
-                List(endpoint: endpoint.endpoint, paths: endpoint.pathComponents, order: listParams?.order, list: $0)
+                List(listEndpoint: endpoint, list: $0)
             })
             callback(callbackResult)
         }

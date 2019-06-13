@@ -2,8 +2,8 @@ import Foundation
 
 
 public class List<TItem: OmiseLocatableObject & Listable> {
-    private(set) public var from: Date?
-    private(set) public var to: Date?
+    private(set) public var from: Date
+    private(set) public var to: Date
     var loadedIndices = 0..<0
     public let order: Ordering
     
@@ -15,8 +15,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         }
     }
     
-    let endpoint: ServerEndpoint
-    let paths: [String]
+    let intiitalEndpoint: APIEndpoint<ListProperty<TItem>>
     
     public var dataUpdatedHandler: (([TItem]) -> Void)?
     
@@ -24,26 +23,39 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         return loadedIndices.first ?? loadedIndices.lowerBound
     }
     
-    public init(endpoint: ServerEndpoint, paths: [String], order: Ordering?, list: ListProperty<TItem>? = nil) {
-        self.endpoint = endpoint
-        self.paths = paths
+    public init(listEndpoint: APIEndpoint<ListProperty<TItem>>, list: ListProperty<TItem>? = nil) {
+        self.intiitalEndpoint = listEndpoint
         
+        let limitParam: Int?
+        let offsetParam: Int?
+        let orderingParam: Ordering?
+        if case .get(let params) = listEndpoint.parameter,
+            let listParams = params as? ListParams {
+            limitParam = listParams.limit
+            offsetParam = listParams.offset
+            orderingParam = listParams.order
+        } else {
+            limitParam = nil
+            offsetParam = nil
+            orderingParam = nil
+        }
+        
+        self.limit = limitParam ?? list?.limit ?? 0
         self.data = list?.data ?? []
-        self.limit = list?.limit ?? 0
         self.total = list?.total ?? 0
         
-        if let order = order {
+        if let order = orderingParam {
             self.order = order
         } else if let from = list?.from, let to = list?.to {
             self.order = from.compare(to) == .orderedDescending ? .reverseChronological : .chronological
         } else {
             self.order = .chronological
         }
-        self.from = list?.from
-        self.to = list?.to
+        self.from = list?.from ?? Date.distantPast
+        self.to = list?.to ?? Date.distantPast
         
-        let offset = list?.offset ?? 0
-        loadedIndices = range(fromOffset: offset, limit: list?.data.count ?? 0)
+        let offset = offsetParam ?? list?.offset ?? 0
+        loadedIndices = range(fromOffset: offset, count: list?.data.count ?? 0)
     }
     
     public func setList(from list: ListProperty<TItem>) -> [TItem] {
@@ -54,7 +66,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         self.to = list.to
         
         let offset = list.offset
-        loadedIndices = range(fromOffset: offset, limit: list.data.count)
+        loadedIndices = range(fromOffset: offset, count: list.data.count)
         
         return list.data
     }
@@ -70,8 +82,10 @@ public class List<TItem: OmiseLocatableObject & Listable> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.firstIndex(where: { $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
-        var indexOfLastUpdatedItem = self.data.firstIndex(where: { $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
+        var indexOfFirstUpdatedItem = self.data.firstIndex(where: {
+            $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
+        var indexOfLastUpdatedItem = self.data.firstIndex(where: {
+            $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
         
         if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
             swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
@@ -80,7 +94,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         let replacingRange = indexOfFirstUpdatedItem..<indexOfLastUpdatedItem
         self.data[replacingRange] = ArraySlice(list.data)
         
-        loadedIndices = range(fromOffset: list.offset, limit: list.data.count)
+        loadedIndices = range(fromOffset: list.offset, count: list.data.count)
         
         return updatedData
     }
@@ -89,8 +103,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         self.data = []
         self.limit = 0
         self.total = 0
-        self.from = nil
-        self.to = nil
+        self.from = Date.distantPast
+        self.to = Date.distantPast
         self.loadedIndices = 0..<0
     }
     
@@ -101,7 +115,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         let total = value.total
         self.total = total
         
-        let valuesRange = range(fromOffset: offset, limit: Swift.min(limit, value.data.count))
+        let valuesRange = range(fromOffset: offset, count: Swift.min(limit, value.data.count))
         self.limit = limit
         
         guard let side = loadedIndices.side(from: valuesRange) else {
@@ -167,6 +181,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
     }
 }
 
+
 extension List: RandomAccessCollection {
     public subscript(index: Array<TItem>.Index) -> TItem {
         return data[index]
@@ -198,8 +213,8 @@ extension List: RandomAccessCollection {
 }
 
 
-func range(fromOffset offset: Int, limit: Int) -> CountableRange<Int> {
-    return offset..<(offset + limit)
+func range(fromOffset offset: Int, count: Int) -> CountableRange<Int> {
+    return offset..<(offset + count)
 }
 
 func combine(range: CountableRange<Int>, with anotherRange: CountableRange<Int>) -> CountableRange<Int> {
@@ -247,5 +262,4 @@ func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> Count
         return range.lowerBound..<range.upperBound.advanced(by: length)
     }
 }
-
 

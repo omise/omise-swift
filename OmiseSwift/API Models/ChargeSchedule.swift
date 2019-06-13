@@ -23,7 +23,6 @@ public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omise
 
 
 extension ChargeSchedule {
-    
     private enum CodingKeys: String, CodingKey {
         case object
         case id

@@ -50,7 +50,7 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         self.totalPages = result.totalPage
         
         let offset = result.page
-        loadedPages = range(fromOffset: offset, limit: 1)
+        loadedPages = range(fromOffset: offset, count: 1)
         
         return result.data
     }
@@ -91,7 +91,7 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     public func insert(from value: SearchResult<TItem>) -> [TItem] {
         self.totalPages = value.totalPage
         self.numberOfItemsPerPage = value.numberOfItemsPerPage
-        let valuesRange = range(fromOffset: value.page, limit: 1)
+        let valuesRange = range(fromOffset: value.page, count: 1)
         
         guard !loadedPages.contains(value.page), let side = loadedPages.side(from: valuesRange) else {
             dataUpdatedHandler?(data)
