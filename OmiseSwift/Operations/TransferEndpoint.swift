@@ -11,8 +11,7 @@ extension Transfer {
     public static func markAsSentEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_sent"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func markAsSent(
@@ -25,8 +24,7 @@ extension Transfer {
     public static func markAsPaidEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func markAsPaid(

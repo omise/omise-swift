@@ -20,8 +20,7 @@ extension Charge {
     public static func captureEndpoint(with id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(
             pathComponents: [resourcePath, id.idString, "capture"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func capture(using client: APIClient, id: DataID<Charge>, callback: @escaping CaptureRequest.Callback) -> CaptureRequest? {
@@ -32,8 +31,7 @@ extension Charge {
     public static func reverseEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "reverse"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func reverse(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -44,8 +42,7 @@ extension Charge {
     public static func expireEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "expire"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func expire(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -58,8 +55,7 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func markAsPaid(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -72,8 +68,7 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_failed"],
-            parameter: .post(nil)
-        )
+            parameter: .post(nil))
     }
     
     public static func markAsFailed(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {

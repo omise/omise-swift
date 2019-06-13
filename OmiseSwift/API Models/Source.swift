@@ -183,17 +183,13 @@ public enum Barcode: Codable, Equatable {
                     CodingKeys.storeID,
                     DecodingError.Context(
                         codingPath: container.codingPath,
-                        debugDescription: "Alipay Barcode store name is present but store id informaiton is missing"
-                    )
-                )
+                        debugDescription: "Alipay Barcode store name is present but store id informaiton is missing"))
             case (.some, nil):
                 throw DecodingError.keyNotFound(
                     CodingKeys.storeName,
                     DecodingError.Context(
                         codingPath: container.codingPath,
-                        debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"
-                    )
-                )
+                        debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"))
             }
             
             self.init(storeInformation: storeInformation, terminalID: terminalID, barcode: barcode)
@@ -289,8 +285,7 @@ public struct Installment: Codable, Equatable {
                 .flatMap(SourceType.InstallmentBrand.init(rawValue:)) else {
                     throw DecodingError.dataCorruptedError(
                         forKey: CodingKeys.type, in: container,
-                        debugDescription: "Invalid Installment Source Type value"
-                    )
+                        debugDescription: "Invalid Installment Source Type value")
         }
         
         self.brand = installmentBrand
@@ -438,8 +433,7 @@ extension PaymentSource: Creatable {
     public static func createEndpointWith(params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: ["sources"],
-            parameter: .post(params)
-        )
+            parameter: .post(params))
     }
     
     public static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {

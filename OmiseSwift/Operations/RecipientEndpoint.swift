@@ -8,8 +8,7 @@ extension Recipient {
         with recipientID: DataID<Recipient>, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Recipient.resourcePath, recipientID.idString, Schedule<Transfer>.resourcePath ],
-            parameter: .get(params)
-        )
+            parameter: .get(params))
     }
     
     @discardableResult

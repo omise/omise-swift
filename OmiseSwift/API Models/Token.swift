@@ -95,8 +95,7 @@ extension Token: Retrievable {
         return RetrieveEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath, id],
-            parameter: .get(retrieveParams)
-        )
+            parameter: .get(retrieveParams))
     }
     
     static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
@@ -114,8 +113,7 @@ extension Token: Creatable {
         return CreateEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath],
-            parameter: .post(params)
-        )
+            parameter: .post(params))
     }
     
     public static func create(using client: APIClient, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {

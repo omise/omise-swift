@@ -64,8 +64,7 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
-            parameter: .get(params)
-        )
+            parameter: .get(params))
     }
     
     static func search(

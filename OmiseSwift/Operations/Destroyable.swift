@@ -12,8 +12,7 @@ public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiab
     static func destroyEndpoint(with id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
-            parameter: .delete
-        )
+            parameter: .delete)
     }
     
     static func destroy(using client: APIClient, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
@@ -36,8 +35,7 @@ public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiable
     static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            parameter: .delete
-        )
+            parameter: .delete)
     }
     
     static func destroy(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {

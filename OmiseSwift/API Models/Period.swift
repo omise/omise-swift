@@ -121,8 +121,7 @@ extension Period: Codable {
                     case (.thursday, .friday), (.thursday, .saturday), (.thursday, .sunday):
                         return false
                     }
-                })
-            )
+                }))
         case .monthly(let month):
             try container.encode("month", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)

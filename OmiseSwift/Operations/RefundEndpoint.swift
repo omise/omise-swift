@@ -9,8 +9,7 @@ public extension Refund {
     static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: [Refund.resourcePath],
-            parameter: .get(params)
-        )
+            parameter: .get(params))
     }
     
     @discardableResult

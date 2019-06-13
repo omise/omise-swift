@@ -258,8 +258,7 @@ extension Charge {
         case (_, .some, .some), (_, .some, .none), (_, .none, .some):
             throw DecodingError.dataCorruptedError(
                 forKey: .failureCode, in: container,
-                debugDescription: "Invalid Charge Failure status."
-            )
+                debugDescription: "Invalid Charge Failure status.")
         }
         
         self.status = status

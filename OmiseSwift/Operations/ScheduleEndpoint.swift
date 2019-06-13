@@ -8,18 +8,23 @@ extension Schedule where Data: OmiseLocatableObject {
     public static func listDataScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Data.resourcePath, Schedule<Data>.resourcePath ],
-            parameter: .get(nil)
-        )
+            parameter: .get(nil))
     }
     
     @discardableResult
-    public static func listDataSchedule(using client: APIClient, params: ListParams? = nil, callback: ScheduleListRequest.Callback?) -> ScheduleListRequest? {
+    public static func listDataSchedule(
+        using client: APIClient, params: ListParams? = nil,
+        callback: ScheduleListRequest.Callback?
+        ) -> ScheduleListRequest? {
         let endpoint = self.listDataScheduleEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
-    public static func listDataSchedule(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Data>>>) -> Void) -> ScheduleListRequest? {
+    public static func listDataSchedule(
+        using client: APIClient, listParams: ListParams? = nil,
+        callback: @escaping (APIResult<List<Schedule<Data>>>) -> Void
+        ) -> ScheduleListRequest? {
         let endpoint = self.listDataScheduleEndpoint(with: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in

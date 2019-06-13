@@ -178,8 +178,7 @@ extension Schedule {
         } else {
             throw DecodingError.keyNotFound(
                 Schedule<Data>.CodingKeys.parameter("parameter"),
-                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Missing scheduling parameter")
-            )
+                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Missing scheduling parameter"))
         }
     }
     

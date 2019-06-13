@@ -23,8 +23,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 if let bayInstallmentMethod = capability[SourceType.installment(.bay)] {
                     XCTAssertEqual(
                         bayInstallmentMethod.payment,
-                        .installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10))
-                    )
+                        .installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10)))
                     XCTAssertEqual(bayInstallmentMethod.supportedCurrencies, [.thb])
                 } else {
                     XCTFail("Capability doesn't have the BAY Installment backend")
@@ -33,37 +32,32 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 10_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_000_000_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 5))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 5)))
                     XCTAssertFalse(capability ~= chargeParams)
                 }
                 
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        cardID: "card_test_123456789abcd"
-                    )
+                        cardID: "card_test_123456789abcd")
                     XCTAssertTrue(capability ~= chargeParams)
                 }
             case let .failure(error):
@@ -93,8 +87,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                        decodedCapability.creditCardMethod?.supportedCurrencies)
         XCTAssertEqual(
             capability[SourceType.installment(.bay)]?.payment,
-            decodedCapability[SourceType.installment(.bay)]?.payment
-        )
+            decodedCapability[SourceType.installment(.bay)]?.payment)
         XCTAssertEqual(capability[SourceType.installment(.bay)]?.supportedCurrencies,
                        decodedCapability[SourceType.installment(.bay)]?.supportedCurrencies)
     }

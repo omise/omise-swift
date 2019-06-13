@@ -20,8 +20,7 @@ public class APIClient: NSObject {
         self.session = URLSession(
             configuration: URLSessionConfiguration.ephemeral,
             delegate: self,
-            delegateQueue: operationQueue
-        )
+            delegateQueue: operationQueue)
     }
     
     func preferredKey(for endpoint: ServerEndpoint) -> String {

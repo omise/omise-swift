@@ -27,9 +27,7 @@ let secretKey = "<#Your secret key here#>"
  */
 let client = APIClient(
     config: APIConfiguration(
-        key: AnyAccessKey(secretKey)
-    )
-)
+        key: AnyAccessKey(secretKey)))
 
 /*:
  ---

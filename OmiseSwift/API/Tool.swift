@@ -108,8 +108,7 @@ func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -
     guard (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian else {
         throw EncodingError.invalidValue(
             dateComponents,
-            EncodingError.Context(codingPath: codingPath, debugDescription: "Date Components' calendar must be Gregorian calendar")
-        )
+            EncodingError.Context(codingPath: codingPath, debugDescription: "Date Components' calendar must be Gregorian calendar"))
     }
     
     guard let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day else {

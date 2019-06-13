@@ -33,8 +33,7 @@ public class URLQueryItemEncoder {
         components.queryItems = queryItems.map({
             URLQueryItem(
                 name: $0.name.addingPercentEncoding(withAllowedCharacters: URLQueryItemEncoder.formURLEncodedAllowedCharacters) ?? $0.name,
-                value: $0.value?.addingPercentEncoding(withAllowedCharacters: URLQueryItemEncoder.formURLEncodedAllowedCharacters)
-            )
+                value: $0.value?.addingPercentEncoding(withAllowedCharacters: URLQueryItemEncoder.formURLEncodedAllowedCharacters))
         })
         
         return components.query!.data(using: .utf8)!
@@ -295,16 +294,14 @@ extension URLQueryItemEncoder {
         
         func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
             codingPath.append(
-                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
-            )
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy))
             defer { codingPath.removeLast() }
             return KeyedEncodingContainer(KeyedContainer<NestedKey>(encoder: encoder, codingPath: codingPath))
         }
         
         func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
             codingPath.append(
-                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
-            )
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy))
             defer { codingPath.removeLast() }
             return self
         }
@@ -317,8 +314,7 @@ extension URLQueryItemEncoder {
         
         func encodeNil() throws {
             codingPath.append(
-                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
-            )
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy))
             defer { codingPath.removeLast() }
             try encoder.pushNil(forKey: codingPath)
             encodedItemsCount += 1
@@ -326,8 +322,7 @@ extension URLQueryItemEncoder {
         
         func encode<T>(_ value: T) throws where T : Encodable {
             codingPath.append(
-                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy)
-            )
+                URLQueryItemArrayElementKey(index: encodedItemsCount, encodingStrategy: encoder.arrayIndexEncodingStrategy))
             defer { codingPath.removeLast() }
             try encoder.push(value, forKey: codingPath)
             encodedItemsCount += 1

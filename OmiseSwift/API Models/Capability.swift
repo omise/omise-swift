@@ -201,8 +201,7 @@ extension Capability.Method {
         case .source(SourceType.billPayment), .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(
                 forKey: Capability.Method.CodingKeys.name, in: methodConfigurations,
-                debugDescription: "Invalid payment method type value"
-            )
+                debugDescription: "Invalid payment method type value")
         }
     }
     
