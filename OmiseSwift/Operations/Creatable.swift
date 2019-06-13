@@ -4,10 +4,12 @@ public protocol Creatable {
     associatedtype CreateParams: APIQuery
 }
 
-public extension OmiseAPIPrimaryObject where Self: Creatable {
+public extension Creatable where Self: OmiseObject {
     typealias CreateEndpoint = APIEndpoint<Self>
     typealias CreateRequest = APIRequest<Self>
-    
+}
+
+public extension OmiseAPIPrimaryObject where Self: Creatable {
     static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: Self.makeResourcePaths(),
@@ -33,9 +35,6 @@ public extension APIClient {
 
 
 public extension OmiseAPIChildObject where Self: Creatable {
-    typealias CreateEndpoint = APIEndpoint<Self>
-    typealias CreateRequest = APIRequest<Self>
-    
     static func createEndpointWith(parent: Parent, params: CreateParams) -> APIEndpoint<Self> {
         return APIEndpoint<Self>(
             pathComponents: Self.makeResourcePathsWith(parent: parent),

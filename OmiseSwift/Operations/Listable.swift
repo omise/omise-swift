@@ -18,10 +18,12 @@ public struct ListParams: APIJSONQuery {
     }
 }
 
-public extension OmiseAPIPrimaryObject where Self: Listable {
+public extension Listable where Self: OmiseLocatableObject {
     typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
     typealias ListRequest = APIRequest<ListProperty<Self>>
-    
+}
+
+public extension OmiseAPIPrimaryObject where Self: Listable {
     @discardableResult
     static func listEndpointWith(params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
@@ -56,7 +58,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
 }
 
 
-public extension List where TItem: OmiseAPIPrimaryObject {
+public extension List {
     func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
         let listParams = ListParams(
             offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
@@ -159,10 +161,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {
-    typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
-    typealias ListRequest = APIRequest<ListProperty<Self>>
-    
+public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {    
     @discardableResult
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(

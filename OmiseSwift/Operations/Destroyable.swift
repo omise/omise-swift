@@ -5,10 +5,12 @@ public protocol Destroyable {
     var isDeleted: Bool { get }
 }
 
-public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiableObject {
+public extension Destroyable where Self: OmiseIdentifiableObject {
     typealias DestroyEndpoint = APIEndpoint<Self>
     typealias DestroyRequest = APIRequest<Self>
-    
+}
+
+public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiableObject {
     static func destroyEndpoint(with id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
@@ -29,9 +31,6 @@ public extension APIClient {
 
 
 public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiableObject {
-    typealias DestroyEndpoint = APIEndpoint<Self>
-    typealias DestroyRequest = APIRequest<Self>
-    
     static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),

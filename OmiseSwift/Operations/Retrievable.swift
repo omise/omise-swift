@@ -10,10 +10,12 @@ public struct RetrieveParams: APIJSONQuery {
     }
 }
 
-public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiableObject {
+public extension Retrievable where Self: OmiseIdentifiableObject {
     typealias RetrieveEndpoint = APIEndpoint<Self>
     typealias RetrieveRequest = APIRequest<Self>
-    
+}
+
+public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiableObject {
     static func retrieveEndpoint(with id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
@@ -35,10 +37,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject {
-    typealias RetrieveEndpoint = APIEndpoint<Self>
-    typealias RetrieveRequest = APIRequest<Self>
-    
+public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject & Retrievable {    
     static func retrieveEndpointWith(parent: Parent, id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(

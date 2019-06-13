@@ -4,10 +4,12 @@ public protocol Updatable {
     associatedtype UpdateParams: APIJSONQuery
 }
 
-public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiableObject {
+public extension Updatable where Self: OmiseIdentifiableObject {
     typealias UpdateEndpoint = APIEndpoint<Self>
     typealias UpdateRequest = APIRequest<Self>
-    
+}
+
+public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiableObject {
     static func updateEndpoint(with id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: makeResourcePaths(id: id),
@@ -34,10 +36,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {
-    typealias UpdateEndpoint = APIEndpoint<Self>
-    typealias UpdateRequest = APIRequest<Self>
-    
+public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {    
     static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
