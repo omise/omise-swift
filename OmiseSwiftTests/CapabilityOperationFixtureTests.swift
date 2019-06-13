@@ -57,7 +57,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        cardID: "card_test_123456789abcd")
+                        cardID: "tokn_test_123456789abcd")
                     XCTAssertTrue(capability ~= chargeParams)
                 }
             case let .failure(error):

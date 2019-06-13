@@ -724,7 +724,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "card_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "tokn_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -737,7 +737,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[1].name, "currency")
         XCTAssertEqual(items[1].value, "THB")
         XCTAssertEqual(items[2].name, "card")
-        XCTAssertEqual(items[2].value, "card_test_12345")
+        XCTAssertEqual(items[2].value, "tokn_test_12345")
         XCTAssertEqual(items[3].name, "description")
         XCTAssertEqual(items[3].value, "Hello")
         XCTAssertEqual(items[4].name, "metadata[customer id]")
@@ -745,7 +745,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateCardChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "card_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "tokn_test_12345", chargeDescription: "Hello", isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -758,7 +758,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[1].name, "currency")
         XCTAssertEqual(items[1].value, "THB")
         XCTAssertEqual(items[2].name, "card")
-        XCTAssertEqual(items[2].value, "card_test_12345")
+        XCTAssertEqual(items[2].value, "tokn_test_12345")
         XCTAssertEqual(items[3].name, "description")
         XCTAssertEqual(items[3].value, "Hello")
         XCTAssertEqual(items[4].name, "metadata[customer id]")
