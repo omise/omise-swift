@@ -114,7 +114,7 @@ public extension List {
     }
 }
 
-public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
+public extension List where TItem: OmiseCreatedObject {
     func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
         let listParams: ListParams
         
