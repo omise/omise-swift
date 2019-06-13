@@ -31,18 +31,23 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     }
     
     @discardableResult
-    static func list(using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
+    static func list(
+        using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?
+        ) -> ListRequest? {
         let endpoint = self.listEndpointWith(params: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
-    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>) -> Void) -> ListRequest? {
+    static func list(
+        using client: APIClient, listParams: ListParams? = nil,
+        callback: @escaping (APIResult<List<Self>>) -> Void
+        ) -> ListRequest? {
         let endpoint = self.listEndpointWith(params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
             let callbackResult = result.map({
-                List(endpoint: endpoint.endpoint, paths: endpoint.pathComponents, order: listParams?.order, list: $0)
+                List(listEndpoint: endpoint, list: $0)
             })
             callback(callbackResult)
         }
@@ -54,13 +59,20 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
 
 public extension List where TItem: OmiseAPIPrimaryObject {
     func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
-        let listParams = ListParams(from: nil, to: nil, offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
+        let listParams = ListParams(
+            from: nil, to: nil,
+            offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
-        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
+        return TItem.ListEndpoint(
+            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            parameter: .get(listParams))
     }
     
     @discardableResult
-    func loadNextPage(using client: APIClient, count: Int? = nil, callback: @escaping (APIResult<[TItem]>) -> Void) -> APIRequest<TItem.ListEndpoint.Result>? {
+    func loadNextPage(
+        using client: APIClient, count: Int? = nil,
+        callback: @escaping (APIResult<[TItem]>) -> Void
+        ) -> APIRequest<TItem.ListEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -73,13 +85,19 @@ public extension List where TItem: OmiseAPIPrimaryObject {
     }
     
     func makeLoadPreviousPageOperation(count: Int?) -> TItem.ListEndpoint {
-        let listParams = ListParams(from: nil, to: nil, offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
+        let listParams = ListParams(
+            from: nil, to: nil,
+            offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
         
-        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
+        return TItem.ListEndpoint(
+            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            parameter: .get(listParams))
     }
     
     @discardableResult
-    func loadPreviousPage(using client: APIClient, count: Int? = nil, callback: @escaping (APIResult<[TItem]>) -> Void) -> TItem.ListRequest? {
+    func loadPreviousPage(
+        using client: APIClient, count: Int? = nil, callback: @escaping (APIResult<[TItem]>) -> Void
+        ) -> TItem.ListRequest? {
         let operation = makeLoadPreviousPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -109,11 +127,15 @@ public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
             listParams = ListParams(from: nil, to: nil, offset: nil, limit: nil, order: order)
         }
         
-        return TItem.ListEndpoint(endpoint: endpoint, pathComponents: paths, parameter: .get(listParams))
+        return TItem.ListEndpoint(
+            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            parameter: .get(listParams))
     }
     
     @discardableResult
-    func refreshData(using client: APIClient, callback: @escaping (APIResult<[TItem]>) -> Void) -> TItem.ListRequest? {
+    func refreshData(
+        using client: APIClient, callback: @escaping (APIResult<[TItem]>) -> Void
+        ) -> TItem.ListRequest? {
         let operation = makeRefreshCurrentDataOperation()
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -132,8 +154,97 @@ public extension List where TItem: OmiseAPIPrimaryObject & OmiseCreatedObject {
 }
 
 public extension APIClient {
-    func list<T: OmiseAPIPrimaryObject & Listable>(_ type: T.Type, callback: @escaping T.ListRequest.Callback) -> T.ListRequest? {
+    func list<T: OmiseAPIPrimaryObject & Listable>(
+        _ type: T.Type, callback: @escaping T.ListRequest.Callback
+        ) -> T.ListRequest? {
         return T.list(using: self, callback: callback)
+    }
+}
+
+
+public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {
+    typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
+    typealias ListRequest = APIRequest<ListProperty<Self>>
+    
+    @discardableResult
+    static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
+        return ListEndpoint(
+            pathComponents: makeResourcePathsWith(parent: parent),
+            parameter: .get(params)
+        )
+    }
+    
+    @discardableResult
+    static func list(using client: APIClient, parent: Parent, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
+        let endpoint = self.listEndpointWith(parent: parent, params: params)
+        return client.request(to: endpoint, callback: callback)
+    }
+    
+    @discardableResult
+    static func list(using client: APIClient, parent: Parent, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>) -> Void) -> ListRequest? {
+        let endpoint = self.listEndpointWith(parent: parent, params: listParams)
+        
+        let requestCallback: ListRequest.Callback = { result in
+            let callbackResult = result.map({
+                List(listEndpoint: endpoint, list: $0)
+            })
+            callback(callbackResult)
+        }
+        
+        return client.request(to: endpoint, callback: requestCallback)
+    }
+}
+
+public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
+    func listEndpoint<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?)
+        -> APIEndpoint<ListProperty<Children>> where Children.Parent == Self {
+            return APIEndpoint<ListProperty<Children>>(
+                pathComponents: Children.makeResourcePathsWith(parent: self),
+                parameter: .get(params)
+            )
+    }
+    
+    @discardableResult
+    func list<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>
+        (keyPath: KeyPath<Self, ListProperty<Children>>,
+         using client: APIClient,
+         params: ListParams? = nil,
+         callback: APIRequest<ListProperty<Children>>.Callback?) -> APIRequest<ListProperty<Children>>? where Children.Parent == Self {
+        let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
+        return client.request(to: endpoint, callback: callback)
+    }
+}
+
+
+public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
+    func listEndpoint<Children: OmiseLocatableObject & OmiseIdentifiableObject>(keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?)
+        -> APIEndpoint<ListProperty<Children>> {
+            return APIEndpoint<ListProperty<Children>>(
+                pathComponents: Self.makeResourcePathsWith(parent: self, keyPath: keyPath),
+                parameter: .get(params)
+            )
+    }
+    
+    @discardableResult
+    func list<Children: OmiseLocatableObject & OmiseIdentifiableObject>
+        (keyPath: KeyPath<Self, ListProperty<Children>>,
+         using client: APIClient,
+         params: ListParams? = nil,
+         callback: APIRequest<ListProperty<Children>>.Callback?) -> APIRequest<ListProperty<Children>>? {
+        let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
+        return client.request(to: endpoint, callback: callback)
+    }
+}
+
+extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
+    static func makeResourcePathsWith<Children: OmiseLocatableObject>(
+        parent: Self, keyPath: KeyPath<Self, ListProperty<Children>>
+        ) -> [String] {
+        var paths = [String]()
+        
+        paths = [Self.resourcePath, parent.id.idString]
+        paths.append(Children.resourcePath)
+        return paths
     }
 }
 

@@ -35,3 +35,22 @@ public extension APIClient {
     }
 }
 
+
+public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject {
+    typealias RetrieveEndpoint = APIEndpoint<Self>
+    typealias RetrieveRequest = APIRequest<Self>
+    
+    static func retrieveEndpointWith(parent: Parent, id: DataID<Self>) -> RetrieveEndpoint {
+        let retrieveParams = RetrieveParams(isExpanded: true)
+        return RetrieveEndpoint(
+            pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
+            parameter: .get(retrieveParams)
+        )
+    }
+    
+    static func retrieve(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+        let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
+        return client.request(to: endpoint, callback: callback)
+    }
+}
+

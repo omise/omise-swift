@@ -27,3 +27,23 @@ public extension APIClient {
         return T.destroy(using: self, id: dataID, callback: callback)
     }
 }
+
+
+public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiableObject {
+    typealias DestroyEndpoint = APIEndpoint<Self>
+    typealias DestroyRequest = APIRequest<Self>
+    
+    static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {
+        return DestroyEndpoint(
+            pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
+            parameter: .delete
+        )
+    }
+    
+    static func destroy(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
+        let endpoint = self.destroyEndpointWith(parent: parent, id: id)
+        return client.request(to: endpoint, callback: callback)
+    }
+}
+
+
