@@ -25,7 +25,7 @@ public extension Listable where Self: OmiseLocatableObject {
 
 public extension OmiseAPIPrimaryObject where Self: Listable {
     @discardableResult
-    static func listEndpointWith(params: ListParams?) -> ListEndpoint {
+    static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: makeResourcePaths(),
             parameter: .get(params))
@@ -35,7 +35,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     static func list(
         using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?
         ) -> ListRequest? {
-        let endpoint = self.listEndpointWith(params: params)
+        let endpoint = self.listEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
     
@@ -44,7 +44,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
         using client: APIClient, listParams: ListParams? = nil,
         callback: @escaping (APIResult<List<Self>>) -> Void
         ) -> ListRequest? {
-        let endpoint = self.listEndpointWith(params: listParams)
+        let endpoint = self.listEndpoint(with: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
             let callbackResult = result.map({

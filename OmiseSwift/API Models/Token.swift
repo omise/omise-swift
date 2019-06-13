@@ -90,7 +90,7 @@ extension Token: Retrievable {
     public typealias RetrieveEndpoint = APIEndpoint<Token>
     public typealias RetrieveRequest = APIRequest<Token>
 
-    static func retrieveEndpointWith(usingKey key: AccessKey, id: String) -> RetrieveEndpoint {
+    static func retrieveEndpoint(usingKey key: AccessKey, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             endpoint: .vault(key),
@@ -99,7 +99,7 @@ extension Token: Retrievable {
     }
     
     static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
-        let endpoint = self.retrieveEndpointWith(usingKey: key, id: id)
+        let endpoint = self.retrieveEndpoint(usingKey: key, id: id)
         return client.request(to: endpoint, callback: callback)
     }
 }

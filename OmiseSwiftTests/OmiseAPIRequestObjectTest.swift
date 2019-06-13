@@ -7,7 +7,7 @@ class OmiseAPIRequestObjectTest: FixtureTestCase {
     
     func testChargeRequest() {
         do {
-            let request = Charge.listEndpointWith(params: nil)
+            let request = Charge.listEndpoint(with: nil)
             XCTAssertEqual(request.pathComponents, [Charge.resourcePath])
         }
         
@@ -26,7 +26,7 @@ class OmiseAPIRequestObjectTest: FixtureTestCase {
     
     func testCustomerRequest() {
         do {
-            let request = Customer.listEndpointWith(params: nil)
+            let request = Customer.listEndpoint(with: nil)
             XCTAssertEqual(request.pathComponents, [Customer.resourcePath])
         }
         
@@ -39,7 +39,7 @@ class OmiseAPIRequestObjectTest: FixtureTestCase {
     
     func testLinkRequest() {
         do {
-            let request = Link.listEndpointWith(params: nil)
+            let request = Link.listEndpoint(with: nil)
             XCTAssertEqual(request.pathComponents, [Link.resourcePath])
         }
         
