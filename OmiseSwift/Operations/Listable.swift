@@ -60,11 +60,14 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
 
 public extension List {
     func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
+        guard total > 0 else {
+            return initialEndpoint
+        }
         let listParams = ListParams(
             offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
         
         return TItem.ListEndpoint(
-            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
             parameter: .get(listParams))
     }
     
@@ -85,11 +88,14 @@ public extension List {
     }
     
     func makeLoadPreviousPageOperation(count: Int?) -> TItem.ListEndpoint {
+        guard total > 0 else {
+            return initialEndpoint
+        }
         let listParams = ListParams(
             offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
         
         return TItem.ListEndpoint(
-            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
             parameter: .get(listParams))
     }
     
@@ -116,18 +122,22 @@ public extension List {
 
 public extension List where TItem: OmiseCreatedObject {
     func makeRefreshCurrentDataOperation() -> TItem.ListEndpoint {
+        guard total > 0 else {
+            return initialEndpoint
+        }
+        
         let listParams: ListParams
         
-        if let from = data.last?.createdDate, total > 0, order == .reverseChronological {
+        if let from = data.last?.createdDate, order == .reverseChronological {
             listParams = ListParams(from: from, limit: 100, order: order)
-        } else if let to = data.first?.createdDate, total > 0, order == .chronological {
+        } else if let to = data.first?.createdDate, order == .chronological {
             listParams = ListParams(to: to, limit: 100, order: order)
         } else {
-            listParams = ListParams(order: order)
+            listParams = ListParams(limit: limit > 0 ? limit : nil, order: order)
         }
         
         return TItem.ListEndpoint(
-            endpoint: intiitalEndpoint.endpoint, pathComponents: intiitalEndpoint.pathComponents,
+            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
             parameter: .get(listParams))
     }
     
@@ -161,7 +171,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {    
+public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {
     @discardableResult
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(

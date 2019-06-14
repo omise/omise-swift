@@ -15,7 +15,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         }
     }
     
-    let intiitalEndpoint: APIEndpoint<ListProperty<TItem>>
+    let initialEndpoint: APIEndpoint<ListProperty<TItem>>
     
     public var dataUpdatedHandler: (([TItem]) -> Void)?
     
@@ -24,7 +24,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
     }
     
     public init(listEndpoint: APIEndpoint<ListProperty<TItem>>, list: ListProperty<TItem>? = nil) {
-        self.intiitalEndpoint = listEndpoint
+        self.initialEndpoint = listEndpoint
         
         let limitParam: Int?
         let offsetParam: Int?
