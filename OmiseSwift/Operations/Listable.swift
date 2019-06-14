@@ -180,13 +180,18 @@ public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listabl
     }
     
     @discardableResult
-    static func list(using client: APIClient, parent: Parent, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
+    static func list(
+        using client: APIClient, parent: Parent, params: ListParams? = nil, callback: ListRequest.Callback?
+        ) -> ListRequest? {
         let endpoint = self.listEndpointWith(parent: parent, params: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
-    static func list(using client: APIClient, parent: Parent, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>) -> Void) -> ListRequest? {
+    static func list(
+        using client: APIClient, parent: Parent,
+        listParams: ListParams? = nil, callback: @escaping (APIResult<List<Self>>
+        ) -> Void) -> ListRequest? {
         let endpoint = self.listEndpointWith(parent: parent, params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
@@ -201,19 +206,19 @@ public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listabl
 }
 
 public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
-    func listEndpoint<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?)
-        -> APIEndpoint<ListProperty<Children>> where Children.Parent == Self {
-            return APIEndpoint<ListProperty<Children>>(
-                pathComponents: Children.makeResourcePathsWith(parent: self),
-                parameter: .get(params))
+    func listEndpoint<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(
+        keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?
+        ) -> APIEndpoint<ListProperty<Children>> where Children.Parent == Self {
+        return APIEndpoint<ListProperty<Children>>(
+            pathComponents: Children.makeResourcePathsWith(parent: self),
+            parameter: .get(params))
     }
     
     @discardableResult
-    func list<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>
-        (keyPath: KeyPath<Self, ListProperty<Children>>,
-         using client: APIClient,
-         params: ListParams? = nil,
-         callback: APIRequest<ListProperty<Children>>.Callback?) -> APIRequest<ListProperty<Children>>? where Children.Parent == Self {
+    func list<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(
+        keyPath: KeyPath<Self, ListProperty<Children>>, using client: APIClient,
+        params: ListParams? = nil, callback: APIRequest<ListProperty<Children>>.Callback?
+        ) -> APIRequest<ListProperty<Children>>? where Children.Parent == Self {
         let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
         return client.request(to: endpoint, callback: callback)
     }
@@ -221,7 +226,9 @@ public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
 
 
 public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
-    func listEndpoint<Children: OmiseLocatableObject & OmiseIdentifiableObject>(keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?)
+    func listEndpoint<Children: OmiseLocatableObject>(
+        keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?
+        )
         -> APIEndpoint<ListProperty<Children>> {
             return APIEndpoint<ListProperty<Children>>(
                 pathComponents: Self.makeResourcePathsWith(parent: self, keyPath: keyPath),
@@ -229,7 +236,7 @@ public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
     }
     
     @discardableResult
-    func list<Children: OmiseLocatableObject & OmiseIdentifiableObject>
+    func list<Children: OmiseLocatableObject>
         (keyPath: KeyPath<Self, ListProperty<Children>>,
          using client: APIClient,
          params: ListParams? = nil,
@@ -243,9 +250,7 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
     static func makeResourcePathsWith<Children: OmiseLocatableObject>(
         parent: Self, keyPath: KeyPath<Self, ListProperty<Children>>
         ) -> [String] {
-        var paths = [Self.resourcePath, parent.id.idString]
-        paths.append(Children.resourcePath)
-        return paths
+        return [Self.resourcePath, parent.id.idString, Children.resourcePath]
     }
 }
 
