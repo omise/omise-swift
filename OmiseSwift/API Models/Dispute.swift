@@ -302,7 +302,7 @@ extension Dispute {
     public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping ListRequest.Callback) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourcePath, state.rawValue],
-            parameter: .get(nil))
+            method: .get, query: nil)
         
         return client.request(to: endpoint, callback: callback)
     }

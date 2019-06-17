@@ -3,15 +3,15 @@ import Foundation
 
 extension Transfer {
     public typealias MarkEndpoint = MarkRequest.Endpoint
-    public typealias MarkRequest = APIRequest<Transfer>
+    public typealias MarkRequest = APIRequest<NoAPIQuery, Transfer>
     
-    public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Transfer>>>
-    public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Transfer>>>
+    public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Transfer>>
+    public typealias ScheduleListRequest = ListAPIRequest<Schedule<Transfer>>
     
     public static func markAsSentEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_sent"],
-            parameter: .post(nil))
+            method: .post)
     }
     
     public static func markAsSent(
@@ -24,7 +24,7 @@ extension Transfer {
     public static func markAsPaidEndpoint(with id : DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
-            parameter: .post(nil))
+            method: .post)
     }
     
     public static func markAsPaid(

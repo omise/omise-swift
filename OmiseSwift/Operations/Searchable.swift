@@ -57,14 +57,14 @@ public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
 
 
 public extension OmiseAPIPrimaryObject where Self: Searchable {
-    typealias SearchEndpoint = APIEndpoint<SearchResult<Self>>
-    typealias SearchRequest = APIRequest<SearchResult<Self>>
+    typealias SearchEndpoint = APIEndpoint<SearchParams<FilterParams>, SearchResult<Self>>
+    typealias SearchRequest = APIRequest<SearchParams<FilterParams>, SearchResult<Self>>
     
     static func searchEndpoint(with params: SearchParams<FilterParams>?) -> SearchEndpoint {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     static func search(
@@ -95,14 +95,14 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
             scope: list.scope, query: list.query, order: list.order, filter: list.filters,
             page: list.loadedPages.last?.advanced(by: 1) ?? 1)
         
-        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))
+        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
     
     @discardableResult
     static func loadNextPage(
         list: Search<Self>, using client: APIClient,
         callback: @escaping (APIResult<[Self]>) -> Void
-        ) -> APIRequest<SearchEndpoint.Result>? {
+        ) -> APIRequest<SearchParams<FilterParams>, SearchEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(list: list)
         
         let requestCallback: SearchRequest.Callback = { result in
@@ -118,14 +118,14 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
             scope: list.scope, query: list.query, order: list.order, filter: list.filters,
             page: list.loadedPages.last?.advanced(by: -1) ?? 1)
         
-        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], parameter: .get(listParams))
+        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
     
     @discardableResult
     static func loadPreviousPage(
         list: Search<Self>, using client: APIClient,
         callback: @escaping (APIResult<[Self]>) -> Void
-        ) -> APIRequest<SearchEndpoint.Result>? {
+        ) -> APIRequest<SearchParams<FilterParams>, SearchEndpoint.Result>? {
         let operation = makeLoadNextPageOperation(list: list)
         
         let requestCallback: SearchRequest.Callback = { result in

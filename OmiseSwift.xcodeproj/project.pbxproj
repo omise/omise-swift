@@ -49,6 +49,8 @@
 		8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */; };
 		8A3139312293B2370055F755 /* TransferSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3139302293B2370055F755 /* TransferSchedule.swift */; };
 		8A3139322293B2370055F755 /* TransferSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3139302293B2370055F755 /* TransferSchedule.swift */; };
+		8A37FD3B22B7A9EB00325538 /* APIQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37FD3A22B7A9EB00325538 /* APIQuery.swift */; };
+		8A37FD3C22B7A9EB00325538 /* APIQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37FD3A22B7A9EB00325538 /* APIQuery.swift */; };
 		8A38E78122968280005FD6F9 /* BillingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38E78022968280005FD6F9 /* BillingAddress.swift */; };
 		8A38E78222968280005FD6F9 /* BillingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38E78022968280005FD6F9 /* BillingAddress.swift */; };
 		8A3B90151E360AD30074D6CD /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3B90141E360AD30074D6CD /* Token.swift */; };
@@ -269,6 +271,7 @@
 		8A2BCAC01E5C083F0069577B /* banks.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = banks.json; sourceTree = "<group>"; };
 		8A2BCAC31E5C400F0069577B /* RecipientOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientOperationTest.swift; sourceTree = "<group>"; };
 		8A3139302293B2370055F755 /* TransferSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferSchedule.swift; sourceTree = "<group>"; };
+		8A37FD3A22B7A9EB00325538 /* APIQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIQuery.swift; sourceTree = "<group>"; };
 		8A38E78022968280005FD6F9 /* BillingAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingAddress.swift; sourceTree = "<group>"; };
 		8A3938E51D8174C9007750AA /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		8A3B90141E360AD30074D6CD /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
@@ -481,6 +484,7 @@
 				8A028B441E2CEA370008E010 /* APIConfiguration.swift */,
 				8A242A511E2E1BAA0068BB5D /* APIEndpoint.swift */,
 				2298735D1CCE15D400970F8C /* APIError.swift */,
+				8A37FD3A22B7A9EB00325538 /* APIQuery.swift */,
 				8A028B4A1E2CECEF0008E010 /* APIRequest.swift */,
 				2298736E1CCE207500970F8C /* Endpoint.swift */,
 				2298738A1CCF5D9500970F8C /* OmiseError.swift */,
@@ -797,6 +801,7 @@
 				8A84EF761E2E27C90041082E /* List.swift in Sources */,
 				8ACE2355229D17C1008AA15E /* RefundEndpoint.swift in Sources */,
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
+				8A37FD3C22B7A9EB00325538 /* APIQuery.swift in Sources */,
 				8A6785CE2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
 				8A3BCB6122B0F4C400569A93 /* RecipientEndpoint.swift in Sources */,
 				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
@@ -872,6 +877,7 @@
 				8A98759B1F0647050090D56F /* Document.swift in Sources */,
 				8ACE2354229D17C1008AA15E /* RefundEndpoint.swift in Sources */,
 				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
+				8A37FD3B22B7A9EB00325538 /* APIQuery.swift in Sources */,
 				8A6785CD2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */,
 				8A3BCB6022B0F4C400569A93 /* RecipientEndpoint.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,

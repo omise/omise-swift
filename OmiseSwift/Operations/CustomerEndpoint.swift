@@ -1,13 +1,13 @@
 import Foundation
 
 extension Customer {
-    public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Charge>>>
-    public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Charge>>>
+    public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Charge>>
+    public typealias ScheduleListRequest = ListAPIRequest<Schedule<Charge>>
     
     public static func listScheduleEndpointChargingCustomer(with customerID: DataID<Customer>, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Customer.resourcePath, customerID.idString, Schedule<Charge>.resourcePath ],
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult

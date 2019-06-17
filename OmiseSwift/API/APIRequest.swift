@@ -1,17 +1,21 @@
 import Foundation
 
 
-public class APIRequest<ResultType: OmiseObject> {
-    public typealias Endpoint = APIEndpoint<ResultType>
+public typealias ListAPIRequest<Result: OmiseObject> = APIRequest<ListParams, ListProperty<Result>>
+public typealias RetrieveAPIRequest<Result: OmiseObject> = APIRequest<RetrieveParams, Result>
+
+
+public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
+    public typealias Endpoint = APIEndpoint<QueryType, ResultType>
     public typealias Callback = (APIResult<ResultType>) -> Void
     
     let client: APIClient
-    let endpoint: APIEndpoint<ResultType>
+    let endpoint: APIEndpoint<QueryType, ResultType>
     let callback: APIRequest.Callback?
     
     var task: URLSessionTask?
     
-    init(client: APIClient, endpoint: APIEndpoint<ResultType>, callback: Callback?) {
+    init(client: APIClient, endpoint: APIEndpoint<QueryType, ResultType>, callback: Callback?) {
         self.client = client
         self.endpoint = endpoint
         self.callback = callback
@@ -33,7 +37,6 @@ public class APIRequest<ResultType: OmiseObject> {
     fileprivate func didComplete(_ data: Data?, response: URLResponse?, error: Error?) {
         // no one's in the forest to hear the leaf falls.
         guard callback != nil else { return }
-        
         
         if let err = error {
             performCallback(.failure(.other(err)))
@@ -84,7 +87,7 @@ public class APIRequest<ResultType: OmiseObject> {
         let auth = try client.preferredEncodedKey(for: endpoint.endpoint)
         
         var request = URLRequest(url: requestURL)
-        request.httpMethod = endpoint.parameter.method
+        request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 10.0
         request.addValue(auth, forHTTPHeaderField: "Authorization")
@@ -92,12 +95,12 @@ public class APIRequest<ResultType: OmiseObject> {
         
         let payloadData: (String, Data)?
         
-        switch endpoint.parameter {
-        case .delete, .get, .head:
+        switch (endpoint.method, endpoint.query) {
+        case (.delete, nil), (.get, nil), (.head, nil):
             payloadData = nil
-        case .post(let query?):
+        case (.post, let query?):
             payloadData = makePayload(for: query)
-        case .patch(let query?):
+        case (.patch, let query?):
             payloadData = makePayload(for: query)
         default:
             payloadData = nil

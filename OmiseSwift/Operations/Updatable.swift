@@ -5,15 +5,15 @@ public protocol Updatable {
 }
 
 public extension Updatable where Self: OmiseIdentifiableObject {
-    typealias UpdateEndpoint = APIEndpoint<Self>
-    typealias UpdateRequest = APIRequest<Self>
+    typealias UpdateEndpoint = APIEndpoint<Self.UpdateParams, Self>
+    typealias UpdateRequest = APIRequest<Self.UpdateParams, Self>
 }
 
 public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiableObject {
     static func updateEndpoint(with id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: makeResourcePaths(id: id),
-            parameter: .patch(params))
+            method: .patch, query: params)
     }
     
     static func update(
@@ -40,7 +40,7 @@ public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableOb
     static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            parameter: .patch(params))
+            method: .patch, query: params)
     }
     
     static func update(

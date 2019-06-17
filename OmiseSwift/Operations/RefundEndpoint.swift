@@ -2,14 +2,14 @@ import Foundation
 
 
 public extension Refund {
-    typealias ListEndpoint = APIEndpoint<ListProperty<Refund>>
-    typealias ListRequest = APIRequest<ListProperty<Refund>>
+    typealias ListEndpoint = APIEndpoint<ListParams, ListProperty<Refund>>
+    typealias ListRequest = APIRequest<ListParams, ListProperty<Refund>>
     
     @discardableResult
     static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: [Refund.resourcePath],
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult

@@ -1,14 +1,14 @@
 import Foundation
 
 extension Recipient {
-    public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Transfer>>>
-    public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Transfer>>>
+    public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Transfer>>
+    public typealias ScheduleListRequest = ListAPIRequest<Schedule<Transfer>>
     
     public static func listScheduleEndpointTransferingRecipient(
         with recipientID: DataID<Recipient>, params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Recipient.resourcePath, recipientID.idString, Schedule<Transfer>.resourcePath ],
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult

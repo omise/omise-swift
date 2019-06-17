@@ -427,13 +427,13 @@ extension PaymentSource: Retrievable {}
 extension PaymentSource: Creatable {
     public typealias CreateParams = PaymentSourceParams
     
-    public typealias CreateEndpoint = APIEndpoint<PaymentSource>
-    public typealias CreateRequest = APIRequest<PaymentSource>
+    public typealias CreateEndpoint = APIEndpoint<CreateParams, PaymentSource>
+    public typealias CreateRequest = APIRequest<CreateParams, PaymentSource>
     
     public static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: ["sources"],
-            parameter: .post(params))
+            method: .post, query: params)
     }
     
     public static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {

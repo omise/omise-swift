@@ -1,54 +1,31 @@
 import Foundation
 
-public protocol APIQuery: Encodable {}
 
-public protocol APIURLQuery: APIQuery {}
-
-public protocol APIJSONQuery: APIURLQuery {}
-
-public protocol APIMultipartFormQuery: APIQuery {}
-
-public protocol APIFileQuery: APIMultipartFormQuery {
-    var filename: String { get }
-    var fileContent: Data { get }
-}
+public typealias ListAPIEndpoint<Result: OmiseObject> = APIEndpoint<ListParams, ListProperty<Result>>
 
 
-public struct APIEndpoint<DataType: OmiseObject> {
-    
-    public enum Parameter {
-        case get(APIURLQuery?)
-        case head(APIURLQuery?)
-        case post(APIQuery?)
-        case patch(APIQuery?)
-        case delete
-        
-        var method: String {
-            switch self {
-            case .get:
-                return "GET"
-            case .head:
-                return "HEAD"
-            case .post:
-                return "POST"
-            case .patch:
-                return "PATCH"
-            case .delete:
-                return "DELETE"
-            }
-        }
-    }
+public struct APIEndpoint<QueryType: APIQuery, DataType: OmiseObject> {
     
     public typealias Result = DataType
     
     public let endpoint: ServerEndpoint
-    public let parameter: Parameter
     public let pathComponents: [String]
+    public let query: QueryType?
+    let method: HTTPMethod
     
-    init(endpoint: ServerEndpoint = .api, pathComponents: [String], parameter: Parameter) {
+    enum HTTPMethod: String {
+        case get = "GET"
+        case head = "HEAD"
+        case post = "POST"
+        case patch = "PATCH"
+        case delete = "DELETE"
+    }
+    
+    init(endpoint: ServerEndpoint = .api, pathComponents: [String], method: HTTPMethod, query: QueryType?) {
         self.endpoint = endpoint
         self.pathComponents = pathComponents
-        self.parameter = parameter
+        self.method = method
+        self.query = query
     }
     
     func makeURL() -> URL {
@@ -62,13 +39,13 @@ public struct APIEndpoint<DataType: OmiseObject> {
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         do {
-            switch parameter {
-            case .get(let query?):
-                urlComponents.queryItems = try encoder.encode(query)
-            case .head(let query?):
-                urlComponents.queryItems = try encoder.encode(query)
-            default:
-                return url
+            if let query = self.query {
+                switch method {
+                case .get, .head:
+                    urlComponents.queryItems = try encoder.encode(query)
+                default:
+                    return url
+                }
             }
         } catch {
             return url
@@ -84,6 +61,16 @@ public struct APIEndpoint<DataType: OmiseObject> {
     
     func deserialize(_ data: Data) throws -> DataType {
         return try deserializeData(data)
+    }
+}
+
+
+extension APIEndpoint where QueryType == NoAPIQuery {
+    init(endpoint: ServerEndpoint = .api, pathComponents: [String], method: HTTPMethod) {
+        self.endpoint = endpoint
+        self.pathComponents = pathComponents
+        self.method = method
+        self.query = nil
     }
 }
 

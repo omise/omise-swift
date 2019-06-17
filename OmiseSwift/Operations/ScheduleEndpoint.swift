@@ -1,14 +1,14 @@
 import Foundation
 
 extension Schedule where Data: OmiseLocatableObject {
-    public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Data>>>
-    public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Data>>>
+    public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Data>>
+    public typealias ScheduleListRequest = ListAPIRequest<Schedule<Data>>
     
     
     public static func listDataScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Data.resourcePath, Schedule<Data>.resourcePath ],
-            parameter: .get(nil))
+            method: .get, query: nil)
     }
     
     @discardableResult

@@ -15,7 +15,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         }
     }
     
-    let initialEndpoint: APIEndpoint<ListProperty<TItem>>
+    let initialEndpoint: ListAPIEndpoint<TItem>
     
     public var dataUpdatedHandler: (([TItem]) -> Void)?
     
@@ -23,28 +23,14 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         return loadedIndices.first ?? loadedIndices.lowerBound
     }
     
-    public init(listEndpoint: APIEndpoint<ListProperty<TItem>>, list: ListProperty<TItem>? = nil) {
+    public init(listEndpoint: ListAPIEndpoint<TItem>, list: ListProperty<TItem>? = nil) {
         self.initialEndpoint = listEndpoint
         
-        let limitParam: Int?
-        let offsetParam: Int?
-        let orderingParam: Ordering?
-        if case .get(let params) = listEndpoint.parameter,
-            let listParams = params as? ListParams {
-            limitParam = listParams.limit
-            offsetParam = listParams.offset
-            orderingParam = listParams.order
-        } else {
-            limitParam = nil
-            offsetParam = nil
-            orderingParam = nil
-        }
-        
-        self.limit = limitParam ?? list?.limit ?? 0
+        self.limit = listEndpoint.query?.limit ?? list?.limit ?? 0
         self.data = list?.data ?? []
         self.total = list?.total ?? 0
         
-        if let order = orderingParam {
+        if let order = listEndpoint.query?.order {
             self.order = order
         } else if let from = list?.from, let to = list?.to {
             self.order = from.compare(to) == .orderedDescending ? .reverseChronological : .chronological
@@ -54,7 +40,7 @@ public class List<TItem: OmiseLocatableObject & Listable> {
         self.from = list?.from ?? Date.distantPast
         self.to = list?.to ?? Date.distantPast
         
-        let offset = offsetParam ?? list?.offset ?? 0
+        let offset = listEndpoint.query?.offset ?? list?.offset ?? 0
         loadedIndices = range(fromOffset: offset, count: list?.data.count ?? 0)
     }
     

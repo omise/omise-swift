@@ -6,15 +6,15 @@ public protocol Destroyable {
 }
 
 public extension Destroyable where Self: OmiseIdentifiableObject {
-    typealias DestroyEndpoint = APIEndpoint<Self>
-    typealias DestroyRequest = APIRequest<Self>
+    typealias DestroyEndpoint = APIEndpoint<NoAPIQuery, Self>
+    typealias DestroyRequest = APIRequest<NoAPIQuery, Self>
 }
 
 public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiableObject {
     static func destroyEndpoint(with id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
-            parameter: .delete)
+            method: .delete)
     }
     
     static func destroy(using client: APIClient, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {
@@ -34,7 +34,7 @@ public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiable
     static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {
         return DestroyEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            parameter: .delete)
+            method: .delete)
     }
     
     static func destroy(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping DestroyRequest.Callback) -> DestroyRequest? {

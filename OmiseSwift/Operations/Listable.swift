@@ -19,8 +19,8 @@ public struct ListParams: APIJSONQuery {
 }
 
 public extension Listable where Self: OmiseLocatableObject {
-    typealias ListEndpoint = APIEndpoint<ListProperty<Self>>
-    typealias ListRequest = APIRequest<ListProperty<Self>>
+    typealias ListEndpoint = ListAPIEndpoint<Self>
+    typealias ListRequest = ListAPIRequest<Self>
 }
 
 public extension OmiseAPIPrimaryObject where Self: Listable {
@@ -28,7 +28,7 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: makeResourcePaths(),
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult
@@ -68,14 +68,14 @@ public extension List {
         
         return TItem.ListEndpoint(
             endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            parameter: .get(listParams))
+            method: .get, query: listParams)
     }
     
     @discardableResult
     func loadNextPage(
         using client: APIClient, count: Int? = nil,
         callback: @escaping (APIResult<[TItem]>) -> Void
-        ) -> APIRequest<TItem.ListEndpoint.Result>? {
+        ) -> TItem.ListRequest? {
         let operation = makeLoadNextPageOperation(count: count)
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
@@ -96,7 +96,7 @@ public extension List {
         
         return TItem.ListEndpoint(
             endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            parameter: .get(listParams))
+            method: .get, query: listParams)
     }
     
     @discardableResult
@@ -138,7 +138,7 @@ public extension List where TItem: OmiseCreatedObject {
         
         return TItem.ListEndpoint(
             endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            parameter: .get(listParams))
+            method: .get, query: listParams)
     }
     
     @discardableResult
@@ -176,7 +176,7 @@ public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listabl
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: makeResourcePathsWith(parent: parent),
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult
@@ -208,17 +208,17 @@ public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listabl
 public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
     func listEndpoint<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(
         keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?
-        ) -> APIEndpoint<ListProperty<Children>> where Children.Parent == Self {
-        return APIEndpoint<ListProperty<Children>>(
+        ) -> ListAPIEndpoint<Children> where Children.Parent == Self {
+        return ListAPIEndpoint<Children>(
             pathComponents: Children.makeResourcePathsWith(parent: self),
-            parameter: .get(params))
+            method: .get, query: params)
     }
     
     @discardableResult
     func list<Children: OmiseAPIChildObject & OmiseLocatableObject & OmiseIdentifiableObject>(
         keyPath: KeyPath<Self, ListProperty<Children>>, using client: APIClient,
-        params: ListParams? = nil, callback: APIRequest<ListProperty<Children>>.Callback?
-        ) -> APIRequest<ListProperty<Children>>? where Children.Parent == Self {
+        params: ListParams? = nil, callback: ListAPIRequest<Children>.Callback?
+        ) -> ListAPIRequest<Children>? where Children.Parent == Self {
         let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
         return client.request(to: endpoint, callback: callback)
     }
@@ -229,10 +229,10 @@ public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
     func listEndpoint<Children: OmiseLocatableObject>(
         keyPath: KeyPath<Self, ListProperty<Children>>, params: ListParams?
         )
-        -> APIEndpoint<ListProperty<Children>> {
-            return APIEndpoint<ListProperty<Children>>(
+        -> ListAPIEndpoint<Children> {
+            return ListAPIEndpoint<Children>(
                 pathComponents: Self.makeResourcePathsWith(parent: self, keyPath: keyPath),
-                parameter: .get(params))
+                method: .get, query: params)
     }
     
     @discardableResult
@@ -240,7 +240,7 @@ public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         (keyPath: KeyPath<Self, ListProperty<Children>>,
          using client: APIClient,
          params: ListParams? = nil,
-         callback: APIRequest<ListProperty<Children>>.Callback?) -> APIRequest<ListProperty<Children>>? {
+         callback: ListAPIRequest<Children>.Callback?) -> ListAPIRequest<Children>? {
         let endpoint = self.listEndpoint(keyPath: keyPath, params: params)
         return client.request(to: endpoint, callback: callback)
     }

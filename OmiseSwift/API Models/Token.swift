@@ -87,15 +87,15 @@ public struct TokenParams: APIJSONQuery {
 extension Token {}
 
 extension Token: Retrievable {
-    public typealias RetrieveEndpoint = APIEndpoint<Token>
-    public typealias RetrieveRequest = APIRequest<Token>
+    public typealias RetrieveEndpoint = APIEndpoint<RetrieveParams, Token>
+    public typealias RetrieveRequest = APIRequest<RetrieveParams, Token>
 
     static func retrieveEndpoint(usingKey key: AccessKey, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath, id],
-            parameter: .get(retrieveParams))
+            method: .get, query: retrieveParams)
     }
     
     static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
@@ -106,14 +106,12 @@ extension Token: Retrievable {
 
 extension Token: Creatable {
     public typealias CreateParams = TokenParams
-    public typealias CreateEndpoint = APIEndpoint<Token>
-    public typealias CreateRequest = APIRequest<Token>
     
     public static func createEndpoint(usingKey key: AccessKey, params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath],
-            parameter: .post(params))
+            method: .post, query: params)
     }
     
     public static func create(using client: APIClient, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {

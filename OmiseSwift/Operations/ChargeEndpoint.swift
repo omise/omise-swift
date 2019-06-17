@@ -2,8 +2,8 @@ import Foundation
 
 
 extension Charge {
-    public typealias ChargeOperationEndpoint = APIEndpoint<Charge>
-    public typealias ChargeOperationRequest = APIRequest<Charge>
+    public typealias ChargeOperationEndpoint = APIEndpoint<NoAPIQuery, Charge>
+    public typealias ChargeOperationRequest = APIRequest<NoAPIQuery, Charge>
     
     public typealias CaptureEndpoint = ChargeOperationEndpoint
     public typealias CaptureRequest = ChargeOperationRequest
@@ -14,13 +14,13 @@ extension Charge {
     public typealias MarkChargeRequest = ChargeOperationRequest
     
     
-    public typealias ScheduleListEndpoint = APIEndpoint<ListProperty<Schedule<Charge>>>
-    public typealias ScheduleListRequest = APIRequest<ListProperty<Schedule<Charge>>>
+    public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Charge>>
+    public typealias ScheduleListRequest = ListAPIRequest<Schedule<Charge>>
     
     public static func captureEndpoint(with id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(
             pathComponents: [resourcePath, id.idString, "capture"],
-            parameter: .post(nil))
+            method: .post, query: nil)
     }
     
     public static func capture(using client: APIClient, id: DataID<Charge>, callback: @escaping CaptureRequest.Callback) -> CaptureRequest? {
@@ -31,7 +31,7 @@ extension Charge {
     public static func reverseEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "reverse"],
-            parameter: .post(nil))
+            method: .post, query: nil)
     }
     
     public static func reverse(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -42,7 +42,7 @@ extension Charge {
     public static func expireEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "expire"],
-            parameter: .post(nil))
+            method: .post, query: nil)
     }
     
     public static func expire(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -55,7 +55,7 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
-            parameter: .post(nil))
+            method: .post, query: nil)
     }
     
     public static func markAsPaid(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
@@ -68,7 +68,7 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_failed"],
-            parameter: .post(nil))
+            method: .post, query: nil)
     }
     
     public static func markAsFailed(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {

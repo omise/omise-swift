@@ -3,14 +3,14 @@ import Foundation
 public protocol SingletonRetrievable {}
 
 public extension SingletonRetrievable where Self: OmiseLocatableObject {
-    typealias SingletonRetrieveEndpoint = APIEndpoint<Self>
-    typealias SingletonRetrieveRequest = APIRequest<Self>
+    typealias SingletonRetrieveEndpoint = APIEndpoint<RetrieveParams, Self>
+    typealias SingletonRetrieveRequest = APIRequest<RetrieveParams, Self>
     
     static func retrieveEndpoint() -> SingletonRetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return SingletonRetrieveEndpoint(
             pathComponents: [Self.resourcePath],
-            parameter: .get(retrieveParams))
+            method: .get, query: retrieveParams)
     }
     
     static func retrieve(

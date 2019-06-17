@@ -5,15 +5,15 @@ public protocol Creatable {
 }
 
 public extension Creatable where Self: OmiseObject {
-    typealias CreateEndpoint = APIEndpoint<Self>
-    typealias CreateRequest = APIRequest<Self>
+    typealias CreateEndpoint = APIEndpoint<Self.CreateParams, Self>
+    typealias CreateRequest = APIRequest<Self.CreateParams, Self>
 }
 
 public extension OmiseAPIPrimaryObject where Self: Creatable {
     static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: Self.makeResourcePaths(),
-            parameter: .post(params))
+            method: .post, query: params)
     }
     
     static func create(
@@ -35,15 +35,15 @@ public extension APIClient {
 
 
 public extension OmiseAPIChildObject where Self: Creatable {
-    static func createEndpointWith(parent: Parent, params: CreateParams) -> APIEndpoint<Self> {
-        return APIEndpoint<Self>(
+    static func createEndpointWith(parent: Parent, params: CreateParams) -> Self.CreateEndpoint {
+        return Self.CreateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent),
-            parameter: .post(params))
+            method: .post, query: params)
     }
     
     static func create(
-        using client: APIClient, parent: Parent, params: CreateParams, callback: @escaping APIRequest<Self>.Callback
-        ) -> APIRequest<Self>? {
+        using client: APIClient, parent: Parent, params: CreateParams, callback: @escaping Self.CreateRequest.Callback
+        ) -> Self.CreateRequest? {
         let endpoint = self.createEndpointWith(parent: parent, params: params)
         return client.request(to: endpoint, callback: callback)
     }

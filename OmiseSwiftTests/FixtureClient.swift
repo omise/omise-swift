@@ -13,9 +13,9 @@ class FixtureClient: APIClient {
     }
     
     @discardableResult
-    override func request<TResult>(to endpoint: APIEndpoint<TResult>, callback: APIRequest<TResult>.Callback?) -> APIRequest<TResult>? {
+    override func request<QueryType, TResult>(to endpoint: APIEndpoint<QueryType, TResult>, callback: ((Result<TResult, OmiseError>) -> Void)?) -> APIRequest<QueryType, TResult>? where QueryType : APIQuery, TResult : OmiseObject {
         do {
-            let req: FixtureRequest<TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
+            let req: FixtureRequest<QueryType, TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as NSError {
             operationQueue.addOperation() { callback?(.failure(.other(err))) }
@@ -28,7 +28,7 @@ class FixtureClient: APIClient {
 }
 
 
-class FixtureRequest<TResult: OmiseObject>: APIRequest<TResult> {
+class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<QueryType, TResult> {
     var fixtureClient: FixtureClient? {
         return client as? FixtureClient
     }
@@ -100,18 +100,9 @@ extension Omise.APIEndpoint {
         }
         
         let fixtureFileSuffix: String?
-        switch parameter {
-        case .get((let query as (APIURLQuery & AdditionalFixtureData)?)):
-            fixtureFileSuffix = query?.fixtureFileSuffix
-        case .head((let query as (APIURLQuery & AdditionalFixtureData)?)):
-            fixtureFileSuffix = query?.fixtureFileSuffix
-            
-        case .post((let query as (APIQuery & AdditionalFixtureData)?)):
-            fixtureFileSuffix = query?.fixtureFileSuffix
-        case .patch((let query as (APIQuery & AdditionalFixtureData)?)):
-            fixtureFileSuffix = query?.fixtureFileSuffix
-        
-        default:
+        if let query = query as? (APIQuery & AdditionalFixtureData) {
+            fixtureFileSuffix = query.fixtureFileSuffix
+        } else {
             fixtureFileSuffix = nil
         }
         
@@ -119,7 +110,7 @@ extension Omise.APIEndpoint {
         if let fixtureFileSuffix = fixtureFileSuffix {
             filename += "-\(fixtureFileSuffix)"
         }
-        filename += "-" + parameter.method.lowercased()
+        filename += "-" + method.rawValue.lowercased()
         return (filename as NSString).appendingPathExtension("json")! as String
     }
 }
