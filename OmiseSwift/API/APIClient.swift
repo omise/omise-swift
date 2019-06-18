@@ -7,9 +7,12 @@ public class APIClient: NSObject {
     var session: URLSession!
     let operationQueue: OperationQueue
     
-    let config: APIConfiguration
+    public let config: APIConfiguration
     
-    fileprivate let pinningCertificateData: Data? = Bundle(for: APIClient.self).url(forResource: "OmisePinning", withExtension: "der").flatMap({ try? Data(contentsOf: $0) })
+    private let pinningCertificateData: Data? =
+        Bundle(for: APIClient.self)
+            .url(forResource: "OmisePinning", withExtension: "der")
+            .flatMap({ try? Data(contentsOf: $0) })
     
     public init(config: APIConfiguration) {
         self.config = config
@@ -32,8 +35,9 @@ public class APIClient: NSObject {
         }
     }
     
-    func preferredEncodedKey(for endpoint: ServerEndpoint) throws -> String {
-        let data = preferredKey(for: endpoint).data(using: .utf8, allowLossyConversion: false)
+    func encodedPreferredKey(for endpoint: ServerEndpoint) throws -> String {
+        let data = preferredKey(for: endpoint)
+            .data(using: .utf8, allowLossyConversion: false)
         guard let encodedKey = data?.base64EncodedString() else {
             throw OmiseError.configuration("bad API key (encoding failed.)")
         }
@@ -42,9 +46,13 @@ public class APIClient: NSObject {
     }
     
     @discardableResult
-    public func request<QueryType, TResult>(to endpoint: APIEndpoint<QueryType, TResult>, callback: (APIRequest<QueryType, TResult>.Callback)?) -> APIRequest<QueryType, TResult>? {
+    public func request<QueryType, TResult>(
+        to endpoint: APIEndpoint<QueryType, TResult>,
+        callback: (APIRequest<QueryType, TResult>.Callback)?
+        ) -> APIRequest<QueryType, TResult>? {
         do {
-            let req: APIRequest<QueryType, TResult> = APIRequest(client: self, endpoint: endpoint, callback: callback)
+            let req = APIRequest<QueryType, TResult>(
+                client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as OmiseError {
             performCallback() {
@@ -72,7 +80,10 @@ public class APIClient: NSObject {
 
 
 extension APIClient: URLSessionDelegate {
-    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func urlSession(
+        _ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?
+        ) -> Void) {
         let credential: URLCredential?
         let challengeDisposition: URLSession.AuthChallengeDisposition
         defer {
@@ -95,14 +106,14 @@ extension APIClient: URLSessionDelegate {
         let status = SecTrustEvaluate(serverTrust, &secresult)
         
         guard errSecSuccess == status else {
-                credential = nil
-                challengeDisposition = .cancelAuthenticationChallenge
-                return
+            credential = nil
+            challengeDisposition = .cancelAuthenticationChallenge
+            return
         }
         
         for i in (0..<SecTrustGetCertificateCount(serverTrust)).reversed() {
             guard let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, i) else { continue }
-                
+            
             let serverCertificateData = SecCertificateCopyData(serverCertificate)
             let data = CFDataGetBytePtr(serverCertificateData);
             let size = CFDataGetLength(serverCertificateData);
@@ -113,7 +124,7 @@ extension APIClient: URLSessionDelegate {
                 return
             }
         }
-
+        
         credential = nil
         challengeDisposition = .cancelAuthenticationChallenge
     }

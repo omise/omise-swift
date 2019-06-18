@@ -2,7 +2,7 @@ import Foundation
 
 public protocol Listable {}
 
-public struct ListParams: APIJSONQuery {
+public struct ListParams: APIURLQuery {
     public var from: Date?
     public var to: Date?
     public var offset: Int?

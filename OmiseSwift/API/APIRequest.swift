@@ -84,7 +84,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
     func makeURLRequest() throws -> URLRequest {
         let requestURL = endpoint.makeURL()
         
-        let auth = try client.preferredEncodedKey(for: endpoint.endpoint)
+        let auth = try client.encodedPreferredKey(for: endpoint.endpoint)
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.method.rawValue
@@ -98,17 +98,10 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         switch (endpoint.method, endpoint.query) {
         case (.delete, nil), (.get, nil), (.head, nil):
             payloadData = nil
-        case (.post, let query?):
-            payloadData = makePayload(for: query)
-        case (.patch, let query?):
-            payloadData = makePayload(for: query)
+        case (.post, let query?), (.patch, let query?):
+            payloadData = query.makePayload()
         default:
             payloadData = nil
-        }
-        
-        guard !(request.httpMethod == "GET" && payloadData != nil) else {
-            omiseWarn("ignoring payloads for HTTP GET operation.")
-            return request as URLRequest
         }
         
         if let (header, payload) = payloadData {
@@ -119,38 +112,5 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         
         return request as URLRequest
     }
-    
-    private func makePayload(for query: APIQuery) -> (String, Data)? {
-        switch query {
-        case let query as APIURLQuery:
-            return makePayload(for: query)
-        case let query as APIFileQuery:
-            return makePayload(for: query)
-        default:
-            return nil
-        }
-    }
-    
-    private func makePayload(for query: APIURLQuery) -> (String, Data)? {
-        var urlComponents = URLComponents()
-        let encoder = URLQueryItemEncoder()
-        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
-        urlComponents.queryItems = try? encoder.encode(query)
-        return urlComponents.percentEncodedQuery?.data(using: .utf8).map({ ("application/x-www-form-urlencoded", $0) })
-    }
-    
-    private func makePayload(for query: APIFileQuery) -> (String, Data)? {
-        let crlf = "\r\n"
-        let boundary = "------\(UUID().uuidString)"
-        
-        var data = Data()
-        data.append("--\(boundary)\(crlf)".data(using: .utf8, allowLossyConversion: false)!)
-        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(query.filename)\"\(crlf + crlf)".data(using: .utf8, allowLossyConversion: false)!)
-        data.append(query.fileContent)
-        data.append("\(crlf)--\(boundary)--".data(using: .utf8, allowLossyConversion: false)!)
-        
-        return ("multipart/form-data; boundary=\(boundary)", data)
-    }
 }
-
 

@@ -2,7 +2,7 @@ import Foundation
 
 public protocol Retrievable {}
 
-public struct RetrieveParams: APIJSONQuery {
+public struct RetrieveParams: APIURLQuery {
     public var isExpanded: Bool = false
     
     private enum CodingKeys: String, CodingKey {
