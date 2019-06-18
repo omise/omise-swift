@@ -39,6 +39,7 @@ public struct ChargeFailure: Equatable {
         case timeout
         case internalError
         case amountMismatch
+        case invalidAccount
         case undefined
         
         /// Processing has failed.
@@ -98,6 +99,9 @@ extension ChargeFailure.Code {
         case .invalidBarcode:
             return "invalid_barcode"
             
+        case .invalidAccount:
+            return "invalid_account"
+            
         case .undefined:
             return "undefined"
         case .other(let code):
@@ -147,6 +151,8 @@ extension ChargeFailure.Code {
             self = .amountMismatch
         case "invalid_barcode":
             self = .invalidBarcode
+        case "invalid_account":
+            self = .invalidAccount
         case "undefined":
             self = .undefined
             
