@@ -6,9 +6,10 @@ private let refundTestingID = DataID<Refund>(idString: "rfnd_test_5frz1pdm34u276
 
 private let charge: Charge = {
     let bundle = Bundle(for: OmiseTestCase.self)
-    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/charges/chrg_test_5frvn3hgya3qemayzrt-get", ofType: "json") else {
-        XCTFail("could not load fixtures.")
-        preconditionFailure()
+    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/charges/chrg_test_5frvn3hgya3qemayzrt-get",
+                                 ofType: "json") else {
+                                    XCTFail("could not load fixtures.")
+                                    preconditionFailure()
     }
     
     guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {

@@ -1,5 +1,6 @@
 import Foundation
 
+
 public protocol Updatable {
     associatedtype UpdateParams: APIJSONQuery
 }

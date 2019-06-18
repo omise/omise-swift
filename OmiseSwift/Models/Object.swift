@@ -26,8 +26,8 @@ public protocol OmiseLiveModeObject: OmiseObject {
 }
 
 
-public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject,
-	OmiseLiveModeObject, OmiseCreatedObject {}
+public protocol OmiseResourceObject
+  : OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {}
 
 public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
 

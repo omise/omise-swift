@@ -80,7 +80,9 @@ private func parsingDateComponentsValue(_ value: String, codingPath: [CodingKey]
         scanner.scanString("-", into: nil) &&
         scanner.scanInt(&lastInt)
         else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "Invalid Date Components value"))
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(codingPath: codingPath,
+                                      debugDescription: "Invalid Date Components value"))
     }
     
     month = secondInt
@@ -107,11 +109,15 @@ func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -
     guard (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian else {
         throw EncodingError.invalidValue(
             dateComponents,
-            EncodingError.Context(codingPath: codingPath, debugDescription: "Date Components' calendar must be Gregorian calendar"))
+            EncodingError.Context(codingPath: codingPath,
+                                  debugDescription: "Date Components' calendar must be Gregorian calendar"))
     }
     
     guard let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day else {
-        throw EncodingError.invalidValue(dateComponents, EncodingError.Context(codingPath: codingPath, debugDescription: "Invalid Date Components value"))
+        throw EncodingError.invalidValue(
+            dateComponents,
+            EncodingError.Context(codingPath: codingPath,
+                                  debugDescription: "Invalid Date Components value"))
     }
     
     return "\(year)-\(month)-\(day)"
@@ -124,7 +130,9 @@ extension Decoder {
         return try container.decode()
     }
     
-    func decode<SkippedKeys: CodingKey>(as type: Dictionary<String, Any>.Type, skippingKeys: SkippedKeys.Type) throws -> Dictionary<String, Any> {
+    func decode<SkippedKeys: CodingKey>(
+        as type: Dictionary<String, Any>.Type, skippingKeys: SkippedKeys.Type
+        ) throws -> Dictionary<String, Any> {
         let container = try self.container(keyedBy: SkippingKeyCodingKeys<SkippedKeys>.self)
         return try container.decode()
     }
@@ -357,10 +365,12 @@ extension Encoder {
     
     func encode(_ jsonDictionary: Dictionary<String, Any>) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
-        try container.encodeJSONDictionary(jsonDictionary)
+        try container.encode(jsonDictionary)
     }
     
-    func encode<SkippedKeys: CodingKey>(_ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type) throws  {
+    func encode<SkippedKeys: CodingKey>(
+        _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
+        ) throws  {
         var container = self.container(keyedBy: JSONCodingKeys.self)
         try container.encode(value, skippingKeysBy: skippingKeys)
     }
@@ -388,7 +398,7 @@ extension KeyedEncodingContainerProtocol {
 
 
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
-    mutating func encodeJSONDictionary(_ value: Dictionary<String, Any>) throws {
+    mutating func encode(_ value: Dictionary<String, Any>) throws {
         try value.forEach({ (key, value) in
             let key = JSONCodingKeys(key: key)
             switch value {
@@ -407,12 +417,17 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
             case Optional<Any>.none:
                 try encodeNil(forKey: key)
             default:
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + [key], debugDescription: "Invalid JSON value"))
+                throw EncodingError.invalidValue(
+                    value,
+                    EncodingError.Context(codingPath: codingPath + [key],
+                                          debugDescription: "Invalid JSON value"))
             }
         })
     }
     
-    mutating func encode<SkippedKeys: CodingKey>(_ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type) throws  {
+    mutating func encode<SkippedKeys: CodingKey>(
+        _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
+        ) throws  {
         try value.forEach({ (key, value) in
             guard SkippedKeys(stringValue: key) == nil else {
                 return
@@ -434,7 +449,10 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
             case Optional<Any>.none:
                 try encodeNil(forKey: key)
             default:
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + [key], debugDescription: "Invalid JSON value"))
+                throw EncodingError.invalidValue(
+                    value,
+                    EncodingError.Context(codingPath: codingPath + [key],
+                                          debugDescription: "Invalid JSON value"))
             }
         })
     }
@@ -443,7 +461,7 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
 extension KeyedEncodingContainerProtocol {
     mutating func encode(_ value: Dictionary<String, Any>, forKey key: Key) throws {
         var container = self.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key)
-        try container.encodeJSONDictionary(value)
+        try container.encode(value)
     }
     
     mutating func encodeIfPresent(_ value: Dictionary<String, Any>?, forKey key: Key) throws {
@@ -484,7 +502,10 @@ extension UnkeyedEncodingContainer {
                 try encodeNil()
             default:
                 let keys = JSONCodingKeys(intValue: index).map({ [ $0 ] }) ?? []
-                throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: codingPath + keys, debugDescription: "Invalid JSON value"))
+                throw EncodingError.invalidValue(
+                    value,
+                    EncodingError.Context(codingPath: codingPath + keys,
+                                          debugDescription: "Invalid JSON value"))
             }
         })
     }
@@ -496,7 +517,7 @@ extension UnkeyedEncodingContainer {
     
     mutating func encode(_ value: Dictionary<String, Any>) throws {
         var nestedContainer = self.nestedContainer(keyedBy: JSONCodingKeys.self)
-        try nestedContainer.encodeJSONDictionary(value)
+        try nestedContainer.encode(value)
     }
 }
 

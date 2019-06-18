@@ -31,8 +31,8 @@ extension APIURLQuery {
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         urlComponents.queryItems = try? encoder.encode(self)
-        return urlComponents.percentEncodedQuery?.data(using: .utf8).map({ ("application/x-www-form-urlencoded", $0) })
-
+        return urlComponents.percentEncodedQuery?.data(using: .utf8)
+            .map({ ("application/x-www-form-urlencoded", $0) })
     }
 }
 
@@ -42,7 +42,6 @@ extension APIJSONQuery {
         encoder.dateEncodingStrategy = .iso8601
         let data = try? encoder.encode(self)
         return data.map({ ("application/json", $0) })
-
     }
 }
 
@@ -53,7 +52,8 @@ extension APIFileQuery {
         
         var data = Data()
         data.append("--\(boundary)\(crlf)".data(using: .utf8, allowLossyConversion: false)!)
-        data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(self.filename)\"\(crlf + crlf)".data(using: .utf8, allowLossyConversion: false)!)
+        data.append(#"Content-Disposition: form-data; name="file\"; filename="\#(self.filename)"\#(crlf + crlf)"#
+            .data(using: .utf8, allowLossyConversion: false)!)
         data.append(self.fileContent)
         data.append("\(crlf)--\(boundary)--".data(using: .utf8, allowLossyConversion: false)!)
         

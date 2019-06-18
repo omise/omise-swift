@@ -299,7 +299,10 @@ extension Dispute: Searchable {
 
 
 extension Dispute {
-    public static func list(using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, callback: @escaping ListRequest.Callback) -> ListRequest? {
+    public static func list(
+        using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, 
+        callback: @escaping ListRequest.Callback
+        ) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourcePath, state.rawValue],
             method: .get, query: nil)

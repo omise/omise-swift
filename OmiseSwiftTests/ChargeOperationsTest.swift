@@ -94,7 +94,10 @@ class ChargeOperationsTest: LiveTest {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-                let list = List<Charge>(listEndpoint: ListAPIEndpoint<Charge>(endpoint: .api, pathComponents: [Charge.resourcePath], method: .get, query: listParams), list: transfersList)
+                let list = List<Charge>(
+                    listEndpoint: ListAPIEndpoint<Charge>(
+                        endpoint: .api, pathComponents: [Charge.resourcePath], method: .get, query: listParams),
+                    list: transfersList)
                 XCTAssertEqual(list.loadedIndices, 30..<30)
 
                 list.loadPreviousPage(using: self.testClient, callback: { (firstLoadResult) in

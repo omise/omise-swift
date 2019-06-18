@@ -52,7 +52,7 @@ public struct TokenParams: APIJSONQuery {
             case securityCode = "security_code"
         }
     }
-
+    
     public func encode(to encoder: Encoder) throws {
         var tokenContainer = encoder.container(keyedBy: TokenCodingKeys.self)
         
@@ -74,8 +74,8 @@ public struct TokenParams: APIJSONQuery {
     }
     
     public init(number: String, name: String,
-        expiration: (month: Int, year: Int), securityCode: String?,
-        billingAddress: BillingAddress? = nil) {
+                expiration: (month: Int, year: Int), securityCode: String?,
+                billingAddress: BillingAddress? = nil) {
         self.number = number
         self.name = name
         self.expiration = expiration
@@ -90,7 +90,7 @@ extension Token {}
 extension Token: Retrievable {
     public typealias RetrieveEndpoint = APIEndpoint<RetrieveParams, Token>
     public typealias RetrieveRequest = APIRequest<RetrieveParams, Token>
-
+    
     static func retrieveEndpoint(usingKey key: AccessKey, id: String) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
@@ -99,7 +99,10 @@ extension Token: Retrievable {
             method: .get, query: retrieveParams)
     }
     
-    static func retrieve(using client: APIClient, usingKey key: AccessKey, id: String, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(
+        using client: APIClient, usingKey key: AccessKey, id: String, 
+        callback: @escaping RetrieveRequest.Callback
+        ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpoint(usingKey: key, id: id)
         return client.request(to: endpoint, callback: callback)
     }
@@ -115,7 +118,10 @@ extension Token: Creatable {
             method: .post, query: params)
     }
     
-    public static func create(using client: APIClient, usingKey key: AccessKey, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+    public static func create(
+        using client: APIClient, usingKey key: AccessKey, params: CreateParams, 
+        callback: @escaping CreateRequest.Callback
+        ) -> CreateRequest? {
         let endpoint = self.createEndpoint(usingKey: key, params: params)
         return client.request(to: endpoint, callback: callback)
     }

@@ -13,17 +13,21 @@ class FixtureClient: APIClient {
     }
     
     @discardableResult
-    override func request<QueryType, TResult>(to endpoint: APIEndpoint<QueryType, TResult>, callback: ((Result<TResult, OmiseError>) -> Void)?) -> APIRequest<QueryType, TResult>? where QueryType : APIQuery, TResult : OmiseObject {
-        do {
-            let req: FixtureRequest<QueryType, TResult> = FixtureRequest(client: self, endpoint: endpoint, callback: callback)
-            return try req.start()
-        } catch let err as NSError {
-            operationQueue.addOperation() { callback?(.failure(.other(err))) }
-        } catch let err as OmiseError {
-            operationQueue.addOperation() { callback?(.failure(err)) }
-        }
-        
-        return nil
+    override func request<QueryType, TResult>(
+        to endpoint: APIEndpoint<QueryType, TResult>,
+        callback: ((Result<TResult, OmiseError>) -> Void)?)
+        -> APIRequest<QueryType, TResult>? where QueryType : APIQuery, TResult : OmiseObject {
+            do {
+                let req: FixtureRequest<QueryType, TResult> = FixtureRequest(
+                    client: self, endpoint: endpoint, callback: callback)
+                return try req.start()
+            } catch let err as NSError {
+                operationQueue.addOperation() { callback?(.failure(.other(err))) }
+            } catch let err as OmiseError {
+                operationQueue.addOperation() { callback?(.failure(err)) }
+            }
+            
+            return nil
     }
 }
 
@@ -91,8 +95,9 @@ protocol AdditionalFixtureData {
 
 extension Omise.APIEndpoint {
     var fixtureFilePath: String {
-        guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true), let hostname = components.host else {
-            preconditionFailure("Invalid URL")
+        guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true),
+            let hostname = components.host else {
+                preconditionFailure("Invalid URL")
         }
         
         let filePath = pathComponents.reduce(hostname) { (path: String, segment: String) -> String in

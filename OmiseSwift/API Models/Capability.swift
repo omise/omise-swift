@@ -154,7 +154,9 @@ extension Capability {
         isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
         
         supportedMethods = try container.decode(Array<Capability.Method>.self, forKey: .paymentMethods)
-        methods = Dictionary(uniqueKeysWithValues: zip(supportedMethods.map({ Capability.Method.Key(payment: $0.payment) }), supportedMethods))
+        methods = Dictionary(
+            uniqueKeysWithValues: zip(supportedMethods.map({ Capability.Method.Key(payment: $0.payment) }),
+                                      supportedMethods))
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -189,14 +191,16 @@ extension Capability.Method {
             self.payment = .card(supportedBrand)
         case .source(SourceType.installment(let brand)):
             let paymentConfigurations = try decoder.container(keyedBy: Capability.Method.ConfigurationCodingKeys.self)
-            let allowedInstallmentTerms = IndexSet(try paymentConfigurations.decode(Array<Int>.self, forKey: .allowedInstallmentTerms))
+            let allowedInstallmentTerms = IndexSet(
+                try paymentConfigurations.decode(Array<Int>.self, forKey: .allowedInstallmentTerms))
             self.payment = .installment(brand, availableNumberOfTerms: allowedInstallmentTerms)
         case .source(SourceType.alipay):
             self.payment = .alipay
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
         case .source(SourceType.unknown(let type)):
-            let configurations = try decoder.container(keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
+            let configurations = try decoder.container(
+                keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
             self.payment = .unknownSource(type, configurations: configurations)
         case .source(SourceType.billPayment), .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(
@@ -211,13 +215,15 @@ extension Capability.Method {
         
         switch payment {
         case .card(let brands):
-            var paymentConfigurations = encoder.container(keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+            var paymentConfigurations = encoder.container(
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
             try paymentConfigurations.encode(brands, forKey: .right(.brands))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
             try paymentConfigurations.encode(Key.card, forKey: .left(.name))
         case .installment(let brand, availableNumberOfTerms: let availableNumberOfTerms):
-            var paymentConfigurations = encoder.container(keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+            var paymentConfigurations = encoder.container(
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
             try paymentConfigurations.encode(Array(availableNumberOfTerms), forKey: .right(.allowedInstallmentTerms))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
@@ -233,7 +239,8 @@ extension Capability.Method {
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
         case .unknownSource(let source, configurations: let configurations):
-            var configurationContainers = encoder.container(keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, JSONCodingKeys>.self)
+            var configurationContainers = encoder.container(
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, JSONCodingKeys>.self)
             try configurations.forEach({ (key, value) in
                 let key = JSONCodingKeys(key: key)
                 switch value {
@@ -252,7 +259,10 @@ extension Capability.Method {
                 case Optional<Any>.none:
                     try configurationContainers.encodeNil(forKey: .right(key))
                 default:
-                    throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: configurationContainers.codingPath + [key], debugDescription: "Invalid JSON value"))
+                    throw EncodingError.invalidValue(
+                        value,
+                        EncodingError.Context(codingPath: configurationContainers.codingPath + [key],
+                                              debugDescription: "Invalid JSON value"))
                 }
             })
             
@@ -311,7 +321,8 @@ extension Capability.Method {
             case .source(let sourceType):
                 let sourceTypeValue = sourceType.sourceTypePrefix
                 if sourceTypeValue.hasSuffix("_") {
-                    return sourceTypeValue.lastIndex(of: "_").map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
+                    return sourceTypeValue.lastIndex(of: "_")
+                        .map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
                 } else {
                     return sourceTypeValue
                 }

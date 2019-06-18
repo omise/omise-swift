@@ -143,7 +143,9 @@ extension Link: Searchable {
 }
 
 extension Link {
-    public func listCharges(using client: APIClient, params: ListParams? = nil, callback: @escaping Charge.ListRequest.Callback) -> Charge.ListRequest? {
+    public func listCharges(
+        using client: APIClient, params: ListParams? = nil, callback: @escaping Charge.ListRequest.Callback
+        ) -> Charge.ListRequest? {
         return self.list(keyPath: \.charges, using: client, params: params, callback: callback)
     }
 }

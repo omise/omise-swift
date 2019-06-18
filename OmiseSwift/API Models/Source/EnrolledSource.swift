@@ -67,7 +67,10 @@ public struct EnrolledSource: SourceData {
                 }
             }
             
-            public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation.Barcode, rhs: EnrolledSource.EnrolledPaymentInformation.Barcode) -> Bool {
+            public static func ==(
+                lhs: EnrolledSource.EnrolledPaymentInformation.Barcode,
+                rhs: EnrolledSource.EnrolledPaymentInformation.Barcode
+                ) -> Bool {
                 switch (lhs, rhs) {
                 case (.alipay, .alipay):
                     return true
@@ -109,7 +112,10 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        public static func ==(lhs: EnrolledSource.EnrolledPaymentInformation, rhs: EnrolledSource.EnrolledPaymentInformation) -> Bool {
+        public static func ==(
+            lhs: EnrolledSource.EnrolledPaymentInformation,
+            rhs: EnrolledSource.EnrolledPaymentInformation
+            ) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
@@ -213,7 +219,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             }
         } else if typeValue.hasPrefix(installmentPrefix),
             let installmentValue = typeValue
-                .range(of: installmentPrefix).map({ String(typeValue[$0.upperBound...]) }).flatMap(SourceType.InstallmentBrand.init(rawValue:)) {
+                .range(of: installmentPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(SourceType.InstallmentBrand.init(rawValue:)) {
             self = .installment(installmentValue)
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)

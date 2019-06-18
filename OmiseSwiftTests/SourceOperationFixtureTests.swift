@@ -178,7 +178,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateInternetBankingSCBSource() {
         let expectation = self.expectation(description: "Creating Internet Banking SCB Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.internetBanking(.scb))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+                                               type: .internetBanking(.scb))
 
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -200,7 +201,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateAlipaySource() {
         let expectation = self.expectation(description: "Creating Alipay Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.alipay)
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+                                               type: .alipay)
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -222,7 +224,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateTescoLotusBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Tesco Lotus Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.billPayment(.tescoLotus))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+                                               type: .billPayment(.tescoLotus))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -244,7 +247,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Resilient Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.billPayment(SourceType.BillPayment.unknown("papaya")))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+                                               type: .billPayment(SourceType.BillPayment.unknown("papaya")))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -266,7 +270,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientInternetBankingSource() {
         let expectation = self.expectation(description: "Creating Resilient Internet Banking Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.internetBanking(.unknown("oms")))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .internetBanking(.unknown("oms")))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -295,7 +299,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             "terminal_id": String?.none as Any,
             ])
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.barcode(omiseBarcode))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .barcode(omiseBarcode))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -330,7 +334,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientSource() {
         let expectation = self.expectation(description: "Creating Resilient Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: PaymentSourceParams.SourceParameter.unknown("omise"))
+        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .unknown("omise"))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -352,8 +356,10 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateBarcodeAlipaySource() throws {
         let expectation = self.expectation(description: "Creating Barcode Alipay Source")
         
-        let alipayBarcode = AlipayBarcodeParams(storeID: "store_1", storeName: "store 1", terminalID: nil, barcode: "1234567890")
-        let createParams = PaymentSourceParams(amount: 1000000, currency: .thb, type: .barcode(Barcode.alipay(alipayBarcode)))
+        let alipayBarcode = AlipayBarcodeParams(storeID: "store_1", storeName: "store 1",
+                                                terminalID: nil, barcode: "1234567890")
+        let createParams = PaymentSourceParams(amount: 1000000, currency: .thb,
+                                               type: .barcode(Barcode.alipay(alipayBarcode)))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -382,18 +388,32 @@ class SourceOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeAlipayBarcodeSource() throws {
-        let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store", terminalID: nil, barcode: "1234567890123456")
-        let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb, type: PaymentSourceParams.SourceParameter.barcode(.alipay(alipayBarcode)))
+        let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store",
+                                                terminalID: nil, barcode: "1234567890123456")
+        let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb,
+                                                     type: .barcode(.alipay(alipayBarcode)))
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
-        let createSourceEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: try encoder.encode(createSourceParams)), encoding: .utf8)
-        XCTAssertEqual(createSourceEncodedString, "amount=1000&currency=THB&type=barcode_alipay&barcode=1234567890123456&store_id=1&store_name=Main%20Store")
+        let createSourceEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
+            queryItems: try encoder.encode(createSourceParams)), encoding: .utf8)
+        XCTAssertEqual(createSourceEncodedString,
+                       """
+                       amount=1000&currency=THB&type=barcode_alipay&barcode=1234567890123456&\
+                       store_id=1&store_name=Main%20Store
+                       """)
         
-        let createChargeParams = ChargeParams.init(value: Value.init(amount: 10_000_00, currency: .thb), sourceType: PaymentSourceParams.SourceParameter.barcode(Barcode.alipay(alipayBarcode)))
-        let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
-        XCTAssertEqual(createChargeEncodedString, "amount=1000000&currency=THB&source%5Btype%5D=barcode_alipay&source%5Bbarcode%5D=1234567890123456&source%5Bstore_id%5D=1&source%5Bstore_name%5D=Main%20Store")
+        let createChargeParams = ChargeParams(value: Value.init(amount: 10_000_00, currency: .thb),
+                                              sourceType: .barcode(Barcode.alipay(alipayBarcode)))
+        let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
+            queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
+        XCTAssertEqual(createChargeEncodedString,
+                       """
+                       amount=1000000&currency=THB&source%5Btype%5D=barcode_alipay&\
+                       source%5Bbarcode%5D=1234567890123456&source%5Bstore_id%5D=1&\
+                       source%5Bstore_name%5D=Main%20Store
+                       """)
     }
     
     func testInstallmentBAYSourceRetrieve() {

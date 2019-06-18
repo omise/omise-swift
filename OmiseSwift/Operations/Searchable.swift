@@ -1,5 +1,6 @@
 import Foundation
 
+
 public protocol Searchable {
     static var scopeName: String { get }
     associatedtype FilterParams: OmiseFilterParams
@@ -16,16 +17,16 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     public var query: String?
     public var order: Ordering?
     public var filter: FilterParams?
-
+    
     public var page: Int?
     public var numberOfItemsPerPage: Int?
-
+    
     private enum CodingKeys: String, CodingKey {
         case scope
         case query
         case order
         case filter = "filters"
-
+        
         case page
         case numberOfItemsPerPage = "per_page"
     }
@@ -43,8 +44,8 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     }
     
     public init<T: Searchable>(searhScopeType: T.Type,
-               query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil,
-                page: Int? = nil,  numberOfItemsPerPage: Int? = nil)
+                               query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil,
+                               page: Int? = nil,  numberOfItemsPerPage: Int? = nil)
         where T.FilterParams == FilterParams {
             self.init(
                 scope: T.scopeName, query: query, order: order, filter: filter,

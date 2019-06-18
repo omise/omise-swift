@@ -184,6 +184,5 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.isSent, decodedTransferFilterParams.isSent)
         XCTAssertEqual(filterParams.sentDate, decodedTransferFilterParams.sentDate)
     }
-    
-    
 }
+

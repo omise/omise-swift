@@ -54,9 +54,10 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultLink.charges.count, decodedLink.charges.count)
         XCTAssertEqual(defaultLink.charges.data.count, decodedLink.charges.data.count)
         
-        guard let defaultCharge = defaultLink.charges.data.first, let decodedCharge = decodedLink.charges.data.first else {
-            XCTFail("Cannot get the recent charge")
-            return
+        guard let defaultCharge = defaultLink.charges.data.first,
+            let decodedCharge = decodedLink.charges.data.first else {
+                XCTFail("Cannot get the recent charge")
+                return
         }
         
         XCTAssertEqual(defaultCharge.object, decodedCharge.object)

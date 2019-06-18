@@ -130,7 +130,8 @@ extension Period: Codable {
                 var daysOfMonthContainers = ruleContainer.nestedUnkeyedContainer(forKey: .daysOfMonth)
                 try daysOfMonthContainers.encode(contentsOf: daysOfMonth.map({ $0.rawValue }).sorted())
             case .weekdayOfMonth(ordinal: let ordinal, weekday: let weekday):
-                try ruleContainer.encode("\(ordinal.apiValue)_\(weekday.apiValue.lowercased())", forKey: .weekdayOfMonth)
+                try ruleContainer.encode(
+                    "\(ordinal.apiValue)_\(weekday.apiValue.lowercased())", forKey: .weekdayOfMonth)
             }
         case .unknown(let value, let rules):
             try container.encode(value, forKey: .period)
@@ -156,7 +157,9 @@ extension Period: Codable {
                     let weekday = splitted.last.flatMap(Weekday.init(weekdayString:)) {
                     onWeekdayOfMonth = (ordinal, weekday)
                 } else {
-                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid Weekdays of month value"))
+                    throw DecodingError.dataCorrupted(
+                        DecodingError.Context(codingPath: decoder.codingPath,
+                                              debugDescription: "Invalid Weekdays of month value"))
                 }
             } else {
                 onWeekdayOfMonth = nil
@@ -192,7 +195,9 @@ extension Period.MonthlyPeriodRule.DayOfMonth: Codable {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(Int.self)
         guard -31...31 ~= value else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(codingPath: decoder.codingPath, 
+                                      debugDescription: "Invalid day of month value"))
         }
         self.day = value
     }
@@ -214,7 +219,9 @@ extension Period.MonthlyPeriodRule.Ordinal: Decodable {
         case "last":
             self = .last
         default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(codingPath: decoder.codingPath, 
+                                      debugDescription: "Invalid day of month value"))
         }
     }
 }

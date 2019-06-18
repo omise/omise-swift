@@ -1,5 +1,6 @@
 import Foundation
 
+
 public protocol SingletonRetrievable {}
 
 public extension SingletonRetrievable where Self: OmiseLocatableObject {

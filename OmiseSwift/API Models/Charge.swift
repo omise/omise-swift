@@ -284,7 +284,7 @@ extension Charge {
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLiveMode, forKey: .isLiveMode)
-
+        
         try container.encode(amount, forKey: .amount)
         try container.encode(currency, forKey: .currency)
         try container.encode(fundingAmount, forKey: .fundingAmount)
@@ -414,20 +414,48 @@ public struct ChargeParams: APIJSONQuery {
         self.metadata = metadata
     }
     
-    public init(value: Value, customerID: DataID<Customer>, cardID: DataID<Card>? = nil, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
-        self.init(value: value, payment: .customer(customerID: customerID, cardID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    public init(
+        value: Value, customerID: DataID<Customer>, cardID: DataID<Card>? = nil,
+        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil, metadata: [String: Any]? = nil
+        ) {
+        self.init(
+            value: value, payment: .customer(customerID: customerID, cardID: cardID),
+            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
+            returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, cardID: DataID<Token>, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
-        self.init(value: value, payment: .card(tokenID: cardID), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    public init(
+        value: Value, cardID: DataID<Token>,
+        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil, metadata: [String: Any]? = nil
+        ) {
+        self.init(
+            value: value, payment: .card(tokenID: cardID),
+            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
+            returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, source: PaymentSource, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
-        self.init(value: value, payment: .source(source), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    public init(
+        value: Value, source: PaymentSource,
+        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil, metadata: [String: Any]? = nil
+        ) {
+        self.init(
+            value: value, payment: .source(source),
+            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
+            returnURL: returnURL, metadata: metadata)
     }
     
-    public init(value: Value, sourceType: PaymentSourceParams.SourceParameter, chargeDescription: String? = nil, isAutoCapture: Bool? = nil, returnURL: URL? = nil, metadata: [String: Any]? = nil) {
-        self.init(value: value, payment: .sourceType(sourceType), chargeDescription: chargeDescription, isAutoCapture: isAutoCapture, returnURL: returnURL, metadata: metadata)
+    public init(
+        value: Value, sourceType: PaymentSourceParams.SourceParameter,
+        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil, metadata: [String: Any]? = nil
+        ) {
+        self.init(
+            value: value, payment: .sourceType(sourceType),
+            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
+            returnURL: returnURL, metadata: metadata)
     }
 }
 

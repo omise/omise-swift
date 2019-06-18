@@ -104,9 +104,10 @@ class DisputeOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultDispute.createdDate, decodedDispute.createdDate)
         XCTAssertEqual(defaultDispute.closedDate, decodedDispute.closedDate)
         
-        guard let defaultDocument = defaultDispute.documents.first, let decodedDocument = decodedDispute.documents.first else {
-            XCTFail("Cannot get the recent document")
-            return
+        guard let defaultDocument = defaultDispute.documents.first,
+            let decodedDocument = decodedDispute.documents.first else {
+                XCTFail("Cannot get the recent document")
+                return
         }
         
         XCTAssertEqual(defaultDocument.object, decodedDocument.object)

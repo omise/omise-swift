@@ -24,18 +24,25 @@ public struct AnySchedulable: Schedulable {
         let json = try decoder.decode(as: Dictionary<String, Any>.self)
         
         guard let object = json[CodingKeys.object.stringValue] as? String else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+            let context = DecodingError.Context(
+                codingPath: decoder.codingPath,
+                debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.object, context)
         }
         
-        guard let id = (json[CodingKeys.id.stringValue] as? String).flatMap(DataID<AnySchedulable>.init(idString:)) else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
-            throw DecodingError.keyNotFound(CodingKeys.id, context)
+        guard let id = (json[CodingKeys.id.stringValue] as? String)
+            .flatMap(DataID<AnySchedulable>.init(idString:)) else {
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Missing object value in Schedule")
+                throw DecodingError.keyNotFound(CodingKeys.id, context)
         }
         guard let createdDate = (json[CodingKeys.createdDate.stringValue] as? String).flatMap({
             ISO8601DateFormatter().date(from: $0)
         }) else {
-            let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+            let context = DecodingError.Context(
+                codingPath: decoder.codingPath,
+                debugDescription: "Missing object value in Schedule")
             throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
         }
         
@@ -77,22 +84,31 @@ public struct AnySchedulable: Schedulable {
             let json = try decoder.decode(as: Dictionary<String, Any>.self)
             
             guard let object = json[CodingKeys.object.stringValue] as? String else {
-                let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Missing object value in Schedule")
                 throw DecodingError.keyNotFound(CodingKeys.object, context)
             }
             
-            guard let id = (json[CodingKeys.id.stringValue] as? String).flatMap(DataID<AnyScheduleData>.init(idString:)) else {
-                let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
-                throw DecodingError.keyNotFound(CodingKeys.id, context)
+            guard let id = (json[CodingKeys.id.stringValue] as? String)
+                .flatMap(DataID<AnyScheduleData>.init(idString:)) else {
+                    let context = DecodingError.Context(
+                        codingPath: decoder.codingPath,
+                        debugDescription: "Missing object value in Schedule")
+                    throw DecodingError.keyNotFound(CodingKeys.id, context)
             }
             guard let createdDate = (json[CodingKeys.createdDate.stringValue] as? String).flatMap({
                 ISO8601DateFormatter().date(from: $0)
             }) else {
-                let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Missing object value in Schedule")
                 throw DecodingError.keyNotFound(CodingKeys.createdDate, context)
             }
             guard let isLiveMode = json[CodingKeys.isLiveMode.stringValue] as? Bool else {
-                let context = DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Missing object value in Schedule")
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Missing object value in Schedule")
                 throw DecodingError.keyNotFound(CodingKeys.isLiveMode, context)
             }
             

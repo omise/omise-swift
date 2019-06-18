@@ -52,4 +52,3 @@ public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiable
     }
 }
 
-

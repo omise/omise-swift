@@ -45,7 +45,9 @@ public struct AnyJSONType: JSONType {
         } else if let dictionaryValue = try? container.decode(Dictionary<String, AnyJSONType>.self) {
             jsonValue = dictionaryValue
         } else {
-            throw DecodingError.typeMismatch(JSONType.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unsupported JSON tyep"))
+            throw DecodingError.typeMismatch(
+                JSONType.self,
+                DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Unsupported JSON tyep"))
         }
     }
 }
@@ -107,7 +109,7 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("hello", result[0].name)
         XCTAssertEqual("world", result[0].value)
     }
-
+    
     func testEncodeMultipleTypes() throws {
         let values = AnyJSONType([
             "0hello": "world",
@@ -134,7 +136,7 @@ class URLEncoderTest: OmiseTestCase {
             "$*nil*$",
             ])
     }
-
+    
     func testEncodeNestedWithEmptyIndexStrategy() throws {
         let values = AnyJSONType([
             "0outer": "normal",
@@ -291,13 +293,14 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("2", result[23].value)
         XCTAssertEqual("9deeparrayindeepdictionary[array][2]", result[23].name)
     }
-
+    
     func testConvertChargeFilterParams() throws {
         var searchFilterParams = ChargeFilterParams()
         searchFilterParams.amount = 1000
         searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")!
         searchFilterParams.isCaptured = true
-        searchFilterParams.created = DateComponents(calendar: Calendar(identifier: .gregorian), year: 2016, month: 8, day: 1)
+        searchFilterParams.created = DateComponents(
+            calendar: Calendar(identifier: .gregorian), year: 2016, month: 8, day: 1)
         
         let encoder = URLQueryItemEncoder()
         let items = try encoder.encode(searchFilterParams)
@@ -333,7 +336,10 @@ class URLEncoderTest: OmiseTestCase {
     }
     
     func testCreateChargeParams() throws {
-        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345", chargeDescription: "A charge description", isAutoCapture: true, returnURL: URL(string: "https://omise.co"), metadata: ["customer-id": "1", "stock-count": 66473])
+        let createChargeParams = ChargeParams(
+            value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345",
+            chargeDescription: "A charge description", isAutoCapture: true, returnURL: URL(string: "https://omise.co"),
+            metadata: ["customer-id": "1", "stock-count": 66473])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets

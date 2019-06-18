@@ -201,7 +201,7 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     public let isDeleted: Bool
     
     public let billingAddress: BillingAddress
-
+    
     public let bankName: String?
     
     public let lastDigits: LastDigits
@@ -395,8 +395,8 @@ public struct CardParams: APIJSONQuery {
     }
     
     public init(name: String? = nil,
-         expirationMonth: Int? = nil, expirationYear: Int? = nil,
-         postalCode: String? = nil, city: String? = nil) {
+                expirationMonth: Int? = nil, expirationYear: Int? = nil,
+                postalCode: String? = nil, city: String? = nil) {
         self.name = name
         self.expirationMonth = expirationMonth
         self.expirationYear = expirationYear
@@ -419,19 +419,31 @@ extension CustomerCard: OmiseAPIChildObject {
 
 
 extension Customer {
-    public func listCards(using client: APIClient, params: ListParams? = nil, callback: @escaping CustomerCard.ListRequest.Callback) -> CustomerCard.ListRequest? {
+    public func listCards(
+        using client: APIClient, params: ListParams? = nil,
+        callback: @escaping CustomerCard.ListRequest.Callback
+        ) -> CustomerCard.ListRequest? {
         return self.list(keyPath: \.cards, using: client, params: params, callback: callback)
     }
     
-    public func retrieveCard(using client: APIClient, id: DataID<CustomerCard>, callback: @escaping CustomerCard.RetrieveRequest.Callback) -> CustomerCard.RetrieveRequest? {
+    public func retrieveCard(
+        using client: APIClient, id: DataID<CustomerCard>,
+        callback: @escaping CustomerCard.RetrieveRequest.Callback
+        ) -> CustomerCard.RetrieveRequest? {
         return CustomerCard.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     
-    public func updateCard(using client: APIClient, id: DataID<CustomerCard>, params: CardParams, callback: @escaping CustomerCard.UpdateRequest.Callback) -> CustomerCard.UpdateRequest? {
+    public func updateCard(
+        using client: APIClient, id: DataID<CustomerCard>, params: CardParams,
+        callback: @escaping CustomerCard.UpdateRequest.Callback
+        ) -> CustomerCard.UpdateRequest? {
         return CustomerCard.update(using: client, parent: self, id: id, params: params, callback: callback)
     }
     
-    public func destroyCard(using client: APIClient, id: DataID<CustomerCard>, callback: @escaping CustomerCard.DestroyRequest.Callback) -> CustomerCard.DestroyRequest? {
+    public func destroyCard(
+        using client: APIClient, id: DataID<CustomerCard>,
+        callback: @escaping CustomerCard.DestroyRequest.Callback
+        ) -> CustomerCard.DestroyRequest? {
         return CustomerCard.destroy(using: client, parent: self, id: id, callback: callback)
     }
 }

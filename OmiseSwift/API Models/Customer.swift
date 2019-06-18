@@ -106,7 +106,7 @@ public struct CustomerParams: APIJSONQuery {
 }
 
 public struct CustomerFilterParams: OmiseFilterParams {
-
+    
     public var createdDate: DateComponents?
     
     private enum CodingKeys: String, CodingKey {

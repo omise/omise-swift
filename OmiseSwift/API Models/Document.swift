@@ -1,7 +1,9 @@
 import Foundation
 
 
-public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject, Equatable {
+public struct Document
+    : OmiseLocatableObject, OmiseIdentifiableObject,
+      OmiseLiveModeObject, OmiseCreatedObject, Equatable {
     public static let resourcePath = "documents"
     public static let idPrefix: String = "docu"
     
@@ -38,7 +40,7 @@ extension Document: Destroyable {}
 public struct DocumentParams: APIFileQuery {
     public var filename: String
     public var fileContent: Data
-
+    
     public init(url: URL) {
         self.fileContent = try! Data(contentsOf: url, options: .mappedIfSafe)
         self.filename = url.lastPathComponent

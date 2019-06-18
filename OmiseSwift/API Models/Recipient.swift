@@ -136,10 +136,14 @@ public struct RecipientParams: APIJSONQuery {
 }
 
 extension RecipientParams {
-    public init(createRecipientParamsWithName name: String, type: Recipient.RecipientType, bankAccountName: String, bankAccountNumber: String, bankAccountBrand: String) {
+    public init(
+        createRecipientParamsWithName name: String, type: Recipient.RecipientType,
+        bankAccountName: String, bankAccountNumber: String, bankAccountBrand: String
+        ) {
         self.name = name
         self.type = type
-        self.bankAccount = BankAccountParams(brand: bankAccountBrand, accountNumber: bankAccountNumber, name: bankAccountName)
+        self.bankAccount = BankAccountParams(
+            brand: bankAccountBrand, accountNumber: bankAccountNumber, name: bankAccountName)
     }
 }
 

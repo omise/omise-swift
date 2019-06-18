@@ -1,5 +1,6 @@
 import Foundation
 
+
 public protocol Creatable {
     associatedtype CreateParams: APIQuery
 }

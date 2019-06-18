@@ -1,5 +1,6 @@
 import Foundation
 
+
 extension Customer {
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Charge>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Charge>>
@@ -38,5 +39,4 @@ extension Customer {
         return client.request(to: endpoint, callback: requestCallback)
     }
 }
-
 

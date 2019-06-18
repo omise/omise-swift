@@ -1,5 +1,6 @@
 import Foundation
 
+
 public protocol Retrievable {}
 
 public struct RetrieveParams: APIURLQuery {

@@ -7,7 +7,10 @@ class TokenOperationTest: LiveTest {
     func testTokenCreate() {
         let expectation = self.expectation(description: "token create")
         
-        let createParams = TokenParams(number: "4242424242424242", name: "John Appleseed", expiration: (month: 1, year: 2021), securityCode: "123")
+        let createParams = TokenParams(number: "4242424242424242",
+                                       name: "John Appleseed",
+                                       expiration: (month: 1, year: 2021),
+                                       securityCode: "123")
         
         let request = Token.create(using: testClient, usingKey: AnyAccessKey(""), params: createParams) { (result) in
             defer { expectation.fulfill() }

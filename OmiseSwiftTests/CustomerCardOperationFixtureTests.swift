@@ -7,7 +7,8 @@ private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy3
 
 private let customer: Customer = {
     let bundle = Bundle(for: OmiseTestCase.self)
-    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/customers/cust_test_5fz0olfpy32zadv96ek-get", ofType: "json") else {
+    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/customers/cust_test_5fz0olfpy32zadv96ek-get",
+                                 ofType: "json") else {
         XCTFail("could not load fixtures.")
         preconditionFailure()
     }

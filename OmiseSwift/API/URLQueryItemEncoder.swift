@@ -1,8 +1,8 @@
 import Foundation
 
 
-
 let iso8601Formatter = ISO8601DateFormatter()
+
 
 public class URLQueryItemEncoder {
     public enum ArrayIndexEncodingStrategy {

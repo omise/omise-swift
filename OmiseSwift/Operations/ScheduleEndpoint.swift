@@ -1,5 +1,6 @@
 import Foundation
 
+
 extension Schedule where Data: OmiseLocatableObject {
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Data>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Data>>

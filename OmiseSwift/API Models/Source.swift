@@ -166,7 +166,7 @@ public enum Barcode: Codable, Equatable {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             
             let barcode = try container.decode(String.self, forKey: .barcode)
-
+            
             let storeID = try container.decodeIfPresent(String.self, forKey: .storeID)
             let storeName = try container.decodeIfPresent(String.self, forKey: .storeName)
             
@@ -212,7 +212,9 @@ public enum Barcode: Codable, Equatable {
         }
         
         public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
-            self.init(storeInformation: StoreInformation(storeID: storeID, storeName: storeName), terminalID: terminalID, barcode: barcode)
+            self.init(
+                storeInformation: StoreInformation(storeID: storeID, storeName: storeName),
+                terminalID: terminalID, barcode: barcode)
         }
         
         public init(terminalID: String?, barcode: String) {
@@ -393,7 +395,7 @@ public struct PaymentSourceParams: APIJSONQuery {
             }
         }
     }
-
+    
     
     private enum CodingKeys: String, CodingKey {
         case amount
@@ -436,7 +438,10 @@ extension PaymentSource: Creatable {
             method: .post, query: params)
     }
     
-    public static func create(using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback) -> CreateRequest? {
+    public static func create(
+        using client: APIClient, params: CreateParams, 
+        callback: @escaping CreateRequest.Callback
+        ) -> CreateRequest? {
         let endpoint = self.createEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }

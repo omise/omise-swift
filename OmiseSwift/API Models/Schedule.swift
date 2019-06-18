@@ -164,7 +164,8 @@ extension Schedule {
         endOnDateComponents = try container.decode(DateComponents.self, forKey: .endDate)
         
         occurrences = try container.decode(ListProperty<Occurrence<Data>>.self, forKey: .occurrences)
-        nextOccurrencesOnDateComponents = try container.decode(Array<DateComponents>.self, forKey: .nextOccurrenceDates)
+        nextOccurrencesOnDateComponents = try container.decode(
+            Array<DateComponents>.self, forKey: .nextOccurrenceDates)
         
         let parameterKey = container.allKeys.first(where: { (key) -> Bool in
             if case .parameter = key {
@@ -178,7 +179,8 @@ extension Schedule {
         } else {
             throw DecodingError.keyNotFound(
                 Schedule<Data>.CodingKeys.parameter("parameter"),
-                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Missing scheduling parameter"))
+                DecodingError.Context(codingPath: container.codingPath,
+                                      debugDescription: "Missing scheduling parameter"))
         }
     }
     
