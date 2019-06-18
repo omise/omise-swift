@@ -42,7 +42,8 @@ public extension OmiseAPIChildObject where Self: Creatable {
     }
     
     static func create(
-        using client: APIClient, parent: Parent, params: CreateParams, callback: @escaping Self.CreateRequest.Callback
+        using client: APIClient, parent: Parent, params: CreateParams,
+        callback: @escaping Self.CreateRequest.Callback
         ) -> Self.CreateRequest? {
         let endpoint = self.createEndpointWith(parent: parent, params: params)
         return client.request(to: endpoint, callback: callback)

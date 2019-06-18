@@ -96,7 +96,7 @@ func createToken() {
 
 func createCharge(with token: Token) {
     let currency = Currency.thb
-    let params = ChargeParams(value: Value(amount: currency.convert(toSubunit: 1000.00), currency: currency), cardID: token.id.idString)
+    let params = ChargeParams(value: Value(amount: currency.convert(toSubunit: 1000.00), currency: currency), cardID: token.id)
     
     Charge.create(using: client, params: params) { (result) in
         switch result {

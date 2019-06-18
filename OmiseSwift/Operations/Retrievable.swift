@@ -16,22 +16,27 @@ public extension Retrievable where Self: OmiseIdentifiableObject {
 }
 
 public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiableObject {
-    static func retrieveEndpoint(with id: DataID<Self>) -> RetrieveEndpoint {
+    static func retrieveEndpoint(for id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
             method: .get, query: retrieveParams)
     }
     
-    static func retrieve(using client: APIClient, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
-        let endpoint = self.retrieveEndpoint(with: id)
+    static func retrieve(
+        using client: APIClient, id: DataID<Self>, 
+        callback: @escaping RetrieveRequest.Callback
+        ) -> RetrieveRequest? {
+        let endpoint = self.retrieveEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
 }
 
 
 public extension APIClient {
-    func retrieve<T: OmiseAPIPrimaryObject & Retrievable>(dataID: DataID<T>, callback: @escaping T.RetrieveRequest.Callback) -> T.RetrieveRequest? {
+    func retrieve<T: OmiseAPIPrimaryObject & Retrievable>(
+        dataID: DataID<T>, callback: @escaping T.RetrieveRequest.Callback
+        ) -> T.RetrieveRequest? {
         return T.retrieve(using: self, id: dataID, callback: callback)
     }
 }
@@ -45,7 +50,10 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
             method: .get, query: retrieveParams)
     }
     
-    static func retrieve(using client: APIClient, parent: Parent, id: DataID<Self>, callback: @escaping RetrieveRequest.Callback) -> RetrieveRequest? {
+    static func retrieve(
+        using client: APIClient, parent: Parent, id: DataID<Self>, 
+        callback: @escaping RetrieveRequest.Callback
+        ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
         return client.request(to: endpoint, callback: callback)
     }

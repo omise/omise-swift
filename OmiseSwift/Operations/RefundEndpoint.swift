@@ -13,13 +13,19 @@ public extension Refund {
     }
     
     @discardableResult
-    static func list(using client: APIClient, params: ListParams? = nil, callback: ListRequest.Callback?) -> ListRequest? {
+    static func list(
+        using client: APIClient, params: ListParams? = nil, 
+        callback: ListRequest.Callback?
+        ) -> ListRequest? {
         let endpoint = self.listEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
-    static func list(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Refund>>) -> Void) -> ListRequest? {
+    static func list(
+        using client: APIClient, listParams: ListParams? = nil,
+        callback: @escaping (APIResult<List<Refund>>
+        ) -> Void) -> ListRequest? {
         let endpoint = self.listEndpoint(with: listParams)
         
         let requestCallback: ListRequest.Callback = { result in

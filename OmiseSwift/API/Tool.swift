@@ -1,10 +1,10 @@
 import Foundation
 #if os(iOS)
-    import UIKit
-    public typealias Color = UIColor
- #elseif os(macOS)
-    import AppKit
-    public typealias Color = NSColor
+import UIKit
+public typealias Color = UIColor
+#elseif os(macOS)
+import AppKit
+public typealias Color = NSColor
 #endif
 
 
@@ -45,7 +45,6 @@ public extension Color {
             b = CGFloat((hexNumber & 0x0000ff)) / 255
             
             self.init(red: r, green: g, blue: b, alpha: 1.0)
-
         default:
             return nil
         }

@@ -13,44 +13,50 @@ extension Charge {
     public typealias MarkChargeEndpoint = ChargeOperationEndpoint
     public typealias MarkChargeRequest = ChargeOperationRequest
     
-    
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Charge>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Charge>>
     
-    public static func captureEndpoint(with id: DataID<Charge>) -> CaptureEndpoint {
+    
+    public static func captureEndpoint(for id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(
             pathComponents: [resourcePath, id.idString, "capture"],
             method: .post, query: nil)
     }
     
-    public static func capture(using client: APIClient, id: DataID<Charge>, callback: @escaping CaptureRequest.Callback) -> CaptureRequest? {
-        let endpoint = captureEndpoint(with: id)
+    public static func capture(
+        using client: APIClient, id: DataID<Charge>, callback: @escaping CaptureRequest.Callback
+        ) -> CaptureRequest? {
+        let endpoint = captureEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
     
-    public static func reverseEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
+    public static func reverseEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "reverse"],
             method: .post, query: nil)
     }
     
-    public static func reverse(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = reverseEndpoint(with: id)
+    public static func reverse(
+        using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback
+        ) -> ReverseRequest? {
+        let endpoint = reverseEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
     
-    public static func expireEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
+    public static func expireEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "expire"],
             method: .post, query: nil)
     }
     
-    public static func expire(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = expireEndpoint(with: id)
+    public static func expire(
+        using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback
+        ) -> ReverseRequest? {
+        let endpoint = expireEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsPaidEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
+    public static func markAsPaidEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         precondition(!id.isLiveMode, "Marking Charge API is available only on the test charge")
         
         return ReverseEndpoint(
@@ -58,12 +64,14 @@ extension Charge {
             method: .post, query: nil)
     }
     
-    public static func markAsPaid(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = markAsPaidEndpoint(with: id)
+    public static func markAsPaid(
+        using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback
+        ) -> ReverseRequest? {
+        let endpoint = markAsPaidEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsFailedEndpoint(with id: DataID<Charge>) -> ReverseEndpoint {
+    public static func markAsFailedEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         precondition(!id.isLiveMode, "Marking Charge API is available only on the test charge")
         
         return ReverseEndpoint(
@@ -71,8 +79,10 @@ extension Charge {
             method: .post, query: nil)
     }
     
-    public static func markAsFailed(using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback) -> ReverseRequest? {
-        let endpoint = markAsFailedEndpoint(with: id)
+    public static func markAsFailed(
+        using client: APIClient, id: DataID<Charge>, callback: @escaping ReverseRequest.Callback
+        ) -> ReverseRequest? {
+        let endpoint = markAsFailedEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
     
@@ -81,12 +91,17 @@ extension Charge {
     }
     
     @discardableResult
-    public static func listSchedule(using client: APIClient, params: ListParams? = nil, callback: ScheduleListRequest.Callback?) -> ScheduleListRequest? {
+    public static func listSchedule(
+        using client: APIClient, params: ListParams? = nil, callback: ScheduleListRequest.Callback?
+        ) -> ScheduleListRequest? {
         return Schedule<Charge>.listDataSchedule(using: client, params: params, callback: callback)
     }
     
     @discardableResult
-    public static func listSchedule(using client: APIClient, listParams: ListParams? = nil, callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void) -> ScheduleListRequest? {
+    public static func listSchedule(
+        using client: APIClient, listParams: ListParams? = nil,
+        callback: @escaping (APIResult<List<Schedule<Charge>>>) -> Void
+        ) -> ScheduleListRequest? {
         return Schedule<Charge>.listDataSchedule(using: client, listParams: listParams, callback: callback)
     }
 }

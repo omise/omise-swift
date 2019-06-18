@@ -83,7 +83,9 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         let endpoint = self.searchEndpoint(with: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
-            let callbackResult = result.map({ Search(result: $0, order: searchParams?.order ?? .chronological) })
+            let callbackResult = result.map({
+                Search(result: $0, order: searchParams?.order ?? .chronological)
+            })
             callback(callbackResult)
         }
         

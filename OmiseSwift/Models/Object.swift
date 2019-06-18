@@ -26,14 +26,17 @@ public protocol OmiseLiveModeObject: OmiseObject {
 }
 
 
-public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {}
+public protocol OmiseResourceObject: OmiseLocatableObject, OmiseIdentifiableObject,
+	OmiseLiveModeObject, OmiseCreatedObject {}
 
 public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
 
 
 public extension OmiseIdentifiableObject {
     static func validate(id: String) -> Bool {
-        return id.range(of: #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#, options: [.regularExpression, .anchored]) != nil
+        return id.range(of:
+            #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#,
+            options: [.regularExpression, .anchored]) != nil
     }
 }
 

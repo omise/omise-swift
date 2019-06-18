@@ -10,7 +10,7 @@ public extension Updatable where Self: OmiseIdentifiableObject {
 }
 
 public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiableObject {
-    static func updateEndpoint(with id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
+    static func updateEndpoint(for id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: makeResourcePaths(id: id),
             method: .patch, query: params)
@@ -20,7 +20,7 @@ public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiable
         using client: APIClient, id: DataID<Self>, params: UpdateParams,
         callback: @escaping UpdateRequest.Callback
         ) -> UpdateRequest? {
-        let endpoint = self.updateEndpoint(with: id, params: params)
+        let endpoint = self.updateEndpoint(for: id, params: params)
         return client.request(to: endpoint, callback: callback)
     }
 }

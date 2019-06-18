@@ -9,7 +9,11 @@ public struct ListParams: APIJSONQuery {
     public var limit: Int?
     public var order: Ordering?
     
-    public init(from: Date? = nil, to: Date? = nil, offset: Int? = nil, limit: Int? = nil, order: Ordering? = nil) {
+    public init(
+        from: Date? = nil, to: Date? = nil,
+        offset: Int? = nil, limit: Int? = nil,
+        order: Ordering? = nil
+        ) {
         self.from = from
         self.to = to
         self.offset = offset

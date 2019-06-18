@@ -118,6 +118,9 @@
 		8AA2BF241F54144F0083F8A6 /* URLQueryItemEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA2BF231F54144F0083F8A6 /* URLQueryItemEncoder.swift */; };
 		8AA2BF251F54144F0083F8A6 /* URLQueryItemEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA2BF231F54144F0083F8A6 /* URLQueryItemEncoder.swift */; };
 		8AA2EFC51D6C8A1E0052CCFB /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8AAC00EA22B7D9B9007A71BF /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BF9B9E1CD1F76100CD3CAD /* LiveTest.swift */; };
+		8AAC00EB22B7D9CF007A71BF /* FixtureClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07D2F31D73F5040030B68D /* FixtureClient.swift */; };
+		8AAC00EC22B7D9DF007A71BF /* FixtureTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07D2F61D73F8370030B68D /* FixtureTestCase.swift */; };
 		8AC49790229FD984000B83FE /* AnySchedulable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC4978F229FD984000B83FE /* AnySchedulable.swift */; };
 		8AC49791229FD984000B83FE /* AnySchedulable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC4978F229FD984000B83FE /* AnySchedulable.swift */; };
 		8ACB41501E28A3C2001793CD /* Charge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB41141E277B60001793CD /* Charge.swift */; };
@@ -929,11 +932,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AEA41621EADE4C0000A5E28 /* TokenOperationTest.swift in Sources */,
+				8AAC00EA22B7D9B9007A71BF /* LiveTest.swift in Sources */,
 				8A4469D31ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift in Sources */,
 				8A028B401E2CCE550008E010 /* OmiseTestCase.swift in Sources */,
 				8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */,
 				8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
+				8AAC00EC22B7D9DF007A71BF /* FixtureTestCase.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */,
@@ -944,6 +949,7 @@
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A9B2AB51FB9B5C5002F42C7 /* DecoderTest.swift in Sources */,
 				8A1CF6B11F8BC1D8003EDB38 /* LastDigitsTest.swift in Sources */,
+				8AAC00EB22B7D9CF007A71BF /* FixtureClient.swift in Sources */,
 				8A6785D72297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

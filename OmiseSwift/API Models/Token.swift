@@ -31,11 +31,11 @@ extension Token {
 
 
 public struct TokenParams: APIJSONQuery {
-    public var name: String?
+    public var name: String
     
     public var number: String
     
-    public var expiration: (month: Int, year: Int)?
+    public var expiration: (month: Int, year: Int)
     
     public var securityCode: String?
     
@@ -56,11 +56,12 @@ public struct TokenParams: APIJSONQuery {
     public func encode(to encoder: Encoder) throws {
         var tokenContainer = encoder.container(keyedBy: TokenCodingKeys.self)
         
-        var cardContainer = tokenContainer.nestedContainer(keyedBy: CombineCodingKeys<TokenCodingKeys.CardCodingKeys, BillingAddress.CodingKeys>.self, forKey: .card)
+        var cardContainer = tokenContainer.nestedContainer(
+            keyedBy: CombineCodingKeys<TokenCodingKeys.CardCodingKeys, BillingAddress.CodingKeys>.self, forKey: .card)
         try cardContainer.encode(number, forKey: .left(.number))
-        try cardContainer.encodeIfPresent(name, forKey: .left(.name))
-        try cardContainer.encodeIfPresent(expiration?.month, forKey: .left(.expirationMonth))
-        try cardContainer.encodeIfPresent(expiration?.year, forKey: .left(.expirationYear))
+        try cardContainer.encode(name, forKey: .left(.name))
+        try cardContainer.encode(expiration.month, forKey: .left(.expirationMonth))
+        try cardContainer.encode(expiration.year, forKey: .left(.expirationYear))
         try cardContainer.encodeIfPresent(securityCode, forKey: .left(.securityCode))
         
         try cardContainer.encodeIfPresent(billingAddress?.street1, forKey: .right(.street1))
@@ -72,8 +73,8 @@ public struct TokenParams: APIJSONQuery {
         try cardContainer.encodeIfPresent(billingAddress?.phoneNumber, forKey: .right(.phoneNumber))
     }
     
-    public init(number: String, name: String?,
-        expiration: (month: Int, year: Int)?, securityCode: String?,
+    public init(number: String, name: String,
+        expiration: (month: Int, year: Int), securityCode: String?,
         billingAddress: BillingAddress? = nil) {
         self.number = number
         self.name = name
