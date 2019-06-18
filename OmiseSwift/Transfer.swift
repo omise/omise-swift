@@ -50,7 +50,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
     
     public let currency: Currency
     
-    public let recipientID: String
+    public let recipient: DetailProperty<Recipient>
     public let transactions: [Transaction<Transfer>]
     
     public let metadata: JSONDictionary
@@ -75,7 +75,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         case net
         case totalFee = "total_fee"
         case currency
-        case recipientID = "recipient"
+        case recipient
         case transactions
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
@@ -110,7 +110,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         feeVat = try container.decode(Int64.self, forKey: .feeVat)
         net = try container.decode(Int64.self, forKey: .net)
         totalFee = try container.decode(Int64.self, forKey: .totalFee)
-        recipientID = try container.decode(String.self, forKey: .recipientID)
+        recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
         transactions = try container.decode(Array<Transaction<Transfer>>.self, forKey: .transactions)
         
         let failureCode = try container.decodeIfPresent(TransferFailure.Code.self, forKey: .failureCode)
@@ -154,7 +154,7 @@ public struct Transfer: OmiseResourceObject, Equatable {
         try container.encode(totalFee, forKey: .totalFee)
         try container.encode(currency, forKey: .currency)
         
-        try container.encode(recipientID, forKey: .recipientID)
+        try container.encode(recipient, forKey: .recipient)
         try container.encode(transactions, forKey: .transactions)
         try container.encode(metadata, forKey: .metadata)
         

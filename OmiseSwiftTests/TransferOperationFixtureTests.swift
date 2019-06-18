@@ -18,6 +18,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(transfer.sentDate, dateFormatter.date(from: "2019-05-22T06:47:57Z"))
                 XCTAssertEqual(transfer.paidDate, dateFormatter.date(from: "2019-05-22T06:47:59Z"))
                 XCTAssertFalse(transfer.shouldFailFast)
+                XCTAssertEqual(transfer.recipient.dataID, "recp_test_5fofl6ivu23gypjeqt8")
             case let .failure(error):
                 XCTFail("\(error)")
             }
