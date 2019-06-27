@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let receiptTestingID = "rcpt_test_12345"
+private let receiptTestingID = DataID<Receipt>(idString: "rcpt_test_12345")!
 
 
 class ReceiptsOperationFixtureTests: FixtureTestCase {
@@ -31,7 +31,9 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receipt.vat, 102200)
                 XCTAssertEqual(receipt.wht, 0)
                 XCTAssertEqual(receipt.total, 1562200)
-                XCTAssertEqual(receipt.issuedDateComponents, DateComponents(calendar: Calendar(identifier: .gregorian), year: 2019, month: 3, day: 11))
+                XCTAssertEqual(receipt.issuedDateComponents,
+                               DateComponents(calendar: Calendar(identifier: .gregorian),
+                                              year: 2019, month: 3, day: 11))
                 XCTAssertEqual(receipt.currency, .thb)
                 XCTAssertFalse(receipt.isCreditNote)
             case let .failure(error):
@@ -106,7 +108,9 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receiptSampleData?.vat, 102200)
                 XCTAssertEqual(receiptSampleData?.wht, 0)
                 XCTAssertEqual(receiptSampleData?.total, 1562200)
-                XCTAssertEqual(receiptSampleData?.issuedDateComponents, DateComponents(calendar: Calendar(identifier: .gregorian), year: 2019, month: 3, day: 11))
+                XCTAssertEqual(receiptSampleData?.issuedDateComponents,
+                               DateComponents(calendar: Calendar(identifier: .gregorian),
+                                              year: 2019, month: 3, day: 11))
                 XCTAssertEqual(receiptSampleData?.currency, .thb)
                 XCTAssertEqual(receiptSampleData?.isCreditNote, false)
 

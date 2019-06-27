@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let transferTestingID = "trsf_test_5fqeuv5ozoo0kffs0ji"
+private let transferTestingID = DataID<Transfer>(idString: "trsf_test_5fqeuv5ozoo0kffs0ji")!
 
 class TransferOperationFixtureTests: FixtureTestCase {
     

@@ -1,7 +1,7 @@
 import XCTest
 import Omise
 
-private let linkTestingID = "link_test_5bh0ji63ctfk4gug2d5"
+private let linkTestingID = DataID<Link>(idString: "link_test_5bh0ji63ctfk4gug2d5")!
 
 class LinkOperationFixtureTest: FixtureTestCase {
     func testLinkRetrieve() {
@@ -54,9 +54,10 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultLink.charges.count, decodedLink.charges.count)
         XCTAssertEqual(defaultLink.charges.data.count, decodedLink.charges.data.count)
         
-        guard let defaultCharge = defaultLink.charges.data.first, let decodedCharge = decodedLink.charges.data.first else {
-            XCTFail("Cannot get the recent charge")
-            return
+        guard let defaultCharge = defaultLink.charges.data.first,
+            let decodedCharge = decodedLink.charges.data.first else {
+                XCTFail("Cannot get the recent charge")
+                return
         }
         
         XCTAssertEqual(defaultCharge.object, decodedCharge.object)
@@ -70,7 +71,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
         XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
         XCTAssertEqual(defaultCharge.isPaid, decodedCharge.isPaid)
-        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)

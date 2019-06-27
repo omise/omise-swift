@@ -22,8 +22,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             failureCode: ChargeFailure.Code.amountMismatch, failureMessage: "Failure Message",
             isRefunded: false, refundAmount: 500.0,
             isReversed: nil, status: .successful,
-            sourceOfFund: .card, isVoided: nil
-        )
+            sourceOfFund: .card, isVoided: nil)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -56,8 +55,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
     func testEncodeRefundFilterParams() throws {
         let filterParams = RefundFilterParams(
             amount: 1000.00, cardLastDigits: LastDigits(lastDigitsString: "4242"),
-            createdDate: SearchOperationFixtureTests.dateComponents, isVoided: false
-        )
+            createdDate: SearchOperationFixtureTests.dateComponents, isVoided: false)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -80,8 +78,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             closedDate: SearchOperationFixtureTests.dateComponents,
             createdDate: SearchOperationFixtureTests.dateComponents,
             currency: .thb,
-            status: DisputeStatus.open
-        )
+            status: Dispute.Status.open)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -104,8 +101,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
         let filterParams = RecipientFilterParams(
             isActive: false, activatedDate: SearchOperationFixtureTests.dateComponents,
             bankLastDigits: LastDigits(lastDigitsString: "4242"),
-            isDeleted: true, type: Recipient.RecipientType.individual
-        )
+            isDeleted: true, type: Recipient.RecipientType.individual)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -125,8 +121,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeCustomerFilterParams() throws {
         let filterParams = CustomerFilterParams(
-            createdDate: SearchOperationFixtureTests.dateComponents
-        )
+            createdDate: SearchOperationFixtureTests.dateComponents)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -145,8 +140,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             amount: 1000.00,
             created: SearchOperationFixtureTests.dateComponents,
             isMultiple: false, isUsed: true,
-            usedDate: SearchOperationFixtureTests.dateComponents
-        )
+            usedDate: SearchOperationFixtureTests.dateComponents)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -171,8 +165,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             isDeleted: true,
             fee: 500.0,
             isPaid: true, paidDate: SearchOperationFixtureTests.dateComponents,
-            isSent: false, sentDate: SearchOperationFixtureTests.dateComponents
-        )
+            isSent: false, sentDate: SearchOperationFixtureTests.dateComponents)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -191,6 +184,5 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.isSent, decodedTransferFilterParams.isSent)
         XCTAssertEqual(filterParams.sentDate, decodedTransferFilterParams.sentDate)
     }
-    
-    
 }
+

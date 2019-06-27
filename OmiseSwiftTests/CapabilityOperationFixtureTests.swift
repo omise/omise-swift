@@ -12,7 +12,6 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(capability):
                 XCTAssertEqual(capability.supportedMethods.count, 6)
-                XCTAssertNil(capability[.virtualAccount(.sinarmas)])
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))
@@ -24,8 +23,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 if let bayInstallmentMethod = capability[SourceType.installment(.bay)] {
                     XCTAssertEqual(
                         bayInstallmentMethod.payment,
-                        .installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10))
-                    )
+                        .installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10)))
                     XCTAssertEqual(bayInstallmentMethod.supportedCurrencies, [.thb])
                 } else {
                     XCTFail("Capability doesn't have the BAY Installment backend")
@@ -34,37 +32,32 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 10_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_000_000_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 5))
-                    )
+                        sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 5)))
                     XCTAssertFalse(capability ~= chargeParams)
                 }
                 
                 do {
                     let chargeParams = ChargeParams(
                         value: Value(amount: 100_00, currency: .thb),
-                        cardID: "card_test_123456789abcd"
-                    )
+                        cardID: "tokn_test_123456789abcd")
                     XCTAssertTrue(capability ~= chargeParams)
                 }
             case let .failure(error):
@@ -88,15 +81,13 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
         let decodedCapability = try decoder.decode(Capability.self, from: encodedData)
         
         XCTAssertEqual(capability.supportedMethods.count, decodedCapability.supportedMethods.count)
-        XCTAssertNil(decodedCapability[SourceType.virtualAccount(.sinarmas)])
         
         XCTAssertEqual(capability.creditCardMethod?.payment, decodedCapability.creditCardMethod?.payment)
         XCTAssertEqual(capability.creditCardMethod?.supportedCurrencies,
                        decodedCapability.creditCardMethod?.supportedCurrencies)
         XCTAssertEqual(
             capability[SourceType.installment(.bay)]?.payment,
-            decodedCapability[SourceType.installment(.bay)]?.payment
-        )
+            decodedCapability[SourceType.installment(.bay)]?.payment)
         XCTAssertEqual(capability[SourceType.installment(.bay)]?.supportedCurrencies,
                        decodedCapability[SourceType.installment(.bay)]?.supportedCurrencies)
     }

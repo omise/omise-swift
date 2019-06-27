@@ -8,14 +8,22 @@ class FixtureTestCase: OmiseTestCase {
     }
     
     static let fixturesDirectoryURL = Bundle(for: FixtureClient.self).url(forResource: "Fixtures", withExtension: nil)!
-    static let apiOmiseFixturesDirectoryURL = Bundle(for: FixtureClient.self).url(forResource: "Fixtures", withExtension: nil)!.appendingPathComponent("api.omise.co")
+    static let apiOmiseFixturesDirectoryURL = Bundle(for: FixtureClient.self)
+        .url(forResource: "Fixtures", withExtension: nil)!
+        .appendingPathComponent("api.omise.co")
+    
+    func fixturesObjectFor<T: OmiseLocatableObject>(type: T.Type, dataID: DataID<T>, suffix: String? = nil) throws -> T {
+        return try fixturesObjectFor(type: type, dataID: dataID.idString, suffix: suffix)
+    }
     
     func fixturesObjectFor<T: OmiseLocatableObject>(type: T.Type, dataID: String, suffix: String? = nil) throws -> T {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
         var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
-        fileURL.appendPathComponent(String(T.resourceInfo.path.suffix(from: T.resourceInfo.path.firstIndex(where: { $0 != "/"}) ?? T.resourceInfo.path.startIndex)))
+        fileURL.appendPathComponent(
+            String(T.resourcePath.suffix(from:
+                T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex)))
         var dataIDComponent = dataID
         
         if let suffix = suffix {
@@ -36,12 +44,16 @@ class FixtureTestCase: OmiseTestCase {
     }
     
     
-    func fixturesObjectFor<T: OmiseLocatableObject & SingletonRetrievable>(type: T.Type, suffix: String? = nil) throws -> T {
+    func fixturesObjectFor<T: OmiseLocatableObject & SingletonRetrievable>(
+        type: T.Type, suffix: String? = nil
+        ) throws -> T {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
         var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
-        var dataIDComponent = String(T.resourceInfo.path.suffix(from: T.resourceInfo.path.firstIndex(where: { $0 != "/"}) ?? T.resourceInfo.path.startIndex))
+        var dataIDComponent = String(
+            T.resourcePath.suffix(from:
+                T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex))
         
         if let suffix = suffix {
             dataIDComponent += "-\(suffix)"

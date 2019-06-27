@@ -2,7 +2,7 @@ import XCTest
 import Omise
 
 
-private let customerTestingID = "cust_test_5fz0olfpy32zadv96ek"
+private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
 
 
 class CustomerOperationFixtureTests: FixtureTestCase {
@@ -18,7 +18,7 @@ class CustomerOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(customer.location, "/customers/cust_test_5fz0olfpy32zadv96ek")
                 XCTAssertEqual(customer.isLiveMode, false)
                 XCTAssertEqual(customer.createdDate, dateFormatter.date(from: "2019-05-21T10:21:20Z"))
-                XCTAssertEqual(customer.defaultCard?.dataID, "card_test_5fzbq7cypephj6fd3zq")
+                XCTAssertEqual(customer.defaultCard?.id, "card_test_5fzbq7cypephj6fd3zq")
                 XCTAssertEqual(customer.email, "john.doe@example.com")
                 XCTAssertNotNil(customer.customerDescription)
             case let .failure(error):

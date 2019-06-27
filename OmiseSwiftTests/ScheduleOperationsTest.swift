@@ -8,8 +8,13 @@ class ScheduleOperationsTest: LiveTest {
     func testCreateEveryMonthChargeSchedule() {
         let expectation = self.expectation(description: "Create Schedule result")
         
-        let parameter = ChargeSchedulingParameter(value: Value(amount: 36_900_00, currency: .thb), customerID: "cust_test_582o6hikunmz90lx0wl", cardID: nil, description: nil)
-        let params = ScheduleParams<Charge>(every: 1, period: Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([1])), endDate: DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2018, month: 5, day: 29), startDate: nil, scheduleData: parameter)
+        let parameter = ChargeSchedulingParameter(value: Value(amount: 36_900_00, currency: .thb),
+                                                  customerID: "cust_test_582o6hikunmz90lx0wl", cardID: nil,
+                                                  description: nil)
+        let params = ScheduleParams<Charge>(
+            every: 1, period: .monthly(.daysOfMonth([1])),
+            endDate: DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2018, month: 5, day: 29),
+            startDate: nil, scheduleData: parameter)
         let request = Schedule<Charge>.create(using: testClient, params: params) { (result) in
             defer { expectation.fulfill() }
             
@@ -20,7 +25,8 @@ class ScheduleOperationsTest: LiveTest {
                 XCTAssertEqual(schedule.status, Schedule<Charge>.Status.running)
                 XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1])))
                 XCTAssertEqual(schedule.every, 1)
-                XCTAssertEqual(schedule.endOnDateComponents, DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 29))
+                XCTAssertEqual(schedule.endOnDateComponents,
+                               DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 29))
                 
                 XCTAssertEqual(schedule.scheduleData.value.amount, 36_900_00)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)

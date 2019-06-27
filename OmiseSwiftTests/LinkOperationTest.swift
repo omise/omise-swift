@@ -45,8 +45,7 @@ class LinkOperationTest: LiveTest {
         let createParams = LinkParams(
             value: Value(amount: 1_000_00, currency: .thb),
             title: "Link for testing",
-            linkDescription: "Testing create link from Omise Swift SDK"
-        )
+            linkDescription: "Testing create link from Omise Swift SDK")
         
         let request = Link.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }

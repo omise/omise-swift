@@ -63,15 +63,16 @@ class TransferOperationsTest: LiveTest {
         
         let updateParams = UpdateTransferParams(amount: 96094)
         
-        let request = Transfer.update(using: testClient, id: "trsf_test_54h7uzmwu5v79mgri6d", params: updateParams) { (result) in
-            defer { expectation.fulfill() }
-            
-            switch result {
-            case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 96094)
-            case let .failure(error):
-                XCTFail("\(error)")
-            }
+        let request = Transfer
+            .update(using: testClient, id: "trsf_test_54h7uzmwu5v79mgri6d", params: updateParams) { (result) in
+                defer { expectation.fulfill() }
+                
+                switch result {
+                case let .success(transfer):
+                    XCTAssertEqual(transfer.value.amount, 96094)
+                case let .failure(error):
+                    XCTFail("\(error)")
+                }
         }
         
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -85,7 +86,7 @@ class TransferOperationsTest: LiveTest {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.id, "trsf_test_54hktxphv9p7wv1tsed")
+                XCTAssertEqual(transfer.id.idString, "trsf_test_54hktxphv9p7wv1tsed")
             case let .failure(error):
                 XCTFail("\(error)")
             }

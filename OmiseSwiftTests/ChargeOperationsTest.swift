@@ -25,7 +25,7 @@ class ChargeOperationsTest: LiveTest {
     func testChargeRetrieve() {
         let expectation = self.expectation(description: "charge retrieve")
         
-        let request = Charge.retrieve(using: testClient, parent: nil, id: "chrg_test_54phpsikwx0q7sv8h4g", callback: { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_54phpsikwx0q7sv8h4g", callback: { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -63,7 +63,7 @@ class ChargeOperationsTest: LiveTest {
                     case let .success(loadedMoreList):
                         XCTAssertGreaterThan(loadedMoreList.count, 0)
                         XCTAssertEqual(transfersList.data.count, 25)
-                        XCTAssertEqual(transfersList.data.count, Set(transfersList.data.flatMap({ $0.id })).count)
+                        XCTAssertEqual(transfersList.data.count, Set(transfersList.data.map({ $0.id })).count)
                         XCTAssertEqual(transfersList.loadedIndices, 0..<25)
                     case .failure(let error):
                         XCTFail("\(error)")
@@ -94,7 +94,10 @@ class ChargeOperationsTest: LiveTest {
             switch result {
             case let .success(transfersList):
                 XCTAssertNotNil(transfersList.data)
-                let list = List<Charge>(endpoint: .api, paths: [Charge.resourceInfo.path], order: .chronological, list: transfersList)
+                let list = List<Charge>(
+                    listEndpoint: ListAPIEndpoint<Charge>(
+                        endpoint: .api, pathComponents: [Charge.resourcePath], method: .get, query: listParams),
+                    list: transfersList)
                 XCTAssertEqual(list.loadedIndices, 30..<30)
 
                 list.loadPreviousPage(using: self.testClient, callback: { (firstLoadResult) in
@@ -113,7 +116,7 @@ class ChargeOperationsTest: LiveTest {
                             case let .success(loadedMoreList):
                                 XCTAssertGreaterThan(loadedMoreList.count, 0)
                                 XCTAssertEqual(list.data.count, 25)
-                                XCTAssertEqual(transfersList.data.count, Set(transfersList.data.flatMap({ $0.id })).count)
+                                XCTAssertEqual(transfersList.data.count, Set(transfersList.data.map({ $0.id })).count)
                                 XCTAssertEqual(list.loadedIndices, 0..<25)
                             case .failure(let error):
                                 XCTFail("\(error)")

@@ -2,12 +2,13 @@ import XCTest
 import Omise
 
 
-private let cardTestingID = "card_test_5fzbq7cypephj6fd3zq"
-private let customerTestingID = "cust_test_5fz0olfpy32zadv96ek"
+private let cardTestingID = DataID<CustomerCard>(idString: "card_test_5fzbq7cypephj6fd3zq")!
+private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
 
 private let customer: Customer = {
     let bundle = Bundle(for: OmiseTestCase.self)
-    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/customers/cust_test_5fz0olfpy32zadv96ek-get", ofType: "json") else {
+    guard let path = bundle.path(forResource: "Fixtures/api.omise.co/customers/cust_test_5fz0olfpy32zadv96ek-get",
+                                 ofType: "json") else {
         XCTFail("could not load fixtures.")
         preconditionFailure()
     }
@@ -26,7 +27,6 @@ private let customer: Customer = {
 class CustomerCardOperationFixtureTests: FixtureTestCase {
     func testCustomerRetrieve() {
         let expectation = self.expectation(description: "Customer result")
-        
         let request = CustomerCard.retrieve(using: testClient, parent: customer, id: cardTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -55,7 +55,7 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCustomer.id, decodedCustomer.id)
         XCTAssertEqual(defaultCustomer.location, decodedCustomer.location)
         XCTAssertEqual(defaultCustomer.email, decodedCustomer.email)
-        XCTAssertEqual(defaultCustomer.defaultCard?.dataID, decodedCustomer.defaultCard?.dataID)
+        XCTAssertEqual(defaultCustomer.defaultCard?.id, decodedCustomer.defaultCard?.id)
         XCTAssertEqual(defaultCustomer.isLiveMode, decodedCustomer.isLiveMode)
         XCTAssertEqual(defaultCustomer.isDeleted, decodedCustomer.isDeleted)
         XCTAssertEqual(defaultCustomer.createdDate, decodedCustomer.createdDate)
