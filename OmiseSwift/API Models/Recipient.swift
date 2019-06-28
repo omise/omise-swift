@@ -188,10 +188,10 @@ public struct RecipientFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        isActive = try container.decodeIfPresent(Bool.self, forKey: .isActive)
+        isActive = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isActive)
         activatedDate = try container.decodeIfPresent(DateComponents.self, forKey: .activatedDate)
         bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
-        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted)
+        isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
         type = try container.decodeIfPresent(Recipient.RecipientType.self, forKey: .type)
     }
     

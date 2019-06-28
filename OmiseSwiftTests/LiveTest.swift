@@ -4,7 +4,7 @@ import Omise
 
 class LiveTest: OmiseTestCase {
     var testClient: APIClient {
-        let config = APIConfiguration(key: AnyAccessKey("akey_test_57rqqo973wulbfhpqgq"))
+        let config = APIConfiguration(key: AnyAccessKey("skey_test_58wfnlwq0pxte1cvbqx"))
         return APIClient(config: config)
     }
 }

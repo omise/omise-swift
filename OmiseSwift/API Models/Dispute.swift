@@ -265,7 +265,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
         closedDate = try container.decodeIfPresent(DateComponents.self, forKey: .closedDate)
         createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .createdDate)

@@ -522,23 +522,23 @@ public struct ChargeFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
-        isAuthorized = try container.decodeIfPresent(Bool.self, forKey: .isAuthorized)
-        isAutoCapture = try container.decodeIfPresent(Bool.self, forKey: .isAutoCapture)
-        isCaptured = try container.decodeIfPresent(Bool.self, forKey: .isCaptured)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
+        isAuthorized = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isAuthorized)
+        isAutoCapture = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isAutoCapture)
+        isCaptured = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCaptured)
         capturedDate = try container.decodeIfPresent(DateComponents.self, forKey: .capturedDate)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
         createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .createdDate)
-        isCustomerPresent = try container.decodeIfPresent(Bool.self, forKey: .isCustomerPresent)
-        isDisputed = try container.decodeIfPresent(Bool.self, forKey: .isDisputed)
+        isCustomerPresent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCustomerPresent)
+        isDisputed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDisputed)
         failureCode = try container.decodeIfPresent(ChargeFailure.Code.self, forKey: .failureCode)
         failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
-        isRefunded = try container.decodeIfPresent(Bool.self, forKey: .isRefunded)
-        refundAmount = try container.decodeIfPresent(Double.self, forKey: .refundAmount)
-        isReversed = try container.decodeIfPresent(Bool.self, forKey: .isReversed)
+        isRefunded = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isRefunded)
+        refundAmount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .refundAmount)
+        isReversed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isReversed)
         status = try container.decodeIfPresent(Charge.APIStatus.self, forKey: .status)
         sourceOfFund = try container.decodeIfPresent(Charge.SourceOfFund.self, forKey: .sourceOfFund)
-        isVoided = try container.decodeIfPresent(Bool.self, forKey: .isVoided)
+        isVoided = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isVoided)
     }
     
     public func encode(to encoder: Encoder) throws {

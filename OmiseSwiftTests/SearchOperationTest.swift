@@ -28,6 +28,30 @@ class SearchOperationTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testDisputedSearch() {
+        let expectation = self.expectation(description: "transfer result")
+        
+        var searchParams = SearchParams(searhScopeType: Charge.self)
+        var searchFilter = ChargeFilterParams()
+        searchFilter.isDisputed = true
+        searchParams.filter = searchFilter
+        
+        let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charges):
+                XCTAssertEqual(charges.data.count, 3)
+                let samplingCharge = charges.data.first
+                XCTAssertEqual(samplingCharge?.value.amount, 10_000_00)
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        })
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
     
     func testSearchChargeByCreatedDate() {
         let expectation = self.expectation(description: "transfer result")

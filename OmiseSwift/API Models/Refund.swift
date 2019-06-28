@@ -136,10 +136,10 @@ public struct RefundFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
-        createdDate = try container.decode(DateComponents.self, forKey: .createdDate)
-        isVoided = try container.decodeIfPresent(Bool.self, forKey: .isVoided)
+        createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .createdDate)
+        isVoided = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isVoided)
     }
     
     public func encode(to encoder: Encoder) throws {

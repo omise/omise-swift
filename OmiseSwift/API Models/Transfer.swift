@@ -220,13 +220,13 @@ public struct TransferFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         created = try container.decodeIfPresent(DateComponents.self, forKey: .created)
-        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted)
-        fee = try container.decodeIfPresent(Double.self, forKey: .fee)
-        isPaid = try container.decodeIfPresent(Bool.self, forKey: .isPaid)
+        isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
+        fee = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .fee)
+        isPaid = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isPaid)
         paidDate = try container.decodeIfPresent(DateComponents.self, forKey: .paidDate)
-        isSent = try container.decodeIfPresent(Bool.self, forKey: .isSent)
+        isSent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isSent)
         sentDate = try container.decodeIfPresent(DateComponents.self, forKey: .sentDate)
     }
     
