@@ -89,7 +89,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         var request = URLRequest(url: requestURL)
         request.httpMethod = endpoint.method.rawValue
         request.cachePolicy = .useProtocolCachePolicy
-        request.timeoutInterval = 10.0
+        request.timeoutInterval = 30.0
         request.addValue(auth, forHTTPHeaderField: "Authorization")
         request.addValue(client.config.apiVersion, forHTTPHeaderField: "Omise-Version")
         
