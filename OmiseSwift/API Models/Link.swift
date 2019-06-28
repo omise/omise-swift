@@ -101,10 +101,10 @@ public struct LinkFilterParams: OmiseFilterParams {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decodeIfPresent(Double.self, forKey: .amount)
+        amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
         created = try container.decodeIfPresent(DateComponents.self, forKey: .created)
-        isMultiple = try container.decodeIfPresent(Bool.self, forKey: .isMultiple)
-        isUsed = try container.decodeIfPresent(Bool.self, forKey: .isUsed)
+        isMultiple = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isMultiple)
+        isUsed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isUsed)
         usedDate = try container.decodeIfPresent(DateComponents.self, forKey: .usedDate)
     }
     

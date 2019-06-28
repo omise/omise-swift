@@ -11,6 +11,28 @@ class SearchOperationFixtureTests: FixtureTestCase {
         return dateComponents
     }()
     
+    func testSearchCharge() throws {
+        var searchParams = SearchParams(searhScopeType: Charge.self)
+        let filterParams = ChargeFilterParams(isDisputed: true)
+        searchParams.filter = filterParams
+        let expectation = self.expectation(description: "Charge Search result")
+        
+        let request = Charge.search(using: testClient, params: searchParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(searchResult):
+                XCTAssertEqual(searchResult.count, 3)
+                XCTAssertNotNil(searchResult.first?.dispute)
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testEncodeChargeFilterParams() throws {
         let filterParams = ChargeFilterParams(
             amount: 1000.00, isAuthorized: true,
@@ -183,6 +205,13 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.paidDate, decodedTransferFilterParams.paidDate)
         XCTAssertEqual(filterParams.isSent, decodedTransferFilterParams.isSent)
         XCTAssertEqual(filterParams.sentDate, decodedTransferFilterParams.sentDate)
+    }
+}
+
+
+extension SearchParams: AdditionalFixtureData {
+    var fixtureFileSuffix: String? {
+        return scope
     }
 }
 
