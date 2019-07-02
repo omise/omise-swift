@@ -92,47 +92,50 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         
         return client.request(to: endpoint, callback: requestCallback)
     }
-    
-    static func makeLoadNextPageOperation(list: Search<Self>) -> SearchEndpoint {
+}
+
+
+extension Search {
+    func makeLoadNextPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: list.scope, query: list.query, order: list.order, filter: list.filters,
-            page: list.loadedPages.last?.advanced(by: 1) ?? 1)
+            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: 1) ?? 1)
         
-        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
+        return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
     
     @discardableResult
-    static func loadNextPage(
-        list: Search<Self>, using client: APIClient,
-        callback: @escaping (APIResult<[Self]>) -> Void
-        ) -> APIRequest<SearchParams<FilterParams>, SearchEndpoint.Result>? {
-        let operation = makeLoadNextPageOperation(list: list)
+    func loadNextPage(
+        using client: APIClient,
+        callback: @escaping (APIResult<[TItem]>) -> Void
+        ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
+        let operation = self.makeLoadNextPageOperation()
         
-        let requestCallback: SearchRequest.Callback = { result in
-            let callbackResult = result.map({ list.insert(from: $0) })
+        let requestCallback: TItem.SearchRequest.Callback = { result in
+            let callbackResult = result.map({ self.insert(from: $0) })
             callback(callbackResult)
         }
         
         return client.request(to: operation, callback: requestCallback)
     }
     
-    static func makeLoadPreviousPageOperation(list: Search<Self>) -> SearchEndpoint {
+    func makeLoadPreviousPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: list.scope, query: list.query, order: list.order, filter: list.filters,
-            page: list.loadedPages.last?.advanced(by: -1) ?? 1)
+            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: -1) ?? 1)
         
-        return SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
+        return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
     
     @discardableResult
-    static func loadPreviousPage(
-        list: Search<Self>, using client: APIClient,
-        callback: @escaping (APIResult<[Self]>) -> Void
-        ) -> APIRequest<SearchParams<FilterParams>, SearchEndpoint.Result>? {
-        let operation = makeLoadNextPageOperation(list: list)
+    func loadPreviousPage(
+        using client: APIClient,
+        callback: @escaping (APIResult<[TItem]>) -> Void
+        ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
+        let operation = makeLoadNextPageOperation()
         
-        let requestCallback: SearchRequest.Callback = { result in
-            let callbackResult = result.map({ list.insert(from: $0) })
+        let requestCallback: TItem.SearchRequest.Callback = { result in
+            let callbackResult = result.map({ self.insert(from: $0) })
             callback(callbackResult)
         }
         
