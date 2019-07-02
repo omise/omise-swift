@@ -5,12 +5,12 @@ public protocol OmiseObject: Codable {
     var object: String { get }
 }
 
-public protocol OmiseLocatableObject: OmiseObject {
+public protocol OmiseLocatableObject: OmiseObject, Hashable {
     static var resourcePath: String { get }
     var location: String { get }
 }
 
-public protocol OmiseIdentifiableObject: OmiseObject {
+public protocol OmiseIdentifiableObject: OmiseObject, Hashable {
     var id: DataID<Self> { get }
     static var idPrefix: String { get }
     
@@ -40,21 +40,34 @@ public extension OmiseIdentifiableObject {
     }
 }
 
-public extension OmiseIdentifiableObject where Self: Equatable {
+public extension OmiseIdentifiableObject {
     static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
-public extension OmiseLocatableObject where Self: Equatable {
+public extension OmiseLocatableObject {
     static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.location == rhs.location
     }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(location)
+    }
 }
 
-public extension OmiseIdentifiableObject where Self: OmiseLocatableObject & Equatable {
+public extension OmiseIdentifiableObject where Self: OmiseLocatableObject {
     static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(location)
+        hasher.combine(id)
     }
 }
 
