@@ -5,40 +5,40 @@ import Omise
 class LastDigitsTest: XCTestCase {
   
   func testCreateLastDigitsSuccessfully() {
-    let firstLastDigits = LastDigits(lastDigitsString: "1234")
+    let firstLastDigits = Digits(digitsString: "1234")
     XCTAssertNotNil(firstLastDigits)
-    XCTAssertEqual(firstLastDigits?.lastDigits, "1234")
+    XCTAssertEqual(firstLastDigits?.digits, "1234")
     
-    let secondLastDigits = LastDigits(lastDigitsString: "1111")
+    let secondLastDigits = Digits(digitsString: "1111")
     XCTAssertNotNil(secondLastDigits)
-    XCTAssertEqual(secondLastDigits?.lastDigits, "1111")
+    XCTAssertEqual(secondLastDigits?.digits, "1111")
     
-    let thirdLastDigits = LastDigits(lastDigitsString: "4242")
+    let thirdLastDigits = Digits(digitsString: "4242")
     XCTAssertNotNil(thirdLastDigits)
-    XCTAssertEqual(thirdLastDigits?.lastDigits, "4242")
+    XCTAssertEqual(thirdLastDigits?.digits, "4242")
   }
   
   func testFailyCreateLastDigits() {
-    let firstTry = LastDigits(lastDigitsString: "123")
+    let firstTry = Digits(digitsString: "123")
     XCTAssertNil(firstTry)
     
-    let secondTry = LastDigits(lastDigitsString: "")
+    let secondTry = Digits(digitsString: "")
     XCTAssertNil(secondTry)
     
-    let thirdTry = LastDigits(lastDigitsString: "12345")
+    let thirdTry = Digits(digitsString: "12345")
     XCTAssertNil(thirdTry)
     
-    let forthTry = LastDigits(lastDigitsString: "abcd")
+    let forthTry = Digits(digitsString: "abcd")
     XCTAssertNil(forthTry)
     
-    let fifthTry = LastDigits(lastDigitsString: "123a")
+    let fifthTry = Digits(digitsString: "123a")
     XCTAssertNil(fifthTry)
   }
   
   func testLastDigitsEquality() {
-    let firstLastDigits = LastDigits(lastDigitsString: "1234")!
-    let secondLastDigits = LastDigits(lastDigitsString: "1234")!
-    let thirdLastDigits = LastDigits(lastDigitsString: "4242")!
+    let firstLastDigits = Digits(digitsString: "1234")!
+    let secondLastDigits = Digits(digitsString: "1234")!
+    let thirdLastDigits = Digits(digitsString: "4242")!
     
     XCTAssertEqual(firstLastDigits, secondLastDigits)
     XCTAssertNotEqual(firstLastDigits, thirdLastDigits)

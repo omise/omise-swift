@@ -38,7 +38,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
             amount: 1000.00, isAuthorized: true,
             isAutoCapture: false, isCaptured: true,
             capturedDate: SearchOperationFixtureTests.dateComponents,
-            cardLastDigits: LastDigits(lastDigitsString: "4242"),
+            cardLastDigits: Digits(digitsString: "4242"),
             createdDate: SearchOperationFixtureTests.dateComponents, isCustomerPresent: true,
             isDisputed: true,
             failureCode: ChargeFailure.Code.amountMismatch, failureMessage: "Failure Message",
@@ -76,7 +76,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeRefundFilterParams() throws {
         let filterParams = RefundFilterParams(
-            amount: 1000.00, cardLastDigits: LastDigits(lastDigitsString: "4242"),
+            amount: 1000.00, cardLastDigits: Digits(digitsString: "4242"),
             createdDate: SearchOperationFixtureTests.dateComponents, isVoided: false)
         
         let encoder = JSONEncoder()
@@ -96,7 +96,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeDisputeFilterParams() throws {
         let filterParams = DisputeFilterParams(
-            amount: 1000.00, cardLastDigits: LastDigits(lastDigitsString: "4242"),
+            amount: 1000.00, cardLastDigits: Digits(digitsString: "4242"),
             closedDate: SearchOperationFixtureTests.dateComponents,
             createdDate: SearchOperationFixtureTests.dateComponents,
             currency: .thb,
@@ -122,7 +122,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
     func testEncodeRecipientFilterParams() throws {
         let filterParams = RecipientFilterParams(
             isActive: false, activatedDate: SearchOperationFixtureTests.dateComponents,
-            bankLastDigits: LastDigits(lastDigitsString: "4242"),
+            bankLastDigits: Digits(digitsString: "4242"),
             isDeleted: true, type: Recipient.RecipientType.individual)
         
         let encoder = JSONEncoder()

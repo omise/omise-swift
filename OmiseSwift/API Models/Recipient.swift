@@ -164,12 +164,12 @@ extension Recipient: Destroyable {}
 public struct RecipientFilterParams: OmiseFilterParams {
     public var isActive: Bool?
     public var activatedDate: DateComponents?
-    public var bankLastDigits: LastDigits?
+    public var bankLastDigits: Digits?
     public var isDeleted: Bool?
     public var type: Recipient.RecipientType?
     
     public init(isActive: Bool? = nil, activatedDate: DateComponents? = nil,
-                bankLastDigits: LastDigits? = nil, isDeleted: Bool? = nil,
+                bankLastDigits: Digits? = nil, isDeleted: Bool? = nil,
                 type: Recipient.RecipientType?) {
         self.isActive = isActive
         self.activatedDate = activatedDate
@@ -190,7 +190,7 @@ public struct RecipientFilterParams: OmiseFilterParams {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         isActive = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isActive)
         activatedDate = try container.decodeIfPresent(DateComponents.self, forKey: .activatedDate)
-        bankLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .bankLastDigits)
+        bankLastDigits = try container.decodeIfPresent(Digits.self, forKey: .bankLastDigits)
         isDeleted = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDeleted)
         type = try container.decodeIfPresent(Recipient.RecipientType.self, forKey: .type)
     }
