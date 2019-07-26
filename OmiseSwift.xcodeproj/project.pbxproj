@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E37DA0322E5A49D0002ABC5 /* FirstDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */; };
+		0E37DA0422E5A49D0002ABC5 /* FirstDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */; };
+		0E37DA0622E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
+		0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
 		220C32711CC762330060112E /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseTestCase.swift */; };
 		2270E3AF1CC78D4200F18814 /* Omise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* Omise.framework */; };
@@ -207,6 +211,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDigits.swift; sourceTree = "<group>"; };
+		0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDigitsTest.swift; sourceTree = "<group>"; };
 		220C326D1CC762330060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220C32701CC762330060112E /* Omise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Omise.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
@@ -426,6 +432,7 @@
 			children = (
 				8A5BC2DD2012743400B55139 /* CurrencyTest.swift */,
 				8A9B2AB31FB9B5C5002F42C7 /* DecoderTest.swift */,
+				0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */,
 				8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */,
 				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 			);
@@ -751,6 +758,7 @@
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
 				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
+				0E37DA0422E5A49D0002ABC5 /* FirstDigits.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
 				8A6079311EB1E395005684CC /* AnyAccessKey.swift in Sources */,
 				8ACB41641E28A403001793CD /* Endpoint.swift in Sources */,
@@ -820,6 +828,7 @@
 				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
+				0E37DA0322E5A49D0002ABC5 /* FirstDigits.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,
 				8A6079301EB1E395005684CC /* AnyAccessKey.swift in Sources */,
 				8ACD570B1E2E3A9600FEE5A0 /* ListProperty.swift in Sources */,
@@ -872,6 +881,8 @@
 				8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */,
 				8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
+				0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */,
+				8AAC00EC22B7D9DF007A71BF /* FixtureTestCase.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */,
@@ -916,6 +927,7 @@
 				8A2BCAC41E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A07D2F51D73F5040030B68D /* FixtureClient.swift in Sources */,
 				8A98759E1F0673C90090D56F /* DocumentOperationTest.swift in Sources */,
+				0E37DA0622E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */,
 				8A1CF6B01F8BC1D7003EDB38 /* LastDigitsTest.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 				8A208DDD21A81267009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
