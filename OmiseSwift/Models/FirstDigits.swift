@@ -4,8 +4,7 @@ public struct FirstDigits: Equatable {
     public let firstDigits: String
     
     public init?(firstDigitsString: String) {
-        guard firstDigitsString.count == 6 &&
-            firstDigitsString.rangeOfCharacter(from:
+        guard firstDigitsString != "" && firstDigitsString.rangeOfCharacter(from:
                 CharacterSet(charactersIn: "0123456789").inverted) == nil
             else {
                 return nil
@@ -24,8 +23,7 @@ extension FirstDigits: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let value = try container.decode(String.self)
-        guard value.count == 6 &&
-            value.rangeOfCharacter(from:
+        guard value != "" && value.rangeOfCharacter(from:
                 CharacterSet(charactersIn: "0123456789").inverted) == nil
             else {
                 let context = DecodingError.Context(

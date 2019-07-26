@@ -32,7 +32,7 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(customer):
-                XCTAssertEqual(customer.firstDigits.firstDigits, "424242")
+                XCTAssertEqual(customer.firstDigits?.firstDigits, "424242")
                 XCTAssertEqual(customer.lastDigits.lastDigits, "4242")
             case let .failure(error):
                 XCTFail("\(error)")
