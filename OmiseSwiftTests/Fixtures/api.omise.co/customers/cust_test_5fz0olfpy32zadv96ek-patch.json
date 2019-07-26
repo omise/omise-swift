@@ -35,6 +35,7 @@
         "phone_number": null,
         "financing": "credit",
         "bank": "STRIPE PAYMENTS UK LIMITED",
+        "first_digits": "424242",
         "last_digits": "4242",
         "brand": "Visa",
         "expiration_month": 5,
