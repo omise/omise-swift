@@ -10,7 +10,7 @@ public protocol OmiseLocatableObject: OmiseObject, Hashable {
     var location: String { get }
 }
 
-public protocol OmiseIdentifiableObject: OmiseObject, Hashable {
+public protocol OmiseIdentifiableObject: OmiseObject, Hashable, Identifiable {
     var id: DataID<Self> { get }
     static var idPrefix: String { get }
     
@@ -62,7 +62,7 @@ public extension OmiseLocatableObject {
 
 public extension OmiseIdentifiableObject where Self: OmiseLocatableObject {
     static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.location == rhs.location
     }
     
     func hash(into hasher: inout Hasher) {
