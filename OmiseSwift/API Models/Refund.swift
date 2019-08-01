@@ -115,7 +115,7 @@ public struct RefundParams: APIJSONQuery {
 
 public struct RefundFilterParams: OmiseFilterParams {
     public var amount: Double?
-    public var cardLastDigits: LastDigits?
+    public var cardLastDigits: Digits?
     public var createdDate: DateComponents?
     public var isVoided: Bool?
     
@@ -126,7 +126,7 @@ public struct RefundFilterParams: OmiseFilterParams {
         case isVoided = "voided"
     }
     
-    public init(amount: Double? = nil, cardLastDigits: LastDigits? = nil,
+    public init(amount: Double? = nil, cardLastDigits: Digits? = nil,
                 createdDate: DateComponents? = nil, isVoided: Bool? = nil) {
         self.amount = amount
         self.cardLastDigits = cardLastDigits
@@ -137,7 +137,7 @@ public struct RefundFilterParams: OmiseFilterParams {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
-        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        cardLastDigits = try container.decodeIfPresent(Digits.self, forKey: .cardLastDigits)
         createdDate = try container.decodeIfPresent(DateComponents.self, forKey: .createdDate)
         isVoided = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isVoided)
     }

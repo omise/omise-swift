@@ -4,7 +4,7 @@ public struct BankAccount: OmiseObject {
     public let object: String
     
     public let bank: Bank
-    public let accountNumberLastDigits: LastDigits
+    public let accountNumberLastDigits: Digits
     public let name: String
     
     public let type: BankAccount.AccountType?
@@ -31,7 +31,7 @@ extension BankAccount {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         name = try container.decode(String.self, forKey: .name)
-        accountNumberLastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        accountNumberLastDigits = try container.decode(Digits.self, forKey: .lastDigits)
         type = try container.decodeIfPresent(BankAccount.AccountType.self, forKey: .type)
         
         let bankID = try container.decodeIfPresent(String.self, forKey: .bankBrand) ??
