@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E37DA0322E5A49D0002ABC5 /* FirstDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */; };
-		0E37DA0422E5A49D0002ABC5 /* FirstDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */; };
 		0E37DA0622E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
 		0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
 		220C32711CC762330060112E /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -127,7 +125,7 @@
 		8ACB415A1E28A3C2001793CD /* Recipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB413A1E27A36F001793CD /* Recipient.swift */; };
 		8ACB415B1E28A3C2001793CD /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB413D1E27A3F4001793CD /* BankAccount.swift */; };
 		8ACB415E1E28A3EC001793CD /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56D41A1D78172D00F30D88 /* Currency.swift */; };
-		8ACB41601E28A3EC001793CD /* LastDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA481DE59A4700F83D21 /* LastDigits.swift */; };
+		8ACB41601E28A3EC001793CD /* Digits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA481DE59A4700F83D21 /* Digits.swift */; };
 		8ACB41631E28A3F2001793CD /* ResourceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258D8171D23C480006C4149 /* ResourceInfo.swift */; };
 		8ACB41641E28A403001793CD /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298736E1CCE207500970F8C /* Endpoint.swift */; };
 		8ACD570B1E2E3A9600FEE5A0 /* ListProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB41321E279730001793CD /* ListProperty.swift */; };
@@ -146,7 +144,7 @@
 		8ACD571C1E2E3A9600FEE5A0 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298736E1CCE207500970F8C /* Endpoint.swift */; };
 		8ACD571D1E2E3A9600FEE5A0 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACB412C1E2793D4001793CD /* Card.swift */; };
 		8ACD571E1E2E3A9600FEE5A0 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A028B4A1E2CECEF0008E010 /* APIRequest.swift */; };
-		8ACD571F1E2E3A9600FEE5A0 /* LastDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA481DE59A4700F83D21 /* LastDigits.swift */; };
+		8ACD571F1E2E3A9600FEE5A0 /* Digits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7CBA481DE59A4700F83D21 /* Digits.swift */; };
 		8ACD57201E2E3A9600FEE5A0 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A028B441E2CEA370008E010 /* APIConfiguration.swift */; };
 		8ACD57211E2E3A9600FEE5A0 /* Ordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A0F9951D22372400CA3D35 /* Ordering.swift */; };
 		8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A242A511E2E1BAA0068BB5D /* APIEndpoint.swift */; };
@@ -211,7 +209,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E37DA0222E5A49D0002ABC5 /* FirstDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDigits.swift; sourceTree = "<group>"; };
 		0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDigitsTest.swift; sourceTree = "<group>"; };
 		220C326D1CC762330060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220C32701CC762330060112E /* Omise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Omise.h; sourceTree = "<group>"; };
@@ -285,7 +282,7 @@
 		8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCardOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A762C2021A6B84F00AC5C46 /* Capability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capability.swift; sourceTree = "<group>"; };
-		8A7CBA481DE59A4700F83D21 /* LastDigits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastDigits.swift; sourceTree = "<group>"; };
+		8A7CBA481DE59A4700F83D21 /* Digits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Digits.swift; sourceTree = "<group>"; };
 		8A82A7061D7942E800A198A3 /* Searchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searchable.swift; sourceTree = "<group>"; };
 		8A82A7091D795DCC00A198A3 /* SearchOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOperationTest.swift; sourceTree = "<group>"; };
 		8A98759A1F0647050090D56F /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
@@ -758,14 +755,13 @@
 				8A98759C1F0647050090D56F /* Document.swift in Sources */,
 				8A5880ED1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */,
-				0E37DA0422E5A49D0002ABC5 /* FirstDigits.swift in Sources */,
 				8A50C5051E2E250800EC9407 /* Creatable.swift in Sources */,
 				8A6079311EB1E395005684CC /* AnyAccessKey.swift in Sources */,
 				8ACB41641E28A403001793CD /* Endpoint.swift in Sources */,
 				8A028B391E2CC3920008E010 /* Card.swift in Sources */,
 				8A4224AC1E4C8F8E00B11AF2 /* Search.swift in Sources */,
 				8A028B4B1E2CECEF0008E010 /* APIRequest.swift in Sources */,
-				8ACB41601E28A3EC001793CD /* LastDigits.swift in Sources */,
+				8ACB41601E28A3EC001793CD /* Digits.swift in Sources */,
 				8A028B451E2CEA370008E010 /* APIConfiguration.swift in Sources */,
 				8A50C50D1E2E259600EC9407 /* Ordering.swift in Sources */,
 				8A5AB0D02189BEF2008EDCF4 /* EnrolledSource.swift in Sources */,
@@ -828,7 +824,6 @@
 				8A5880EC1F46EB4D00647405 /* Receipt.swift in Sources */,
 				8ACD573A1E2E563800FEE5A0 /* Account.swift in Sources */,
 				8ACD57221E2E3A9600FEE5A0 /* APIEndpoint.swift in Sources */,
-				0E37DA0322E5A49D0002ABC5 /* FirstDigits.swift in Sources */,
 				8ACD57331E2E3A9600FEE5A0 /* DetailProperty.swift in Sources */,
 				8A6079301EB1E395005684CC /* AnyAccessKey.swift in Sources */,
 				8ACD570B1E2E3A9600FEE5A0 /* ListProperty.swift in Sources */,
@@ -837,7 +832,7 @@
 				8ACD57201E2E3A9600FEE5A0 /* APIConfiguration.swift in Sources */,
 				8ACD57241E2E3A9600FEE5A0 /* Retrievable.swift in Sources */,
 				8ACD57181E2E3A9600FEE5A0 /* Link.swift in Sources */,
-				8ACD571F1E2E3A9600FEE5A0 /* LastDigits.swift in Sources */,
+				8ACD571F1E2E3A9600FEE5A0 /* Digits.swift in Sources */,
 				8A5AB0CF2189BEF2008EDCF4 /* EnrolledSource.swift in Sources */,
 				8A762C2121A6B84F00AC5C46 /* Capability.swift in Sources */,
 				8ACD57291E2E3A9600FEE5A0 /* Recipient.swift in Sources */,

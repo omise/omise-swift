@@ -459,7 +459,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     public var isAutoCapture: Bool?
     public var isCaptured: Bool?
     public var capturedDate: DateComponents?
-    public var cardLastDigits: LastDigits?
+    public var cardLastDigits: Digits?
     public var createdDate: DateComponents?
     public var isCustomerPresent: Bool?
     public var isDisputed: Bool?
@@ -499,7 +499,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
         isAutoCapture = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isAutoCapture)
         isCaptured = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCaptured)
         capturedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .capturedDate)
-        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        cardLastDigits = try container.decodeIfPresent(Digits.self, forKey: .cardLastDigits)
         createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
         isCustomerPresent = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isCustomerPresent)
         isDisputed = try container.decodeOmiseAPIValueIfPresent(Bool.self, forKey: .isDisputed)
@@ -537,7 +537,7 @@ public struct ChargeFilterParams: OmiseFilterParams {
     public init(amount: Double? = nil, isAuthorized: Bool? = nil,
                 isAutoCapture: Bool? = nil, isCaptured: Bool? = nil,
                 capturedDate: DateComponents? = nil,
-                cardLastDigits: LastDigits? = nil,
+                cardLastDigits: Digits? = nil,
                 createdDate: DateComponents? = nil,
                 isCustomerPresent: Bool? = nil,
                 isDisputed: Bool? = nil,

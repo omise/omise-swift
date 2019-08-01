@@ -236,7 +236,7 @@ public struct DisputeParams: APIJSONQuery {
 
 public struct DisputeFilterParams: OmiseFilterParams {
     public var amount: Double?
-    public var cardLastDigits: LastDigits?
+    public var cardLastDigits: Digits?
     public var closedDate: DateComponents?
     public var createdDate: DateComponents?
     public var currency: Currency?
@@ -251,7 +251,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
         case status
     }
     
-    public init(amount: Double? = nil, cardLastDigits: LastDigits? = nil,
+    public init(amount: Double? = nil, cardLastDigits: Digits? = nil,
                 closedDate: DateComponents? = nil, createdDate: DateComponents? = nil,
                 currency: Currency? = nil, status: DisputeStatus? = nil) {
         self.amount = amount
@@ -265,7 +265,7 @@ public struct DisputeFilterParams: OmiseFilterParams {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         amount = try container.decodeOmiseAPIValueIfPresent(Double.self, forKey: .amount)
-        cardLastDigits = try container.decodeIfPresent(LastDigits.self, forKey: .cardLastDigits)
+        cardLastDigits = try container.decodeIfPresent(Digits.self, forKey: .cardLastDigits)
         closedDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .closedDate)
         createdDate = try container.decodeOmiseDateComponentsIfPresent(forKey: .createdDate)
         currency = try container.decodeIfPresent(Currency.self, forKey: .currency)

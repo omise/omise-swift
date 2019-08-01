@@ -241,7 +241,7 @@ public struct TransferFilterParams: OmiseFilterParams {
     
     public init(amount: Double? = nil, created: DateComponents? = nil,
                 currency: Currency? = nil, isDeleted: Bool? = nil,
-                bankLastDigits: LastDigits? = nil, fee: Double? = nil,
+                bankLastDigits: Digits? = nil, fee: Double? = nil,
                 isPaid: Bool? = nil, paidDate: DateComponents? = nil,
                 isSent: Bool? = nil, sentDate: DateComponents? = nil) {
         self.amount = amount

@@ -8,7 +8,7 @@ class SearchOperationTest: LiveTest {
         
         var searchParams = SearchParams(searhScopeType: Charge.self)
         var searchFilter = ChargeFilterParams()
-        searchFilter.cardLastDigits = LastDigits(lastDigitsString: "4242")!
+        searchFilter.cardLastDigits = Digits(digitsString: "4242")!
         searchParams.filter = searchFilter
         
         let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
