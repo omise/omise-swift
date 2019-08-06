@@ -111,7 +111,16 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
         }
     }
     
-    public var lastDigits: LastDigits {
+    public var firstDigits: Digits? {
+        switch self {
+        case .tokenized(let card):
+            return card.firstDigits
+        case .customer(let card):
+            return card.firstDigits
+        }
+    }
+    
+    public var lastDigits: Digits {
         switch self {
         case .tokenized(let card):
             return card.lastDigits
@@ -199,7 +208,8 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
 
     public let bankName: String?
     
-    public let lastDigits: LastDigits
+    public let firstDigits: Digits?
+    public let lastDigits: Digits
     public let brand: CardBrand
     public let expiration: (month: Int, year: Int)?
     
@@ -218,6 +228,7 @@ extension TokenizedCard {
         case isLiveMode = "livemode"
         case createdDate = "created_at"
         case isDeleted = "deleted"
+        case firstDigits = "first_digits"
         case lastDigits = "last_digits"
         case brand
         case name
@@ -237,6 +248,7 @@ extension TokenizedCard {
         try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isDeleted, forKey: .isDeleted)
+        try container.encodeIfPresent(firstDigits, forKey: .firstDigits)
         try container.encode(lastDigits, forKey: .lastDigits)
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
@@ -259,7 +271,8 @@ extension TokenizedCard {
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
-        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        firstDigits = try container.decodeIfPresent(Digits.self, forKey: .firstDigits)
+        lastDigits = try container.decode(Digits.self, forKey: .lastDigits)
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)
         bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
@@ -293,7 +306,8 @@ public struct CustomerCard: OmiseResourceObject {
     
     public let bankName: String?
     
-    public let lastDigits: LastDigits
+    public let firstDigits: Digits?
+    public let lastDigits: Digits
     public let brand: CardBrand
     public let expiration: (month: Int, year: Int)?
     
@@ -314,6 +328,7 @@ extension CustomerCard {
         case isLiveMode = "livemode"
         case createdDate = "created_at"
         case isDeleted = "deleted"
+        case firstDigits = "first_digits"
         case lastDigits = "last_digits"
         case brand
         case name
@@ -334,6 +349,7 @@ extension CustomerCard {
         try container.encode(isLiveMode, forKey: .isLiveMode)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isDeleted, forKey: .isDeleted)
+        try container.encodeIfPresent(firstDigits, forKey: .firstDigits)
         try container.encode(lastDigits, forKey: .lastDigits)
         try container.encode(brand, forKey: .brand)
         try container.encode(name, forKey: .name)
@@ -355,7 +371,8 @@ extension CustomerCard {
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
-        lastDigits = try container.decode(LastDigits.self, forKey: .lastDigits)
+        firstDigits = try container.decodeIfPresent(Digits.self, forKey: .firstDigits)
+        lastDigits = try container.decode(Digits.self, forKey: .lastDigits)
         brand = try container.decode(CardBrand.self, forKey: .brand)
         name = try container.decode(String.self, forKey: .name)
         bankName = try container.decodeIfPresent(String.self, forKey: .bankName)

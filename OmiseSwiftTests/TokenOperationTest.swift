@@ -15,7 +15,7 @@ class TokenOperationTest: LiveTest {
             switch result {
             case let .success(token):
                 XCTAssertNotNil(token)
-                XCTAssertEqual(token.card.lastDigits.lastDigits, "4242")
+                XCTAssertEqual(token.card.lastDigits.digits, "4242")
             case let .failure(error):
                 XCTFail("\(error)")
             }
