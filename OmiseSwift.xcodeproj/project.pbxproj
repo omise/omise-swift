@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E37DA0622E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
-		0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */; };
 		220C32711CC762330060112E /* Omise.h in Headers */ = {isa = PBXBuildFile; fileRef = 220C32701CC762330060112E /* Omise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22112D091CC7910700D0DB54 /* OmiseTestCase.swift */; };
 		2270E3AF1CC78D4200F18814 /* Omise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 220C326D1CC762330060112E /* Omise.framework */; };
@@ -33,8 +31,8 @@
 		8A149C83229537D300BF8E75 /* AccountAndBalanceOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A149C82229537D300BF8E75 /* AccountAndBalanceOperationFixtureTests.swift */; };
 		8A1CF6AD1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AC1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift */; };
 		8A1CF6AE1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AC1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift */; };
-		8A1CF6B01F8BC1D7003EDB38 /* LastDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */; };
-		8A1CF6B11F8BC1D8003EDB38 /* LastDigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */; };
+		8A1CF6B01F8BC1D7003EDB38 /* DigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AF1F8BC1BD003EDB38 /* DigitsTest.swift */; };
+		8A1CF6B11F8BC1D8003EDB38 /* DigitsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CF6AF1F8BC1BD003EDB38 /* DigitsTest.swift */; };
 		8A208DDD21A81267009104C0 /* CapabilityOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A208DDA21A81247009104C0 /* CapabilityOperationFixtureTests.swift */; };
 		8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A208DDA21A81247009104C0 /* CapabilityOperationFixtureTests.swift */; };
 		8A242A4E1E2E0A6A0068BB5D /* OmiseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2298738A1CCF5D9500970F8C /* OmiseError.swift */; };
@@ -228,7 +226,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDigitsTest.swift; sourceTree = "<group>"; };
 		220C326D1CC762330060112E /* Omise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Omise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		220C32701CC762330060112E /* Omise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Omise.h; sourceTree = "<group>"; };
 		220C32721CC762330060112E /* Info-OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-OSX.plist"; sourceTree = "<group>"; };
@@ -267,7 +264,7 @@
 		8A1039641EDD5FD70035B2EF /* ScheduleOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleOperationsTest.swift; sourceTree = "<group>"; };
 		8A149C82229537D300BF8E75 /* AccountAndBalanceOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAndBalanceOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A1CF6AC1F8B84B4003EDB38 /* SourceOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceOperationFixtureTests.swift; sourceTree = "<group>"; };
-		8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastDigitsTest.swift; sourceTree = "<group>"; };
+		8A1CF6AF1F8BC1BD003EDB38 /* DigitsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitsTest.swift; sourceTree = "<group>"; };
 		8A208DDA21A81247009104C0 /* CapabilityOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilityOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A242A511E2E1BAA0068BB5D /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefundOperationFixtureTests.swift; sourceTree = "<group>"; };
@@ -438,8 +435,7 @@
 			children = (
 				8A5BC2DD2012743400B55139 /* CurrencyTest.swift */,
 				8A9B2AB31FB9B5C5002F42C7 /* DecoderTest.swift */,
-				0E37DA0522E5A9620002ABC5 /* FirstDigitsTest.swift */,
-				8A1CF6AF1F8BC1BD003EDB38 /* LastDigitsTest.swift */,
+				8A1CF6AF1F8BC1BD003EDB38 /* DigitsTest.swift */,
 				8A6785D52297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift */,
 				229873801CCF3B1900970F8C /* URLEncoderTest.swift */,
 			);
@@ -942,7 +938,6 @@
 				8A6785D12297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */,
 				8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
-				0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */,
 				8AAC00EC22B7D9DF007A71BF /* FixtureTestCase.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
@@ -953,7 +948,7 @@
 				8A5880F01F46EEB300647405 /* ReceiptsOperationFixtureTests.swift in Sources */,
 				8A2BCAC51E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A9B2AB51FB9B5C5002F42C7 /* DecoderTest.swift in Sources */,
-				8A1CF6B11F8BC1D8003EDB38 /* LastDigitsTest.swift in Sources */,
+				8A1CF6B11F8BC1D8003EDB38 /* DigitsTest.swift in Sources */,
 				8AAC00EB22B7D9CF007A71BF /* FixtureClient.swift in Sources */,
 				8A6785D72297FF7F0068DF40 /* OmiseAPIRequestObjectTest.swift in Sources */,
 			);
@@ -991,8 +986,7 @@
 				8A2BCAC41E5C400F0069577B /* RecipientOperationTest.swift in Sources */,
 				8A07D2F51D73F5040030B68D /* FixtureClient.swift in Sources */,
 				8A98759E1F0673C90090D56F /* DocumentOperationTest.swift in Sources */,
-				0E37DA0622E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */,
-				8A1CF6B01F8BC1D7003EDB38 /* LastDigitsTest.swift in Sources */,
+				8A1CF6B01F8BC1D7003EDB38 /* DigitsTest.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 				8A208DDD21A81267009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 			);
