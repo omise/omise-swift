@@ -5,7 +5,7 @@ public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public let idString: String
     
     public var isLiveMode: Bool {
-        return idString.contains("_test_")
+        return !idString.contains("_test_")
     }
     
     public init?(idString: String) {
