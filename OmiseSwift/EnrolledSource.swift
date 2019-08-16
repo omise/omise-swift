@@ -10,6 +10,7 @@ public struct EnrolledSource: SourceData {
         case billPayment(BillPayment)
         case virtualAccount(VirtualAccount)
         case barcode(Barcode)
+        case promptpay(ScannableBarcode)
         case installment(SourceType.InstallmentBrand)
         
         case unknown(name: String, references: [String: Any]?)
@@ -113,6 +114,8 @@ public struct EnrolledSource: SourceData {
                     bill = Omise.SourceType.BillPayment.unknown(name)
                 }
                 return Omise.SourceType.billPayment(bill)
+            case .promptpay:
+                return Omise.SourceType.promptpay
             case .virtualAccount(let account):
                 let virtualAccount: Omise.SourceType.VirtualAccount
                 switch account {
@@ -143,6 +146,8 @@ public struct EnrolledSource: SourceData {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
             case (.alipay, .alipay):
+                return true
+            case (.promptpay, .promptpay):
                 return true
             case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
                 return lhsValue == rhsValue
@@ -205,6 +210,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
     private enum CodingKeys: String, CodingKey {
         case type
         case references
+        case scannableCode = "scannable_code"
     }
     
     public init(from decoder: Decoder) throws {
@@ -219,6 +225,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             self = internetBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay
+        } else if typeValue == promptpayValue {
+            let scannableBarcode = try container.decode(ScannableBarcode.self, forKey: .scannableCode)
+            self = .promptpay(scannableBarcode)
         } else if typeValue.hasPrefix(billPaymentPrefix),
             let billPaymentValue = typeValue
                 .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) }) {
@@ -271,7 +280,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(internetBankingPrefix + bank.rawValue, forKey: .type)
         case .alipay:
             try container.encode(alipayValue, forKey: .type)
-            
+        case .promptpay(let barcode):
+            try container.encode(promptpayValue, forKey: .type)
+            try container.encode(barcode, forKey: .scannableCode)
         case .billPayment(let billPayment):
             switch billPayment {
             case .tescoLotus(let bill):

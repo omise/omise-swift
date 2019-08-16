@@ -6,6 +6,7 @@ let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
 let virtualAccountPrefix = "virtual_account_"
 let barcodePrefix = "barcode_"
+let promptpayValue = "promptpay"
 let installmentPrefix = "installment_"
 
 
@@ -56,6 +57,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case billPayment(BillPayment)
     case virtualAccount(VirtualAccount)
     case barcode(Barcode)
+    case promptpay
     case installment(InstallmentBrand)
     
     case unknown(String)
@@ -184,13 +186,14 @@ public enum SourceType: Codable, Equatable, Hashable {
             return internetBankingPrefix
         case .alipay:
             return alipayValue
-            
         case .billPayment:
             return billPaymentPrefix
         case .virtualAccount:
             return virtualAccountPrefix
         case .barcode:
             return barcodePrefix
+        case .promptpay:
+            return promptpayValue
         case .installment:
             return installmentPrefix
         case .unknown(let source):
@@ -205,7 +208,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = internetBankingPrefix + bank.rawValue
         case .alipay:
             value = alipayValue
-            
+        case .promptpay:
+            value = promptpayValue
         case .billPayment(let bill):
             value = billPaymentPrefix + bill.rawValue
         case .virtualAccount(let account):
@@ -251,6 +255,8 @@ extension SourceType {
                 .range(of: barcodePrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(Barcode.init(rawValue:)).map(SourceType.barcode) {
             self = barcodeValue
+        } else if value == promptpayValue {
+            self = .promptpay
         } else {
             self = .unknown(value)
         }

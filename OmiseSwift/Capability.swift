@@ -92,6 +92,7 @@ extension Capability {
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
             case alipay
+            case promptpay
             case unknownSource(String, configurations: JSONDictionary)
         }
     }
@@ -193,6 +194,8 @@ extension Capability.Method {
             self.payment = .installment(brand, availableNumberOfTerms: allowedInstallmentTerms)
         case .source(SourceType.alipay):
             self.payment = .alipay
+        case .source(SourceType.promptpay):
+            self.payment = .promptpay
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
         case .source(SourceType.unknown(let type)):
@@ -233,6 +236,11 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .promptpay:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.promptpay), forKey: .name)
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, JSONCodingKeys>.self)
             try configurations.forEach({ (key, value) in
@@ -296,6 +304,8 @@ extension Capability.Method {
                 self = .card
             case .alipay:
                 self = .source(.alipay)
+            case .promptpay:
+                self = .source(.promptpay)
             case .installment(let brand, availableNumberOfTerms: _):
                 self = .source(.installment(brand))
             case .internetBanking(let banking):

@@ -63,7 +63,6 @@ public struct PaymentSource: SourceData, OmiseLocatableObject, OmiseIdentifiable
                     barcode = .unknown(name)
                 }
                 return .barcode(barcode)
-                
             case .installment(let installment):
                 return .installment(installment.brand)
             case .unknown(name: let sourceName):

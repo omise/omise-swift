@@ -169,6 +169,8 @@
 		8ACD573B1E2E563800FEE5A0 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACD57391E2E563800FEE5A0 /* Account.swift */; };
 		8ACD573D1E2E570600FEE5A0 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACD573C1E2E570600FEE5A0 /* Balance.swift */; };
 		8ACD573E1E2E570600FEE5A0 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACD573C1E2E570600FEE5A0 /* Balance.swift */; };
+		8ACFDDFA23067C2900FA8EF4 /* Barcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACFDDF923067C2900FA8EF4 /* Barcode.swift */; };
+		8ACFDDFB23067C2900FA8EF4 /* Barcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACFDDF923067C2900FA8EF4 /* Barcode.swift */; };
 		8AD3F2D31DEC077000F68FB4 /* LinkOperationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */; };
 		8AD3F2D61DEC113200F68FB4 /* LinkOperationFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */; };
 		8AD58423228EC5C5008F3BF6 /* ChargeSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */; };
@@ -304,6 +306,7 @@
 		8ACB41421E27A51A001793CD /* Refund.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Refund.swift; sourceTree = "<group>"; };
 		8ACD57391E2E563800FEE5A0 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		8ACD573C1E2E570600FEE5A0 /* Balance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
+		8ACFDDF923067C2900FA8EF4 /* Barcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Barcode.swift; sourceTree = "<group>"; };
 		8AD3F2D11DEC077000F68FB4 /* LinkOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationTest.swift; sourceTree = "<group>"; };
 		8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkOperationFixtureTest.swift; sourceTree = "<group>"; };
 		8AD58422228EC5C5008F3BF6 /* ChargeSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeSchedule.swift; sourceTree = "<group>"; };
@@ -493,6 +496,7 @@
 		8A5AB0D42189C01A008EDCF4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				8ACFDDF923067C2900FA8EF4 /* Barcode.swift */,
 				8A5AB0CE2189BEF2008EDCF4 /* EnrolledSource.swift */,
 				8A5AB0D12189BF0F008EDCF4 /* PaymentSource.swift */,
 				8A47E935202980780070A247 /* SourceType.swift */,
@@ -520,7 +524,7 @@
 				8A98759A1F0647050090D56F /* Document.swift */,
 				22338DB71D21392A00811363 /* Failable.swift */,
 				8A590B431EDD72EC003C60E0 /* Forex.swift */,
-				8A7CBA481DE59A4700F83D21 /* LastDigits.swift */,
+				8A7CBA481DE59A4700F83D21 /* Digits.swift */,
 				8A028B371E2CBABF0008E010 /* Link.swift */,
 				8A3938E51D8174C9007750AA /* List.swift */,
 				8ACB41321E279730001793CD /* ListProperty.swift */,
@@ -767,6 +771,7 @@
 				8A5AB0D02189BEF2008EDCF4 /* EnrolledSource.swift in Sources */,
 				8A762C2221A6B84F00AC5C46 /* Capability.swift in Sources */,
 				8A242A521E2E1BAA0068BB5D /* APIEndpoint.swift in Sources */,
+				8ACFDDFB23067C2900FA8EF4 /* Barcode.swift in Sources */,
 				8ACB41581E28A3C2001793CD /* Refund.swift in Sources */,
 				8A47E937202980BE0070A247 /* SourceType.swift in Sources */,
 				8A50C5081E2E250800EC9407 /* Retrievable.swift in Sources */,
@@ -836,6 +841,7 @@
 				8A5AB0CF2189BEF2008EDCF4 /* EnrolledSource.swift in Sources */,
 				8A762C2121A6B84F00AC5C46 /* Capability.swift in Sources */,
 				8ACD57291E2E3A9600FEE5A0 /* Recipient.swift in Sources */,
+				8ACFDDFA23067C2900FA8EF4 /* Barcode.swift in Sources */,
 				8ACD57191E2E3A9600FEE5A0 /* List.swift in Sources */,
 				8A47E936202980780070A247 /* SourceType.swift in Sources */,
 				8ACD571C1E2E3A9600FEE5A0 /* Endpoint.swift in Sources */,
@@ -877,7 +883,6 @@
 				8A208DDE21A81268009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 				8A1039661EDD5FD70035B2EF /* ScheduleOperationsTest.swift in Sources */,
 				0E37DA0722E5A9620002ABC5 /* FirstDigitsTest.swift in Sources */,
-				8AAC00EC22B7D9DF007A71BF /* FixtureTestCase.swift in Sources */,
 				8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */,
 				8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */,
 				8A590B4B1EDD780A003C60E0 /* ForexOperationFixtureTests.swift in Sources */,
