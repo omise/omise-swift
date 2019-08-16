@@ -363,6 +363,34 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testPromptPayChargeCreate() {
+        let expectation = self.expectation(description: "PromptPay Charge create")
+        
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .promptpay)
+        
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
+                
+                if case .promptpay(let barcode)? = charge.source?.paymentInformation {
+                    XCTAssertEqual(barcode.type, .qr)
+                    XCTAssertEqual(barcode.image.id, "docu_test_59o3j8xlm2n5qew173e")
+                    XCTAssertEqual(barcode.image.filename, "qrcode.svg")
+                } else {
+                    XCTFail("Wrong Source Type found")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         
@@ -721,6 +749,79 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
         XCTAssertEqual(defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation)
 
+    }
+    
+    func testPromptPayChargeRetrieve() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_promptpay") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 10_000_00)
+                XCTAssertEqual(charge.currency, .thb)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_59o3faxp9fn4fksdryb")
+                XCTAssertEqual(charge.source?.flow, .offline)
+                switch charge.source?.paymentInformation {
+                case .promptpay(let barcode)?:
+                    XCTAssertEqual(barcode.type, .qr)
+                    XCTAssertEqual(barcode.image.id, "docu_test_59o3j8xlm2n5qew173e")
+                    XCTAssertEqual(barcode.image.filename, "qrcode.svg")
+                default:
+                    XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodePromptPayCharge() throws {
+        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_promptpay")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultCharge)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
+        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
+        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
+        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
+        XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
+        XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
+        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
+        XCTAssertEqual(defaultCharge.status, decodedCharge.status)
+        XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
+        XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
+        XCTAssertEqual(defaultCharge.transaction?.dataID, decodedCharge.transaction?.dataID)
+        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
+        
+        XCTAssertEqual(defaultCharge.refunds?.object, defaultCharge.refunds?.object)
+        XCTAssertEqual(defaultCharge.refunds?.from, decodedCharge.refunds?.from)
+        XCTAssertEqual(defaultCharge.refunds?.to, decodedCharge.refunds?.to)
+        XCTAssertEqual(defaultCharge.refunds?.offset, decodedCharge.refunds?.offset)
+        XCTAssertEqual(defaultCharge.refunds?.limit, decodedCharge.refunds?.limit)
+        XCTAssertEqual(defaultCharge.refunds?.total, decodedCharge.refunds?.total)
+        
+        XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
+        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
+        
+        XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
+        XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
+        XCTAssertEqual(defaultCharge.source?.sourceType.value, decodedCharge.source?.sourceType.value)
+        XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
+        XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
+        XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
+        XCTAssertEqual(defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation)
     }
     
     func testEncodingCreateChargeParams() throws {
