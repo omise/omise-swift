@@ -11,6 +11,7 @@ public struct EnrolledSource: SourceData {
         case barcode(Barcode)
         case installment(SourceType.InstallmentBrand)
         case truemoney(Truemoney)
+        case payWithPoints
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -110,6 +111,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.installment(installmentBrand)
             case .truemoney:
                 return Omise.SourceType.truemoney
+            case .payWithPoints:
+                return Omise.SourceType.payWithPoints
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -130,6 +133,8 @@ public struct EnrolledSource: SourceData {
                 return lhsValue == rhsValue
             case (.installment(let lhsValue), .installment(let rhsValue)):
                 return lhsValue == rhsValue
+                
+                
             default: return false
             }
         }
@@ -230,6 +235,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         } else if typeValue == truemoneyValue {
             let truemoney = try Truemoney(from: decoder)
             self = .truemoney(truemoney)
+        } else if typeValue == payWithPointsValue {
+            self = .payWithPoints
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
@@ -268,6 +275,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case .truemoney(let truemoney):
             try container.encode(sourceType, forKey: .type)
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
+        case .payWithPoints:
+            try container.encode(sourceType, forKey: .type)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)
