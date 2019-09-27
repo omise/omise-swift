@@ -316,7 +316,7 @@ extension KeyedDecodingContainerProtocol {
     }
     
     func decodeIfPresent(_ type: Dictionary<String, Any>.Type, forKey key: Key) throws -> Dictionary<String, Any>? {
-        guard contains(key) else {
+        guard try (contains(key) && !decodeNil(forKey: key)) else {
             return nil
         }
         return try decode(type, forKey: key)
@@ -328,7 +328,7 @@ extension KeyedDecodingContainerProtocol {
     }
     
     func decodeIfPresent(_ type: Array<Any>.Type, forKey key: Key) throws -> Array<Any>? {
-        guard contains(key) else {
+        guard try (contains(key) && !decodeNil(forKey: key)) else {
             return nil
         }
         return try decode(type, forKey: key)
