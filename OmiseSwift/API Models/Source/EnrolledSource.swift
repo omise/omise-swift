@@ -10,6 +10,7 @@ public struct EnrolledSource: SourceData {
         case billPayment(BillPayment)
         case barcode(Barcode)
         case installment(SourceType.InstallmentBrand)
+        case truemoney(Truemoney)
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -107,6 +108,8 @@ public struct EnrolledSource: SourceData {
                 return .barcode(barcode)
             case .installment(let installmentBrand):
                 return Omise.SourceType.installment(installmentBrand)
+            case .truemoney:
+                return Omise.SourceType.truemoney
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -181,6 +184,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
     private enum CodingKeys: String, CodingKey {
         case type
         case references
+        case phoneNumber = "phone_number"
     }
     
     public init(from decoder: Decoder) throws {
@@ -223,6 +227,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 .map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(SourceType.InstallmentBrand.init(rawValue:)) {
             self = .installment(installmentValue)
+        } else if typeValue == truemoneyValue {
+            let truemoney = try Truemoney(from: decoder)
+            self = .truemoney(truemoney)
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
@@ -258,7 +265,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             }
         case .installment:
             try container.encode(sourceType, forKey: .type)
-            
+        case .truemoney(let truemoney):
+            try container.encode(sourceType, forKey: .type)
+            try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)

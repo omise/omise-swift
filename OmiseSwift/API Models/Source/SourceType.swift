@@ -6,6 +6,7 @@ let alipayValue = "alipay"
 let billPaymentPrefix = "bill_payment_"
 let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
+let truemoneyValue = "truemoney"
 
 
 public enum InternetBanking: RawRepresentable, Equatable, Hashable {
@@ -55,6 +56,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case billPayment(BillPayment)
     case barcode(Barcode)
     case installment(InstallmentBrand)
+    case truemoney
     
     case unknown(String)
     
@@ -162,6 +164,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             return billPaymentPrefix
         case .barcode:
             return barcodePrefix
+        case .truemoney:
+            return truemoneyValue
         case .installment:
             return installmentPrefix
         case .unknown(let source):
@@ -183,6 +187,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = barcodePrefix + barcodeType.rawValue
         case .installment(let installmentBrand):
             value = installmentPrefix + installmentBrand.rawValue
+        case .truemoney:
+            value = truemoneyValue
         case .unknown(let source):
             value = source
         }
@@ -229,6 +235,15 @@ extension SourceType {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(value)
+    }
+}
+
+
+public struct Truemoney: Hashable, Codable {
+    public let phoneNumber: String
+    
+    public enum CodingKeys: String, CodingKey {
+        case phoneNumber = "phone_number"
     }
 }
 

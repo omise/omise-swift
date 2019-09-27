@@ -706,6 +706,35 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testTruemoneyChargeRetrieve() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5hd31zvpaoe85d9h3fh") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 10_000_00)
+                XCTAssertEqual(charge.currency, .thb)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_5hd31zvg1d8wb8dun5y")
+                XCTAssertEqual(charge.source?.flow, .redirect)
+                switch charge.source?.paymentInformation {
+                case .truemoney(let truemoney)?:
+                    XCTAssertEqual(truemoney.phoneNumber, "0812345678")
+                default:
+                    XCTFail("Wrong source information on Truemoney charge")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testEncodeBarcodeAlipayCharge() throws {
         let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5fzc7olqr3su9mscg9i")
         
