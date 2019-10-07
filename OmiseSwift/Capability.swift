@@ -92,6 +92,8 @@ extension Capability {
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
             case alipay
+            case truemoney
+            case payWithPoints
             case unknownSource(String, configurations: JSONDictionary)
         }
     }
@@ -195,6 +197,10 @@ extension Capability.Method {
             self.payment = .alipay
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
+        case .source(SourceType.truemoney):
+            self.payment = .truemoney
+        case .source(SourceType.payWithPoints):
+            self.payment = .payWithPoints
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decodeJSONDictionary()
             self.payment = .unknownSource(type, configurations: configurations)
@@ -233,6 +239,18 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .truemoney:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.truemoney), forKey: .name)
+            
+        case .payWithPoints:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+            
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, JSONCodingKeys>.self)
             try configurations.forEach({ (key, value) in
@@ -300,6 +318,10 @@ extension Capability.Method {
                 self = .source(.installment(brand))
             case .internetBanking(let banking):
                 self = .source(.internetBanking(banking))
+            case .truemoney:
+                self = .source(.truemoney)
+            case .payWithPoints:
+                self = .source(.payWithPoints)
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }
