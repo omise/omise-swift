@@ -240,6 +240,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             self = .truemoney(truemoney)
         } else if typeValue == payWithPointsValue {
             self = .payWithPoints
+        } else if typeValue == payWithPointsCitiValue {
+            self = .payWithPointsCiti
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
