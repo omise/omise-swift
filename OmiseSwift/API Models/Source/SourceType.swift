@@ -8,6 +8,7 @@ let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
 let truemoneyValue = "truemoney"
 let payWithPointsValue = "points"
+let payWithPointsCitiValue = "points_citi"
 
 
 public enum InternetBanking: RawRepresentable, Equatable, Hashable {
@@ -59,7 +60,8 @@ public enum SourceType: Codable, Equatable, Hashable {
     case installment(InstallmentBrand)
     case truemoney
     case payWithPoints
-    
+    case payWithPointsCiti
+
     case unknown(String)
     
     public enum BillPayment: RawRepresentable, Equatable, Hashable {
@@ -172,6 +174,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             return installmentPrefix
         case .payWithPoints:
             return payWithPointsValue
+        case .payWithPointsCiti:
+            return payWithPointsCitiValue
         case .unknown(let source):
             return source
         }
@@ -195,6 +199,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = truemoneyValue
         case .payWithPoints:
             value = payWithPointsValue
+        case .payWithPointsCiti:
+            value = payWithPointsCitiValue
         case .unknown(let source):
             value = source
         }

@@ -94,6 +94,7 @@ extension Capability {
             case alipay
             case truemoney
             case payWithPoints
+            case payWithPointsCiti
             case unknownSource(String, configurations: JSONDictionary)
         }
     }
@@ -204,6 +205,8 @@ extension Capability.Method {
             self.payment = .truemoney
         case .source(SourceType.payWithPoints):
             self.payment = .payWithPoints
+        case .source(SourceType.payWithPointsCiti):
+            self.payment = .payWithPointsCiti
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
@@ -254,7 +257,13 @@ extension Capability.Method {
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
-            try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+            try methodConfigurations.encode(Key.source(.payWithPoints), forKey: .name)
+            
+        case .payWithPointsCiti:
+        var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+        
+        try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+        try methodConfigurations.encode(Key.source(.payWithPointsCiti), forKey: .name)
             
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(
@@ -331,6 +340,8 @@ extension Capability.Method {
                 self = .source(.truemoney)
             case .payWithPoints:
                 self = .source(.payWithPoints)
+            case .payWithPointsCiti:
+                self = .source(.payWithPointsCiti)
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

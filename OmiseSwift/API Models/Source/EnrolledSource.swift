@@ -12,6 +12,7 @@ public struct EnrolledSource: SourceData {
         case installment(SourceType.InstallmentBrand)
         case truemoney(Truemoney)
         case payWithPoints
+        case payWithPointsCiti
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -113,6 +114,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPoints:
                 return Omise.SourceType.payWithPoints
+            case .payWithPointsCiti:
+                return Omise.SourceType.payWithPointsCiti
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -276,6 +279,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(sourceType, forKey: .type)
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .payWithPoints:
+            try container.encode(sourceType, forKey: .type)
+        case .payWithPointsCiti:
             try container.encode(sourceType, forKey: .type)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
