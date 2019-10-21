@@ -10,7 +10,7 @@ public protocol OmiseLocatableObject: OmiseObject, Hashable {
     var location: String { get }
 }
 
-public protocol OmiseIdentifiableObject: OmiseObject, Hashable, Identifiable {
+public protocol OmiseIdentifiableObject: OmiseObject, Hashable {
     var id: DataID<Self> { get }
     static var idPrefix: String { get }
     
