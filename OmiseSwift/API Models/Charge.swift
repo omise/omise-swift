@@ -26,27 +26,27 @@ public struct Charge: OmiseResourceObject, Equatable {
         return Value(amount: fundingAmount, currency: fundingCurrency)
     }
     
-    public let feeAmount: Int64
+    public let feeAmount: Int64?
     public var feeValue: Value {
-        return Value(amount: feeAmount, currency: fundingCurrency)
+        return Value(amount: feeAmount ?? 0, currency: fundingCurrency)
     }
-    public let feeVatAmount: Int64
+    public let feeVatAmount: Int64?
     public var feeVatValue: Value {
-        return Value(amount: feeVatAmount, currency: fundingCurrency)
+        return Value(amount: feeVatAmount ?? 0, currency: fundingCurrency)
     }
     
-    public let interestAmount: Int64
+    public let interestAmount: Int64?
     public var interestValue: Value {
-        return Value(amount: interestAmount, currency: fundingCurrency)
+        return Value(amount: interestAmount ?? 0, currency: fundingCurrency)
     }
-    public let interestVatAmount: Int64
+    public let interestVatAmount: Int64?
     public var interestVatValue: Value {
-        return Value(amount: interestVatAmount, currency: fundingCurrency)
+        return Value(amount: interestVatAmount ?? 0, currency: fundingCurrency)
     }
     
-    public let netAmount: Int64
+    public let netAmount: Int64?
     public var netValue: Value {
-        return Value(amount: netAmount, currency: fundingCurrency)
+        return Value(amount: netAmount ?? 0, currency: fundingCurrency)
     }
     
     public var chargeDescription: String?
@@ -151,6 +151,7 @@ extension Charge {
         case id
         case isLiveMode = "livemode"
         case createdDate = "created_at"
+        case created
         case status
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
@@ -200,16 +201,22 @@ extension Charge {
         location = try container.decode(String.self, forKey: .location)
         id = try container.decode(DataID<Charge>.self, forKey: .id)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
-        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        
+        if let created = try container.decodeIfPresent(Date.self, forKey: .createdDate) {
+            createdDate = created
+        } else {
+            createdDate = try container.decode(Date.self, forKey: .created)
+        }
+        
         amount = try container.decode(Int64.self, forKey: .amount)
         currency = try container.decode(Currency.self, forKey: .currency)
         fundingAmount = try container.decode(Int64.self, forKey: .fundingAmount)
         fundingCurrency = try container.decode(Currency.self, forKey: .fundingCurrency)
-        feeAmount = try container.decode(Int64.self, forKey: .feeAmount)
-        feeVatAmount = try container.decode(Int64.self, forKey: .feeVatAmount)
-        interestAmount = try container.decode(Int64.self, forKey: .interestAmount)
-        interestVatAmount = try container.decode(Int64.self, forKey: .interestVatAmount)
-        netAmount = try container.decode(Int64.self, forKey: .netAmount)
+        feeAmount = try container.decodeIfPresent(Int64.self, forKey: .feeAmount)
+        feeVatAmount = try container.decodeIfPresent(Int64.self, forKey: .feeVatAmount)
+        interestAmount = try container.decodeIfPresent(Int64.self, forKey: .interestAmount)
+        interestVatAmount = try container.decodeIfPresent(Int64.self, forKey: .interestVatAmount)
+        netAmount = try container.decodeIfPresent(Int64.self, forKey: .netAmount)
         chargeDescription = try container.decodeIfPresent(String.self, forKey: .chargeDescription)
         isAutoCapture = try container.decode(Bool.self, forKey: .isAutoCapture)
         isAuthorized = try container.decode(Bool.self, forKey: .isAuthorized)
