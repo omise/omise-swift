@@ -129,6 +129,7 @@ extension PaymentSource {
         case isLiveMode = "livemode"
         case location
         case createdDate = "created_at"
+        case created
         case currency
         case amount
         case flow
@@ -143,7 +144,13 @@ extension PaymentSource {
         object = try container.decode(String.self, forKey: .object)
         isLiveMode = try container.decode(Bool.self, forKey: .isLiveMode)
         location = try container.decode(String.self, forKey: .location)
-        createdDate = try container.decode(Date.self, forKey: .createdDate)
+
+        if let created = try container.decodeIfPresent(Date.self, forKey: .createdDate) {
+            createdDate = created
+        } else {
+            createdDate = try container.decode(Date.self, forKey: .created)
+        }
+        
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
