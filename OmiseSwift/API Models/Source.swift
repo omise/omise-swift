@@ -272,7 +272,8 @@ public struct Installment: Codable, Equatable {
     fileprivate enum CodingKeys: String, CodingKey {
         case type
         case isZeroInterests = "zero_interest_installments"
-        case installmentTerms = "installment_term"
+        case installmentTerm = "installment_term"
+        case installmentTerms = "installment_terms"
     }
     
     public init(from decoder: Decoder) throws {
@@ -291,8 +292,18 @@ public struct Installment: Codable, Equatable {
         }
         
         self.brand = installmentBrand
-        self.numberOfTerms = try container.decode(Int.self, forKey: .installmentTerms)
-        self.isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
+        
+        if let installment = try container.decodeIfPresent(Int.self, forKey: .installmentTerm) {
+            self.numberOfTerms = installment
+        } else {
+            self.numberOfTerms = try container.decode(Int.self, forKey: .installmentTerms)
+        }
+        
+        if container.contains(.isZeroInterests) {
+            self.isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
+        } else {
+            self.isZeroInterests = false
+        }
     }
     
     public func encode(to encoder: Encoder) throws {
