@@ -252,10 +252,15 @@ extension SourceType {
 
 
 public struct Truemoney: Hashable, Codable {
-    public let phoneNumber: String
+    public let phoneNumber: String?
     
     public enum CodingKeys: String, CodingKey {
         case phoneNumber = "phone_number"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        phoneNumber = try container.decodeIfPresent(String.self, forKey: .phoneNumber)
     }
 }
 
