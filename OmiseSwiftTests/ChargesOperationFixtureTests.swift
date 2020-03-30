@@ -735,6 +735,74 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testPromptPayChargeRetrieve() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5jcmh5y5z3g5hurbu8o") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 2000)
+                XCTAssertEqual(charge.currency, .thb)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_5jcmh5xwf1e7g0idm9y")
+                XCTAssertEqual(charge.source?.flow, .offline)
+                switch charge.source?.paymentInformation {
+                case .promptpay(let scannableCode)?:
+                    let image = scannableCode.image
+                    XCTAssertEqual(scannableCode.object, "barcode")
+                    XCTAssertEqual(image.id, "docu_test_5jcmh5zy9loubnch5th")
+                    XCTAssertEqual(image.filename, "qrcode.png")
+                    XCTAssertEqual(image.location, "/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th")
+                    XCTAssertEqual(image.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th/downloads/25624FE66C9AA7F7")
+                default:
+                    XCTFail("Wrong source information on PromptPay charge")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testPayNowChargeRetrieve() throws {
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_5jdsrqlycr0rrwfzgkq") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.amount, 40000)
+                XCTAssertEqual(charge.currency, .sgd)
+                XCTAssertEqual(charge.source?.amount, charge.amount)
+                XCTAssertEqual(charge.source?.currency, charge.currency)
+                XCTAssertEqual(charge.source?.id, "src_test_5jdsrqlf87w0gimvmv6")
+                XCTAssertEqual(charge.source?.flow, .offline)
+                switch charge.source?.paymentInformation {
+                case .paynow(let scannableCode)?:
+                    let image = scannableCode.image
+                    XCTAssertEqual(scannableCode.object, "barcode")
+                    XCTAssertEqual(image.id, "docu_test_5jdsrqn9ziozwpylicq")
+                    XCTAssertEqual(image.filename, "qrcode.png")
+                    XCTAssertEqual(image.location, "/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq")
+                    XCTAssertEqual(image.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq/downloads/D372681E6E6BFBA7")
+                default:
+                    XCTFail("Wrong source information on PromptPay charge")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testEncodeTruemoneyChargeRetrieve() throws {
         let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5hd31zvpaoe85d9h3fh")
         
