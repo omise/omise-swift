@@ -3,8 +3,8 @@ import Foundation
 
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
-let promptpayValue = "promptpay"
-let paynowValue = "paynow"
+let promptPayValue = "promptpay"
+let payNowValue = "paynow"
 let billPaymentPrefix = "bill_payment_"
 let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
@@ -57,8 +57,8 @@ public enum InternetBanking: RawRepresentable, Equatable, Hashable {
 public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
     case alipay
-    case promptpay
-    case paynow
+    case promptPay
+    case payNow
     case billPayment(BillPayment)
     case barcode(Barcode)
     case installment(InstallmentBrand)
@@ -167,10 +167,10 @@ public enum SourceType: Codable, Equatable, Hashable {
             return internetBankingPrefix
         case .alipay:
             return alipayValue
-        case .promptpay:
-            return promptpayValue
-        case .paynow:
-            return paynowValue
+        case .promptPay:
+            return promptPayValue
+        case .payNow:
+            return payNowValue
         case .billPayment:
             return billPaymentPrefix
         case .barcode:
@@ -195,10 +195,10 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = internetBankingPrefix + bank.rawValue
         case .alipay:
             value = alipayValue
-        case .promptpay:
-            return promptpayValue
-        case .paynow:
-            return paynowValue
+        case .promptPay:
+            return promptPayValue
+        case .payNow:
+            return payNowValue
         case .billPayment(let bill):
             value = billPaymentPrefix + bill.rawValue
         case .barcode(let barcodeType):
@@ -228,10 +228,10 @@ extension SourceType {
             self = internetBankingOffsite
         } else if value == alipayValue {
             self = .alipay
-        } else if value == promptpayValue {
-            self = .promptpay
-        } else if value == paynowValue {
-            self = .paynow
+        } else if value == promptPayValue {
+            self = .promptPay
+        } else if value == payNowValue {
+            self = .payNow
         } else if value.hasPrefix(billPaymentPrefix),
             let billPaymentOffline = value
                 .range(of: billPaymentPrefix).map({ String(value[$0.upperBound...]) })

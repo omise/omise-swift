@@ -750,7 +750,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.id, "src_test_5jcmh5xwf1e7g0idm9y")
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
-                case .promptpay(let scannableCode)?:
+                case .promptPay(let scannableCode)?:
                     let image = scannableCode.image
                     XCTAssertEqual(scannableCode.object, "barcode")
                     XCTAssertEqual(image.id, "docu_test_5jcmh5zy9loubnch5th")
@@ -784,7 +784,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.id, "src_test_5jdsrqlf87w0gimvmv6")
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
-                case .paynow(let scannableCode)?:
+                case .payNow(let scannableCode)?:
                     let image = scannableCode.image
                     XCTAssertEqual(scannableCode.object, "barcode")
                     XCTAssertEqual(image.id, "docu_test_5jdsrqn9ziozwpylicq")
