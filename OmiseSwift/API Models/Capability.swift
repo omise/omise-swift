@@ -92,6 +92,8 @@ extension Capability {
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
             case alipay
+            case promptPay
+            case payNow
             case truemoney
             case payWithPoints
             case payWithPointsCiti
@@ -199,6 +201,10 @@ extension Capability.Method {
             self.payment = .installment(brand, availableNumberOfTerms: allowedInstallmentTerms)
         case .source(SourceType.alipay):
             self.payment = .alipay
+        case .source(SourceType.promptPay):
+            self.payment = .promptPay
+        case .source(SourceType.payNow):
+            self.payment = .payNow
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
         case .source(SourceType.truemoney):
@@ -247,6 +253,16 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .promptPay:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.promptPay), forKey: .name)
+        case .payNow:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.payNow), forKey: .name)
         case .truemoney:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -332,6 +348,10 @@ extension Capability.Method {
                 self = .card
             case .alipay:
                 self = .source(.alipay)
+            case .promptPay:
+                self = .source(.promptPay)
+            case .payNow:
+                self = .source(.payNow)
             case .installment(let brand, availableNumberOfTerms: _):
                 self = .source(.installment(brand))
             case .internetBanking(let banking):

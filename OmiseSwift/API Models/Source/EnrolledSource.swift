@@ -7,6 +7,8 @@ public struct EnrolledSource: SourceData {
     public enum EnrolledPaymentInformation: Codable, Equatable {
         case internetBanking(InternetBanking)
         case alipay
+        case promptPay(ScannableCode)
+        case payNow(ScannableCode)
         case billPayment(BillPayment)
         case barcode(Barcode)
         case installment(SourceType.InstallmentBrand)
@@ -90,6 +92,10 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.internetBanking(bank)
             case .alipay:
                 return Omise.SourceType.alipay
+            case .promptPay:
+                return Omise.SourceType.promptPay
+            case .payNow:
+                return Omise.SourceType.payNow
             case .billPayment(let billPayment):
                 let bill: Omise.SourceType.BillPayment
                 switch billPayment {
@@ -129,6 +135,10 @@ public struct EnrolledSource: SourceData {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
             case (.alipay, .alipay):
+                return true
+            case (.promptPay, .promptPay):
+                return true
+            case (.payNow, .payNow):
                 return true
             case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
                 return lhsValue == rhsValue
@@ -193,6 +203,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case type
         case references
         case phoneNumber = "phone_number"
+        case scannableCode = "scannable_code"
     }
     
     public init(from decoder: Decoder) throws {
@@ -207,6 +218,12 @@ extension EnrolledSource.EnrolledPaymentInformation {
             self = internetBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay
+        } else if typeValue == promptPayValue {
+            let scannableCode = try container.decode(ScannableCode.self, forKey: .scannableCode)
+            self = .promptPay(scannableCode)
+        } else if typeValue == payNowValue {
+            let scannableCode = try container.decode(ScannableCode.self, forKey: .scannableCode)
+            self = .payNow(scannableCode)
         } else if typeValue.hasPrefix(billPaymentPrefix),
             let billPaymentValue = typeValue
                 .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) }) {
@@ -256,7 +273,12 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(internetBankingPrefix + bank.rawValue, forKey: .type)
         case .alipay:
             try container.encode(alipayValue, forKey: .type)
-            
+        case .promptPay(let scannableCode):
+            try container.encode(promptPayValue, forKey: .type)
+            try container.encode(scannableCode, forKey: .scannableCode)
+        case .payNow(let scannableCode):
+            try container.encode(payNowValue, forKey: .type)
+            try container.encode(scannableCode, forKey: .scannableCode)
         case .billPayment(let billPayment):
             switch billPayment {
             case .tescoLotus(let bill):
