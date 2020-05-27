@@ -1097,9 +1097,9 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[5].value, "1")
     }
     
-    func testEncodingCreatePromtPayChargeParams() throws {
+    func testEncodingCreatePromptPayChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
-                                  sourceType: .promtPay,
+                                  sourceType: .promptPay,
                                   chargeDescription: "Test",
                                   metadata: ["customer_id": "123"])
         
