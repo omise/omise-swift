@@ -1098,37 +1098,51 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreatePromtPayChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .promtPay)
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+                                  sourceType: .promtPay,
+                                  chargeDescription: "Test",
+                                  metadata: ["customer_id": "123"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
         let items = try encoder.encode(params)
         
-        XCTAssertEqual(items.count, 3)
+        XCTAssertEqual(items.count, 5)
         XCTAssertEqual(items[0].name, "amount")
         XCTAssertEqual(items[0].value, "1000000")
         XCTAssertEqual(items[1].name, "currency")
         XCTAssertEqual(items[1].value, "THB")
         XCTAssertEqual(items[2].name, "source[type]")
         XCTAssertEqual(items[2].value, "promptpay")
+        XCTAssertEqual(items[3].name, "description")
+        XCTAssertEqual(items[3].value, "Test")
+        XCTAssertEqual(items[4].name, "metadata[customer_id]")
+        XCTAssertEqual(items[4].value, "123")
     }
     
     func testEncodingCreatePayNowChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .payNow)
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+                                  sourceType: .payNow,
+                                  chargeDescription: "Test",
+                                  metadata: ["customer_id": "123"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
         let items = try encoder.encode(params)
         
-        XCTAssertEqual(items.count, 3)
+        XCTAssertEqual(items.count, 5)
         XCTAssertEqual(items[0].name, "amount")
         XCTAssertEqual(items[0].value, "1000000")
         XCTAssertEqual(items[1].name, "currency")
         XCTAssertEqual(items[1].value, "THB")
         XCTAssertEqual(items[2].name, "source[type]")
         XCTAssertEqual(items[2].value, "paynow")
+        XCTAssertEqual(items[3].name, "description")
+        XCTAssertEqual(items[3].value, "Test")
+        XCTAssertEqual(items[4].name, "metadata[customer_id]")
+        XCTAssertEqual(items[4].value, "123")
     }
     
     func testEncodingCreateSourceChargeParams() throws {
