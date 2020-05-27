@@ -1114,6 +1114,23 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[2].value, "promptpay")
     }
     
+    func testEncodingCreatePayNowChargeParams() throws {
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb), sourceType: .payNow)
+        
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
+        
+        let items = try encoder.encode(params)
+        
+        XCTAssertEqual(items.count, 3)
+        XCTAssertEqual(items[0].name, "amount")
+        XCTAssertEqual(items[0].value, "1000000")
+        XCTAssertEqual(items[1].name, "currency")
+        XCTAssertEqual(items[1].value, "THB")
+        XCTAssertEqual(items[2].name, "source[type]")
+        XCTAssertEqual(items[2].value, "paynow")
+    }
+    
     func testEncodingCreateSourceChargeParams() throws {
         let source = PaymentSource(id: "src_test_12345", object: "source",
                                    isLiveMode: false, location: "/sources/src_test_12345",
