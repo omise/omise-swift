@@ -29,6 +29,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
         case billPayment(SourceType.BillPayment)
         case barcode(Barcode)
         case installment(Installment)
+        case promptPay
+        case payNow
         
         case unknown(String)
         
@@ -59,6 +61,10 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 
             case .installment(let installment):
                 return .installment(installment.brand)
+            case .promptPay:
+                return .promptPay
+            case .payNow:
+                return .payNow
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -102,6 +108,10 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 }
             } else if typeValue.hasPrefix(installmentPrefix) {
                 self = .installment(try Installment(from: decoder))
+            } else if typeValue == promptPayValue {
+                self = .promptPay
+            } else if typeValue == payNowValue {
+                self = .payNow
             } else {
                 self = .unknown(typeValue)
             }
