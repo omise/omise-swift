@@ -1122,7 +1122,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreatePayNowChargeParams() throws {
-        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+        let params = ChargeParams(value: Value(amount: 10_000_00, currency: .sgd),
                                   sourceType: .payNow,
                                   chargeDescription: "Test",
                                   metadata: ["customer_id": "123"])
@@ -1136,7 +1136,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[0].name, "amount")
         XCTAssertEqual(items[0].value, "1000000")
         XCTAssertEqual(items[1].name, "currency")
-        XCTAssertEqual(items[1].value, "THB")
+        XCTAssertEqual(items[1].value, "SGD")
         XCTAssertEqual(items[2].name, "source[type]")
         XCTAssertEqual(items[2].value, "paynow")
         XCTAssertEqual(items[3].name, "description")
