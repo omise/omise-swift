@@ -91,6 +91,7 @@ extension Capability {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
+            case billPayment(SourceType.BillPayment)
             case alipay
             case promptPay
             case payNow
@@ -217,7 +218,9 @@ extension Capability.Method {
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
             self.payment = .unknownSource(type, configurations: configurations)
-        case .source(SourceType.billPayment), .source(SourceType.barcode):
+        case .source(SourceType.billPayment(let billPayment)):
+            self.payment = .billPayment(billPayment)
+        case .source(SourceType.barcode):
             throw DecodingError.dataCorruptedError(
                 forKey: Capability.Method.CodingKeys.name, in: methodConfigurations,
                 debugDescription: "Invalid payment method type value")
@@ -280,6 +283,12 @@ extension Capability.Method {
         
         try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
         try methodConfigurations.encode(Key.source(.payWithPointsCiti), forKey: .name)
+            
+        case .billPayment(let billPayment):
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.billPayment(billPayment)), forKey: .name)
             
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(
@@ -362,6 +371,8 @@ extension Capability.Method {
                 self = .source(.payWithPoints)
             case .payWithPointsCiti:
                 self = .source(.payWithPointsCiti)
+            case .billPayment(let billPayment):
+                self = .source(.billPayment(billPayment))
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }
