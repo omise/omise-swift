@@ -139,9 +139,19 @@ extension Capability.Method.Payment {
         switch (lhs, rhs) {
         case (.card, .card), (.alipay, .alipay):
             return true
-        case (.installment(let lhsValue), .installment(let rhsValue)):
-            return lhsValue == rhsValue
+        case (.promptPay, .promptPay), (.payNow, .payNow):
+            return true
+        case (.truemoney, .truemoney):
+            return true
+        case (.payWithPoints, .payWithPoints), (.payWithPointsCiti, .payWithPointsCiti):
+            return true
+        case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
+            return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
         case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.barcode(let lhsValue), .barcode(let rhsValue)):
             return lhsValue == rhsValue
         default:
             return false
