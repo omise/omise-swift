@@ -92,6 +92,7 @@ extension Capability {
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
             case billPayment(SourceType.BillPayment)
+            case barcode(SourceType.Barcode)
             case alipay
             case promptPay
             case payNow
@@ -220,10 +221,8 @@ extension Capability.Method {
             self.payment = .unknownSource(type, configurations: configurations)
         case .source(SourceType.billPayment(let billPayment)):
             self.payment = .billPayment(billPayment)
-        case .source(SourceType.barcode):
-            throw DecodingError.dataCorruptedError(
-                forKey: Capability.Method.CodingKeys.name, in: methodConfigurations,
-                debugDescription: "Invalid payment method type value")
+        case .source(SourceType.barcode(let barcode)):
+            self.payment = .barcode(barcode)
         }
     }
     
@@ -289,6 +288,12 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.billPayment(billPayment)), forKey: .name)
+            
+        case .barcode(let barcode):
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.barcode(barcode)), forKey: .name)
             
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(
@@ -373,6 +378,8 @@ extension Capability.Method {
                 self = .source(.payWithPointsCiti)
             case .billPayment(let billPayment):
                 self = .source(.billPayment(billPayment))
+            case .barcode(let barcode):
+                self = .source(.barcode(barcode))
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }
