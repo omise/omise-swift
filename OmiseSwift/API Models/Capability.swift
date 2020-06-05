@@ -189,8 +189,6 @@ extension Capability.Method {
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
         
-        let methodConfigurations = try decoder.container(keyedBy: Capability.Method.CodingKeys.self)
-        
         switch sourceTypeKey {
         case .card:
             let paymentConfigurations = try decoder.container(keyedBy: Capability.Method.ConfigurationCodingKeys.self)
@@ -215,14 +213,14 @@ extension Capability.Method {
             self.payment = .payWithPoints
         case .source(SourceType.payWithPointsCiti):
             self.payment = .payWithPointsCiti
-        case .source(SourceType.unknown(let type)):
-            let configurations = try decoder.container(
-                keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
-            self.payment = .unknownSource(type, configurations: configurations)
         case .source(SourceType.billPayment(let billPayment)):
             self.payment = .billPayment(billPayment)
         case .source(SourceType.barcode(let barcode)):
             self.payment = .barcode(barcode)
+        case .source(SourceType.unknown(let type)):
+            let configurations = try decoder.container(
+                keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
+            self.payment = .unknownSource(type, configurations: configurations)
         }
     }
     
@@ -278,10 +276,10 @@ extension Capability.Method {
             try methodConfigurations.encode(Key.source(.payWithPoints), forKey: .name)
             
         case .payWithPointsCiti:
-        var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         
-        try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
-        try methodConfigurations.encode(Key.source(.payWithPointsCiti), forKey: .name)
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.payWithPointsCiti), forKey: .name)
             
         case .billPayment(let billPayment):
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
