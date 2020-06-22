@@ -52,6 +52,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 switch barcodeInformation {
                 case .alipay:
                     barcode = .alipay
+                case .weChatPay:
+                    barcode = .weChatPay
                 case .unknown(let name, _):
                     barcode = .unknown(name)
                 }
@@ -95,6 +97,9 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 case SourceType.Barcode.alipay.rawValue:
                     let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
+                case SourceType.Barcode.weChatPay.rawValue:
+                    let weChatPayBarcode = try Barcode.WeChatPayBarcode(from: decoder)
+                    self = .barcode(.weChatPay(weChatPayBarcode))
                 case let barcodeType:
                     let parameters = try decoder.decode(
                         as: Dictionary<String, Any>.self, skippingKeys: PaymentSource.CodingKeys.self)

@@ -52,6 +52,7 @@ public struct EnrolledSource: SourceData {
         
         public enum Barcode: Equatable {
             case alipay(AlipayBarcode)
+            case weChatPay
             case unknown(name: String, references: [String: Any])
             
             var value: String {
@@ -59,6 +60,8 @@ public struct EnrolledSource: SourceData {
                 switch self {
                 case .alipay:
                     value = "alipay"
+                case .weChatPay:
+                    value = "wechat"
                 case .unknown(name: let name, references: _):
                     value = name
                 }
@@ -78,6 +81,8 @@ public struct EnrolledSource: SourceData {
                 ) -> Bool {
                 switch (lhs, rhs) {
                 case (.alipay, .alipay):
+                    return true
+                case (.weChatPay, .weChatPay):
                     return true
                 case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
                     return lhsName == rhsName
@@ -110,6 +115,8 @@ public struct EnrolledSource: SourceData {
                 switch barcodeInformation {
                 case .alipay:
                     barcode = .alipay
+                case .weChatPay:
+                    barcode = .weChatPay
                 case .unknown(name: let name, references: _):
                     barcode = .unknown(name)
                 }
@@ -242,6 +249,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             case SourceType.Barcode.alipay.rawValue:
                 let alipayBarcode = try container.decode(Barcode.AlipayBarcode.self, forKey: .references)
                 self = .barcode(.alipay(alipayBarcode))
+            case SourceType.Barcode.weChatPay.rawValue:
+                self = .barcode(.weChatPay)
             case let barcodeType:
                 let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
                 self = .barcode(.unknown(name: barcodeType, references: references ?? [:]))
@@ -293,6 +302,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             case .alipay(let alipayBarcode):
                 try container.encode(barcodePrefix + SourceType.Barcode.alipay.rawValue, forKey: .type)
                 try container.encode(alipayBarcode, forKey: .references)
+            case .weChatPay:
+                try container.encode(barcodePrefix + SourceType.Barcode.weChatPay.rawValue, forKey: .type)
             case let .unknown(name: name, references: references):
                 try container.encode(barcodePrefix + name, forKey: .type)
                 try container.encode(references, forKey: .references)
