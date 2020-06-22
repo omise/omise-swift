@@ -175,6 +175,51 @@ class SourceOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSource.paymentInformation, decodedCharge.paymentInformation)
     }
     
+    func testBarcodeWeChatPaySourceRetrieve() throws {
+        let expectation = self.expectation(description: "Barcode WeChat Pay Source result")
+        
+        let request = PaymentSource.retrieve(using: testClient, id: "src_test_5kamc5arxz9ho6jleis") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(source):
+                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.currency, .thb)
+                XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.weChatPay))
+                XCTAssertEqual(source.flow, Flow.offline)
+                if case .barcode(.weChatPay(let weChatPayBarcodeResult)) = source.paymentInformation {
+                    XCTAssertEqual(weChatPayBarcodeResult.barcode, "1234567890123456")
+                } else {
+                    XCTFail("Wrong payment information")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeBarcodeWeChatPaySourceRetrieve() throws {
+        let defaultSource = try fixturesObjectFor(type: PaymentSource.self, dataID: "src_test_5kamc5arxz9ho6jleis")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSource)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(PaymentSource.self, from: encodedData)
+        XCTAssertEqual(defaultSource.id, decodedCharge.id)
+        XCTAssertEqual(defaultSource.location, decodedCharge.location)
+        XCTAssertEqual(defaultSource.amount, decodedCharge.amount)
+        XCTAssertEqual(defaultSource.currency, decodedCharge.currency)
+        XCTAssertEqual(defaultSource.sourceType, decodedCharge.sourceType)
+        XCTAssertEqual(defaultSource.flow, decodedCharge.flow)
+        XCTAssertEqual(defaultSource.paymentInformation, decodedCharge.paymentInformation)
+    }
+    
     func testCreateInternetBankingSCBSource() {
         let expectation = self.expectation(description: "Creating Internet Banking SCB Source")
         
