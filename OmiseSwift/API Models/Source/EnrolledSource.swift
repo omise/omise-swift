@@ -232,8 +232,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 let billInformation = try container.decode(BillPayment.BillInformation.self, forKey: .references)
                 self = .billPayment(.tescoLotus(billInformation))
             case let billPaymentType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .billPayment(.unknown(name: billPaymentType, references: references))
+                let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
+                self = .billPayment(.unknown(name: billPaymentType, references: references ?? [:]))
             }
         } else if typeValue.hasPrefix(barcodePrefix),
             let barcodeValue = typeValue
@@ -243,8 +243,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 let alipayBarcode = try container.decode(Barcode.AlipayBarcode.self, forKey: .references)
                 self = .barcode(.alipay(alipayBarcode))
             case let barcodeType:
-                let references = try container.decode(Dictionary<String, Any>.self, forKey: .references)
-                self = .barcode(.unknown(name: barcodeType, references: references))
+                let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
+                self = .barcode(.unknown(name: barcodeType, references: references ?? [:]))
             }
         } else if typeValue.hasPrefix(installmentPrefix),
             let installmentValue = typeValue
