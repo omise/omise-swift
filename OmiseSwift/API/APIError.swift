@@ -9,6 +9,7 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
      */
     public enum APIErrorCode: CustomDebugStringConvertible, Codable, Equatable {
         case authenticationFailure
+        case lockedOut
         case notFound
         case usedToken
         case invalidAmount
@@ -30,6 +31,8 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
             switch code {
             case "authentication_failure":
                 self = .authenticationFailure
+            case "locked_out":
+                self = .lockedOut
             case "not_found":
                 self = .notFound
             case "used_token":
@@ -76,6 +79,8 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
             switch self {
             case .authenticationFailure:
                 return "authentication_failure"
+            case .lockedOut:
+                return "locked_out"
             case .notFound:
                 return "not_found"
             case .usedToken:
@@ -113,6 +118,8 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
             switch self {
             case .authenticationFailure:
                 return "Authentication Failure"
+            case .lockedOut:
+                return "Locked out"
             case .notFound:
                 return "Not Found"
             case .usedToken:
