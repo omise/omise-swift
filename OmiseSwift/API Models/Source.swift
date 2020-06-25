@@ -342,6 +342,8 @@ public struct PaymentSourceParams: APIJSONQuery {
         case billPayment(SourceType.BillPayment)
         case barcode(Barcode)
         case installment(Installment.CreateParameter)
+        case promptPay
+        case payNow
         
         case unknown(String)
         
@@ -372,6 +374,10 @@ public struct PaymentSourceParams: APIJSONQuery {
                 
             case .installment(let installment):
                 return .installment(installment.brand)
+            case .promptPay:
+                return .promptPay
+            case .payNow:
+                return .payNow
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
