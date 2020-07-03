@@ -94,14 +94,18 @@ public enum SourceType: Codable, Equatable, Hashable {
     
     public enum Barcode: RawRepresentable, Equatable, Hashable {
         static private let alipayValue = "alipay"
+        static private let weChatPayValue = "wechat"
         
         case alipay
+        case weChatPay
         case unknown(String)
         
         public var rawValue: String {
             switch self {
             case .alipay:
                 return Barcode.alipayValue
+            case .weChatPay:
+                return Barcode.weChatPayValue
             case .unknown(let value):
                 return value
             }
@@ -111,6 +115,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             switch rawValue {
             case Barcode.alipayValue:
                 self = .alipay
+            case Barcode.weChatPayValue:
+                self = .weChatPay
             case let value:
                 self = .unknown(value)
             }

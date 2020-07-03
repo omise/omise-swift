@@ -379,6 +379,29 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testBarcodeWeChatPayChargeCreate() {
+        let expectation = self.expectation(description: "Barcode WeChat Pay Charge create")
+        
+        let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890123456")
+        let createParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+                                        sourceType: .barcode(.weChatPay(weChatPayBarcode)))
+        
+        _ = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 10_000_00)
+                XCTAssertEqual(charge.source?.paymentInformation, .barcode(.weChatPay))
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         

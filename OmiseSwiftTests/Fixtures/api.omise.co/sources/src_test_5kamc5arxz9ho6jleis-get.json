@@ -1,0 +1,23 @@
+{
+  "object": "source",
+  "id": "src_test_5kamc5arxz9ho6jleis",
+  "livemode": false,
+  "location": "/sources/src_test_5kamc5arxz9ho6jleis",
+  "amount": 1000000,
+  "barcode": "1234567890123456",
+  "created_at": "2020-06-22T06:07:01Z",
+  "currency": "THB",
+  "email": null,
+  "flow": "offline",
+  "installment_term": null,
+  "name": null,
+  "mobile_number": null,
+  "phone_number": null,
+  "scannable_code": null,
+  "references": null,
+  "store_id": null,
+  "store_name": null,
+  "terminal_id": null,
+  "type": "barcode_wechat",
+  "zero_interest_installments": null
+}
