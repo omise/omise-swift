@@ -15,7 +15,7 @@ public struct Customer: OmiseResourceObject, Equatable {
     public let isDeleted: Bool
     
     public let defaultCard: DetailProperty<CustomerCard>?
-    public let email: String
+    public let email: String?
     
     public var customerDescription: String?
     public var cards: ListProperty<CustomerCard>
@@ -48,7 +48,7 @@ extension Customer {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         defaultCard = try container.decodeIfPresent(DetailProperty<CustomerCard>.self, forKey: .defaultCard)
-        email = try container.decode(String.self, forKey: .email)
+        email = try container.decodeIfPresent(String.self, forKey: .email)
         customerDescription = try container.decodeIfPresent(String.self, forKey: .customerDescription)
         cards = try container.decode(ListProperty<CustomerCard>.self, forKey: .cards)
         metadata = try container.decodeIfPresent([String: Any].self, forKey: .metadata) ?? [:]
