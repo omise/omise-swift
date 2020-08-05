@@ -9,7 +9,6 @@ let billPaymentPrefix = "bill_payment_"
 let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
 let truemoneyValue = "truemoney"
-let payWithPointsValue = "points"
 let payWithPointsCitiValue = "points_citi"
 
 
@@ -63,7 +62,6 @@ public enum SourceType: Codable, Equatable, Hashable {
     case barcode(Barcode)
     case installment(InstallmentBrand)
     case truemoney
-    case payWithPoints
     case payWithPointsCiti
 
     case unknown(String)
@@ -185,8 +183,6 @@ public enum SourceType: Codable, Equatable, Hashable {
             return truemoneyValue
         case .installment:
             return installmentPrefix
-        case .payWithPoints:
-            return payWithPointsValue
         case .payWithPointsCiti:
             return payWithPointsCitiValue
         case .unknown(let source):
@@ -213,8 +209,6 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = installmentPrefix + installmentBrand.rawValue
         case .truemoney:
             value = truemoneyValue
-        case .payWithPoints:
-            value = payWithPointsValue
         case .payWithPointsCiti:
             value = payWithPointsCitiValue
         case .unknown(let source):

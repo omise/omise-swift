@@ -869,75 +869,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             XCTFail("Wrong source information on Truemoney charge")
         }
     }
-    
-    func testPayWithPointsChargeRetrieve() throws {
-        let expectation = self.expectation(description: "Charge result")
-        
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_5h7y182ys9ryzl48f3y") { (result) in
-            defer { expectation.fulfill() }
-            
-            switch result {
-            case let .success(charge):
-                XCTAssertEqual(charge.amount, 1000_00)
-                XCTAssertEqual(charge.currency, .thb)
-                XCTAssertEqual(charge.source?.amount, charge.amount)
-                XCTAssertEqual(charge.source?.currency, charge.currency)
-                XCTAssertEqual(charge.source?.id, "src_test_5h7y17tow1mjshcnvpw")
-                XCTAssertEqual(charge.source?.flow, .redirect)
-                switch charge.source?.paymentInformation {
-                case .payWithPoints?:
-                    break
-                default:
-                    XCTFail("Wrong source information on Pay with Points charge")
-                }
-            case let .failure(error):
-                XCTFail("\(error)")
-            }
-        }
-        
-        XCTAssertNotNil(request)
-        waitForExpectations(timeout: 15.0, handler: nil)
-    }
-    
-    func testEncodePayWithPointsChargeRetrieve() throws {
-        let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5h7y182ys9ryzl48f3y")
-        
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        let encodedData = try encoder.encode(defaultCharge)
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        let decodedCharge = try decoder.decode(Charge.self, from: encodedData)
-        XCTAssertEqual(defaultCharge.id, decodedCharge.id)
-        XCTAssertEqual(defaultCharge.isLiveMode, decodedCharge.isLiveMode)
-        XCTAssertEqual(defaultCharge.location, decodedCharge.location)
-        XCTAssertEqual(defaultCharge.amount, decodedCharge.amount)
-        XCTAssertEqual(defaultCharge.currency, decodedCharge.currency)
-        XCTAssertEqual(defaultCharge.chargeDescription, decodedCharge.chargeDescription)
-        XCTAssertEqual(defaultCharge.status, decodedCharge.status)
-        XCTAssertEqual(defaultCharge.isAutoCapture, decodedCharge.isAutoCapture)
-        XCTAssertEqual(defaultCharge.isAuthorized, decodedCharge.isAuthorized)
-        XCTAssertEqual(defaultCharge.transaction?.id, decodedCharge.transaction?.id)
-        XCTAssertEqual(defaultCharge.refundedAmount, decodedCharge.refundedAmount)
-        
-        XCTAssertEqual(defaultCharge.refunds.object, defaultCharge.refunds.object)
-        XCTAssertEqual(defaultCharge.refunds.from, decodedCharge.refunds.from)
-        XCTAssertEqual(defaultCharge.refunds.to, decodedCharge.refunds.to)
-        XCTAssertEqual(defaultCharge.refunds.offset, decodedCharge.refunds.offset)
-        XCTAssertEqual(defaultCharge.refunds.limit, decodedCharge.refunds.limit)
-        XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
-        
-        XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
-        XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
-        XCTAssertEqual(defaultCharge.source?.sourceType.value, decodedCharge.source?.sourceType.value)
-        XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
-        XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
-        XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
-        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
-        XCTAssertEqual(decodedCharge.source?.paymentInformation.sourceType, .payWithPoints)
-    }
-    
+
     func testPayWithPointsCitiChargeRetrieve() throws {
         let expectation = self.expectation(description: "Charge result")
         

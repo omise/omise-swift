@@ -97,7 +97,6 @@ extension Capability {
             case promptPay
             case payNow
             case truemoney
-            case payWithPoints
             case payWithPointsCiti
             case unknownSource(String, configurations: JSONDictionary)
         }
@@ -143,7 +142,7 @@ extension Capability.Method.Payment {
             return true
         case (.truemoney, .truemoney):
             return true
-        case (.payWithPoints, .payWithPoints), (.payWithPointsCiti, .payWithPointsCiti):
+        case (.payWithPointsCiti, .payWithPointsCiti):
             return true
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
@@ -219,8 +218,6 @@ extension Capability.Method {
             self.payment = .internetBanking(bank)
         case .source(SourceType.truemoney):
             self.payment = .truemoney
-        case .source(SourceType.payWithPoints):
-            self.payment = .payWithPoints
         case .source(SourceType.payWithPointsCiti):
             self.payment = .payWithPointsCiti
         case .source(SourceType.billPayment(let billPayment)):
@@ -278,13 +275,7 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.truemoney), forKey: .name)
-            
-        case .payWithPoints:
-            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
-            
-            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
-            try methodConfigurations.encode(Key.source(.payWithPoints), forKey: .name)
-            
+
         case .payWithPointsCiti:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         
@@ -380,8 +371,6 @@ extension Capability.Method {
                 self = .source(.internetBanking(banking))
             case .truemoney:
                 self = .source(.truemoney)
-            case .payWithPoints:
-                self = .source(.payWithPoints)
             case .payWithPointsCiti:
                 self = .source(.payWithPointsCiti)
             case .billPayment(let billPayment):
