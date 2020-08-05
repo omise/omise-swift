@@ -94,8 +94,6 @@
 		8A5BC2DF2012743400B55139 /* CurrencyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BC2DD2012743400B55139 /* CurrencyTest.swift */; };
 		8A6079301EB1E395005684CC /* AnyAccessKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* AnyAccessKey.swift */; };
 		8A6079311EB1E395005684CC /* AnyAccessKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60792F1EB1E395005684CC /* AnyAccessKey.swift */; };
-		8A634A0D1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
-		8A634A0E1DAF916200C4D9AE /* OmisePinning.der in Resources */ = {isa = PBXBuildFile; fileRef = 8A634A0C1DAF916200C4D9AE /* OmisePinning.der */; };
 		8A6785CD2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */; };
 		8A6785CE2297CABB0068DF40 /* OmiseAPIChildObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */; };
 		8A6785D02297F0C90068DF40 /* CustomerOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */; };
@@ -295,7 +293,6 @@
 		8A5AB0D12189BF0F008EDCF4 /* PaymentSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSource.swift; sourceTree = "<group>"; };
 		8A5BC2DD2012743400B55139 /* CurrencyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTest.swift; sourceTree = "<group>"; };
 		8A60792F1EB1E395005684CC /* AnyAccessKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyAccessKey.swift; sourceTree = "<group>"; };
-		8A634A0C1DAF916200C4D9AE /* OmisePinning.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = OmisePinning.der; sourceTree = "<group>"; };
 		8A6785CC2297CABB0068DF40 /* OmiseAPIChildObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmiseAPIChildObject.swift; sourceTree = "<group>"; };
 		8A6785CF2297F0C90068DF40 /* CustomerOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8A6785D22297F3C40068DF40 /* CustomerCardOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCardOperationFixtureTests.swift; sourceTree = "<group>"; };
@@ -588,7 +585,6 @@
 		8AC06B8B22A756F400816255 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8A634A0C1DAF916200C4D9AE /* OmisePinning.der */,
 				8A2BCAC01E5C083F0069577B /* banks.json */,
 			);
 			path = Resources;
@@ -742,7 +738,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A634A0D1DAF916200C4D9AE /* OmisePinning.der in Resources */,
 				8A2BCAC21E5C083F0069577B /* banks.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -751,7 +746,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A634A0E1DAF916200C4D9AE /* OmisePinning.der in Resources */,
 				8A2BCAC11E5C083F0069577B /* banks.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
