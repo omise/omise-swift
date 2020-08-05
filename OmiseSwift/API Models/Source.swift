@@ -118,6 +118,7 @@ extension Source {
 
 public enum Barcode: Codable, Equatable {
     case alipay(AlipayBarcode)
+    case weChatPay(WeChatPayBarcode)
     case unknown(name: String, parameters: [String: Any])
     
     var value: String {
@@ -125,6 +126,8 @@ public enum Barcode: Codable, Equatable {
         switch self {
         case .alipay:
             value = "alipay"
+        case .weChatPay:
+            value = "wechat"
         case .unknown(name: let name, parameters: _):
             value = name
         }
@@ -221,10 +224,20 @@ public enum Barcode: Codable, Equatable {
             self.init(storeInformation: nil, terminalID: terminalID, barcode: barcode)
         }
     }
+
+    public struct WeChatPayBarcode: Codable, Equatable {
+        public let barcode: String
+        
+        public init(barcode: String) {
+            self.barcode = barcode
+        }
+    }
     
     public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
         switch (lhs, rhs) {
         case (.alipay(let lhsValue), .alipay(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.weChatPay(let lhsValue), .weChatPay(let rhsValue)):
             return lhsValue == rhsValue
         case let (.unknown(name: lhsName, parameters: _), .unknown(name: rhsName, parameters: _)):
             return lhsName == rhsName
@@ -243,6 +256,9 @@ public enum Barcode: Codable, Equatable {
         case SourceType.Barcode.alipay.rawValue:
             let alipayBarcode = try AlipayBarcode(from: decoder)
             self = .alipay(alipayBarcode)
+        case SourceType.Barcode.weChatPay.rawValue:
+            let weChatPayBarcode = try WeChatPayBarcode(from: decoder)
+            self = .weChatPay(weChatPayBarcode)
         case let value:
             let parameters = try decoder.decode(as: Dictionary<String, Any>.self, skippingKeys: CodingKeys.self)
             self = .unknown(name: value, parameters: parameters)
@@ -252,6 +268,8 @@ public enum Barcode: Codable, Equatable {
     public func encode(to encoder: Encoder) throws {
         switch self {
         case .alipay(let barcodeInformation):
+            try barcodeInformation.encode(to: encoder)
+        case .weChatPay(let barcodeInformation):
             try barcodeInformation.encode(to: encoder)
         case .unknown(name: _, parameters: let parameters):
             try encoder.encode(parameters, skippingKeysBy: CodingKeys.self)
@@ -329,6 +347,7 @@ public struct Installment: Codable, Equatable {
 
 
 public typealias AlipayBarcodeParams = Barcode.AlipayBarcode
+public typealias WeChatPayBarcodeParams = Barcode.WeChatPayBarcode
 
 public struct PaymentSourceParams: APIJSONQuery {
     public let amount: Int64
@@ -342,6 +361,8 @@ public struct PaymentSourceParams: APIJSONQuery {
         case billPayment(SourceType.BillPayment)
         case barcode(Barcode)
         case installment(Installment.CreateParameter)
+        case promptPay
+        case payNow
         
         case unknown(String)
         
@@ -365,6 +386,8 @@ public struct PaymentSourceParams: APIJSONQuery {
                 switch barcodeInformation {
                 case .alipay:
                     barcode = .alipay
+                case .weChatPay:
+                    barcode = .weChatPay
                 case .unknown(let name, _):
                     barcode = .unknown(name)
                 }
@@ -372,6 +395,10 @@ public struct PaymentSourceParams: APIJSONQuery {
                 
             case .installment(let installment):
                 return .installment(installment.brand)
+            case .promptPay:
+                return .promptPay
+            case .payNow:
+                return .payNow
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }

@@ -91,7 +91,14 @@ extension Capability {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
+            case billPayment(SourceType.BillPayment)
+            case barcode(SourceType.Barcode)
             case alipay
+            case promptPay
+            case payNow
+            case truemoney
+            case payWithPoints
+            case payWithPointsCiti
             case unknownSource(String, configurations: JSONDictionary)
         }
     }
@@ -132,9 +139,19 @@ extension Capability.Method.Payment {
         switch (lhs, rhs) {
         case (.card, .card), (.alipay, .alipay):
             return true
-        case (.installment(let lhsValue), .installment(let rhsValue)):
-            return lhsValue == rhsValue
+        case (.promptPay, .promptPay), (.payNow, .payNow):
+            return true
+        case (.truemoney, .truemoney):
+            return true
+        case (.payWithPoints, .payWithPoints), (.payWithPointsCiti, .payWithPointsCiti):
+            return true
+        case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
+            return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
         case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.barcode(let lhsValue), .barcode(let rhsValue)):
             return lhsValue == rhsValue
         default:
             return false
@@ -182,8 +199,6 @@ extension Capability.Method {
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
         
-        let methodConfigurations = try decoder.container(keyedBy: Capability.Method.CodingKeys.self)
-        
         switch sourceTypeKey {
         case .card:
             let paymentConfigurations = try decoder.container(keyedBy: Capability.Method.ConfigurationCodingKeys.self)
@@ -196,16 +211,26 @@ extension Capability.Method {
             self.payment = .installment(brand, availableNumberOfTerms: allowedInstallmentTerms)
         case .source(SourceType.alipay):
             self.payment = .alipay
+        case .source(SourceType.promptPay):
+            self.payment = .promptPay
+        case .source(SourceType.payNow):
+            self.payment = .payNow
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
+        case .source(SourceType.truemoney):
+            self.payment = .truemoney
+        case .source(SourceType.payWithPoints):
+            self.payment = .payWithPoints
+        case .source(SourceType.payWithPointsCiti):
+            self.payment = .payWithPointsCiti
+        case .source(SourceType.billPayment(let billPayment)):
+            self.payment = .billPayment(billPayment)
+        case .source(SourceType.barcode(let barcode)):
+            self.payment = .barcode(barcode)
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
             self.payment = .unknownSource(type, configurations: configurations)
-        case .source(SourceType.billPayment), .source(SourceType.barcode):
-            throw DecodingError.dataCorruptedError(
-                forKey: Capability.Method.CodingKeys.name, in: methodConfigurations,
-                debugDescription: "Invalid payment method type value")
         }
     }
     
@@ -238,6 +263,46 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .promptPay:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.promptPay), forKey: .name)
+        case .payNow:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.payNow), forKey: .name)
+        case .truemoney:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.truemoney), forKey: .name)
+            
+        case .payWithPoints:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.payWithPoints), forKey: .name)
+            
+        case .payWithPointsCiti:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+        
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.payWithPointsCiti), forKey: .name)
+            
+        case .billPayment(let billPayment):
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.billPayment(billPayment)), forKey: .name)
+            
+        case .barcode(let barcode):
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.barcode(barcode)), forKey: .name)
+            
         case .unknownSource(let source, configurations: let configurations):
             var configurationContainers = encoder.container(
                 keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, JSONCodingKeys>.self)
@@ -305,10 +370,24 @@ extension Capability.Method {
                 self = .card
             case .alipay:
                 self = .source(.alipay)
+            case .promptPay:
+                self = .source(.promptPay)
+            case .payNow:
+                self = .source(.payNow)
             case .installment(let brand, availableNumberOfTerms: _):
                 self = .source(.installment(brand))
             case .internetBanking(let banking):
                 self = .source(.internetBanking(banking))
+            case .truemoney:
+                self = .source(.truemoney)
+            case .payWithPoints:
+                self = .source(.payWithPoints)
+            case .payWithPointsCiti:
+                self = .source(.payWithPointsCiti)
+            case .billPayment(let billPayment):
+                self = .source(.billPayment(billPayment))
+            case .barcode(let barcode):
+                self = .source(.barcode(barcode))
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

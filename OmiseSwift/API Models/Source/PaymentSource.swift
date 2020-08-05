@@ -29,6 +29,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
         case billPayment(SourceType.BillPayment)
         case barcode(Barcode)
         case installment(Installment)
+        case promptPay
+        case payNow
         
         case unknown(String)
         
@@ -52,6 +54,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 switch barcodeInformation {
                 case .alipay:
                     barcode = .alipay
+                case .weChatPay:
+                    barcode = .weChatPay
                 case .unknown(let name, _):
                     barcode = .unknown(name)
                 }
@@ -59,6 +63,10 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 
             case .installment(let installment):
                 return .installment(installment.brand)
+            case .promptPay:
+                return .promptPay
+            case .payNow:
+                return .payNow
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -95,6 +103,9 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 case SourceType.Barcode.alipay.rawValue:
                     let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
+                case SourceType.Barcode.weChatPay.rawValue:
+                    let weChatPayBarcode = try Barcode.WeChatPayBarcode(from: decoder)
+                    self = .barcode(.weChatPay(weChatPayBarcode))
                 case let barcodeType:
                     let parameters = try decoder.decode(
                         as: Dictionary<String, Any>.self, skippingKeys: PaymentSource.CodingKeys.self)
@@ -102,6 +113,10 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 }
             } else if typeValue.hasPrefix(installmentPrefix) {
                 self = .installment(try Installment(from: decoder))
+            } else if typeValue == promptPayValue {
+                self = .promptPay
+            } else if typeValue == payNowValue {
+                self = .payNow
             } else {
                 self = .unknown(typeValue)
             }

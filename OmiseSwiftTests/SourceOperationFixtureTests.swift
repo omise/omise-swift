@@ -175,6 +175,51 @@ class SourceOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultSource.paymentInformation, decodedCharge.paymentInformation)
     }
     
+    func testBarcodeWeChatPaySourceRetrieve() throws {
+        let expectation = self.expectation(description: "Barcode WeChat Pay Source result")
+        
+        let request = PaymentSource.retrieve(using: testClient, id: "src_test_5kamc5arxz9ho6jleis") { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(source):
+                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.currency, .thb)
+                XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.weChatPay))
+                XCTAssertEqual(source.flow, Flow.offline)
+                if case .barcode(.weChatPay(let weChatPayBarcodeResult)) = source.paymentInformation {
+                    XCTAssertEqual(weChatPayBarcodeResult.barcode, "1234567890123456")
+                } else {
+                    XCTFail("Wrong payment information")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeBarcodeWeChatPaySourceRetrieve() throws {
+        let defaultSource = try fixturesObjectFor(type: PaymentSource.self, dataID: "src_test_5kamc5arxz9ho6jleis")
+        
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedData = try encoder.encode(defaultSource)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let decodedCharge = try decoder.decode(PaymentSource.self, from: encodedData)
+        XCTAssertEqual(defaultSource.id, decodedCharge.id)
+        XCTAssertEqual(defaultSource.location, decodedCharge.location)
+        XCTAssertEqual(defaultSource.amount, decodedCharge.amount)
+        XCTAssertEqual(defaultSource.currency, decodedCharge.currency)
+        XCTAssertEqual(defaultSource.sourceType, decodedCharge.sourceType)
+        XCTAssertEqual(defaultSource.flow, decodedCharge.flow)
+        XCTAssertEqual(defaultSource.paymentInformation, decodedCharge.paymentInformation)
+    }
+    
     func testCreateInternetBankingSCBSource() {
         let expectation = self.expectation(description: "Creating Internet Banking SCB Source")
         
@@ -413,6 +458,61 @@ class SourceOperationFixtureTests: FixtureTestCase {
                        amount=1000000&currency=THB&source%5Btype%5D=barcode_alipay&\
                        source%5Bbarcode%5D=1234567890123456&source%5Bstore_id%5D=1&\
                        source%5Bstore_name%5D=Main%20Store
+                       """)
+    }
+    
+    func testCreateBarcodeWeChatPaySource() throws {
+        let expectation = self.expectation(description: "Creating Barcode WeChatPay Source")
+        
+        let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890")
+        let createParams = PaymentSourceParams(amount: 1000000, currency: .thb,
+                                               type: .barcode(Barcode.weChatPay(weChatPayBarcode)))
+        
+        _ = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(source):
+                XCTAssertEqual(source.amount, 1000000)
+                XCTAssertEqual(source.currency, .thb)
+                XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.weChatPay))
+                XCTAssertEqual(source.flow, Flow.offline)
+                if case .barcode(.weChatPay(let weChatPayBarcodeResult)) = source.paymentInformation {
+                    XCTAssertEqual(weChatPayBarcodeResult.barcode, "1234567890123456")
+                } else {
+                    XCTFail("Wrong payment information")
+                }
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        })
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testEncodeWeChatPayBarcodeSource() throws {
+        let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890123456")
+        let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb,
+                                                     type: .barcode(.weChatPay(weChatPayBarcode)))
+        
+        let encoder = URLQueryItemEncoder()
+        encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
+        
+        let createSourceEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
+            queryItems: try encoder.encode(createSourceParams)), encoding: .utf8)
+        XCTAssertEqual(createSourceEncodedString,
+                       """
+                       amount=1000&currency=THB&type=barcode_wechat&barcode=1234567890123456
+                       """)
+        
+        let createChargeParams = ChargeParams(value: Value.init(amount: 10_000_00, currency: .thb),
+                                              sourceType: .barcode(Barcode.weChatPay(weChatPayBarcode)))
+        let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
+            queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
+        XCTAssertEqual(createChargeEncodedString,
+                       """
+                       amount=1000000&currency=THB&source%5Btype%5D=barcode_wechat&\
+                       source%5Bbarcode%5D=1234567890123456
                        """)
     }
     

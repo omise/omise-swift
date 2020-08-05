@@ -11,11 +11,11 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(capability):
-                XCTAssertEqual(capability.supportedMethods.count, 6)
+                XCTAssertEqual(capability.supportedMethods.count, 16)
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))
-                    XCTAssertEqual(creditCardMethod.supportedCurrencies, [.thb, .jpy, .usd, .eur, .gbp, .sgd])
+                    XCTAssertEqual(creditCardMethod.supportedCurrencies, [.thb, .jpy, .usd, .eur, .gbp, .sgd, .aud, .chf, .cny, .dkk, .hkd])
                 } else {
                     XCTFail("Capability doesn't have the Credit Card backend")
                 }

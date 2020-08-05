@@ -3,9 +3,14 @@ import Foundation
 
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
+let promptPayValue = "promptpay"
+let payNowValue = "paynow"
 let billPaymentPrefix = "bill_payment_"
 let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
+let truemoneyValue = "truemoney"
+let payWithPointsValue = "points"
+let payWithPointsCitiValue = "points_citi"
 
 
 public enum InternetBanking: RawRepresentable, Equatable, Hashable {
@@ -52,10 +57,15 @@ public enum InternetBanking: RawRepresentable, Equatable, Hashable {
 public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
     case alipay
+    case promptPay
+    case payNow
     case billPayment(BillPayment)
     case barcode(Barcode)
     case installment(InstallmentBrand)
-    
+    case truemoney
+    case payWithPoints
+    case payWithPointsCiti
+
     case unknown(String)
     
     public enum BillPayment: RawRepresentable, Equatable, Hashable {
@@ -84,14 +94,18 @@ public enum SourceType: Codable, Equatable, Hashable {
     
     public enum Barcode: RawRepresentable, Equatable, Hashable {
         static private let alipayValue = "alipay"
+        static private let weChatPayValue = "wechat"
         
         case alipay
+        case weChatPay
         case unknown(String)
         
         public var rawValue: String {
             switch self {
             case .alipay:
                 return Barcode.alipayValue
+            case .weChatPay:
+                return Barcode.weChatPayValue
             case .unknown(let value):
                 return value
             }
@@ -101,6 +115,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             switch rawValue {
             case Barcode.alipayValue:
                 self = .alipay
+            case Barcode.weChatPayValue:
+                self = .weChatPay
             case let value:
                 self = .unknown(value)
             }
@@ -157,13 +173,22 @@ public enum SourceType: Codable, Equatable, Hashable {
             return internetBankingPrefix
         case .alipay:
             return alipayValue
-            
+        case .promptPay:
+            return promptPayValue
+        case .payNow:
+            return payNowValue
         case .billPayment:
             return billPaymentPrefix
         case .barcode:
             return barcodePrefix
+        case .truemoney:
+            return truemoneyValue
         case .installment:
             return installmentPrefix
+        case .payWithPoints:
+            return payWithPointsValue
+        case .payWithPointsCiti:
+            return payWithPointsCitiValue
         case .unknown(let source):
             return source
         }
@@ -176,13 +201,22 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = internetBankingPrefix + bank.rawValue
         case .alipay:
             value = alipayValue
-            
+        case .promptPay:
+            return promptPayValue
+        case .payNow:
+            return payNowValue
         case .billPayment(let bill):
             value = billPaymentPrefix + bill.rawValue
         case .barcode(let barcodeType):
             value = barcodePrefix + barcodeType.rawValue
         case .installment(let installmentBrand):
             value = installmentPrefix + installmentBrand.rawValue
+        case .truemoney:
+            value = truemoneyValue
+        case .payWithPoints:
+            value = payWithPointsValue
+        case .payWithPointsCiti:
+            value = payWithPointsCitiValue
         case .unknown(let source):
             value = source
         }
@@ -200,6 +234,10 @@ extension SourceType {
             self = internetBankingOffsite
         } else if value == alipayValue {
             self = .alipay
+        } else if value == promptPayValue {
+            self = .promptPay
+        } else if value == payNowValue {
+            self = .payNow
         } else if value.hasPrefix(billPaymentPrefix),
             let billPaymentOffline = value
                 .range(of: billPaymentPrefix).map({ String(value[$0.upperBound...]) })
@@ -232,3 +270,28 @@ extension SourceType {
     }
 }
 
+
+public struct Truemoney: Hashable, Codable {
+    public let phoneNumber: String?
+    
+    public enum CodingKeys: String, CodingKey {
+        case phoneNumber = "phone_number"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        phoneNumber = try container.decodeIfPresent(String.self, forKey: .phoneNumber)
+    }
+}
+
+public struct ScannableCode: OmiseObject, Decodable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case image
+    }
+    
+    public let object: String
+    public let image: Document
+    
+}
