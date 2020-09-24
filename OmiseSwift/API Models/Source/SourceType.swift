@@ -127,6 +127,7 @@ public enum SourceType: Codable, Equatable, Hashable {
         case bbl
         case ktc
         case kBank
+        case scb
         case unknown(String)
         
         public init?(rawValue: String) {
@@ -141,6 +142,8 @@ public enum SourceType: Codable, Equatable, Hashable {
                 self = .ktc
             case "kbank":
                 self = .kBank
+            case "scb":
+                self = .scb
             case let value:
                 self = .unknown(value)
             }
@@ -156,6 +159,8 @@ public enum SourceType: Codable, Equatable, Hashable {
                 return "bbl"
             case .ktc:
                 return "ktc"
+            case .scb:
+                return "scb"
             case .kBank:
                 return "kbank"
                 
