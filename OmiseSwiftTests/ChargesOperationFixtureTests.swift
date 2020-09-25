@@ -1086,6 +1086,33 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[6].name, "return_uri")
         XCTAssertEqual(items[6].value, "https://omise.co")
     }
+ 
+    func testSCBInstallmentChargeRetrieve() throws {
+        let chargeTestingID: DataID<Charge>  = "chrg_test_5lbtxbcn2m1zg000f3q"
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.id, chargeTestingID)
+                XCTAssertEqual(charge.location, "/charges/chrg_test_5lbtxbcn2m1zg000f3q")
+                XCTAssertEqual(charge.livemode, false)
+                XCTAssertEqual(charge.source?.flow, "redirect")
+                XCTAssertEqual(charge.source?.installment_term, 3)
+                XCTAssertEqual(charge.source?.type, "installment_scb")
+                XCTAssertEqual(charge.source?.charge_status, "pending")
+                XCTAssertEqual(charge.authorize_uri, "https://api.omise.co/payments/pay2_test_5lbtxbcqdd6g352o9yn/authorize")
+                XCTAssertEqual(charge.return_uri, "https://omise.co")
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
 
     func testEncodingCreatePromptPayChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
