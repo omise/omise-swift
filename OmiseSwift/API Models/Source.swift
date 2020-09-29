@@ -344,6 +344,16 @@ public struct Installment: Codable, Equatable {
     public struct CreateParameter: Codable, Equatable {
         public let brand: SourceType.InstallmentBrand
         public let numberOfTerms: Int
+        
+        private enum CodingKeys: String, CodingKey {
+            case brand
+            case numberOfTerms = "installment_term"
+        }
+        
+        public init(brand: SourceType.InstallmentBrand, numberOfTerms: Int) {
+            self.brand = brand
+            self.numberOfTerms = numberOfTerms
+        }
     }
 }
 

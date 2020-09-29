@@ -1079,7 +1079,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[2].value, "installment_scb")
         XCTAssertEqual(items[3].name, "source[brand]")
         XCTAssertEqual(items[3].value, "scb")
-        XCTAssertEqual(items[4].name, "source[numberOfTerms]")
+        XCTAssertEqual(items[4].name, "source[installment_term]")
         XCTAssertEqual(items[4].value, "6")
         XCTAssertEqual(items[5].name, "capture")
         XCTAssertEqual(items[5].value, "false")
@@ -1088,7 +1088,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
  
     func testSCBInstallmentChargeRetrieve() throws {
-        let chargeTestingID: DataID<Charge>  = "chrg_test_5lbtxbcn2m1zg000f3q"
+        let chargeTestingID: DataID<Charge>  = "chrg_5lbteqohxzy2945n6wx"
         let expectation = self.expectation(description: "Charge result")
         
         let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
@@ -1097,8 +1097,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.id, chargeTestingID)
-                XCTAssertEqual(charge.location, "/charges/chrg_test_5lbtxbcn2m1zg000f3q")
-                XCTAssertEqual(charge.livemode, false)
+                XCTAssertEqual(charge.location, "/charges/chrg_5lbteqohxzy2945n6wx")
+                XCTAssertEqual(charge.livemode, true)
                 XCTAssertEqual(charge.source?.flow, "redirect")
                 XCTAssertEqual(charge.source?.installment_term, 3)
                 XCTAssertEqual(charge.source?.type, "installment_scb")
