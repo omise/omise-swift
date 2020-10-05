@@ -27,9 +27,6 @@
 .build/
 .fseventsd
 Carthage/Build
-Carthage/Checkouts
-Cartfile
-Cartfile.resolved
 DerivedData/
 Icon
 build/
