@@ -192,7 +192,7 @@ public enum Barcode: Codable, Equatable {
                     CodingKeys.storeName,
                     DecodingError.Context(
                         codingPath: container.codingPath,
-                        debugDescription: "Alipay Barcode store id is present but store name informaiton is missing"))
+                        debugDescription: "Alipay Barcode store id is present but store name information is missing"))
             }
             
             self.init(storeInformation: storeInformation, terminalID: terminalID, barcode: barcode)
@@ -334,6 +334,8 @@ public struct Installment: Codable, Equatable {
             return IndexSet([ 3, 4, 5, 6, 7, 8, 9, 10 ])
         case .kBank:
             return IndexSet([ 3, 4, 6, 10 ])
+        case .scb:
+            return IndexSet([ 3, 4, 6, 9, 10 ])
         case .unknown:
             return IndexSet(1...360) // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
         }
@@ -342,6 +344,16 @@ public struct Installment: Codable, Equatable {
     public struct CreateParameter: Codable, Equatable {
         public let brand: SourceType.InstallmentBrand
         public let numberOfTerms: Int
+        
+        private enum CodingKeys: String, CodingKey {
+            case brand
+            case numberOfTerms = "installment_term"
+        }
+        
+        public init(brand: SourceType.InstallmentBrand, numberOfTerms: Int) {
+            self.brand = brand
+            self.numberOfTerms = numberOfTerms
+        }
     }
 }
 
