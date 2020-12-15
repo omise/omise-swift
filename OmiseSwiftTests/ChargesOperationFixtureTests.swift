@@ -1138,7 +1138,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[4].value, "123")
     }
 
-    func testMobileBankingChargeCreate() {
+    func testSCBMobileBankingChargeCreate() {
         let expectation = self.expectation(description: "Mobile Banking SCB Charge create")
         
         let createParams = ChargeParams(value: Value(amount: 100_00, currency: .thb),
@@ -1162,7 +1162,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testMobileBankingChargeRetrieve() {
+    func testSCBMobileBankingChargeRetrieve() {
             let expectation = self.expectation(description: "Mobile Banking Charge result")
             
             let request = Charge.retrieve(using: testClient, id: "chrg_test_5m7f02ng1lxmr8ryb2a") { (result) in
