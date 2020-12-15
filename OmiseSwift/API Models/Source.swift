@@ -4,7 +4,7 @@ import Foundation
 public enum Flow: String, Codable, Equatable {
     case redirect
     case offline
-    case app_redirect
+    case appRedirect = "app_redirect"
 }
 
 
