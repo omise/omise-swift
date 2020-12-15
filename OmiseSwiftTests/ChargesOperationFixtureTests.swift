@@ -68,7 +68,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
 
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
@@ -161,7 +161,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
@@ -514,7 +514,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
         XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
@@ -578,7 +578,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
         XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
@@ -968,7 +968,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
         XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
@@ -1279,7 +1279,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
         XCTAssertEqual(defaultCharge.card?.id, decodedCharge.card?.id)
@@ -1357,7 +1357,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
         XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
@@ -1434,7 +1434,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.refunds.total, decodedCharge.refunds.total)
         
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
         
         XCTAssertEqual(defaultCharge.source?.object, decodedCharge.source?.object)
