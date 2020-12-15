@@ -1141,7 +1141,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testSCBMobileBankingChargeCreate() {
         let expectation = self.expectation(description: "Mobile Banking SCB Charge create")
         
-        let createParams = ChargeParams(value: Value(amount: 100_00, currency: .thb),
+        let createParams = ChargeParams(value: Value(amount: 100, currency: .thb),
                                         sourceType: .mobileBanking(.scb),
                                         returnURL: defaultReturnURL)
         
@@ -1151,7 +1151,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             switch result {
             case let .success(charge):
                 XCTAssertNotNil(charge)
-                XCTAssertEqual(charge.value.amount, 10_000_00)
+                XCTAssertEqual(charge.value.amount, 100)
                 XCTAssertEqual(charge.source?.paymentInformation, .mobileBanking(.scb))
                 XCTAssertEqual(charge.returnURL, defaultReturnURL)
             case let .failure(error):
@@ -1163,7 +1163,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testSCBMobileBankingChargeRetrieve() {
-            let expectation = self.expectation(description: "Mobile Banking Charge result")
+            let expectation = self.expectation(description: "Mobile Banking SCB Charge result")
             
             let request = Charge.retrieve(using: testClient, id: "chrg_test_5m7f02ng1lxmr8ryb2a") { (result) in
                 defer { expectation.fulfill() }

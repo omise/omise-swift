@@ -190,7 +190,7 @@ extension Charge {
         case ipAddress = "ip"
         case dispute
         case returnURL = "return_uri"
-        case authorizedURL = "authorized_uri"
+        case authorizedURL = "authorize_uri"
         case metadata
     }
     
