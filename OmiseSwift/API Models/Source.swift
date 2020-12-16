@@ -4,6 +4,7 @@ import Foundation
 public enum Flow: String, Codable, Equatable {
     case redirect
     case offline
+    case appRedirect = "app_redirect"
 }
 
 
@@ -375,6 +376,7 @@ public struct PaymentSourceParams: APIJSONQuery {
         case installment(Installment.CreateParameter)
         case promptPay
         case payNow
+        case mobileBanking(MobileBanking)
         
         case unknown(String)
         
@@ -382,6 +384,8 @@ public struct PaymentSourceParams: APIJSONQuery {
             switch self {
             case .internetBanking(let bank):
                 return Omise.SourceType.internetBanking(bank)
+            case .mobileBanking(let bank):
+                return Omise.SourceType.mobileBanking(bank)
             case .alipay:
                 return Omise.SourceType.alipay
             case .billPayment(let billPayment):

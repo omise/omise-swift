@@ -10,7 +10,7 @@ let barcodePrefix = "barcode_"
 let installmentPrefix = "installment_"
 let truemoneyValue = "truemoney"
 let payWithPointsCitiValue = "points_citi"
-
+let mobileBankingPrefix = "mobile_banking_"
 
 public enum InternetBanking: RawRepresentable, Equatable, Hashable {
     public init?(rawValue: String) {
@@ -52,6 +52,45 @@ public enum InternetBanking: RawRepresentable, Equatable, Hashable {
     case unknown(String)
 }
 
+public enum MobileBanking: RawRepresentable, Equatable, Hashable {
+    public init?(rawValue: String) {
+        switch rawValue {
+        case "bay":
+            self = .bay
+        case "bbl":
+            self = .bbl
+        case "ktb":
+            self = .ktb
+        case "scb":
+            self = .scb
+        case let value:
+            self = .unknown(value)
+        }
+    }
+    
+    public var rawValue: String {
+        switch self {
+        case .bay:
+            return "bay"
+        case .bbl:
+            return "bbl"
+        case .ktb:
+            return "ktb"
+        case .scb:
+            return "scb"
+            
+        case .unknown(let value):
+            return value
+        }
+    }
+    
+    case bay
+    case bbl
+    case ktb
+    case scb
+    
+    case unknown(String)
+}
 
 public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
@@ -63,6 +102,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case installment(InstallmentBrand)
     case truemoney
     case payWithPointsCiti
+    case mobileBanking(MobileBanking)
 
     case unknown(String)
     
@@ -190,6 +230,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             return installmentPrefix
         case .payWithPointsCiti:
             return payWithPointsCitiValue
+        case .mobileBanking:
+            return mobileBankingPrefix
         case .unknown(let source):
             return source
         }
@@ -216,6 +258,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = truemoneyValue
         case .payWithPointsCiti:
             value = payWithPointsCitiValue
+        case .mobileBanking(let bank):
+            value = mobileBankingPrefix + bank.rawValue
         case .unknown(let source):
             value = source
         }
@@ -252,6 +296,11 @@ extension SourceType {
                 .range(of: barcodePrefix).map({ String(value[$0.upperBound...]) })
                 .flatMap(Barcode.init(rawValue:)).map(SourceType.barcode) {
             self = barcodeValue
+        } else if value.hasPrefix(mobileBankingPrefix),
+            let mobileBankingOffsite = value
+              .range(of: mobileBankingPrefix).map({ String(value[$0.upperBound...]) })
+              .flatMap(MobileBanking.init(rawValue:)).map(SourceType.mobileBanking) {
+            self = mobileBankingOffsite
         } else {
             self = .unknown(value)
         }

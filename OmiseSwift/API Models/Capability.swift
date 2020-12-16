@@ -91,6 +91,7 @@ extension Capability {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
+            case mobileBanking(MobileBanking)
             case billPayment(SourceType.BillPayment)
             case barcode(SourceType.Barcode)
             case alipay
@@ -147,6 +148,8 @@ extension Capability.Method.Payment {
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
         case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.mobileBanking(let lhsValue), .mobileBanking(let rhsValue)):
             return lhsValue == rhsValue
         case (.billPayment(let lhsValue), .billPayment(let rhsValue)):
             return lhsValue == rhsValue
@@ -216,6 +219,8 @@ extension Capability.Method {
             self.payment = .payNow
         case .source(SourceType.internetBanking(let bank)):
             self.payment = .internetBanking(bank)
+        case .source(SourceType.mobileBanking(let bank)):
+            self.payment = .mobileBanking(bank)
         case .source(SourceType.truemoney):
             self.payment = .truemoney
         case .source(SourceType.payWithPointsCiti):
@@ -255,6 +260,11 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.internetBanking(bank)), forKey: .name)
+        case .mobileBanking(let bank):
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.mobileBanking(bank)), forKey: .name)
         case .alipay:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -369,6 +379,8 @@ extension Capability.Method {
                 self = .source(.installment(brand))
             case .internetBanking(let banking):
                 self = .source(.internetBanking(banking))
+            case .mobileBanking(let banking):
+                self = .source(.mobileBanking(banking))
             case .truemoney:
                 self = .source(.truemoney)
             case .payWithPointsCiti:

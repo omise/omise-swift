@@ -6,6 +6,7 @@ public struct EnrolledSource: SourceData {
     
     public enum EnrolledPaymentInformation: Codable, Equatable {
         case internetBanking(InternetBanking)
+        case mobileBanking(MobileBanking)
         case alipay
         case promptPay(ScannableCode)
         case payNow(ScannableCode)
@@ -94,6 +95,8 @@ public struct EnrolledSource: SourceData {
             switch self {
             case .internetBanking(let bank):
                 return Omise.SourceType.internetBanking(bank)
+            case .mobileBanking(let bank):
+                return Omise.SourceType.mobileBanking(bank)
             case .alipay:
                 return Omise.SourceType.alipay
             case .promptPay:
@@ -137,6 +140,8 @@ public struct EnrolledSource: SourceData {
             ) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
+                return lhsValue == rhsValue
+            case (.mobileBanking(let lhsValue), .mobileBanking(let rhsValue)):
                 return lhsValue == rhsValue
             case (.alipay, .alipay):
                 return true
@@ -220,6 +225,11 @@ extension EnrolledSource.EnrolledPaymentInformation {
                 .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.internetBanking) {
             self = internetBankingOffsite
+        } else if typeValue.hasPrefix(mobileBankingPrefix),
+            let mobileBankingOffsite = typeValue
+                .range(of: mobileBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(MobileBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.mobileBanking) {
+            self = mobileBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay
         } else if typeValue == promptPayValue {
@@ -275,6 +285,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         switch self {
         case .internetBanking(let bank):
             try container.encode(internetBankingPrefix + bank.rawValue, forKey: .type)
+        case .mobileBanking(let bank):
+            try container.encode(mobileBankingPrefix + bank.rawValue, forKey: .type)
         case .alipay:
             try container.encode(alipayValue, forKey: .type)
         case .promptPay(let scannableCode):
