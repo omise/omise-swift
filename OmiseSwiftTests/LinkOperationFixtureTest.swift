@@ -75,7 +75,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.id, decodedCharge.source?.id)
         XCTAssertEqual(defaultCharge.location, decodedCharge.location)
         XCTAssertEqual(defaultCharge.returnURL, decodedCharge.returnURL)
-        XCTAssertEqual(defaultCharge.authorizedURL, decodedCharge.authorizedURL)
+        XCTAssertEqual(defaultCharge.authorizeURL, decodedCharge.authorizeURL)
         
         XCTAssertEqual(defaultCharge.card, decodedCharge.card)
         XCTAssertEqual(defaultCharge.card?.object, decodedCharge.card?.object)
