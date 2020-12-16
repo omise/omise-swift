@@ -100,7 +100,7 @@ public struct Charge: OmiseResourceObject, Equatable {
     public var dispute: Dispute?
     
     public let returnURL: URL?
-    public let authorizedURL: URL?
+    public let authorizeURL: URL?
     
     public let metadata: JSONDictionary
 }
@@ -190,7 +190,7 @@ extension Charge {
         case ipAddress = "ip"
         case dispute
         case returnURL = "return_uri"
-        case authorizedURL = "authorize_uri"
+        case authorizeURL = "authorize_uri"
         case metadata
     }
     
@@ -234,7 +234,7 @@ extension Charge {
         link = try container.decodeIfPresent(DetailProperty<Link>.self, forKey: .link)
         dispute = try container.decodeIfPresent(Dispute.self, forKey: .dispute)
         returnURL = try container.decodeIfPresent(URL.self, forKey: .returnURL)
-        authorizedURL = try container.decodeIfPresent(URL.self, forKey: .authorizedURL)
+        authorizeURL = try container.decodeIfPresent(URL.self, forKey: .authorizeURL)
         metadata = try container.decode([String: Any].self, forKey: .metadata)
         
         let statusValue = try container.decode(String.self, forKey: .status)
@@ -318,7 +318,7 @@ extension Charge {
         try container.encodeIfPresent(schedule, forKey: .schedule)
         try container.encodeIfPresent(link, forKey: .link)
         try container.encodeIfPresent(returnURL, forKey: .returnURL)
-        try container.encodeIfPresent(authorizedURL, forKey: .authorizedURL)
+        try container.encodeIfPresent(authorizeURL, forKey: .authorizeURL)
         try container.encode(metadata, forKey: .metadata)
         
         switch status {
