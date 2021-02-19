@@ -14,6 +14,21 @@ public struct ListProperty<Item: OmiseObject>: OmiseObject {
     public var offset: Int
     
     public var data: [Item]
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        object = try container.decode(String.self, forKey: .object)
+        location = try container.decode(String.self, forKey: .location)
+        from = try container.decode(Date.self, forKey: .from)
+        to = try container.decode(Date.self, forKey: .to)
+        limit = try container.decode(Int.self, forKey: .limit)
+        total = try container.decode(Int.self, forKey: .total)
+        offset = try container.decode(Int.self, forKey: .offset)
+
+        let decodedData = try container.decode([DecodingResult<Item>].self, forKey: .data)
+        data = decodedData.compactMap { try? $0.result.get() }
+    }
 }
 
 extension ListProperty: RandomAccessCollection {
@@ -57,3 +72,10 @@ extension ListProperty: Equatable where Item: Equatable {
     }
 }
 
+private struct DecodingResult<T: Decodable>: Decodable {
+    let result: Result<T, Error>
+
+    init(from decoder: Decoder) throws {
+        result = Result { try T(from: decoder) }
+    }
+}
