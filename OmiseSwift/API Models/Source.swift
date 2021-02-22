@@ -377,7 +377,8 @@ public struct PaymentSourceParams: APIJSONQuery {
         case promptPay
         case payNow
         case mobileBanking(MobileBanking)
-        
+        case fpx
+
         case unknown(String)
         
         var sourceType: Omise.SourceType {
@@ -415,6 +416,8 @@ public struct PaymentSourceParams: APIJSONQuery {
                 return .promptPay
             case .payNow:
                 return .payNow
+            case .fpx:
+                return .fpx
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }

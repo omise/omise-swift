@@ -15,6 +15,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
     
     public let currency: Currency
     public let amount: Int64
+    public let bank: String?
     
     public let flow: Flow
     public let paymentInformation: PaymentSourceInformation
@@ -146,6 +147,7 @@ extension PaymentSource {
         case createdDate = "created_at"
         case currency
         case amount
+        case bank
         case flow
         case type
         case references
@@ -161,6 +163,7 @@ extension PaymentSource {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
+        bank = try container.decode(String.self, forKey: .bank)
         flow = try container.decode(Flow.self, forKey: .flow)
         paymentInformation = try PaymentSourceInformation(from: decoder)
     }
@@ -174,6 +177,7 @@ extension PaymentSource {
         try container.encode(location, forKey: .location)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(amount, forKey: .amount)
+        try container.encode(bank, forKey: .bank)
         try container.encode(currency, forKey: .currency)
         try container.encode(flow, forKey: .flow)
         try paymentInformation.encode(to: encoder)

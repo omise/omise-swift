@@ -99,6 +99,7 @@ extension Capability {
             case payNow
             case truemoney
             case payWithPointsCiti
+            case fpx
             case unknownSource(String, configurations: JSONDictionary)
         }
     }
@@ -144,6 +145,8 @@ extension Capability.Method.Payment {
         case (.truemoney, .truemoney):
             return true
         case (.payWithPointsCiti, .payWithPointsCiti):
+            return true
+        case (.fpx, .fpx):
             return true
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
@@ -229,6 +232,8 @@ extension Capability.Method {
             self.payment = .billPayment(billPayment)
         case .source(SourceType.barcode(let barcode)):
             self.payment = .barcode(barcode)
+        case .source(SourceType.fpx):
+            self.payment = .fpx
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
@@ -270,6 +275,11 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .fpx:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.fpx), forKey: .name)
         case .promptPay:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -389,6 +399,8 @@ extension Capability.Method {
                 self = .source(.billPayment(billPayment))
             case .barcode(let barcode):
                 self = .source(.barcode(barcode))
+            case .fpx:
+                self = .source(.fpx)
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

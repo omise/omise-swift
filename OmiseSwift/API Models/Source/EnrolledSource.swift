@@ -15,6 +15,7 @@ public struct EnrolledSource: SourceData {
         case installment(SourceType.InstallmentBrand)
         case truemoney(Truemoney)
         case payWithPointsCiti
+        case fpx
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -129,6 +130,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPointsCiti:
                 return Omise.SourceType.payWithPointsCiti
+            case .fpx:
+                return Omise.SourceType.fpx
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -155,7 +158,8 @@ public struct EnrolledSource: SourceData {
                 return lhsValue == rhsValue
             case (.installment(let lhsValue), .installment(let rhsValue)):
                 return lhsValue == rhsValue
-                
+            case (.fpx, .fpx):
+                return true
                 
             default: return false
             }
@@ -168,6 +172,7 @@ public struct EnrolledSource: SourceData {
     
     public let currency: Currency
     public let amount: Int64
+    public let bank: String
     
     public let flow: Flow
     public let paymentInformation: PaymentInformation
@@ -182,6 +187,7 @@ public struct EnrolledSource: SourceData {
         case currency
         case amount
         case flow
+        case bank
     }
     
     public init(from decoder: Decoder) throws {
@@ -190,6 +196,7 @@ public struct EnrolledSource: SourceData {
         object = try container.decode(String.self, forKey: .object)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
+        bank = try container.decode(String.self, forKey: .bank)
         flow = try container.decode(Flow.self, forKey: .flow)
         paymentInformation = try PaymentInformation.init(from: decoder)
     }
@@ -201,6 +208,7 @@ public struct EnrolledSource: SourceData {
         try container.encode(id, forKey: .id)
         try container.encode(currency, forKey: .currency)
         try container.encode(amount, forKey: .amount)
+        try container.encode(bank, forKey: .bank)
         try container.encode(flow, forKey: .flow)
         try paymentInformation.encode(to: encoder)
     }
@@ -273,6 +281,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             self = .truemoney(truemoney)
         } else if typeValue == payWithPointsCitiValue {
             self = .payWithPointsCiti
+        } else if typeValue == fpxValue {
+            self = .fpx
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
@@ -322,6 +332,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .payWithPointsCiti:
             try container.encode(sourceType, forKey: .type)
+        case .fpx:
+            try container.encode(fpxValue, forKey: .type)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)
