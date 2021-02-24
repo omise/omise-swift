@@ -8,8 +8,8 @@ public struct EnrolledSource: SourceData {
         case internetBanking(InternetBanking)
         case mobileBanking(MobileBanking)
         case alipay
-        case promptPay(ScannableCode)
-        case payNow(ScannableCode)
+        case promptPay(ScannableCode?)
+        case payNow(ScannableCode?)
         case billPayment(BillPayment)
         case barcode(Barcode)
         case installment(SourceType.InstallmentBrand)
@@ -21,7 +21,7 @@ public struct EnrolledSource: SourceData {
         
         public enum BillPayment: Equatable {
             
-            case tescoLotus(BillInformation)
+            case tescoLotus(BillInformation?)
             case unknown(name: String, references: [String: Any])
             
             public struct BillInformation: Codable, Equatable {
@@ -52,7 +52,7 @@ public struct EnrolledSource: SourceData {
         }
         
         public enum Barcode: Equatable {
-            case alipay(AlipayBarcode)
+            case alipay(AlipayBarcode?)
             case weChatPay
             case unknown(name: String, references: [String: Any])
             

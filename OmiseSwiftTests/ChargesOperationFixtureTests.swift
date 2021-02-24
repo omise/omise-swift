@@ -650,10 +650,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let bill))?:
-                    XCTAssertEqual(bill.omiseTaxID, "0105556091152")
-                    XCTAssertEqual(bill.referenceNumber1, "068263727885787840")
-                    XCTAssertEqual(bill.referenceNumber2, "060028266962275319")
-                    XCTAssertEqual(bill.barcodeURL, URL(string:
+                    XCTAssertEqual(bill?.omiseTaxID, "0105556091152")
+                    XCTAssertEqual(bill?.referenceNumber1, "068263727885787840")
+                    XCTAssertEqual(bill?.referenceNumber2, "060028266962275319")
+                    XCTAssertEqual(bill?.barcodeURL, URL(string:
                         """
                         https://api.omise.co/charges/chrg_test_5fzc7srreh7yj3oh6k0/\
                         documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012
@@ -710,6 +710,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         switch (defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation) {
         case (EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let bill))?,
               EnrolledSource.EnrolledPaymentInformation.billPayment(.tescoLotus(let decodedBill))?):
+            let bill = try XCTUnwrap(bill)
+            let decodedBill = try XCTUnwrap(decodedBill)
             XCTAssertEqual(bill.omiseTaxID, decodedBill.omiseTaxID)
             XCTAssertEqual(bill.referenceNumber1, decodedBill.referenceNumber1)
             XCTAssertEqual(bill.referenceNumber2, decodedBill.referenceNumber2)
@@ -761,7 +763,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case .barcode(.alipay(let alipayBarcode))?:
-                    XCTAssertEqual(alipayBarcode.expiredDate, dateFormatter.date(from: "2019-05-23T06:00:30Z"))
+                    XCTAssertEqual(alipayBarcode?.expiredDate, dateFormatter.date(from: "2019-05-23T06:00:30Z"))
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }
@@ -819,12 +821,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case .promptPay(let scannableCode)?:
-                    let image = scannableCode.image
-                    XCTAssertEqual(scannableCode.object, "barcode")
-                    XCTAssertEqual(image.id, "docu_test_5jcmh5zy9loubnch5th")
-                    XCTAssertEqual(image.filename, "qrcode.png")
-                    XCTAssertEqual(image.location, "/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th")
-                    XCTAssertEqual(image.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th/downloads/25624FE66C9AA7F7")
+                    let image = scannableCode?.image
+                    XCTAssertEqual(scannableCode?.object, "barcode")
+                    XCTAssertEqual(image?.id, "docu_test_5jcmh5zy9loubnch5th")
+                    XCTAssertEqual(image?.filename, "qrcode.png")
+                    XCTAssertEqual(image?.location, "/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th")
+                    XCTAssertEqual(image?.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th/downloads/25624FE66C9AA7F7")
                 default:
                     XCTFail("Wrong source information on PromptPay charge")
                 }
@@ -853,12 +855,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
                 case .payNow(let scannableCode)?:
-                    let image = scannableCode.image
-                    XCTAssertEqual(scannableCode.object, "barcode")
-                    XCTAssertEqual(image.id, "docu_test_5jdsrqn9ziozwpylicq")
-                    XCTAssertEqual(image.filename, "qrcode.png")
-                    XCTAssertEqual(image.location, "/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq")
-                    XCTAssertEqual(image.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq/downloads/D372681E6E6BFBA7")
+                    let image = scannableCode?.image
+                    XCTAssertEqual(scannableCode?.object, "barcode")
+                    XCTAssertEqual(image?.id, "docu_test_5jdsrqn9ziozwpylicq")
+                    XCTAssertEqual(image?.filename, "qrcode.png")
+                    XCTAssertEqual(image?.location, "/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq")
+                    XCTAssertEqual(image?.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq/downloads/D372681E6E6BFBA7")
                 default:
                     XCTFail("Wrong source information on PromptPay charge")
                 }
@@ -1132,32 +1134,31 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(items[6].value, "https://omise.co")
     }
  
-//    func testSCBInstallmentChargeRetrieve() throws {
-//        let chargeTestingID: DataID<Charge>  = "chrg_5lbteqohxzy2945n6wx"
-//        let expectation = self.expectation(description: "Charge result")
-//
-//        let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
-//            defer { expectation.fulfill() }
-//
-//            switch result {
-//            case let .success(charge):
-//                XCTAssertEqual(charge.id, chargeTestingID)
-//                XCTAssertEqual(charge.location, "/charges/chrg_5lbteqohxzy2945n6wx")
-//                XCTAssertEqual(charge.livemode, true)
-//                XCTAssertEqual(charge.source?.flow, "redirect")
-//                XCTAssertEqual(charge.source?.installment_term, 3)
-//                XCTAssertEqual(charge.source?.type, "installment_scb")
-//                XCTAssertEqual(charge.source?.charge_status, "pending")
-//                XCTAssertEqual(charge.authorize_uri, "https://api.omise.co/payments/pay2_test_5lbtxbcqdd6g352o9yn/authorize")
-//                XCTAssertEqual(charge.return_uri, "https://omise.co")
-//            case let .failure(error):
-//                XCTFail("\(error)")
-//            }
-//        }
-//
-//        XCTAssertNotNil(request)
-//        waitForExpectations(timeout: 15.0, handler: nil)
-//    }
+    func testSCBInstallmentChargeRetrieve() throws {
+        let chargeTestingID: DataID<Charge>  = "chrg_5lbteqohxzy2945n6wx"
+        let expectation = self.expectation(description: "Charge result")
+        
+        let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertEqual(charge.id, chargeTestingID)
+                XCTAssertEqual(charge.location, "/charges/chrg_5lbteqohxzy2945n6wx")
+                XCTAssertEqual(charge.isLiveMode, true)
+                XCTAssertEqual(charge.source?.flow, .redirect)
+                XCTAssertEqual(charge.source?.sourceType, .installment(.scb))
+                XCTAssertEqual(charge.status, .pending)
+                XCTAssertEqual(charge.authorizeURL?.absoluteString, "https://api.omise.co/payments/pay2_5lbteqokzg718tsqm1l/authorize")
+                XCTAssertEqual(charge.returnURL?.absoluteString, "https://omise.co")
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        XCTAssertNotNil(request)
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
 
     func testEncodingCreatePromptPayChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),

@@ -9,6 +9,10 @@
   "location": "/charges",
   "data": [
     {
+        "object": "charge",
+        "id": "chrg_test_incomplete_json",
+    },
+    {
       "object": "charge",
       "id": "chrg_test_5fzcsz7y07vu6ddib17",
       "livemode": false,
