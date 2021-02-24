@@ -263,7 +263,7 @@ extension Charge {
         
         self.status = status
         
-        source = try container.decodeIfPresent(EnrolledSource.self, forKey: .source)
+        source = try? container.decodeIfPresent(EnrolledSource.self, forKey: .source)
         card = try container.decodeIfPresent(Card.self, forKey: .card)
         
         switch (card, source) {
