@@ -232,8 +232,8 @@ extension Capability.Method {
             self.payment = .billPayment(billPayment)
         case .source(SourceType.barcode(let barcode)):
             self.payment = .barcode(barcode)
-        case .source(SourceType.fpx(let fpx)):
-            self.payment = .fpx(fpx)
+        case .source(SourceType.fpx(let fpxBank)):
+            self.payment = .fpx(fpxBank)
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
