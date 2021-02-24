@@ -130,8 +130,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPointsCiti:
                 return Omise.SourceType.payWithPointsCiti
-            case .fpx(let fpx):
-                return Omise.SourceType.fpx(fpx)
+            case .fpx(let fpxBank):
+                return Omise.SourceType.fpx(fpxBank)
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -330,9 +330,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .payWithPointsCiti:
             try container.encode(sourceType, forKey: .type)
-        case .fpx(let fpx):
+        case .fpx(let fpxBank):
             try container.encode(fpxValue, forKey: .type)
-            try container.encode(fpx, forKey: .bank)
+            try container.encode(fpxBank, forKey: .bank)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)

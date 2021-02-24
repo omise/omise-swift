@@ -146,8 +146,8 @@ extension Capability.Method.Payment {
             return true
         case (.payWithPointsCiti, .payWithPointsCiti):
             return true
-        case (.fpx, .fpx):
-            return true
+        case (.fpx(let lhsValue), .fpx(let rhsValue)):
+            return lhsValue == rhsValue
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
         case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
@@ -275,11 +275,11 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
-        case .fpx(let fpx):
+        case .fpx(let fpxBank):
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
-            try methodConfigurations.encode(Key.source(.fpx(fpx)), forKey: .name)
+            try methodConfigurations.encode(Key.source(.fpx(fpxBank)), forKey: .name)
         case .promptPay:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -399,8 +399,8 @@ extension Capability.Method {
                 self = .source(.billPayment(billPayment))
             case .barcode(let barcode):
                 self = .source(.barcode(barcode))
-            case .fpx(let fpx):
-                self = .source(.fpx(fpx))
+            case .fpx(let fpxBank):
+                self = .source(.fpx(fpxBank))
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

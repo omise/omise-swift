@@ -358,30 +358,6 @@ public struct Installment: Codable, Equatable {
     }
 }
 
-public struct FPX: Codable, Equatable, Hashable {
-    public let bank: String
-    
-    public init(bank: String) {
-        self.bank = bank
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case bank
-    }
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        bank = try container.decode(String.self, forKey: .bank)
-      
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(bank, forKey: .bank)
-    }
-}
-
 public typealias AlipayBarcodeParams = Barcode.AlipayBarcode
 public typealias WeChatPayBarcodeParams = Barcode.WeChatPayBarcode
 
@@ -439,8 +415,8 @@ public struct PaymentSourceParams: APIJSONQuery {
                 return .promptPay
             case .payNow:
                 return .payNow
-            case .fpx(let fpx):
-                return .fpx(fpx)
+            case .fpx(let fpxBank):
+                return .fpx(fpxBank)
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }

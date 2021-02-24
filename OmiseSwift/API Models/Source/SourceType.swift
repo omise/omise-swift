@@ -97,19 +97,17 @@ public enum FPXBank: RawRepresentable, Equatable, Hashable, Codable {
     private enum CodingKeys: String, CodingKey {
         case bank
     }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let bankValue = try container.decode(String.self, forKey: .bank)
         
         self.init(rawValue: bankValue)
-        
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(rawValue, forKey: .bank)
-        
-        
     }
     
     public init(rawValue: String) {
