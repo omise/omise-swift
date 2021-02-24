@@ -279,8 +279,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         } else if typeValue == payWithPointsCitiValue {
             self = .payWithPointsCiti
         } else if typeValue == fpxValue {
-            let fpx = try FPXBank(from: decoder)
-            self = .fpx(fpx)
+            let fpxBank = try FPXBank(from: decoder)
+            self = .fpx(fpxBank)
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
