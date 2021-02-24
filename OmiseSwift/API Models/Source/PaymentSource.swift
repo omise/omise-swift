@@ -15,8 +15,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
     
     public let currency: Currency
     public let amount: Int64
-    public let bank: String?
-    
+
     public let flow: Flow
     public let paymentInformation: PaymentSourceInformation
     
@@ -32,7 +31,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
         case installment(Installment)
         case promptPay
         case payNow
-        
+        case fpx(FPXBank)
+
         case unknown(String)
         
         var sourceType: Omise.SourceType {
@@ -68,6 +68,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 return .promptPay
             case .payNow:
                 return .payNow
+            case .fpx(let fpx):
+                return .fpx(fpx)
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -118,6 +120,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 self = .promptPay
             } else if typeValue == payNowValue {
                 self = .payNow
+            } else if typeValue == fpxValue {
+                self = .fpx(try FPXBank(from: decoder))
             } else {
                 self = .unknown(typeValue)
             }
@@ -147,7 +151,6 @@ extension PaymentSource {
         case createdDate = "created_at"
         case currency
         case amount
-        case bank
         case flow
         case type
         case references
@@ -163,7 +166,6 @@ extension PaymentSource {
         createdDate = try container.decode(Date.self, forKey: .createdDate)
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
-        bank = try container.decode(String.self, forKey: .bank)
         flow = try container.decode(Flow.self, forKey: .flow)
         paymentInformation = try PaymentSourceInformation(from: decoder)
     }
@@ -177,7 +179,6 @@ extension PaymentSource {
         try container.encode(location, forKey: .location)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(amount, forKey: .amount)
-        try container.encode(bank, forKey: .bank)
         try container.encode(currency, forKey: .currency)
         try container.encode(flow, forKey: .flow)
         try paymentInformation.encode(to: encoder)
