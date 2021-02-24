@@ -443,7 +443,7 @@ extension SourceType {
             self = mobileBankingOffsite
         } else if value == fpxValue {
             self = .fpx(FPXBank(rawValue: value))
-        }else {
+        } else {
             self = .unknown(value)
         }
     }
