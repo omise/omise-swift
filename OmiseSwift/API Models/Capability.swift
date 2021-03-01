@@ -86,7 +86,7 @@ extension Capability {
     public struct Method: Codable, Equatable {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
-        
+        public let banks: [BankStatus]
         public enum Payment : Equatable {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
@@ -127,6 +127,7 @@ extension Capability.Method {
     private enum CodingKeys: String, CodingKey {
         case name
         case supportedCurrencies = "currencies"
+        case banks
     }
     
     private enum ConfigurationCodingKeys: String, CodingKey {
@@ -203,7 +204,8 @@ extension Capability.Method {
         
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
-        
+        banks = try container.decode([BankStatus].self,forKey:.banks)
+
         switch sourceTypeKey {
         case .card:
             let paymentConfigurations = try decoder.container(keyedBy: Capability.Method.ConfigurationCodingKeys.self)
@@ -244,6 +246,7 @@ extension Capability.Method {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         try container.encode(supportedCurrencies, forKey: .supportedCurrencies)
+        try container.encode(banks, forKey: .banks)
         
         switch payment {
         case .card(let brands):
@@ -278,6 +281,7 @@ extension Capability.Method {
         case .fpx(let fpxBank):
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
+            try methodConfigurations.encode(Array(banks), forKey: .banks)
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.fpx(fpxBank)), forKey: .name)
         case .promptPay:
