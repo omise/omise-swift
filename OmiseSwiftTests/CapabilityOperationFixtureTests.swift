@@ -11,7 +11,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(capability):
-                XCTAssertEqual(capability.supportedMethods.count, 16)
+                XCTAssertEqual(capability.supportedMethods.count, 17)
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))

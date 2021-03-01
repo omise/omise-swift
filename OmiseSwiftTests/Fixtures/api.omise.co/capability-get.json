@@ -229,6 +229,16 @@
       ],
       "card_brands": null,
       "installment_terms": null
+    },
+    {
+      "object": "payment_method",
+      "name": "fpx",
+      "currencies": [
+          "THB",
+          "MYR"
+      ],
+      "card_brands": null,
+      "installment_terms": null
     }
   ],
   "country": "TH",
