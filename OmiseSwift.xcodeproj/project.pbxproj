@@ -203,6 +203,8 @@
 		8AF2219E21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */; };
 		8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */; };
 		8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */; };
+		8BC028E125EC8D4E00749FE1 /* BankStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC028E025EC8D4E00749FE1 /* BankStatus.swift */; };
+		8BC028E225EC8D4E00749FE1 /* BankStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC028E025EC8D4E00749FE1 /* BankStatus.swift */; };
 		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
 /* End PBXBuildFile section */
 
@@ -336,6 +338,7 @@
 		8AEA41601EADE4C0000A5E28 /* TokenOperationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOperationTest.swift; sourceTree = "<group>"; };
 		8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargeOperationsTest.swift; sourceTree = "<group>"; };
+		8BC028E025EC8D4E00749FE1 /* BankStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankStatus.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -525,6 +528,7 @@
 				8ACB41381E27A335001793CD /* Transfer.swift */,
 				8A3139302293B2370055F755 /* TransferSchedule.swift */,
 				8AC06B8822A7569900816255 /* Source */,
+				8BC028E025EC8D4E00749FE1 /* BankStatus.swift */,
 			);
 			path = "API Models";
 			sourceTree = "<group>";
@@ -840,6 +844,7 @@
 				8ACB41521E28A3C2001793CD /* DetailProperty.swift in Sources */,
 				8A50C50A1E2E250800EC9407 /* SingletonRetrievable.swift in Sources */,
 				8ACB41571E28A3C2001793CD /* Transfer.swift in Sources */,
+				8BC028E225EC8D4E00749FE1 /* BankStatus.swift in Sources */,
 				8ACD573E1E2E570600FEE5A0 /* Balance.swift in Sources */,
 				8A061AA11E2E31C70025EC14 /* ChargeEndpoint.swift in Sources */,
 			);
@@ -916,6 +921,7 @@
 				8ACD572E1E2E3A9600FEE5A0 /* APIResult.swift in Sources */,
 				8ACD57361E2E3A9600FEE5A0 /* Transfer.swift in Sources */,
 				8ACD572F1E2E3A9600FEE5A0 /* Transaction.swift in Sources */,
+				8BC028E125EC8D4E00749FE1 /* BankStatus.swift in Sources */,
 				8ACD573D1E2E570600FEE5A0 /* Balance.swift in Sources */,
 				8ACD57261E2E3A9600FEE5A0 /* Charge.swift in Sources */,
 			);
