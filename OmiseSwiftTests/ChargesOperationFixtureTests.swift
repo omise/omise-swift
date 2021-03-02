@@ -416,6 +416,13 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 2500)
                 XCTAssertEqual(charge.source?.paymentInformation, .fpx(fpxParams))
+                switch charge.source?.paymentInformation {
+                case .fpx(let fpx)?:
+                    XCTAssertEqual(fpx.bank, .affin)
+                    XCTAssertEqual(fpx.email, "test@omise.co")
+                default:
+                    XCTFail("Wrong source information on FPX charge creation")
+                }
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -434,10 +441,17 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 case let .success(charge):
                     XCTAssertEqual(charge.value.amount, 2500)
                     XCTAssertEqual(charge.status, .pending)
-                    XCTAssertEqual(charge.source?.paymentInformation.sourceType,Omise.SourceType.fpx(FPX(bank: FPX.FPXBank.affin, email: "test@omise.co")))
+                    XCTAssertEqual(charge.source?.paymentInformation.sourceType,Omise.SourceType.fpx)
                     XCTAssertEqual(charge.source?.flow, .redirect)
                     XCTAssertEqual(charge.authorizeURL,URL(string:"https://pay.staging-omise.co/payments/pay2_5mx7ibzcow9goicfhnt/authorize"))
                     XCTAssertEqual(charge.returnURL, URL(string:"http://www.google.co.th"))
+                    switch charge.source?.paymentInformation {
+                    case .fpx(let fpx)?:
+                        XCTAssertEqual(fpx.bank, .affin)
+                        XCTAssertEqual(fpx.email, "test@omise.co")
+                    default:
+                        XCTFail("Wrong source information on FPX charge retrieve")
+                    }
                 case let .failure(error):
                     XCTFail("\(error)")
                 }

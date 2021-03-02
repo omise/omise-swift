@@ -99,7 +99,7 @@ extension Capability {
             case payNow
             case truemoney
             case payWithPointsCiti
-            case fpx(FPX)
+            case fpx
             case unknownSource(String, configurations: JSONDictionary)
         }
         public struct BankStatus: Codable, Hashable {
@@ -152,8 +152,8 @@ extension Capability.Method.Payment {
             return true
         case (.payWithPointsCiti, .payWithPointsCiti):
             return true
-        case (.fpx(let lhsValue), .fpx(let rhsValue)):
-            return lhsValue == rhsValue
+        case (.fpx, .fpx):
+            return true
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
         case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
@@ -239,8 +239,8 @@ extension Capability.Method {
             self.payment = .billPayment(billPayment)
         case .source(SourceType.barcode(let barcode)):
             self.payment = .barcode(barcode)
-        case .source(SourceType.fpx(let fpx)):
-            self.payment = .fpx(fpx)
+        case .source(SourceType.fpx):
+            self.payment = .fpx
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
@@ -283,12 +283,12 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
-        case .fpx(let fpx):
+        case .fpx:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
             try methodConfigurations.encode(Array(banks), forKey: .banks)
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
-            try methodConfigurations.encode(Key.source(.fpx(fpx)), forKey: .name)
+            try methodConfigurations.encode(Key.source(.fpx), forKey: .name)
         case .promptPay:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -408,8 +408,8 @@ extension Capability.Method {
                 self = .source(.billPayment(billPayment))
             case .barcode(let barcode):
                 self = .source(.barcode(barcode))
-            case .fpx(let fpx):
-                self = .source(.fpx(fpx))
+            case .fpx:
+                self = .source(.fpx)
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

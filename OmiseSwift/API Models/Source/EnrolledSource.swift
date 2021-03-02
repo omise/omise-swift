@@ -130,8 +130,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPointsCiti:
                 return Omise.SourceType.payWithPointsCiti
-            case .fpx(let fpx):
-                return Omise.SourceType.fpx(fpx)
+            case .fpx:
+                return Omise.SourceType.fpx
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }

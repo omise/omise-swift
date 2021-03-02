@@ -415,8 +415,8 @@ public struct PaymentSourceParams: APIJSONQuery {
                 return .promptPay
             case .payNow:
                 return .payNow
-            case .fpx(let fpx):
-                return .fpx(fpx)
+            case .fpx:
+                return .fpx
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
