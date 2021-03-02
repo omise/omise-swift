@@ -92,137 +92,164 @@ public enum MobileBanking: RawRepresentable, Equatable, Hashable {
     
     case unknown(String)
 }
-
-public enum FPXBank: RawRepresentable, Equatable, Hashable, Codable {
+public struct FPXParams: Codable, Equatable , Hashable{
+    public let email: String?
+    public let bank: FPXBank
+    
+    public init(bank:FPXBank,email:String?=nil){
+        self.bank = bank
+        self.email = email
+    }
     private enum CodingKeys: String, CodingKey {
         case bank
+        case email
     }
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let bankValue = try container.decode(String.self, forKey: .bank)
+        let bankValue = try container.decode(FPXBank.self, forKey: .bank)
+        let emailValue = try container.decodeIfPresent(String.self, forKey: .email)
         
-        self.init(rawValue: bankValue)
+        self.init(bank: bankValue,email: emailValue)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(rawValue, forKey: .bank)
+        try container.encode(bank, forKey: .bank)
+        try container.encodeIfPresent(email, forKey: .email)
     }
     
-    public init(rawValue: String) {
-        switch rawValue {
-        case "affin":
-            self = .affin
-        case "alliance":
-            self = .alliance
-        case "agro":
-            self = .agro
-        case "ambank":
-            self = .ambank
-        case "islam":
-            self = .islam
-        case "muamalat":
-            self = .muamalat
-        case "rakyat":
-            self = .rakyat
-        case "bsn":
-            self = .bsn
-        case "cimb":
-            self = .cimb
-        case "hongleong":
-            self = .hongLeong
-        case "hsbc":
-            self = .hsbc
-        case "kfh":
-            self = .kfh
-        case "maybank2e":
-            self = .maybank2e
-        case "maybank2u":
-            self = .maybank2u
-        case "ocbc":
-            self = .ocbc
-        case "public":
-            self = .publicBank
-        case "rhb":
-            self = .rhb
-        case "sc":
-            self = .sc
-        case "uob":
-            self = .uob
-            
-        case let value:
-            self = .unknown(value)
+    public enum FPXBank: RawRepresentable, Equatable, Hashable, Codable {
+        private enum CodingKeys: String, CodingKey {
+            case bank
         }
-    }
-    
-    public var rawValue: String {
-        switch self {
-        case .affin:
-            return "affin"
-        case .alliance:
-            return "alliance"
-        case .agro:
-            return "agro"
-        case .ambank:
-            return "ambank"
-        case .islam:
-            return "islam"
-        case .muamalat:
-            return "muamalat"
-        case .rakyat:
-            return "rakyat"
-        case .bsn:
-            return "bsn"
-        case .cimb:
-            return "cimb"
-        case .hongLeong:
-            return "hongleong"
-        case .hsbc:
-            return "hsbc"
-        case .kfh:
-            return "kfh"
-        case .maybank2e:
-            return "maybank2e"
-        case .maybank2u:
-            return "maybank2u"
-        case .ocbc:
-            return "ocbc"
-        case .publicBank:
-            return "public"
-        case .rhb:
-            return "rhb"
-        case .sc:
-            return "sc"
-        case .uob:
-            return "uob"
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let bankValue = try container.decode(String.self, forKey: .bank)
             
-        case .unknown(let value):
-            return value
+            self.init(rawValue: bankValue)
         }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(rawValue, forKey: .bank)
+        }
+        
+        
+        public init(rawValue: String) {
+            switch rawValue {
+            case "affin":
+                self = .affin
+            case "alliance":
+                self = .alliance
+            case "agro":
+                self = .agro
+            case "ambank":
+                self = .ambank
+            case "islam":
+                self = .islam
+            case "muamalat":
+                self = .muamalat
+            case "rakyat":
+                self = .rakyat
+            case "bsn":
+                self = .bsn
+            case "cimb":
+                self = .cimb
+            case "hongleong":
+                self = .hongLeong
+            case "hsbc":
+                self = .hsbc
+            case "kfh":
+                self = .kfh
+            case "maybank2e":
+                self = .maybank2e
+            case "maybank2u":
+                self = .maybank2u
+            case "ocbc":
+                self = .ocbc
+            case "public":
+                self = .publicBank
+            case "rhb":
+                self = .rhb
+            case "sc":
+                self = .sc
+            case "uob":
+                self = .uob
+                
+            case let value:
+                self = .unknown(value)
+            }
+        }
+        
+        public var rawValue: String {
+            switch self {
+            case .affin:
+                return "affin"
+            case .alliance:
+                return "alliance"
+            case .agro:
+                return "agro"
+            case .ambank:
+                return "ambank"
+            case .islam:
+                return "islam"
+            case .muamalat:
+                return "muamalat"
+            case .rakyat:
+                return "rakyat"
+            case .bsn:
+                return "bsn"
+            case .cimb:
+                return "cimb"
+            case .hongLeong:
+                return "hongleong"
+            case .hsbc:
+                return "hsbc"
+            case .kfh:
+                return "kfh"
+            case .maybank2e:
+                return "maybank2e"
+            case .maybank2u:
+                return "maybank2u"
+            case .ocbc:
+                return "ocbc"
+            case .publicBank:
+                return "public"
+            case .rhb:
+                return "rhb"
+            case .sc:
+                return "sc"
+            case .uob:
+                return "uob"
+                
+            case .unknown(let value):
+                return value
+            }
+        }
+        
+        case affin
+        case alliance
+        case agro
+        case ambank
+        case islam
+        case muamalat
+        case rakyat
+        case bsn
+        case cimb
+        case hongLeong
+        case hsbc
+        case kfh
+        case maybank2e
+        case maybank2u
+        case ocbc
+        case publicBank
+        case rhb
+        case sc
+        case uob
+        
+        case unknown(String)
     }
-    
-    case affin
-    case alliance
-    case agro
-    case ambank
-    case islam
-    case muamalat
-    case rakyat
-    case bsn
-    case cimb
-    case hongLeong
-    case hsbc
-    case kfh
-    case maybank2e
-    case maybank2u
-    case ocbc
-    case publicBank
-    case rhb
-    case sc
-    case uob
-    
-    case unknown(String)
 }
 
 public enum SourceType: Codable, Equatable, Hashable {
@@ -236,7 +263,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case truemoney
     case payWithPointsCiti
     case mobileBanking(MobileBanking)
-    case fpx(FPXBank)
+    case fpx(FPXParams)
     
     case unknown(String)
     
@@ -440,7 +467,7 @@ extension SourceType {
               .flatMap(MobileBanking.init(rawValue:)).map(SourceType.mobileBanking) {
             self = mobileBankingOffsite
         } else if value == fpxValue {
-            self = .fpx(FPXBank(rawValue: value))
+            self = .fpx(FPXParams(bank: FPXParams.FPXBank(rawValue:value)))
         } else {
             self = .unknown(value)
         }
