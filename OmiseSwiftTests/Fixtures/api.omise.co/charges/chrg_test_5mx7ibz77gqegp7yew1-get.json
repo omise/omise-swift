@@ -54,7 +54,7 @@
       "bank": "affin",
       "created_at": "2021-02-19T02:04:29Z",
       "currency": "MYR",
-      "email": null,
+      "email": "test@omise.co",
       "flow": "redirect",
       "installment_term": null,
       "name": null,
