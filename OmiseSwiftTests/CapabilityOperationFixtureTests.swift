@@ -23,7 +23,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 if let fpxMethod = capability[SourceType.fpx] {
                     let firstBank = fpxMethod.banks[0]
 
-                    XCTAssertEqual(firstBank.active,true)
+                    XCTAssertTrue(firstBank.active)
                     XCTAssertEqual(firstBank.name,"KFH")
                     XCTAssertEqual(firstBank.code,"kfh")
                 } else {
