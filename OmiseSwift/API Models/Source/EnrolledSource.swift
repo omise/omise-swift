@@ -333,8 +333,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(sourceType, forKey: .type)
         case .fpx(let fpx):
             try container.encode(fpxValue, forKey: .type)
-            try container.encode(fpx, forKey: .bank)
-            try container.encode(fpx, forKey: .email)
+            try container.encode(fpx.bank, forKey: .bank)
+            try container.encode(fpx.email, forKey: .email)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)

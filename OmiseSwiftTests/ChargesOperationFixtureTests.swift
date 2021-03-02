@@ -416,13 +416,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 2500)
                 XCTAssertEqual(charge.source?.paymentInformation, .fpx(fpxParams))
-                switch charge.source?.paymentInformation {
-                case .fpx(let fpx)?:
-                    XCTAssertEqual(fpx.bank, .affin)
-                    XCTAssertEqual(fpx.email, "test@omise.co")
-                default:
-                    XCTFail("Wrong source information on FPX charge creation")
-                }
             case let .failure(error):
                 XCTFail("\(error)")
             }
