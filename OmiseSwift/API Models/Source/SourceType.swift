@@ -92,7 +92,8 @@ public enum MobileBanking: RawRepresentable, Equatable, Hashable {
     
     case unknown(String)
 }
-public struct FPXParams: Codable, Equatable , Hashable{
+
+public struct FPX: Codable, Equatable , Hashable{
     public let email: String?
     public let bank: FPXBank
     
@@ -263,7 +264,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case truemoney
     case payWithPointsCiti
     case mobileBanking(MobileBanking)
-    case fpx(FPXParams)
+    case fpx(FPX)
     
     case unknown(String)
     
@@ -467,7 +468,7 @@ extension SourceType {
               .flatMap(MobileBanking.init(rawValue:)).map(SourceType.mobileBanking) {
             self = mobileBankingOffsite
         } else if value == fpxValue {
-            self = .fpx(FPXParams(bank: FPXParams.FPXBank(rawValue:value)))
+            self = .fpx(FPX(bank: FPX.FPXBank(rawValue:value)))
         } else {
             self = .unknown(value)
         }

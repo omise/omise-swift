@@ -15,7 +15,7 @@ public struct EnrolledSource: SourceData {
         case installment(SourceType.InstallmentBrand)
         case truemoney(Truemoney)
         case payWithPointsCiti
-        case fpx(FPXParams)
+        case fpx(FPX)
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -130,8 +130,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPointsCiti:
                 return Omise.SourceType.payWithPointsCiti
-            case .fpx(let fpxParams):
-                return Omise.SourceType.fpx(fpxParams)
+            case .fpx(let fpx):
+                return Omise.SourceType.fpx(fpx)
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -280,8 +280,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         } else if typeValue == payWithPointsCitiValue {
             self = .payWithPointsCiti
         } else if typeValue == fpxValue {
-            let fpxParams = try FPXParams(from: decoder)
-            self = .fpx(fpxParams)
+            let fpx = try FPX(from: decoder)
+            self = .fpx(fpx)
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
@@ -331,10 +331,10 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .payWithPointsCiti:
             try container.encode(sourceType, forKey: .type)
-        case .fpx(let fpxParams):
+        case .fpx(let fpx):
             try container.encode(fpxValue, forKey: .type)
-            try container.encode(fpxParams, forKey: .bank)
-            try container.encode(fpxParams, forKey: .email)
+            try container.encode(fpx, forKey: .bank)
+            try container.encode(fpx, forKey: .email)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)

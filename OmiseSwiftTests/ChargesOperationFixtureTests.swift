@@ -404,7 +404,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testFPXChargeCreate() {
         let expectation = self.expectation(description: "FPX Charge create")
-        let fpxParams = FPXParams(bank: FPXParams.FPXBank.affin, email: "test@omise.co")
+        let fpxParams = FPX(bank: FPX.FPXBank.affin, email: "test@omise.co")
         let createParams = ChargeParams(value: Value(amount: 2500, currency: .myr),
                                         sourceType: .fpx(fpxParams))
         
@@ -434,7 +434,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 case let .success(charge):
                     XCTAssertEqual(charge.value.amount, 2500)
                     XCTAssertEqual(charge.status, .pending)
-                    XCTAssertEqual(charge.source?.paymentInformation.sourceType,Omise.SourceType.fpx(FPXParams(bank: FPXParams.FPXBank.affin, email: "test@omise.co")))
+                    XCTAssertEqual(charge.source?.paymentInformation.sourceType,Omise.SourceType.fpx(FPX(bank: FPX.FPXBank.affin, email: "test@omise.co")))
                     XCTAssertEqual(charge.source?.flow, .redirect)
                     XCTAssertEqual(charge.authorizeURL,URL(string:"https://pay.staging-omise.co/payments/pay2_5mx7ibzcow9goicfhnt/authorize"))
                     XCTAssertEqual(charge.returnURL, URL(string:"http://www.google.co.th"))
