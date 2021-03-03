@@ -97,7 +97,7 @@ public struct FPX: Codable, Equatable , Hashable {
     public let email: String?
     public let bank: String
     
-    public init(bank: String,email: String? = nil) {
+    public init(bank: String, email: String? = nil) {
         self.bank = bank
         self.email = email
     }

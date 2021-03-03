@@ -103,9 +103,14 @@ extension Capability {
             case unknownSource(String, configurations: JSONDictionary)
         }
         public struct BankDetails: Codable, Hashable {
+            enum CodingKeys: String, CodingKey {
+                case code, name
+                case isActive = "active"
+            }
+
             public let code: String
             public let name: String
-            public let active: Bool
+            public let isActive: Bool
         }
     }
 }
@@ -209,7 +214,7 @@ extension Capability.Method {
         
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
-        banks = try container.decode([BankDetails].self,forKey:.banks)
+        banks = try container.decode([BankDetails].self, forKey: .banks)
 
         switch sourceTypeKey {
         case .card:

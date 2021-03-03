@@ -23,9 +23,9 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 if let fpxMethod = capability[SourceType.fpx] {
                     let firstBank = fpxMethod.banks[0]
 
-                    XCTAssertTrue(firstBank.active)
-                    XCTAssertEqual(firstBank.name,"KFH")
-                    XCTAssertEqual(firstBank.code,"kfh")
+                    XCTAssertTrue(firstBank.isActive)
+                    XCTAssertEqual(firstBank.name, "KFH")
+                    XCTAssertEqual(firstBank.code, "kfh")
                 } else {
                     XCTFail("Capability doesn't have the FPX backend")
                 }
