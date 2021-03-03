@@ -36,8 +36,8 @@ public enum Period {
                 self.init(rawValue: value)!
             }
             
-            public var hashValue: Int {
-                return day.hashValue
+            public func hash(into hasher: inout Hasher) {
+                hasher.combine(day)
             }
         }
         public enum Ordinal: Equatable {

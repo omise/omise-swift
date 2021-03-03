@@ -107,6 +107,7 @@ private func parsingDateComponentsValue(_ value: String, codingPath: [CodingKey]
     return components
 }
 
+// swiftlint:disable identifier_name
 func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -> String {
     guard (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian else {
         throw EncodingError.invalidValue(

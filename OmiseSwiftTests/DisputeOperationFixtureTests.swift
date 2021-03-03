@@ -176,8 +176,8 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             defer { expectation.fulfill() }
             
             switch result {
-            case let .success(DisputesList):
-                XCTAssertNotNil(DisputesList.data)
+            case let .success(disputesList):
+                XCTAssertNotNil(disputesList.data)
             case let .failure(error):
                 XCTFail("\(error)")
             }
