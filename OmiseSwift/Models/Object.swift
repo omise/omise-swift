@@ -36,9 +36,7 @@ public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
 
 public extension OmiseIdentifiableObject {
     static func validate(id: String) -> Bool {
-        return id.range(of:
-            #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#,
-            options: [.regularExpression, .anchored]) != nil
+        id.range(of: #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#, options: [.regularExpression, .anchored]) != nil
     }
 }
 
