@@ -31,4 +31,3 @@ public struct Account: OmiseResourceObject, Equatable {
 
 extension Account: OmiseAPIPrimaryObject {}
 extension Account: SingletonRetrievable {}
-

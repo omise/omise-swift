@@ -55,4 +55,3 @@ extension Transfer {
         return Schedule<Transfer>.listDataSchedule(using: client, listParams: listParams, callback: callback)
     }
 }
-

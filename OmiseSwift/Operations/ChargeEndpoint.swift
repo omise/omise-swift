@@ -105,4 +105,3 @@ extension Charge {
         return Schedule<Charge>.listDataSchedule(using: client, listParams: listParams, callback: callback)
     }
 }
-

@@ -182,4 +182,3 @@ extension Charge {
         return Refund.create(using: client, parent: self, params: params, callback: callback)
     }
 }
-

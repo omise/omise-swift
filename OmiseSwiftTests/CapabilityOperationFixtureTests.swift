@@ -105,4 +105,3 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                        decodedCapability[SourceType.installment(.bay)]?.supportedCurrencies)
     }
 }
-

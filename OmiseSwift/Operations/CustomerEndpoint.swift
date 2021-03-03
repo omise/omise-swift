@@ -39,4 +39,3 @@ extension Customer {
         return client.request(to: endpoint, callback: requestCallback)
     }
 }
-

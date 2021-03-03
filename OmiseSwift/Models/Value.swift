@@ -13,4 +13,3 @@ public struct Value: Equatable {
         return currency.convert(fromSubunit: amount)
     }
 }
-

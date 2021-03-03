@@ -91,4 +91,3 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         return paths
     }
 }
-

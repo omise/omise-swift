@@ -248,4 +248,3 @@ func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> Count
         return range.lowerBound..<range.upperBound.advanced(by: length)
     }
 }
-

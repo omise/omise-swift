@@ -438,4 +438,3 @@ extension Capability.Method {
 }
 
 extension Capability: SingletonRetrievable {}
-

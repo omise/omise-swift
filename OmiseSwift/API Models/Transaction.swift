@@ -55,5 +55,3 @@ extension Transaction {
 extension Transaction: OmiseAPIPrimaryObject {}
 extension Transaction: Listable {}
 extension Transaction: Retrievable {}
-
-

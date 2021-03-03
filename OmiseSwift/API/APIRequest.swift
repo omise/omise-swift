@@ -113,4 +113,3 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         return request as URLRequest
     }
 }
-

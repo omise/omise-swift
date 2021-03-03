@@ -184,4 +184,3 @@ extension PaymentSource {
         try paymentInformation.encode(to: encoder)
     }
 }
-

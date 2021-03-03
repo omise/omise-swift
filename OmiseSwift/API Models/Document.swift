@@ -54,4 +54,3 @@ extension Document: OmiseAPIChildObject {
 extension Document: Creatable {
     public typealias CreateParams = DocumentParams
 }
-

@@ -75,4 +75,3 @@ class DecodeTests: XCTestCase {
         XCTAssertEqual(jsonData, encodedData)
     }
 }
-

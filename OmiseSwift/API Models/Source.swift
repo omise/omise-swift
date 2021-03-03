@@ -491,5 +491,3 @@ extension PaymentSource: Creatable {
         return client.request(to: endpoint, callback: callback)
     }
 }
-
-

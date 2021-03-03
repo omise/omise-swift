@@ -166,4 +166,3 @@ extension Currency {
         }
     }
 }
-

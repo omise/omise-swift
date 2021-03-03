@@ -214,4 +214,3 @@ extension SearchParams: AdditionalFixtureData {
         return scope
     }
 }
-

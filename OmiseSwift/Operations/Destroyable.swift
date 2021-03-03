@@ -51,4 +51,3 @@ public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiable
         return client.request(to: endpoint, callback: callback)
     }
 }
-

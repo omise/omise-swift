@@ -286,6 +286,3 @@ public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {
 extension Schedule : Creatable where Data : Creatable & Schedulable {
     public typealias CreateParams = ScheduleParams<Data>
 }
-
-
-

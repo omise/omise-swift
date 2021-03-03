@@ -1659,4 +1659,3 @@ extension ChargeParams: AdditionalFixtureData {
         }
     }
 }
-

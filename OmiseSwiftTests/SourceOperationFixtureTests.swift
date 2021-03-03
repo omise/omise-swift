@@ -553,4 +553,3 @@ extension PaymentSourceParams: AdditionalFixtureData {
         return sourceParameter.sourceType.value
     }
 }
-

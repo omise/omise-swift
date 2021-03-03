@@ -39,4 +39,3 @@ extension Schedule where Data: OmiseLocatableObject {
     }
     
 }
-

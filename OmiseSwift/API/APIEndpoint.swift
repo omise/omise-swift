@@ -73,4 +73,3 @@ extension APIEndpoint where QueryType == NoAPIQuery {
         self.query = nil
     }
 }
-

@@ -145,5 +145,3 @@ extension Customer: Searchable {
 }
 
 extension Customer: Destroyable {}
-
-

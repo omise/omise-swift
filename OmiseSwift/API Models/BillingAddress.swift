@@ -20,4 +20,3 @@ public struct BillingAddress: Codable, Equatable {
         case phoneNumber = "phone_number"
     }
 }
-

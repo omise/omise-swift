@@ -38,4 +38,3 @@ extension Recipient {
         return client.request(to: endpoint, callback: requestCallback)
     }
 }
-

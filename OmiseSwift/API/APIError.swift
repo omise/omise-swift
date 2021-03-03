@@ -169,4 +169,3 @@ public struct APIError: OmiseLocatableObject, CustomDebugStringConvertible, Equa
 }
 
 extension APIError: Error {}
-

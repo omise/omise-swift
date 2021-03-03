@@ -59,4 +59,3 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
         return client.request(to: endpoint, callback: callback)
     }
 }
-

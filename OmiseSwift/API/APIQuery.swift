@@ -60,5 +60,3 @@ extension APIFileQuery {
         return ("multipart/form-data; boundary=\(boundary)", data)
     }
 }
-
-

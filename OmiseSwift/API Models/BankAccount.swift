@@ -70,4 +70,3 @@ public struct BankAccountParams: APIJSONQuery {
         self.name = name
     }
 }
-

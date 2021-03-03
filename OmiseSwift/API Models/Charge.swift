@@ -609,4 +609,3 @@ extension Charge: Updatable {
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
-

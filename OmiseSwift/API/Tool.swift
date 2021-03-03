@@ -555,4 +555,3 @@ extension UnkeyedEncodingContainer {
         try nestedContainer.encode(value)
     }
 }
-

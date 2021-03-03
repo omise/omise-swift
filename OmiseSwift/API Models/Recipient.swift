@@ -209,4 +209,3 @@ public struct RecipientFilterParams: OmiseFilterParams {
 extension Recipient: Searchable {
     public typealias FilterParams = RecipientFilterParams
 }
-

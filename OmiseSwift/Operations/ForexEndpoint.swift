@@ -19,4 +19,3 @@ extension Forex {
         return client.request(to: endpoint, callback: callback)
     }
 }
-

@@ -276,4 +276,3 @@ extension Transfer: Destroyable {}
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams
 }
-

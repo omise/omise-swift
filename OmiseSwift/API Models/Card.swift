@@ -479,4 +479,3 @@ extension Card: Equatable {
         return lhs.id == rhs.id
     }
 }
-

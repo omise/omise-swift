@@ -364,4 +364,3 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("66473", result[7].value)
     }
 }
-

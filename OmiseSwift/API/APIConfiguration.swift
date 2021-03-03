@@ -13,4 +13,3 @@ public struct APIConfiguration {
         self.accessKey = key
     }
 }
-

@@ -113,4 +113,3 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         return value.data
     }
 }
-

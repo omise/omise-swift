@@ -50,5 +50,3 @@ public extension OmiseAPIChildObject where Self: Creatable {
         return client.request(to: endpoint, callback: callback)
     }
 }
-
-

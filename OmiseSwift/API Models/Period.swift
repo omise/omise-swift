@@ -302,4 +302,3 @@ extension Period.MonthlyPeriodRule.Ordinal {
         }
     }
 }
-

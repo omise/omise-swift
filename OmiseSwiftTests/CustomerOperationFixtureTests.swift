@@ -30,4 +30,3 @@ class CustomerOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
 }
-

@@ -119,4 +119,3 @@ extension Omise.APIEndpoint {
         return (filename as NSString).appendingPathExtension("json")! as String
     }
 }
-

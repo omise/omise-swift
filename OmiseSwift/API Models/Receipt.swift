@@ -130,4 +130,3 @@ extension Receipt {
 extension Receipt: OmiseAPIPrimaryObject {}
 extension Receipt: Listable {}
 extension Receipt: Retrievable {}
-

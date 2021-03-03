@@ -69,4 +69,3 @@ public struct Bank {
         self.preferredColor = (data?["color"] as? String).flatMap(Color.init(hexString:))
     }
 }
-

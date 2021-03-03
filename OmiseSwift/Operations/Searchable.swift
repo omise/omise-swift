@@ -151,4 +151,3 @@ public extension APIClient {
         return T.search(using: self, params: params, callback: callback)
     }
 }
-

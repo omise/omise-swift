@@ -258,4 +258,3 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         return [Self.resourcePath, parent.id.idString, Children.resourcePath]
     }
 }
-

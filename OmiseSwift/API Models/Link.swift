@@ -149,5 +149,3 @@ extension Link {
         return self.list(keyPath: \.charges, using: client, params: params, callback: callback)
     }
 }
-
-

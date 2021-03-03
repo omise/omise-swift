@@ -19,4 +19,3 @@ extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiab
         return paths
     }
 }
-

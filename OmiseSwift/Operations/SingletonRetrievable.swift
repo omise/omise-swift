@@ -30,4 +30,3 @@ public extension APIClient {
         return T.retrieve(using: self, callback: callback)
     }
 }
-

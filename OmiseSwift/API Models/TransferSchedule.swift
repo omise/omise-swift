@@ -120,4 +120,3 @@ public struct TransferSchedulingParameter: SchedulingParameter, APIJSONQuery, Eq
         }
     }
 }
-

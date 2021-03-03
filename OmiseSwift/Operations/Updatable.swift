@@ -52,4 +52,3 @@ public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableOb
         return client.request(to: endpoint, callback: callback)
     }
 }
-

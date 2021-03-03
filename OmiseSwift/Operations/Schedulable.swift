@@ -19,4 +19,3 @@ extension Schedulable {
         return parameterKey == key
     }
 }
-
