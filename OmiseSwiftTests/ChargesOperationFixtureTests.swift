@@ -404,7 +404,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testFPXChargeCreate() {
         let expectation = self.expectation(description: "FPX Charge create")
-        let fpxParams = FPX(bank: FPX.FPXBank.affin, email: "test@omise.co")
+        let fpxParams = FPX(bank: "affin", email: "test@omise.co")
         let createParams = ChargeParams(value: Value(amount: 2500, currency: .myr),
                                         sourceType: .fpx(fpxParams))
         
@@ -440,7 +440,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                     XCTAssertEqual(charge.returnURL, URL(string:"http://www.google.co.th"))
                     switch charge.source?.paymentInformation {
                     case .fpx(let fpx)?:
-                        XCTAssertEqual(fpx.bank, .affin)
+                        XCTAssertEqual(fpx.bank, "affin")
                         XCTAssertEqual(fpx.email, "test@omise.co")
                     default:
                         XCTFail("Wrong source information on FPX charge retrieve")
