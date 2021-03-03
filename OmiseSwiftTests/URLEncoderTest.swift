@@ -92,7 +92,7 @@ extension AnyJSONType: Encodable {
     }
 }
 
-fileprivate struct AnyJSONAttributeEncodingKey: CodingKey {
+private struct AnyJSONAttributeEncodingKey: CodingKey {
     let stringValue: String
     init?(intValue: Int) { return nil }
     var intValue: Int? { return nil }
@@ -119,7 +119,7 @@ class URLEncoderTest: OmiseTestCase {
             "4bool": false,
             "5boolean": true,
             "6date": Date(timeIntervalSince1970: 0),
-            "7nil": String?.none as Optional<String>,
+            "7nil": String?.none as Optional<String>
             ] as [String: Optional<Any>])
         
         let encoder = URLQueryItemEncoder()
@@ -133,7 +133,7 @@ class URLEncoderTest: OmiseTestCase {
             "false",
             "true",
             "1970-01-01T00:00:00Z",
-            "$*nil*$",
+            "$*nil*$"
             ])
     }
     
@@ -150,7 +150,7 @@ class URLEncoderTest: OmiseTestCase {
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
             ])
         
         let encoder = URLQueryItemEncoder()
@@ -228,7 +228,7 @@ class URLEncoderTest: OmiseTestCase {
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
             ])
         
         let encoder = URLQueryItemEncoder()
@@ -311,7 +311,7 @@ class URLEncoderTest: OmiseTestCase {
             "1000.0",
             "4242",
             "true",
-            "2016-8-1",
+            "2016-8-1"
             ])
     }
     
@@ -331,7 +331,7 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual(result, [
             expectedFromDateString,
             expectedToDateString,
-            "chronological",
+            "chronological"
             ])
     }
     

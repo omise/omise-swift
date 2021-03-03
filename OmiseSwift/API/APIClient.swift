@@ -63,7 +63,7 @@ public class APIClient: NSObject {
     }
     
     
-    func performCallback(_ callback: @escaping () -> ()) {
+    func performCallback(_ callback: @escaping () -> Void) {
         operationQueue.addOperation(callback)
     }
     

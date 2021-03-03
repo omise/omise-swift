@@ -423,7 +423,7 @@ extension URLQueryItemEncoder {
     }
 }
 
-fileprivate class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
+private class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
     fileprivate let encoder: URLQueryItemEncoder
     
     init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
@@ -438,7 +438,7 @@ fileprivate class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
     }
 }
 
-fileprivate class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencingEncoder {
+private class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencingEncoder {
     var referencedUnkeyedContainer: UnkeyedContanier
     
     init(encoder: URLQueryItemEncoder, codingPath: [CodingKey], referencing: UnkeyedContanier) {

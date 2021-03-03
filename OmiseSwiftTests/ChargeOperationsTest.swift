@@ -78,7 +78,7 @@ class ChargeOperationsTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testChargeInfiniteListWithBefore() -> Void {
+    func testChargeInfiniteListWithBefore() {
         let expectation = self.expectation(description: "transfer list")
         let firstExpectation = self.expectation(description: "transfer list")
         let secondExpectation = self.expectation(description: "Load more of transfer list")

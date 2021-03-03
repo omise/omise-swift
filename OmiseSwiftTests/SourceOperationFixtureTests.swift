@@ -341,7 +341,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             "barcode": "1234567890",
             "store_id": "store_1",
             "store_name": "store 1",
-            "terminal_id": String?.none as Any,
+            "terminal_id": String?.none as Any
             ])
         
         let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .barcode(omiseBarcode))

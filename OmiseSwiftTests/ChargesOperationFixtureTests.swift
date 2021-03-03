@@ -461,7 +461,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             "user-id": "a-user-id",
             "user": [
                 "name": "John Appleseed",
-                "tel": "08-xxxx-xxxx",
+                "tel": "08-xxxx-xxxx"
             ]
         ]
         
