@@ -405,7 +405,7 @@ extension Encoder {
     
     func encode<SkippedKeys: CodingKey>(
         _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
-        ) throws  {
+        ) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
         try container.encode(value, skippingKeysBy: skippingKeys)
     }
@@ -462,7 +462,7 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     
     mutating func encode<SkippedKeys: CodingKey>(
         _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
-        ) throws  {
+        ) throws {
         try value.forEach({ (key, value) in
             guard SkippedKeys(stringValue: key) == nil else {
                 return

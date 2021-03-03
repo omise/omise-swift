@@ -45,7 +45,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     
     public init<T: Searchable>(searhScopeType: T.Type,
                                query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil,
-                               page: Int? = nil,  numberOfItemsPerPage: Int? = nil)
+                               page: Int? = nil, numberOfItemsPerPage: Int? = nil)
         where T.FilterParams == FilterParams {
             self.init(
                 scope: T.scopeName, query: query, order: order, filter: filter,
@@ -54,7 +54,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
 }
 
 
-public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
+public protocol OmiseFilterParams: APIJSONQuery, Decodable {}
 
 
 public extension OmiseAPIPrimaryObject where Self: Searchable {

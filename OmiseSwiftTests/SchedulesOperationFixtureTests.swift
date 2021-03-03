@@ -22,7 +22,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 let expectedMonthlyRule = Period.MonthlyPeriodRule.daysOfMonth([27])
                 XCTAssertEqual(schedule.period, Period.monthly(expectedMonthlyRule))
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -30,7 +30,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
                 let firstNextOccurrenceDate = gregorianCalendar.date(from:
-                    DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 27))!
+                    DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 27))!
                 let nextOccurrences = (0..<12).map({ (month) in
                     return gregorianCalendar.date(byAdding: .month, value: month, to: firstNextOccurrenceDate)
                         .flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
@@ -105,7 +105,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.daily)
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -114,7 +114,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
                 let firstNextOccurrenceDate = gregorianCalendar.date(
-                    from: DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 24))!
+                    from: DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 24))!
                 let nextOccurrences = (0..<30).map({ (day) in
                     return gregorianCalendar.date(byAdding: .day, value: day, to: firstNextOccurrenceDate)
                         .flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
@@ -222,7 +222,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.weekdayOfMonth(ordinal: .last, weekday: .friday)))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -295,7 +295,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.weekdayOfMonth(ordinal: .first, weekday: .monday)))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -368,7 +368,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.weekly([.monday, .tuesday, .wednesday, .thursday, .friday]))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -445,7 +445,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([25])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 22))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 22))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 22))
                 
@@ -518,7 +518,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([27])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
@@ -562,7 +562,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1, 16])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: Calendar.scheduleAPICalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2020, month: 5, day: 23))
                 

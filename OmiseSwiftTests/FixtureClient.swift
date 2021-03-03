@@ -22,9 +22,9 @@ class FixtureClient: APIClient {
                     client: self, endpoint: endpoint, callback: callback)
                 return try req.start()
             } catch let err as NSError {
-                operationQueue.addOperation() { callback?(.failure(.other(err))) }
+                operationQueue.addOperation { callback?(.failure(.other(err))) }
             } catch let err as OmiseError {
-                operationQueue.addOperation() { callback?(.failure(err)) }
+                operationQueue.addOperation { callback?(.failure(err)) }
             }
             
             return nil

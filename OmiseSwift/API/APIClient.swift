@@ -50,11 +50,11 @@ public class APIClient: NSObject {
                 client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as OmiseError {
-            performCallback() {
+            performCallback {
                 callback?(.failure(err))
             }
         } catch let err {
-            performCallback() {
+            performCallback {
                 callback?(.failure(.other(err)))
             }
         }
