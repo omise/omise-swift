@@ -86,7 +86,7 @@ extension Capability {
     public struct Method: Codable, Equatable {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
-        
+        public let banks: [BankDetails]
         public enum Payment : Equatable {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
@@ -99,7 +99,18 @@ extension Capability {
             case payNow
             case truemoney
             case payWithPointsCiti
+            case fpx
             case unknownSource(String, configurations: JSONDictionary)
+        }
+        public struct BankDetails: Codable, Hashable {
+            enum CodingKeys: String, CodingKey {
+                case code, name
+                case isActive = "active"
+            }
+
+            public let code: String
+            public let name: String
+            public let isActive: Bool
         }
     }
 }
@@ -126,6 +137,7 @@ extension Capability.Method {
     private enum CodingKeys: String, CodingKey {
         case name
         case supportedCurrencies = "currencies"
+        case banks
     }
     
     private enum ConfigurationCodingKeys: String, CodingKey {
@@ -144,6 +156,8 @@ extension Capability.Method.Payment {
         case (.truemoney, .truemoney):
             return true
         case (.payWithPointsCiti, .payWithPointsCiti):
+            return true
+        case (.fpx, .fpx):
             return true
         case (.installment(let lhsBrand, let lhsNumberOfTerms), .installment(let rhsBrand, let rhsNumberOfTerms)):
             return lhsBrand == rhsBrand && lhsNumberOfTerms == rhsNumberOfTerms
@@ -200,7 +214,8 @@ extension Capability.Method {
         
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
-        
+        banks = try container.decode([BankDetails].self, forKey: .banks)
+
         switch sourceTypeKey {
         case .card:
             let paymentConfigurations = try decoder.container(keyedBy: Capability.Method.ConfigurationCodingKeys.self)
@@ -229,6 +244,8 @@ extension Capability.Method {
             self.payment = .billPayment(billPayment)
         case .source(SourceType.barcode(let barcode)):
             self.payment = .barcode(barcode)
+        case .source(SourceType.fpx):
+            self.payment = .fpx
         case .source(SourceType.unknown(let type)):
             let configurations = try decoder.container(
                 keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
@@ -239,6 +256,7 @@ extension Capability.Method {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         try container.encode(supportedCurrencies, forKey: .supportedCurrencies)
+        try container.encode(banks, forKey: .banks)
         
         switch payment {
         case .card(let brands):
@@ -270,6 +288,12 @@ extension Capability.Method {
             
             try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
             try methodConfigurations.encode(Key.source(.alipay), forKey: .name)
+        case .fpx:
+            var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
+            
+            try methodConfigurations.encode(Array(banks), forKey: .banks)
+            try methodConfigurations.encode(Array(supportedCurrencies), forKey: .supportedCurrencies)
+            try methodConfigurations.encode(Key.source(.fpx), forKey: .name)
         case .promptPay:
             var methodConfigurations = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
             
@@ -389,6 +413,8 @@ extension Capability.Method {
                 self = .source(.billPayment(billPayment))
             case .barcode(let barcode):
                 self = .source(.barcode(barcode))
+            case .fpx:
+                self = .source(.fpx)
             case .unknownSource(let sourceType, configurations: _):
                 self = .source(.unknown(sourceType))
             }

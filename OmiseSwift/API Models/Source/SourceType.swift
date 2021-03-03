@@ -11,6 +11,7 @@ let installmentPrefix = "installment_"
 let truemoneyValue = "truemoney"
 let payWithPointsCitiValue = "points_citi"
 let mobileBankingPrefix = "mobile_banking_"
+let fpxValue = "fpx"
 
 public enum InternetBanking: RawRepresentable, Equatable, Hashable {
     public init?(rawValue: String) {
@@ -92,6 +93,16 @@ public enum MobileBanking: RawRepresentable, Equatable, Hashable {
     case unknown(String)
 }
 
+public struct FPX: Codable, Equatable , Hashable {
+    public let email: String?
+    public let bank: String
+    
+    public init(bank: String, email: String? = nil) {
+        self.bank = bank
+        self.email = email
+    }
+}
+
 public enum SourceType: Codable, Equatable, Hashable {
     case internetBanking(InternetBanking)
     case alipay
@@ -103,7 +114,8 @@ public enum SourceType: Codable, Equatable, Hashable {
     case truemoney
     case payWithPointsCiti
     case mobileBanking(MobileBanking)
-
+    case fpx
+    
     case unknown(String)
     
     public enum BillPayment: RawRepresentable, Equatable, Hashable {
@@ -232,6 +244,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             return payWithPointsCitiValue
         case .mobileBanking:
             return mobileBankingPrefix
+        case .fpx:
+            return fpxValue
         case .unknown(let source):
             return source
         }
@@ -260,6 +274,8 @@ public enum SourceType: Codable, Equatable, Hashable {
             value = payWithPointsCitiValue
         case .mobileBanking(let bank):
             value = mobileBankingPrefix + bank.rawValue
+        case .fpx:
+            value = fpxValue
         case .unknown(let source):
             value = source
         }
@@ -301,6 +317,8 @@ extension SourceType {
               .range(of: mobileBankingPrefix).map({ String(value[$0.upperBound...]) })
               .flatMap(MobileBanking.init(rawValue:)).map(SourceType.mobileBanking) {
             self = mobileBankingOffsite
+        } else if value == fpxValue {
+            self = .fpx
         } else {
             self = .unknown(value)
         }

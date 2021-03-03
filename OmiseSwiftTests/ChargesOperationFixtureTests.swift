@@ -402,6 +402,58 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    func testFPXChargeCreate() {
+        let expectation = self.expectation(description: "FPX Charge create")
+        let fpxParams = FPX(bank: "affin", email: "test@omise.co")
+        let createParams = ChargeParams(value: Value(amount: 2500, currency: .myr),
+                                        sourceType: .fpx(fpxParams))
+        
+        _ = Charge.create(using: testClient, params: createParams) { (result) in
+            defer { expectation.fulfill() }
+            
+            switch result {
+            case let .success(charge):
+                XCTAssertNotNil(charge)
+                XCTAssertEqual(charge.value.amount, 2500)
+                XCTAssertEqual(charge.source?.paymentInformation, .fpx(fpxParams))
+            case let .failure(error):
+                XCTFail("\(error)")
+            }
+        }
+        
+        waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
+    func testFPXChargeRetrieve() {
+            let expectation = self.expectation(description: "FPX Charge result")
+            
+            let request = Charge.retrieve(using: testClient, id: "chrg_test_5mx7ibz77gqegp7yew1") { (result) in
+                defer { expectation.fulfill() }
+                
+                switch result {
+                case let .success(charge):
+                    XCTAssertEqual(charge.value.amount, 2500)
+                    XCTAssertEqual(charge.status, .pending)
+                    XCTAssertEqual(charge.source?.paymentInformation.sourceType, Omise.SourceType.fpx)
+                    XCTAssertEqual(charge.source?.flow, .redirect)
+                    XCTAssertEqual(charge.authorizeURL, URL(string:"https://pay.staging-omise.co/payments/pay2_5mx7ibzcow9goicfhnt/authorize"))
+                    XCTAssertEqual(charge.returnURL, URL(string:"http://www.google.co.th"))
+                    switch charge.source?.paymentInformation {
+                    case .fpx(let fpx)?:
+                        XCTAssertEqual(fpx.bank, "affin")
+                        XCTAssertEqual(fpx.email, "test@omise.co")
+                    default:
+                        XCTFail("Wrong source information on FPX charge retrieve")
+                    }
+                case let .failure(error):
+                    XCTFail("\(error)")
+                }
+            }
+            
+            XCTAssertNotNil(request)
+            waitForExpectations(timeout: 15.0, handler: nil)
+    }
+    
     func testChargeUpdate() {
         let expectation = self.expectation(description: "Charge update")
         

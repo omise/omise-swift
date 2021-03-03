@@ -15,6 +15,7 @@ public struct EnrolledSource: SourceData {
         case installment(SourceType.InstallmentBrand)
         case truemoney(Truemoney)
         case payWithPointsCiti
+        case fpx(FPX)
         
         case unknown(name: String, references: [String: Any]?)
         
@@ -129,6 +130,8 @@ public struct EnrolledSource: SourceData {
                 return Omise.SourceType.truemoney
             case .payWithPointsCiti:
                 return Omise.SourceType.payWithPointsCiti
+            case .fpx:
+                return Omise.SourceType.fpx
             case .unknown(name: let sourceName, references: _):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -155,7 +158,8 @@ public struct EnrolledSource: SourceData {
                 return lhsValue == rhsValue
             case (.installment(let lhsValue), .installment(let rhsValue)):
                 return lhsValue == rhsValue
-                
+            case (.fpx(let lhsValue), .fpx(let rhsValue)):
+                return lhsValue == rhsValue
                 
             default: return false
             }
@@ -213,6 +217,8 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case references
         case phoneNumber = "phone_number"
         case scannableCode = "scannable_code"
+        case bank
+        case email
     }
     
     public init(from decoder: Decoder) throws {
@@ -273,6 +279,9 @@ extension EnrolledSource.EnrolledPaymentInformation {
             self = .truemoney(truemoney)
         } else if typeValue == payWithPointsCitiValue {
             self = .payWithPointsCiti
+        } else if typeValue == fpxValue {
+            let fpx = try FPX(from: decoder)
+            self = .fpx(fpx)
         } else {
             let references = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: .references)
             self = .unknown(name: typeValue, references: references)
@@ -322,6 +331,10 @@ extension EnrolledSource.EnrolledPaymentInformation {
             try container.encode(truemoney.phoneNumber, forKey: .phoneNumber)
         case .payWithPointsCiti:
             try container.encode(sourceType, forKey: .type)
+        case .fpx(let fpx):
+            try container.encode(fpxValue, forKey: .type)
+            try container.encode(fpx.bank, forKey: .bank)
+            try container.encode(fpx.email, forKey: .email)
         case .unknown(name: let sourceType, references: let references):
             try container.encode(sourceType, forKey: .type)
             try container.encodeIfPresent(references, forKey: .references)

@@ -15,7 +15,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
     
     public let currency: Currency
     public let amount: Int64
-    
+
     public let flow: Flow
     public let paymentInformation: PaymentSourceInformation
     
@@ -31,7 +31,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
         case installment(Installment)
         case promptPay
         case payNow
-        
+        case fpx(FPX)
+
         case unknown(String)
         
         var sourceType: Omise.SourceType {
@@ -67,6 +68,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 return .promptPay
             case .payNow:
                 return .payNow
+            case .fpx:
+                return .fpx
             case .unknown(name: let sourceName):
                 return Omise.SourceType.unknown(sourceName)
             }
@@ -117,6 +120,8 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                 self = .promptPay
             } else if typeValue == payNowValue {
                 self = .payNow
+            } else if typeValue == fpxValue {
+                self = .fpx(try FPX(from: decoder))
             } else {
                 self = .unknown(typeValue)
             }

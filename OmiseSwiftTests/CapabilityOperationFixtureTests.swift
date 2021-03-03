@@ -11,13 +11,23 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(capability):
-                XCTAssertEqual(capability.supportedMethods.count, 16)
+                XCTAssertEqual(capability.supportedMethods.count, 17)
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))
                     XCTAssertEqual(creditCardMethod.supportedCurrencies, [.thb, .jpy, .usd, .eur, .gbp, .sgd, .aud, .chf, .cny, .dkk, .hkd])
                 } else {
                     XCTFail("Capability doesn't have the Credit Card backend")
+                }
+                
+                if let fpxMethod = capability[SourceType.fpx] {
+                    let firstBank = fpxMethod.banks[0]
+
+                    XCTAssertTrue(firstBank.isActive)
+                    XCTAssertEqual(firstBank.name, "KFH")
+                    XCTAssertEqual(firstBank.code, "kfh")
+                } else {
+                    XCTFail("Capability doesn't have the FPX backend")
                 }
                 
                 if let bayInstallmentMethod = capability[SourceType.installment(.bay)] {
@@ -85,6 +95,9 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(capability.creditCardMethod?.payment, decodedCapability.creditCardMethod?.payment)
         XCTAssertEqual(capability.creditCardMethod?.supportedCurrencies,
                        decodedCapability.creditCardMethod?.supportedCurrencies)
+        XCTAssertEqual(
+            capability[SourceType.fpx]?.banks,
+            decodedCapability[SourceType.fpx]?.banks)
         XCTAssertEqual(
             capability[SourceType.installment(.bay)]?.payment,
             decodedCapability[SourceType.installment(.bay)]?.payment)
