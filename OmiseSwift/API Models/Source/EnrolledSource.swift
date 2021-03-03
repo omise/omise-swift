@@ -195,7 +195,7 @@ public struct EnrolledSource: SourceData {
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
-        paymentInformation = try PaymentInformation.init(from: decoder)
+        paymentInformation = try PaymentInformation(from: decoder)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -221,6 +221,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case email
     }
     
+    // swiftlint:disable cyclomatic_complexity
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         

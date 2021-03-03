@@ -73,7 +73,7 @@ class TransferOperationsTest: LiveTest {
                 case let .failure(error):
                     XCTFail("\(error)")
                 }
-        }
+            }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }

@@ -158,7 +158,7 @@ extension Schedule {
         isActive = try container.decode(Bool.self, forKey: .isActive)
         
         every = try container.decode(Int.self, forKey: .every)
-        period = try Period.init(from: decoder)
+        period = try Period(from: decoder)
         
         startOnDateComponents = try container.decode(DateComponents.self, forKey: .startDate)
         endOnDateComponents = try container.decode(DateComponents.self, forKey: .endDate)

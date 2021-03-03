@@ -30,7 +30,7 @@ class DocumentOperationTest: LiveTest {
                         case let .failure(error):
                             XCTFail("\(error)")
                         }
-                })
+                    })
                 
                 XCTAssertNotNil(documentRequest)
             case let .failure(error):

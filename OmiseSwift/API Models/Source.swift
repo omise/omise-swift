@@ -102,9 +102,9 @@ public enum Source: SourceData {
 extension Source {
     public init(from decoder: Decoder) throws {
         do {
-            self = .enrolled(try EnrolledSource.init(from: decoder))
+            self = .enrolled(try EnrolledSource(from: decoder))
         } catch is DecodingError {
-            self = .source(try PaymentSource.init(from: decoder))
+            self = .source(try PaymentSource(from: decoder))
         }
     }
     

@@ -18,7 +18,7 @@ public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let idString = try container.decode(String.self)
-        if let id = DataID<Data>.init(idString: idString) {
+        if let id = DataID<Data>(idString: idString) {
             self = id
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid data ID value")

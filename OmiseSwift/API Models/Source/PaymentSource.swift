@@ -104,7 +104,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
                     .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
                 switch barcodeValue {
                 case SourceType.Barcode.alipay.rawValue:
-                    let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
+                    let alipayBarcode = try Barcode.AlipayBarcode(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
                 case SourceType.Barcode.weChatPay.rawValue:
                     let weChatPayBarcode = try Barcode.WeChatPayBarcode(from: decoder)

@@ -455,7 +455,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                        store_id=1&store_name=Main%20Store
                        """)
         
-        let createChargeParams = ChargeParams(value: Value.init(amount: 10_000_00, currency: .thb),
+        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
                                               sourceType: .barcode(Barcode.alipay(alipayBarcode)))
         let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
             queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
@@ -511,7 +511,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                        amount=1000&currency=THB&type=barcode_wechat&barcode=1234567890123456
                        """)
         
-        let createChargeParams = ChargeParams(value: Value.init(amount: 10_000_00, currency: .thb),
+        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
                                               sourceType: .barcode(Barcode.weChatPay(weChatPayBarcode)))
         let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
             queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
