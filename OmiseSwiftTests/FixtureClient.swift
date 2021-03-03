@@ -5,7 +5,7 @@ import Foundation
 class FixtureClient: APIClient {
     let fixturesDirectoryURL: URL
     
-    public override init(config: APIConfiguration) {
+    override init(config: APIConfiguration) {
         let bundle = Bundle(for: FixtureClient.self)
         self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
         

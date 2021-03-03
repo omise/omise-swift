@@ -1504,7 +1504,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                         https://api.omise.co/charges/chrg_test_5fzbagmkeikty9pdkgh/\
                         documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012
                         """
-                        ] as [String: String])
+                    ] as [String: String])
                 }
                 
             case let .failure(error):
@@ -1592,7 +1592,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                         https://api.omise.co/charges/chrg_test_5fzcfas8shggyzje7gw/\
                         documents/docu_test_5fzc7stfx9z2u3ohh4a/downloads/B6958F0720700012
                         """
-                        ] as [String: String])
+                    ] as [String: String])
                 default:
                     XCTFail("Wrong source information on Testco Lotus Bill Payment charge")
                 }

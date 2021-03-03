@@ -87,7 +87,7 @@ extension AnyJSONType: Encodable {
                 let value = AnyJSONType(value)
                 try container.encode(value, forKey: AnyJSONAttributeEncodingKey(stringValue: key))
             }
-        default: fatalError()
+        default: fatalError("Unexpected json object")
         }
     }
 }
@@ -121,7 +121,7 @@ class URLEncoderTest: OmiseTestCase {
             "5boolean": true,
             "6date": Date(timeIntervalSince1970: 0),
             "7nil": String?.none as String?
-            ] as [String: Any?])
+        ] as [String: Any?])
         
         let encoder = URLQueryItemEncoder()
         let result = try encoder.encode(values).map({ (query) in query.value ?? "$*nil*$" })
@@ -135,7 +135,7 @@ class URLEncoderTest: OmiseTestCase {
             "true",
             "1970-01-01T00:00:00Z",
             "$*nil*$"
-            ])
+        ])
     }
     
     // swiftlint:disable function_body_length
@@ -153,7 +153,7 @@ class URLEncoderTest: OmiseTestCase {
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
             "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
-            ])
+        ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -231,7 +231,7 @@ class URLEncoderTest: OmiseTestCase {
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
             "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
-            ])
+        ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .index
@@ -314,7 +314,7 @@ class URLEncoderTest: OmiseTestCase {
             "4242",
             "true",
             "2016-8-1"
-            ])
+        ])
     }
     
     func testConvertListParams() throws {
@@ -334,7 +334,7 @@ class URLEncoderTest: OmiseTestCase {
             expectedFromDateString,
             expectedToDateString,
             "chronological"
-            ])
+        ])
     }
     
     func testCreateChargeParams() throws {

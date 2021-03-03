@@ -65,7 +65,7 @@ class FixtureTestCase: OmiseTestCase {
         guard let data = try? Data(contentsOf: fileURL) else {
             throw NSError(domain: URLError.errorDomain, code: URLError.fileDoesNotExist.rawValue, userInfo: [
                 NSURLErrorFailingURLErrorKey: fileURL
-                ])
+            ])
         }
         
         return try decoder.decode(T.self, from: data)

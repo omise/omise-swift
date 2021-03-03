@@ -10,7 +10,7 @@ struct MetadataDummy: Decodable {
         case metadata
     }
     
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         metadata = try container.decode([String: Any].self, forKey: .metadata)
     }
