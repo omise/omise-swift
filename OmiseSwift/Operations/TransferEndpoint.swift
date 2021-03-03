@@ -8,7 +8,7 @@ extension Transfer {
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Transfer>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Transfer>>
     
-    public static func markAsSentEndpoint(for id : DataID<Transfer>) -> MarkEndpoint {
+    public static func markAsSentEndpoint(for id: DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_sent"],
             method: .post)
@@ -21,7 +21,7 @@ extension Transfer {
         return client.request(to: endpoint, callback: callback)
     }
     
-    public static func markAsPaidEndpoint(for id : DataID<Transfer>) -> MarkEndpoint {
+    public static func markAsPaidEndpoint(for id: DataID<Transfer>) -> MarkEndpoint {
         return MarkEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
             method: .post)

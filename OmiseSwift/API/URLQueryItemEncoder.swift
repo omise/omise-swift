@@ -228,9 +228,9 @@ extension URLQueryItemEncoder {
 }
 
 extension URLQueryItemEncoder: Encoder {
-    public var userInfo: [CodingUserInfoKey : Any] { return [:] }
+    public var userInfo: [CodingUserInfoKey: Any] { return [:] }
     
-    public func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
+    public func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         return KeyedEncodingContainer(KeyedContainer<Key>(encoder: self, codingPath: codingPath))
     }
     
@@ -248,7 +248,7 @@ extension URLQueryItemEncoder {
         let encoder: URLQueryItemEncoder
         let codingPath: [CodingKey]
         
-        func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
+        func encode<T>(_ value: T, forKey key: Key) throws where T: Encodable {
             let codingPath = self.codingPath + [key]
             encoder.codingPath = codingPath
             defer { encoder.codingPath.removeLast() }
@@ -264,7 +264,7 @@ extension URLQueryItemEncoder {
         
         func nestedContainer<NestedKey>(
             keyedBy keyType: NestedKey.Type, forKey key: Key
-            ) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+            ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey {
             return KeyedEncodingContainer(KeyedContainer<NestedKey>(encoder: encoder, codingPath: codingPath + [key]))
         }
         
@@ -300,7 +300,7 @@ extension URLQueryItemEncoder {
         
         func nestedContainer<NestedKey>(
             keyedBy keyType: NestedKey.Type
-            ) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+            ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey {
             codingPath.append(
                 URLQueryItemArrayElementKey(
                     index: encodedItemsCount,
@@ -336,7 +336,7 @@ extension URLQueryItemEncoder {
             encodedItemsCount += 1
         }
         
-        func encode<T>(_ value: T) throws where T : Encodable {
+        func encode<T>(_ value: T) throws where T: Encodable {
             codingPath.append(
                 URLQueryItemArrayElementKey(
                     index: encodedItemsCount,
@@ -416,7 +416,7 @@ extension URLQueryItemEncoder {
             try encoder.push(value, forKey: codingPath)
         }
         
-        mutating func encode<T>(_ value: T) throws where T : Encodable {
+        mutating func encode<T>(_ value: T) throws where T: Encodable {
             encoder.codingPath = self.codingPath
             try encoder.push(value, forKey: codingPath)
         }

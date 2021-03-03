@@ -65,7 +65,7 @@ extension Capability {
 
 
 extension Capability {
-    public struct Limit : Codable, Equatable, Hashable {
+    public struct Limit: Codable, Equatable, Hashable {
         public let max: Int64
         public let min: Int64
         
@@ -87,7 +87,7 @@ extension Capability {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
         public let banks: [BankDetails]
-        public enum Payment : Equatable {
+        public enum Payment: Equatable {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
             case internetBanking(InternetBanking)
@@ -365,7 +365,7 @@ extension Capability.Method {
 
 private let creditCardMethodTypeValue = "card"
 extension Capability.Method {
-    fileprivate enum Key : RawRepresentable, Hashable, Codable {
+    fileprivate enum Key: RawRepresentable, Hashable, Codable {
         case card
         case source(SourceType)
         

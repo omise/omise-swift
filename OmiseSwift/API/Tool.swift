@@ -185,7 +185,7 @@ struct JSONCodingKeys: CodingKey {
 }
 
 
-enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
+enum CombineCodingKeys<Left: CodingKey, Right: CodingKey>: CodingKey {
     var stringValue: String {
         switch self {
         case .left(let left):
@@ -228,7 +228,7 @@ enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
     case right(Right)
 }
 
-struct SkippingKeyCodingKeys<Key: CodingKey> : CodingKey {
+struct SkippingKeyCodingKeys<Key: CodingKey>: CodingKey {
     let stringValue: String
     
     init?(stringValue: String) {

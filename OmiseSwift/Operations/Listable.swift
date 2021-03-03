@@ -176,7 +176,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self : OmiseLocatableObject & Listable {
+public extension OmiseAPIChildObject where Self: OmiseLocatableObject & Listable {
     @discardableResult
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(

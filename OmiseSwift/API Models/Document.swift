@@ -1,9 +1,7 @@
 import Foundation
 
 
-public struct Document
-    : OmiseLocatableObject, OmiseIdentifiableObject,
-      OmiseLiveModeObject, OmiseCreatedObject, Equatable {
+public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject, Equatable {
     public static let resourcePath = "documents"
     public static let idPrefix: String = "docu"
     

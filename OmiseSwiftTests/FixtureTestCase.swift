@@ -22,8 +22,7 @@ class FixtureTestCase: OmiseTestCase {
         
         var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
         fileURL.appendPathComponent(
-            String(T.resourcePath.suffix(from:
-                T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex)))
+            String(T.resourcePath.suffix(from: T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex)))
         var dataIDComponent = dataID
         
         if let suffix = suffix {
@@ -52,8 +51,7 @@ class FixtureTestCase: OmiseTestCase {
         
         var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
         var dataIDComponent = String(
-            T.resourcePath.suffix(from:
-                T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex))
+            T.resourcePath.suffix(from: T.resourcePath.firstIndex(where: { $0 != "/"}) ?? T.resourcePath.startIndex))
         
         if let suffix = suffix {
             dataIDComponent += "-\(suffix)"

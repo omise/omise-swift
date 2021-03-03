@@ -107,7 +107,7 @@ public struct Charge: OmiseResourceObject, Equatable {
 
 extension Charge {
     
-    public enum Status : Equatable {
+    public enum Status: Equatable {
         case failed(ChargeFailure)
         case expired
         case reversed
@@ -124,7 +124,7 @@ extension Charge {
         case failed
     }
     
-    public enum SourceOfFund : String, Codable, Equatable {
+    public enum SourceOfFund: String, Codable, Equatable {
         case card
         case offsite
         case offline
