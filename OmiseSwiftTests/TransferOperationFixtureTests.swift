@@ -135,7 +135,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
                     case .other(let code) = failure.code {
                     XCTAssertEqual(code, "other")
                 } else {
-                    XCTFail()
+                    XCTFail("Unexpected transfer status")
                 }
             case let .failure(error):
                 XCTFail("\(error)")
@@ -165,7 +165,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             case .other(let decodedTransferFailedCode) = decodedTransferFailed.code {
             XCTAssertEqual(transferFailedCode, decodedTransferFailedCode)
         } else {
-            XCTFail()
+            XCTFail("Unexpected transfer status")
         }
     }
 }

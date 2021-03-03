@@ -173,7 +173,8 @@ extension Dispute.Reason: Equatable {
             
         case "not_available":
             self = .notAvailable
-        case "other": fallthrough
+        case "other":
+            self = .other
         default:
             self = .other
         }

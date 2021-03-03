@@ -33,7 +33,7 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 if let bayInstallmentMethod = capability[SourceType.installment(.bay)] {
                     XCTAssertEqual(
                         bayInstallmentMethod.payment,
-                        .installment(.bay, availableNumberOfTerms: IndexSet(arrayLiteral: 3, 4, 6, 9, 10)))
+                        .installment(.bay, availableNumberOfTerms: IndexSet([3, 4, 6, 9, 10])))
                     XCTAssertEqual(bayInstallmentMethod.supportedCurrencies, [.thb])
                 } else {
                     XCTFail("Capability doesn't have the BAY Installment backend")
