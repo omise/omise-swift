@@ -471,7 +471,11 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         
         let updateParams = UpdateChargeParams(chargeDescription: "Charge for order 3947 (XXL)", metadata: metadata)
         
-        let request = Charge.update(using: testClient, id: "chrg_test_5fzbppsjk5q9cxqjz0o", params: updateParams) { (result) in
+        let request = Charge.update(
+            using: testClient,
+            id: "chrg_test_5fzbppsjk5q9cxqjz0o",
+            params: updateParams
+        ) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -836,7 +840,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                     XCTAssertEqual(scannableCode?.object, "barcode")
                     XCTAssertEqual(image?.id, "docu_test_5jcmh5zy9loubnch5th")
                     XCTAssertEqual(image?.filename, "qrcode.png")
-                    XCTAssertEqual(image?.location, "/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th")
+                    XCTAssertEqual(image?.location,
+                                   "/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th")
                     XCTAssertEqual(image?.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jcmh5y5z3g5hurbu8o/documents/docu_test_5jcmh5zy9loubnch5th/downloads/25624FE66C9AA7F7")
                 default:
                     XCTFail("Wrong source information on PromptPay charge")
@@ -870,7 +875,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                     XCTAssertEqual(scannableCode?.object, "barcode")
                     XCTAssertEqual(image?.id, "docu_test_5jdsrqn9ziozwpylicq")
                     XCTAssertEqual(image?.filename, "qrcode.png")
-                    XCTAssertEqual(image?.location, "/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq")
+                    XCTAssertEqual(image?.location,
+                                   "/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq")
                     XCTAssertEqual(image?.downloadURL?.absoluteString, "https://api.omise.co/charges/chrg_test_5jdsrqlycr0rrwfzgkq/documents/docu_test_5jdsrqn9ziozwpylicq/downloads/D372681E6E6BFBA7")
                 default:
                     XCTFail("Wrong source information on PromptPay charge")
@@ -919,9 +925,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
         XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
-        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
+        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType,
+                       decodedCharge.source?.paymentInformation.sourceType)
         switch (defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation) {
-        case (EnrolledSource.EnrolledPaymentInformation.truemoney(let truemoney)?, EnrolledSource.EnrolledPaymentInformation.truemoney(let decodedTruemoney)?):
+        case (.truemoney(let truemoney)?, .truemoney(let decodedTruemoney)?):
             XCTAssertEqual(truemoney.phoneNumber, decodedTruemoney.phoneNumber)
         default:
             XCTFail("Wrong source information on Truemoney charge")
@@ -992,7 +999,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.flow, decodedCharge.source?.flow)
         XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
-        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType, decodedCharge.source?.paymentInformation.sourceType)
+        XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType,
+                       decodedCharge.source?.paymentInformation.sourceType)
         XCTAssertEqual(decodedCharge.source?.paymentInformation.sourceType, .payWithPointsCiti)
     }
     
@@ -1229,7 +1237,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 case let .success(charge):
                     XCTAssertEqual(charge.value.amount, 100)
                     XCTAssertEqual(charge.status, .pending)
-                    XCTAssertEqual(charge.source?.paymentInformation.sourceType, EnrolledSource.EnrolledPaymentInformation.mobileBanking(.scb).sourceType)
+                    XCTAssertEqual(charge.source?.paymentInformation, .mobileBanking(.scb))
                     XCTAssertEqual(charge.source?.flow, .appRedirect)
                     XCTAssertEqual(charge.authorizeURL, URL(string: "http://lvh.me:52000/confirm_test?payload=pj%25C1ak%259C%25D44%25C2%2526%25CE%25CA%2584%2513%25D2%25BF%25F1%25DE%257B%25ED%2529_%250A%257Bu%25E3%2504%25D1%25A8%25C0%25BF%25A9%25E4%25AD%259F%2587%25BBh%259F%2589%25C2%25C5G%25B6U%25B8%258D%25C1%252B%259B%25BEe%25F1%25E7%253FQ%250C8%2501%251F%258B%2599%25094%2512%25CB%25DD%25E5i%25E8%25CD%255D%25A1%25A9%25F5%25E0%2599%250D%2502%2580%25F4%253C%250C%2505%250B%25C6l%2529%2523Q%25CC%253D%25C0%2582Z%251A%25B1%259D%257F%25B1%255E%25A5%2591%2589%25D6%25DEU%25AB%25A1%25CC%253BS%25E7hY%25BB%25A0%25A1hp%2523%25E2%250Ee%25F2l%252B%2525"))
                     XCTAssertEqual(charge.returnURL, URL(string: "scbeasysim://purchase/811bbdf9-7255-4d4b-af20-002848c5e84b"))
@@ -1572,7 +1580,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.id, "src_test_5fzc7socrzb7an79lj9")
                 XCTAssertEqual(charge.source?.flow, .offline)
                 switch charge.source?.paymentInformation {
-                case EnrolledSource.EnrolledPaymentInformation.billPayment(.unknown(name: let name, references: let references))?:
+                case .billPayment(.unknown(name: let name, references: let references))?:
                     XCTAssertEqual(name, "papaya")
                     XCTAssertEqual((references as? [String: String]) ?? [:], [
                         "omise_tax_id": "0105556091152",

@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject, Equatable {
+public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public static let resourcePath = "documents"
     public static let idPrefix: String = "docu"
     
@@ -16,6 +16,8 @@ public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLive
     public let filename: String
     public let downloadURL: URL?
 }
+
+extension Document: Equatable { }
 
 extension Document {
     private enum CodingKeys: String, CodingKey {

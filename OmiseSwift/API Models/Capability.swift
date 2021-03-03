@@ -264,14 +264,16 @@ extension Capability.Method {
         switch payment {
         case .card(let brands):
             var paymentConfigurations = encoder.container(
-                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self
+            )
             try paymentConfigurations.encode(brands, forKey: .right(.brands))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
             try paymentConfigurations.encode(Key.card, forKey: .left(.name))
         case .installment(let brand, availableNumberOfTerms: let availableNumberOfTerms):
             var paymentConfigurations = encoder.container(
-                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self
+            )
             try paymentConfigurations.encode(Array(availableNumberOfTerms), forKey: .right(.allowedInstallmentTerms))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))

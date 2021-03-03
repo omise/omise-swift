@@ -287,7 +287,11 @@ extension KeyedDecodingContainerProtocol {
             }
             
             guard let boolValue = Bool(value) else {
-                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a boolean")
+                throw DecodingError.dataCorruptedError(
+                    forKey: key,
+                    in: self,
+                    debugDescription: "Invalid Omise API Value for a boolean"
+                )
             }
             
             return boolValue
@@ -304,7 +308,11 @@ extension KeyedDecodingContainerProtocol {
             }
             
             guard let doubleValue = Double(value) else {
-                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a double")
+                throw DecodingError.dataCorruptedError(
+                    forKey: key,
+                    in: self,
+                    debugDescription: "Invalid Omise API Value for a double"
+                )
             }
             
             return doubleValue

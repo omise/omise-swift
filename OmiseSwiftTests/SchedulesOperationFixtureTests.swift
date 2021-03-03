@@ -180,7 +180,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 return
         }
         XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
-        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count,
+                       decodedSchedule.nextOccurrencesOnDateComponents.count)
         
         XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
         XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)

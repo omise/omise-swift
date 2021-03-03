@@ -340,7 +340,8 @@ public struct Installment: Codable, Equatable {
         case .scb:
             return IndexSet([ 3, 4, 6, 9, 10 ])
         case .unknown:
-            return IndexSet(1...360) // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
+            // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
+            return IndexSet(1...360)
         }
     }
     

@@ -15,7 +15,8 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 
                 if let creditCardMethod = capability.creditCardMethod {
                     XCTAssertEqual(creditCardMethod.payment, .card([]))
-                    XCTAssertEqual(creditCardMethod.supportedCurrencies, [.thb, .jpy, .usd, .eur, .gbp, .sgd, .aud, .chf, .cny, .dkk, .hkd])
+                    XCTAssertEqual(creditCardMethod.supportedCurrencies,
+                                   [.thb, .jpy, .usd, .eur, .gbp, .sgd, .aud, .chf, .cny, .dkk, .hkd])
                 } else {
                     XCTFail("Capability doesn't have the Credit Card backend")
                 }

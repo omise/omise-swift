@@ -317,7 +317,11 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientInternetBankingSource() {
         let expectation = self.expectation(description: "Creating Resilient Internet Banking Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .internetBanking(.unknown("oms")))
+        let createParams = PaymentSourceParams(
+            amount: 1_000_00,
+            currency: .thb,
+            type: .internetBanking(.unknown("oms"))
+        )
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
