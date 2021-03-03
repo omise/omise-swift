@@ -53,9 +53,9 @@ public class APIClient: NSObject {
             performCallback {
                 callback?(.failure(err))
             }
-        } catch let err {
+        } catch {
             performCallback {
-                callback?(.failure(.other(err)))
+                callback?(.failure(.other(error)))
             }
         }
         

@@ -12,7 +12,7 @@ public class URLQueryItemEncoder {
         case index
     }
     
-    fileprivate(set) public var codingPath: [CodingKey] = []
+    public fileprivate(set) var codingPath: [CodingKey] = []
     fileprivate var items: [URLQueryItem] = []
     public var arrayIndexEncodingStrategy = ArrayIndexEncodingStrategy.emptySquareBrackets
     public init() {}

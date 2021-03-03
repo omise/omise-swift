@@ -9,10 +9,10 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     public let order: Ordering
     
     public var loadedPages = 0..<0
-    private(set) public var total: Int = 0
-    private(set) public var numberOfItemsPerPage: Int = 0
-    private(set) public var totalPages: Int = 0
-    private(set) public var data: [TItem] = [] {
+    public private(set) var total: Int = 0
+    public private(set) var numberOfItemsPerPage: Int = 0
+    public private(set) var totalPages: Int = 0
+    public private(set) var data: [TItem] = [] {
         didSet {
             dataUpdatedHandler?(data)
         }

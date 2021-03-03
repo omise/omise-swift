@@ -2,14 +2,14 @@ import Foundation
 
 
 public class List<TItem: OmiseLocatableObject & Listable> {
-    private(set) public var from: Date
-    private(set) public var to: Date
+    public private(set) var from: Date
+    public private(set) var to: Date
     var loadedIndices = 0..<0
     public let order: Ordering
     
-    private(set) public var limit: Int = 0
-    private(set) public var total: Int = 0
-    private(set) public var data: [TItem] = [] {
+    public private(set) var limit: Int = 0
+    public private(set) var total: Int = 0
+    public private(set) var data: [TItem] = [] {
         didSet {
             dataUpdatedHandler?(data)
         }

@@ -44,18 +44,18 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
         let fixtureFileURL = (client as! FixtureClient).fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
         DispatchQueue.global().async {
             let data: Data?
-            let error: Error?
+            let thrownError: Error?
             
             defer {
-                self.didComplete(data: data, error: error)
+                self.didComplete(data: data, error: thrownError)
             }
             
             do {
                 data = try Data(contentsOf: fixtureFileURL)
-                error = nil
-            } catch let thrownError {
+                thrownError = nil
+            } catch {
                 data = nil
-                error = thrownError
+                thrownError = error
             }
         }
         return self

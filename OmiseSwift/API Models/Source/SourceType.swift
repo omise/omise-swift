@@ -119,7 +119,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case unknown(String)
     
     public enum BillPayment: RawRepresentable, Equatable, Hashable {
-        static private let tescoLotusValue = "tesco_lotus"
+        private static let tescoLotusValue = "tesco_lotus"
         case tescoLotus
         case unknown(String)
         
@@ -143,8 +143,8 @@ public enum SourceType: Codable, Equatable, Hashable {
     }
     
     public enum Barcode: RawRepresentable, Equatable, Hashable {
-        static private let alipayValue = "alipay"
-        static private let weChatPayValue = "wechat"
+        private static let alipayValue = "alipay"
+        private static let weChatPayValue = "wechat"
         
         case alipay
         case weChatPay

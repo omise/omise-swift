@@ -69,8 +69,8 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         } catch let err as OmiseError {
             result = .failure(err)
             
-        } catch let err {
-            result = .failure(.other(err))
+        } catch {
+            result = .failure(.other(error))
         }
         
         performCallback(result)

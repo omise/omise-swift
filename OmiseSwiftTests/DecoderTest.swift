@@ -52,8 +52,8 @@ class DecodeTests: XCTestCase {
             XCTAssertTrue(array.count == 2)
             XCTAssertEqual(array[0] as? String, "value_1")
             XCTAssertEqual(array[1] as? String, "value_2")
-        } catch let thrownError {
-            XCTFail(thrownError.localizedDescription)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
     
