@@ -99,6 +99,7 @@ private struct AnyJSONAttributeEncodingKey: CodingKey {
     init(stringValue: String) { self.stringValue = stringValue }
 }
 
+// swiftlint:disable type_body_length
 class URLEncoderTest: OmiseTestCase {
     func testEncodeBasic() throws {
         let values = AnyJSONType(["hello": "world"])
@@ -137,6 +138,7 @@ class URLEncoderTest: OmiseTestCase {
             ])
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeNestedWithEmptyIndexStrategy() throws {
         let values = AnyJSONType([
             "0outer": "normal",

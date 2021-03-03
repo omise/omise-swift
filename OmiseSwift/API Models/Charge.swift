@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 
 
@@ -194,6 +196,7 @@ extension Charge {
         case metadata
     }
     
+    // swiftlint:disable function_body_length
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)

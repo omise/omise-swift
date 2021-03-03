@@ -1,7 +1,9 @@
+// swiftlint:disable file_length
+
 import XCTest
 @testable import Omise
 
-
+// swiftlint:disable type_body_length
 class SchedulesOperationFixtureTests: FixtureTestCase {
     func testScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")

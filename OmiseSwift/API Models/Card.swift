@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 
 public enum CardBrand: String, Codable, Equatable {

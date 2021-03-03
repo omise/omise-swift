@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 
 
@@ -253,6 +255,7 @@ extension Capability.Method {
         }
     }
     
+    // swiftlint:disable function_body_length
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         try container.encode(supportedCurrencies, forKey: .supportedCurrencies)

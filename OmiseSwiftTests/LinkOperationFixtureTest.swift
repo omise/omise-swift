@@ -23,6 +23,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeLinkRetrieve() throws {
         let defaultLink = try fixturesObjectFor(type: Link.self, dataID: linkTestingID)
         

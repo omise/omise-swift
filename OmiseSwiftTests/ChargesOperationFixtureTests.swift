@@ -1,9 +1,12 @@
+// swiftlint:disable file_length
+
 import XCTest
 @testable import Omise
 
 
 private let defaultReturnURL = URL(string: "https://omise.co")!
 
+// swiftlint:disable type_body_length
 class ChargesOperationFixtureTests: FixtureTestCase {
     func testChargeRetrieve() {
         let chargeTestingID: DataID<Charge>  = "chrg_test_5fzbppsjk5q9cxqjz0o"
@@ -130,6 +133,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeDisputedCharge() throws {
         let defaultCharge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5flpmtdmcibefxk7bxc")
         

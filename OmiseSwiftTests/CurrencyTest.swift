@@ -4,6 +4,7 @@ import Omise
 
 class CurrencyTest: XCTestCase {
     
+    // swiftlint:disable function_body_length
     func testSupportedCurrencies() {
         do {
             let currency = Currency(code: "THB")

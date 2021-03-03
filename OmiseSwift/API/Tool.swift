@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 #if os(iOS)
 import UIKit
