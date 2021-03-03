@@ -77,6 +77,7 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -97,7 +98,7 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-        
     }
 }

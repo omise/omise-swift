@@ -36,6 +36,7 @@ class TransferOperationsTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -55,6 +56,7 @@ class TransferOperationsTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -75,6 +77,7 @@ class TransferOperationsTest: LiveTest {
                 }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -92,9 +95,9 @@ class TransferOperationsTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-    
     
     func testCreateAndDestroy() {
         let expectation = self.expectation(description: "transfer create")
@@ -117,12 +120,14 @@ class TransferOperationsTest: LiveTest {
                         XCTFail("\(error)")
                     }
                 }
+                XCTAssertNotNil(destroyRequest)
             case let .failure(error):
                 XCTFail("\(error)")
                 deleteExpectaion.fulfill()
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
 }

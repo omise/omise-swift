@@ -183,6 +183,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -203,6 +204,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -223,6 +225,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -243,6 +246,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -263,6 +267,7 @@ class DisputeOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     

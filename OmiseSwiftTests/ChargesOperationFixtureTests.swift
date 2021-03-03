@@ -243,6 +243,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -261,13 +262,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.fundingValue.amount, 10_000_00)
                 XCTAssertEqual(charge.fundingValue.currency, .thb)
-                
-                
             case let .failure(error):
                 XCTFail("\(error)")
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -291,6 +291,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -326,6 +327,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -350,6 +352,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -376,6 +379,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -481,6 +485,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -577,7 +582,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
         XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType,
                        decodedCharge.source?.paymentInformation.sourceType)
-        
     }
     
     func testAlipayChargeRetrieve() {
@@ -1032,7 +1036,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.amount, decodedCharge.source?.amount)
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
         XCTAssertEqual(defaultCharge.source?.paymentInformation, decodedCharge.source?.paymentInformation)
-
     }
     
     func testEncodingCreateChargeParams() throws {
@@ -1144,10 +1147,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testSCBInstallmentChargeRetrieve() throws {
         let chargeTestingID: DataID<Charge>  = "chrg_5lbteqohxzy2945n6wx"
         let expectation = self.expectation(description: "Charge result")
-        
+
         let request = Charge.retrieve(using: testClient, id: chargeTestingID) { (result) in
             defer { expectation.fulfill() }
-            
+
             switch result {
             case let .success(charge):
                 XCTAssertEqual(charge.id, chargeTestingID)
@@ -1162,7 +1165,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTFail("\(error)")
             }
         }
-        
+
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -1198,7 +1201,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                                         sourceType: .mobileBanking(.scb),
                                         returnURL: defaultReturnURL)
         
-        Charge.create(using: testClient, params: createParams) { (result) in
+        let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -1212,6 +1215,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -1468,7 +1472,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.source?.currency, decodedCharge.source?.currency)
         XCTAssertEqual(defaultCharge.source?.paymentInformation.sourceType,
                        decodedCharge.source?.paymentInformation.sourceType)
-        
     }
     
     func testResilientSourceChargeRetrieve() {

@@ -59,9 +59,9 @@ class TransferOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-    
     
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
@@ -80,6 +80,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -99,6 +100,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -116,9 +118,9 @@ class TransferOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-    
     
     func testTransferOtherFailureCode() {
         let expectation = self.expectation(description: "transfer result")

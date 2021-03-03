@@ -36,6 +36,7 @@ class LinkOperationTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -58,7 +59,7 @@ class LinkOperationTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-
     }
 }

@@ -78,9 +78,9 @@ class RefundOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-    
     
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
@@ -98,6 +98,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
