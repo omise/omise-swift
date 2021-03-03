@@ -39,8 +39,8 @@ public struct DocumentParams: APIFileQuery {
     public var filename: String
     public var fileContent: Data
     
-    public init(url: URL) {
-        self.fileContent = try! Data(contentsOf: url, options: .mappedIfSafe)
+    public init(url: URL) throws {
+        self.fileContent = try Data(contentsOf: url, options: .mappedIfSafe)
         self.filename = url.lastPathComponent
     }
 }

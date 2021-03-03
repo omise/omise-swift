@@ -20,7 +20,7 @@ private let customer: Customer = {
     
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
-    return try! decoder.decode(Customer.self, from: data)
+    return try! decoder.decode(Customer.self, from: data) // swiftlint:disable:this force_try
 }()
 
 

@@ -39,6 +39,8 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
     
     override func start() throws -> Self {
         let fixtureFilePath = endpoint.fixtureFilePath
+        
+        // swiftlint:disable force_cast
         let fixtureFileURL = (client as! FixtureClient).fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
         DispatchQueue.global().async {
             let data: Data?

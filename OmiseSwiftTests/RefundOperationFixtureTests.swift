@@ -19,7 +19,7 @@ private let charge: Charge = {
     
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
-    return try! decoder.decode(Charge.self, from: data)
+    return try! decoder.decode(Charge.self, from: data) // swiftlint:disable:this force_try
 }()
 
 class RefundOperationFixtureTests: FixtureTestCase {

@@ -15,7 +15,10 @@ class DocumentOperationTest: LiveTest {
                 let fileURL = Bundle(for: DocumentOperationTest.self)
                     .url(forResource: "ScreenShot", withExtension: "png")!
                 
-                let params = DocumentParams(url: fileURL)
+                guard let params = try? DocumentParams(url: fileURL) else {
+                    return XCTFail("Failed to create document params from url: \(fileURL.absoluteString)")
+                }
+                
                 let documentRequest = Document.create(
                     using: self.testClient, parent: dispute, params: params,
                     callback: { (documentResult) in
