@@ -27,7 +27,7 @@
         "percentage": null
     },
     "currency": "MYR",
-    "funding_currency": "THB",
+    "funding_currency": "MYR",
     "ip": null,
     "refunds": {
         "object": "list",

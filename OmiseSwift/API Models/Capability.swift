@@ -86,7 +86,7 @@ extension Capability {
     public struct Method: Codable, Equatable {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
-        public let banks: [BankStatus]
+        public let banks: [BankDetails]
         public enum Payment : Equatable {
             case card(Set<CardBrand>)
             case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
@@ -102,7 +102,7 @@ extension Capability {
             case fpx
             case unknownSource(String, configurations: JSONDictionary)
         }
-        public struct BankStatus: Codable, Hashable {
+        public struct BankDetails: Codable, Hashable {
             public let code: String
             public let name: String
             public let active: Bool
@@ -209,7 +209,7 @@ extension Capability.Method {
         
         let sourceTypeKey = try container.decode(Capability.Method.Key.self, forKey: .name)
         supportedCurrencies = try container.decode(Set<Currency>.self, forKey: .supportedCurrencies)
-        banks = try container.decode([BankStatus].self,forKey:.banks)
+        banks = try container.decode([BankDetails].self,forKey:.banks)
 
         switch sourceTypeKey {
         case .card:

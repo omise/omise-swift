@@ -93,11 +93,11 @@ public enum MobileBanking: RawRepresentable, Equatable, Hashable {
     case unknown(String)
 }
 
-public struct FPX: Codable, Equatable , Hashable{
+public struct FPX: Codable, Equatable , Hashable {
     public let email: String?
     public let bank: FPXBank
     
-    public init(bank: FPXBank,email: String? = nil){
+    public init(bank: FPXBank,email: String? = nil) {
         self.bank = bank
         self.email = email
     }
