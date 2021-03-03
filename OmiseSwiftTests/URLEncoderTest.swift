@@ -78,7 +78,7 @@ extension AnyJSONType: Encodable {
         case let value as [Encodable]:
             var container = encoder.unkeyedContainer()
             try container.encode(contentsOf: value.map(AnyJSONType.init))
-        case let value as Dictionary<String, AnyJSONType>:
+        case let value as [String: AnyJSONType]:
             var container = encoder.container(keyedBy: AnyJSONAttributeEncodingKey.self)
             let sortedValuesByKey = value.sorted(by: { (first, second) -> Bool in
                 return first.key < second.key
@@ -119,8 +119,8 @@ class URLEncoderTest: OmiseTestCase {
             "4bool": false,
             "5boolean": true,
             "6date": Date(timeIntervalSince1970: 0),
-            "7nil": String?.none as Optional<String>
-            ] as [String: Optional<Any>])
+            "7nil": String?.none as String?
+            ] as [String: Any?])
         
         let encoder = URLQueryItemEncoder()
         let result = try encoder.encode(values).map({ (query) in query.value ?? "$*nil*$" })

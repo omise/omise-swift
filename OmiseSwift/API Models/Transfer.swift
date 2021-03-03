@@ -114,7 +114,7 @@ extension Transfer {
         net = try container.decode(Int64.self, forKey: .net)
         totalFee = try container.decode(Int64.self, forKey: .totalFee)
         recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
-        transactions = try container.decode(Array<Transaction<Transfer>>.self, forKey: .transactions)
+        transactions = try container.decode([Transaction<Transfer>].self, forKey: .transactions)
         
         let failureCode = try container.decodeIfPresent(TransferFailure.Code.self, forKey: .failureCode)
         let failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)

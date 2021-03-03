@@ -59,7 +59,7 @@ extension Dispute {
         reasonCode = try container.decode(Reason.self, forKey: .reasonCode)
         responseMessage = try container.decodeIfPresent(String.self, forKey: .responseMessage)
         adminMessage = try container.decodeIfPresent(String.self, forKey: .adminMessage)
-        transactions = try container.decode(Array<Transaction<Dispute>>.self, forKey: .transactions)
+        transactions = try container.decode([Transaction<Dispute>].self, forKey: .transactions)
         charge = try container.decode(DetailProperty<Charge>.self, forKey: .charge)
         documents = try container.decode(ListProperty<Document>.self, forKey: .documents)
         closedDate = try container.decodeIfPresent(Date.self, forKey: .closedDate)

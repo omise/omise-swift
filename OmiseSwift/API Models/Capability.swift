@@ -342,11 +342,11 @@ extension Capability.Method {
                     try configurationContainers.encode(value, forKey: .right(key))
                 case let value as Double:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case let value as Dictionary<String, Any>:
+                case let value as [String: Any]:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case let value as Array<Any>:
+                case let value as [Any]:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case Optional<Any>.none:
+                case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
                     try configurationContainers.encodeNil(forKey: .right(key))
                 default:
                     throw EncodingError.invalidValue(
