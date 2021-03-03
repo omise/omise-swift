@@ -169,14 +169,14 @@ extension Refund: OmiseAPIChildObject {
 
 extension Charge {
     public func retrieveRefund(
-        using client: APIClient, id: DataID<Refund>, 
+        using client: APIClient, id: DataID<Refund>,
         callback: @escaping Refund.RetrieveRequest.Callback
         ) -> Refund.RetrieveRequest? {
         return Refund.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     
     public func createRefund(
-        using client: APIClient, params: RefundParams, 
+        using client: APIClient, params: RefundParams,
         callback: @escaping Refund.CreateRequest.Callback
         ) -> Refund.CreateRequest? {
         return Refund.create(using: client, parent: self, params: params, callback: callback)

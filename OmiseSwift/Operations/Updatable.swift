@@ -37,7 +37,7 @@ public extension APIClient {
 }
 
 
-public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {    
+public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {
     static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),

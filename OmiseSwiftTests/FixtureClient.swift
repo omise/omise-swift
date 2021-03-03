@@ -2,7 +2,7 @@ import Foundation
 @testable import Omise
 
 
-class FixtureClient: APIClient {    
+class FixtureClient: APIClient {
     let fixturesDirectoryURL: URL
     
     public override init(config: APIConfiguration) {

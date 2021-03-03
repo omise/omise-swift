@@ -8,7 +8,7 @@ import AppKit
 
 
 // We provide the banks information file in a JSON file format.
-// This JSON's keys are the country code of supported banks and 
+// This JSON's keys are the country code of supported banks and
 // values are maps from the bank's ID to a JSON dictionary containing bank's information
 // [ "th": [ "test": [ /* bank's information */ ] ] ]
 private let banks: [String: [String: JSONDictionary]] = {

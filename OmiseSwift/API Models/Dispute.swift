@@ -300,7 +300,7 @@ extension Dispute: Searchable {
 
 extension Dispute {
     public static func list(
-        using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, 
+        using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil,
         callback: @escaping ListRequest.Callback
         ) -> ListRequest? {
         let endpoint = ListEndpoint(

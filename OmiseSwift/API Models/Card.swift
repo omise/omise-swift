@@ -178,7 +178,7 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     }
 }
 
-extension Card {    
+extension Card {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         do {

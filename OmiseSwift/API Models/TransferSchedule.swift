@@ -1,7 +1,6 @@
 import Foundation
 
 
-
 public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
     public static let idPrefix: String = "rtrf"
     

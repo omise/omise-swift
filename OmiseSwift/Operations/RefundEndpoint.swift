@@ -14,7 +14,7 @@ public extension Refund {
     
     @discardableResult
     static func list(
-        using client: APIClient, params: ListParams? = nil, 
+        using client: APIClient, params: ListParams? = nil,
         callback: ListRequest.Callback?
         ) -> ListRequest? {
         let endpoint = self.listEndpoint(with: params)
