@@ -14,7 +14,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .alipay)
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -55,7 +55,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .billPayment(.tescoLotus))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -96,7 +96,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .internetBanking(.scb))
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -137,7 +137,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.alipay))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -185,7 +185,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.weChatPay))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -225,7 +225,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateInternetBankingSCBSource() {
         let expectation = self.expectation(description: "Creating Internet Banking SCB Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
                                                type: .internetBanking(.scb))
 
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -233,7 +233,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.internetBanking(.scb))
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -248,7 +248,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateAlipaySource() {
         let expectation = self.expectation(description: "Creating Alipay Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
                                                type: .alipay)
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -256,7 +256,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.alipay)
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -271,7 +271,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateTescoLotusBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Tesco Lotus Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
                                                type: .billPayment(.tescoLotus))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -279,7 +279,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.billPayment(.tescoLotus))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -294,7 +294,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Resilient Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
                                                type: .billPayment(SourceType.BillPayment.unknown("papaya")))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -302,7 +302,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.billPayment(.unknown("papaya")))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -318,7 +318,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Creating Resilient Internet Banking Source")
         
         let createParams = PaymentSourceParams(
-            amount: 1_000_00,
+            amount: 100_000,
             currency: .thb,
             type: .internetBanking(.unknown("oms"))
         )
@@ -328,7 +328,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.internetBanking(.unknown("oms")))
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -350,14 +350,14 @@ class SourceOperationFixtureTests: FixtureTestCase {
             "terminal_id": String?.none as Any
         ])
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .barcode(omiseBarcode))
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .barcode(omiseBarcode))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 1000000)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.barcode(SourceType.Barcode.unknown("omise")))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -385,14 +385,14 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientSource() {
         let expectation = self.expectation(description: "Creating Resilient Source")
         
-        let createParams = PaymentSourceParams(amount: 1_000_00, currency: .thb, type: .unknown("omise"))
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .unknown("omise"))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 1_000_00)
+                XCTAssertEqual(source.amount, 100_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, SourceType.unknown("omise"))
                 XCTAssertEqual(source.flow, Flow.redirect)
@@ -409,7 +409,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let alipayBarcode = AlipayBarcodeParams(storeID: "store_1", storeName: "store 1",
                                                 terminalID: nil, barcode: "1234567890")
-        let createParams = PaymentSourceParams(amount: 1000000, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 1_000_000, currency: .thb,
                                                type: .barcode(Barcode.alipay(alipayBarcode)))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -417,7 +417,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 1000000)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.alipay))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -441,7 +441,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testEncodeAlipayBarcodeSource() throws {
         let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store",
                                                 terminalID: nil, barcode: "1234567890123456")
-        let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb,
+        let createSourceParams = PaymentSourceParams(amount: 1000, currency: .thb,
                                                      type: .barcode(.alipay(alipayBarcode)))
         
         let encoder = URLQueryItemEncoder()
@@ -455,7 +455,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                        store_id=1&store_name=Main%20Store
                        """)
         
-        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+        let createChargeParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
                                               sourceType: .barcode(Barcode.alipay(alipayBarcode)))
         let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
             queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
@@ -471,7 +471,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Creating Barcode WeChatPay Source")
         
         let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890")
-        let createParams = PaymentSourceParams(amount: 1000000, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 1_000_000, currency: .thb,
                                                type: .barcode(Barcode.weChatPay(weChatPayBarcode)))
         
         _ = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -479,7 +479,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 1000000)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .barcode(SourceType.Barcode.weChatPay))
                 XCTAssertEqual(source.flow, Flow.offline)
@@ -498,7 +498,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     
     func testEncodeWeChatPayBarcodeSource() throws {
         let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890123456")
-        let createSourceParams = PaymentSourceParams(amount: 1_000, currency: .thb,
+        let createSourceParams = PaymentSourceParams(amount: 1000, currency: .thb,
                                                      type: .barcode(.weChatPay(weChatPayBarcode)))
         
         let encoder = URLQueryItemEncoder()
@@ -511,7 +511,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                        amount=1000&currency=THB&type=barcode_wechat&barcode=1234567890123456
                        """)
         
-        let createChargeParams = ChargeParams(value: Value(amount: 10_000_00, currency: .thb),
+        let createChargeParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
                                               sourceType: .barcode(Barcode.weChatPay(weChatPayBarcode)))
         let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
             queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
@@ -530,7 +530,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(source):
-                XCTAssertEqual(source.amount, 10_000_00)
+                XCTAssertEqual(source.amount, 1_000_000)
                 XCTAssertEqual(source.currency, .thb)
                 XCTAssertEqual(source.sourceType, .installment(.bay))
                 XCTAssertEqual(source.flow, Flow.redirect)

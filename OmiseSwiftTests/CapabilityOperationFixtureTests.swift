@@ -42,32 +42,32 @@ class CapabilityOperationFixtureTests: FixtureTestCase {
                 
                 do {
                     let chargeParams = ChargeParams(
-                        value: Value(amount: 100_00, currency: .thb),
+                        value: Value(amount: 10_000, currency: .thb),
                         sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
-                        value: Value(amount: 10_00, currency: .thb),
+                        value: Value(amount: 1000, currency: .thb),
                         sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
-                        value: Value(amount: 100_000_000_00, currency: .thb),
+                        value: Value(amount: 10_000_000_000, currency: .thb),
                         sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 6)))
                     XCTAssertTrue(capability ~= chargeParams)
                 }
                 do {
                     let chargeParams = ChargeParams(
-                        value: Value(amount: 100_00, currency: .thb),
+                        value: Value(amount: 10_000, currency: .thb),
                         sourceType: .installment(Installment.CreateParameter(brand: .bay, numberOfTerms: 5)))
                     XCTAssertFalse(capability ~= chargeParams)
                 }
                 
                 do {
                     let chargeParams = ChargeParams(
-                        value: Value(amount: 100_00, currency: .thb),
+                        value: Value(amount: 10_000, currency: .thb),
                         cardID: "tokn_test_123456789abcd")
                     XCTAssertTrue(capability ~= chargeParams)
                 }

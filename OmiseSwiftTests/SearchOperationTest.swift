@@ -18,7 +18,7 @@ class SearchOperationTest: LiveTest {
             case let .success(charges):
                 XCTAssertEqual(charges.data.count, 30)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.value.amount, 1_000_00)
+                XCTAssertEqual(samplingCharge?.value.amount, 100_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -43,7 +43,7 @@ class SearchOperationTest: LiveTest {
             case let .success(charges):
                 XCTAssertEqual(charges.data.count, 3)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.value.amount, 10_000_00)
+                XCTAssertEqual(samplingCharge?.value.amount, 1_000_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -73,7 +73,7 @@ class SearchOperationTest: LiveTest {
             case let .success(charges):
                 XCTAssertEqual(charges.data.count, 2)
                 let samplingCharge = charges.data.first
-                XCTAssertEqual(samplingCharge?.value.amount, 100000)
+                XCTAssertEqual(samplingCharge?.value.amount, 100_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }

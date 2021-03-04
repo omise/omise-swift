@@ -12,7 +12,7 @@ class LinkOperationTest: LiveTest {
             
             switch result {
             case let .success(link):
-                XCTAssertEqual(link.value.amount, 1490000)
+                XCTAssertEqual(link.value.amount, 1_490_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -43,7 +43,7 @@ class LinkOperationTest: LiveTest {
         let expectation = self.expectation(description: "link update")
         
         let createParams = LinkParams(
-            value: Value(amount: 1_000_00, currency: .thb),
+            value: Value(amount: 100_000, currency: .thb),
             title: "Link for testing",
             linkDescription: "Testing create link from Omise Swift SDK")
         

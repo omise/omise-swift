@@ -27,10 +27,10 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receipt.chargeFee, 0)
                 XCTAssertEqual(receipt.voidedFee, 0)
                 XCTAssertEqual(receipt.transferFee, 0)
-                XCTAssertEqual(receipt.feeSubtotal, 1460000)
-                XCTAssertEqual(receipt.vat, 102200)
+                XCTAssertEqual(receipt.feeSubtotal, 1_460_000)
+                XCTAssertEqual(receipt.vat, 102_200)
                 XCTAssertEqual(receipt.wht, 0)
-                XCTAssertEqual(receipt.total, 1562200)
+                XCTAssertEqual(receipt.total, 1_562_200)
                 XCTAssertEqual(receipt.issuedDateComponents,
                                DateComponents(calendar: Calendar(identifier: .gregorian),
                                               year: 2019, month: 3, day: 11))
@@ -104,10 +104,10 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receiptSampleData?.chargeFee, 0)
                 XCTAssertEqual(receiptSampleData?.voidedFee, 0)
                 XCTAssertEqual(receiptSampleData?.transferFee, 0)
-                XCTAssertEqual(receiptSampleData?.feeSubtotal, 1460000)
-                XCTAssertEqual(receiptSampleData?.vat, 102200)
+                XCTAssertEqual(receiptSampleData?.feeSubtotal, 1_460_000)
+                XCTAssertEqual(receiptSampleData?.vat, 102_200)
                 XCTAssertEqual(receiptSampleData?.wht, 0)
-                XCTAssertEqual(receiptSampleData?.total, 1562200)
+                XCTAssertEqual(receiptSampleData?.total, 1_562_200)
                 XCTAssertEqual(receiptSampleData?.issuedDateComponents,
                                DateComponents(calendar: Calendar(identifier: .gregorian),
                                               year: 2019, month: 3, day: 11))

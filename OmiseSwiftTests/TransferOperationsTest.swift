@@ -11,8 +11,8 @@ class TransferOperationsTest: LiveTest {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 1_000_00)
-                XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502010909.0))
+                XCTAssertEqual(transfer.value.amount, 100_000)
+                XCTAssertEqual(transfer.sentDate, Date(timeIntervalSinceReferenceDate: 502_010_909.0))
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -42,7 +42,7 @@ class TransferOperationsTest: LiveTest {
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams(amount: 96094)
+        let createParams = TransferParams(amount: 96_094)
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -61,7 +61,7 @@ class TransferOperationsTest: LiveTest {
     func testTransferUpdate() {
         let expectation = self.expectation(description: "transfer update")
         
-        let updateParams = UpdateTransferParams(amount: 96094)
+        let updateParams = UpdateTransferParams(amount: 96_094)
         
         let request = Transfer
             .update(using: testClient, id: "trsf_test_54h7uzmwu5v79mgri6d", params: updateParams) { (result) in
@@ -69,7 +69,7 @@ class TransferOperationsTest: LiveTest {
                 
                 switch result {
                 case let .success(transfer):
-                    XCTAssertEqual(transfer.value.amount, 96094)
+                    XCTAssertEqual(transfer.value.amount, 96_094)
                 case let .failure(error):
                     XCTFail("\(error)")
                 }
@@ -99,7 +99,7 @@ class TransferOperationsTest: LiveTest {
     func testCreateAndDestroy() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams(amount: 96094)
+        let createParams = TransferParams(amount: 96_094)
         let deleteExpectaion = self.expectation(description: "transfer delete")
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in

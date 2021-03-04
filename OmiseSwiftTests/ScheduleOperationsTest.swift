@@ -8,7 +8,7 @@ class ScheduleOperationsTest: LiveTest {
     func testCreateEveryMonthChargeSchedule() {
         let expectation = self.expectation(description: "Create Schedule result")
         
-        let parameter = ChargeSchedulingParameter(value: Value(amount: 36_900_00, currency: .thb),
+        let parameter = ChargeSchedulingParameter(value: Value(amount: 3_690_000, currency: .thb),
                                                   customerID: "cust_test_582o6hikunmz90lx0wl", cardID: nil,
                                                   description: nil)
         let params = ScheduleParams<Charge>(
@@ -28,7 +28,7 @@ class ScheduleOperationsTest: LiveTest {
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2018, month: 5, day: 29))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 36_900_00)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 3_690_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_582o6hikunmz90lx0wl")
             case let .failure(error):

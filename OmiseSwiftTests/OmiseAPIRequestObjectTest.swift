@@ -69,12 +69,12 @@ class OmiseAPIRequestObjectTest: FixtureTestCase {
         
         do {
             let charge = try fixturesObjectFor(type: Charge.self, dataID: "chrg_test_5frvn3hgya3qemayzrt")
-            let refundParams = RefundParams(amount: 10_00)
+            let refundParams = RefundParams(amount: 1000)
             let request = Refund.createEndpointWith(parent: charge, params: refundParams)
             XCTAssertEqual(request.pathComponents,
                            [Charge.resourcePath, charge.id.idString, Refund.resourcePath])
             XCTAssertEqual(request.method, .post)
-            XCTAssertEqual(request.query?.amount, 10_00)
+            XCTAssertEqual(request.query?.amount, 1000)
         }
     }
 }

@@ -31,7 +31,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(refund):
-                XCTAssertEqual(refund.value.amount, 100000)
+                XCTAssertEqual(refund.value.amount, 100_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -85,7 +85,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
         
-        let createParams = RefundParams(amount: 10000)
+        let createParams = RefundParams(amount: 10_000)
         
         let request = Refund.create(using: testClient, parent: charge, params: createParams) { (result) in
             defer { expectation.fulfill() }

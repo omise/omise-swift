@@ -27,7 +27,7 @@ class AccountAndBalanceOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(balance):
-                XCTAssertEqual(balance.transferableAmount, 60102095)
+                XCTAssertEqual(balance.transferableAmount, 60_102_095)
             case let .failure(err):
                 XCTFail("\(err)")
             }

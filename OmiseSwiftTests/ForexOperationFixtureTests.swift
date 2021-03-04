@@ -13,7 +13,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
             case let .success(forex):
                 XCTAssertEqual(forex.quote, .thb)
                 XCTAssertEqual(forex.base, .usd)
-                XCTAssertEqual(forex.rate, 32.84666705)
+                XCTAssertEqual(forex.rate, 32.846_667_05)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -27,7 +27,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultForex.base, .usd)
         XCTAssertEqual(defaultForex.quote, .thb)
-        XCTAssertEqual(defaultForex.rate, 32.84666705)
+        XCTAssertEqual(defaultForex.rate, 32.846_667_05)
         XCTAssertEqual(defaultForex.location, "/forex/usd")
         XCTAssertEqual(defaultForex.object, "forex")
         
@@ -56,7 +56,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
             case let .success(forex):
                 XCTAssertEqual(forex.quote, .thb)
                 XCTAssertEqual(forex.base, .jpy)
-                XCTAssertEqual(forex.rate, 0.29617176959999997)
+                XCTAssertEqual(forex.rate, 0.296_171_769_599_999_97)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -70,7 +70,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultForex.base, .jpy)
         XCTAssertEqual(defaultForex.quote, .thb)
-        XCTAssertEqual(defaultForex.rate, 0.29617176959999997)
+        XCTAssertEqual(defaultForex.rate, 0.296_171_769_599_999_97)
         XCTAssertEqual(defaultForex.location, "/forex/jpy")
         XCTAssertEqual(defaultForex.object, "forex")
         
@@ -99,7 +99,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
             case let .success(forex):
                 XCTAssertEqual(forex.quote, .thb)
                 XCTAssertEqual(forex.base, .sgd)
-                XCTAssertEqual(forex.rate, 24.054176718999997)
+                XCTAssertEqual(forex.rate, 24.054_176_718_999_997)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -113,7 +113,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultForex.base, .sgd)
         XCTAssertEqual(defaultForex.quote, .thb)
-        XCTAssertEqual(defaultForex.rate, 24.054176718999997)
+        XCTAssertEqual(defaultForex.rate, 24.054_176_718_999_997)
         XCTAssertEqual(defaultForex.location, "/forex/sgd")
         XCTAssertEqual(defaultForex.object, "forex")
         
@@ -142,7 +142,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
             case let .success(forex):
                 XCTAssertEqual(forex.quote, .thb)
                 XCTAssertEqual(forex.base, .eur)
-                XCTAssertEqual(forex.rate, 36.784682468599996)
+                XCTAssertEqual(forex.rate, 36.784_682_468_599_996)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -156,7 +156,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultForex.base, .eur)
         XCTAssertEqual(defaultForex.quote, .thb)
-        XCTAssertEqual(defaultForex.rate, 36.784682468599996)
+        XCTAssertEqual(defaultForex.rate, 36.784_682_468_599_996)
         XCTAssertEqual(defaultForex.location, "/forex/eur")
         XCTAssertEqual(defaultForex.object, "forex")
         
@@ -185,7 +185,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
             case let .success(forex):
                 XCTAssertEqual(forex.quote, .thb)
                 XCTAssertEqual(forex.base, .gbp)
-                XCTAssertEqual(forex.rate, 42.8132877978)
+                XCTAssertEqual(forex.rate, 42.813_287_797_8)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -199,7 +199,7 @@ class ForexOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(defaultForex.base, .gbp)
         XCTAssertEqual(defaultForex.quote, .thb)
-        XCTAssertEqual(defaultForex.rate, 42.8132877978)
+        XCTAssertEqual(defaultForex.rate, 42.813_287_797_8)
         XCTAssertEqual(defaultForex.location, "/forex/gbp")
         XCTAssertEqual(defaultForex.object, "forex")
         
