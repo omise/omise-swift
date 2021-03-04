@@ -177,10 +177,9 @@ extension Schedule {
         if let parameterKey = parameterKey {
             scheduleData = try container.decode(Data.ScheduleData.self, forKey: parameterKey)
         } else {
-            throw DecodingError.keyNotFound(
-                Schedule<Data>.CodingKeys.parameter("parameter"),
-                DecodingError.Context(codingPath: container.codingPath,
-                                      debugDescription: "Missing scheduling parameter"))
+            let errorContext = DecodingError.Context(codingPath: container.codingPath,
+                                                     debugDescription: "Missing scheduling parameter")
+            throw DecodingError.keyNotFound(Schedule<Data>.CodingKeys.parameter("parameter"), errorContext)
         }
     }
     

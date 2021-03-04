@@ -157,8 +157,9 @@ extension Period: Codable {
                     onWeekdayOfMonth = (ordinal, weekday)
                 } else {
                     throw DecodingError.dataCorrupted(
-                        DecodingError.Context(codingPath: decoder.codingPath,
-                                              debugDescription: "Invalid Weekdays of month value"))
+                        DecodingError.Context(
+                            codingPath: decoder.codingPath,
+                            debugDescription: "Invalid Weekdays of month value"))
                 }
             } else {
                 onWeekdayOfMonth = nil
@@ -195,8 +196,7 @@ extension Period.MonthlyPeriodRule.DayOfMonth: Codable {
         let value = try container.decode(Int.self)
         guard -31...31 ~= value else {
             throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: decoder.codingPath,
-                                      debugDescription: "Invalid day of month value"))
+                DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
         }
         self.day = value
     }
@@ -219,8 +219,7 @@ extension Period.MonthlyPeriodRule.Ordinal: Decodable {
             self = .last
         default:
             throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: decoder.codingPath,
-                                      debugDescription: "Invalid day of month value"))
+                DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Invalid day of month value"))
         }
     }
 }

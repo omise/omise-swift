@@ -550,12 +550,16 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Create Schedule result")
         
         let parameter = ChargeSchedulingParameter(value: Value(amount: 1_000_000, currency: .thb),
-                                                  customerID: "cust_test_5fz0olfpy32zadv96ek", cardID: nil,
+                                                  customerID: "cust_test_5fz0olfpy32zadv96ek",
+                                                  cardID: nil,
                                                   description: nil)
         let params = ScheduleParams<Charge>(
-            every: 1, period: .monthly(.daysOfMonth([1, 16])),
+            every: 1,
+            period: .monthly(.daysOfMonth([1, 16])),
             endDate: DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2020, month: 5, day: 23),
-            startDate: nil, scheduleData: parameter)
+            startDate: nil,
+            scheduleData: parameter
+        )
         let request = Schedule<Charge>.create(using: testClient, params: params) { (result) in
             defer { expectation.fulfill() }
             

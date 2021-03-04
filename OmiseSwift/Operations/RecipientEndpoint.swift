@@ -11,7 +11,8 @@ extension Recipient {
     ) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Recipient.resourcePath, recipientID.idString, Schedule<Transfer>.resourcePath ],
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult

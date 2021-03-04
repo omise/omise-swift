@@ -11,7 +11,8 @@ extension Customer {
     ) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Customer.resourcePath, customerID.idString, Schedule<Charge>.resourcePath ],
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult

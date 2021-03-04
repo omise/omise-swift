@@ -11,7 +11,8 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return SingletonRetrieveEndpoint(
             pathComponents: [Self.resourcePath],
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(

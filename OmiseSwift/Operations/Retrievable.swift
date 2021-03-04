@@ -21,7 +21,8 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(
@@ -49,7 +50,8 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(

@@ -14,7 +14,8 @@ public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiable
     static func updateEndpoint(for id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: makeResourcePaths(id: id),
-            method: .patch, query: params)
+            method: .patch,
+            query: params)
     }
     
     static func update(
@@ -44,7 +45,8 @@ public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableOb
     static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {
         return UpdateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            method: .patch, query: params)
+            method: .patch,
+            query: params)
     }
     
     static func update(

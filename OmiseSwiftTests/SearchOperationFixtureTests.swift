@@ -35,16 +35,23 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeChargeFilterParams() throws {
         let filterParams = ChargeFilterParams(
-            amount: 1000.00, isAuthorized: true,
-            isAutoCapture: false, isCaptured: true,
+            amount: 1000.00,
+            isAuthorized: true,
+            isAutoCapture: false,
+            isCaptured: true,
             capturedDate: SearchOperationFixtureTests.dateComponents,
             cardLastDigits: Digits(digitsString: "4242"),
-            createdDate: SearchOperationFixtureTests.dateComponents, isCustomerPresent: true,
+            createdDate: SearchOperationFixtureTests.dateComponents,
+            isCustomerPresent: true,
             isDisputed: true,
-            failureCode: ChargeFailure.Code.amountMismatch, failureMessage: "Failure Message",
-            isRefunded: false, refundAmount: 500.0,
-            isReversed: nil, status: .successful,
-            sourceOfFund: .card, isVoided: nil)
+            failureCode: ChargeFailure.Code.amountMismatch,
+            failureMessage: "Failure Message",
+            isRefunded: false,
+            refundAmount: 500.0,
+            isReversed: nil,
+            status: .successful,
+            sourceOfFund: .card,
+            isVoided: nil)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -76,8 +83,10 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeRefundFilterParams() throws {
         let filterParams = RefundFilterParams(
-            amount: 1000.00, cardLastDigits: Digits(digitsString: "4242"),
-            createdDate: SearchOperationFixtureTests.dateComponents, isVoided: false)
+            amount: 1000.00,
+            cardLastDigits: Digits(digitsString: "4242"),
+            createdDate: SearchOperationFixtureTests.dateComponents,
+            isVoided: false)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -96,7 +105,8 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeDisputeFilterParams() throws {
         let filterParams = DisputeFilterParams(
-            amount: 1000.00, cardLastDigits: Digits(digitsString: "4242"),
+            amount: 1000.00,
+            cardLastDigits: Digits(digitsString: "4242"),
             closedDate: SearchOperationFixtureTests.dateComponents,
             createdDate: SearchOperationFixtureTests.dateComponents,
             currency: .thb,
@@ -121,9 +131,11 @@ class SearchOperationFixtureTests: FixtureTestCase {
     
     func testEncodeRecipientFilterParams() throws {
         let filterParams = RecipientFilterParams(
-            isActive: false, activatedDate: SearchOperationFixtureTests.dateComponents,
+            isActive: false,
+            activatedDate: SearchOperationFixtureTests.dateComponents,
             bankLastDigits: Digits(digitsString: "4242"),
-            isDeleted: true, type: Recipient.RecipientType.individual)
+            isDeleted: true,
+            type: Recipient.RecipientType.individual)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -161,7 +173,8 @@ class SearchOperationFixtureTests: FixtureTestCase {
         let filterParams = LinkFilterParams(
             amount: 1000.00,
             created: SearchOperationFixtureTests.dateComponents,
-            isMultiple: false, isUsed: true,
+            isMultiple: false,
+            isUsed: true,
             usedDate: SearchOperationFixtureTests.dateComponents)
         
         let encoder = JSONEncoder()
@@ -186,8 +199,10 @@ class SearchOperationFixtureTests: FixtureTestCase {
             created: SearchOperationFixtureTests.dateComponents,
             isDeleted: true,
             fee: 500.0,
-            isPaid: true, paidDate: SearchOperationFixtureTests.dateComponents,
-            isSent: false, sentDate: SearchOperationFixtureTests.dateComponents)
+            isPaid: true,
+            paidDate: SearchOperationFixtureTests.dateComponents,
+            isSent: false,
+            sentDate: SearchOperationFixtureTests.dateComponents)
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601

@@ -82,9 +82,9 @@ private func parsingDateComponentsValue(_ value: String, codingPath: [CodingKey]
         scanner.scanString("-", into: nil) &&
         scanner.scanInt(&lastInt)
         else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: codingPath,
-                                      debugDescription: "Invalid Date Components value"))
+        let errorContext = DecodingError.Context(codingPath: codingPath,
+                                                 debugDescription: "Invalid Date Components value")
+        throw DecodingError.dataCorrupted(errorContext)
     }
     
     month = secondInt

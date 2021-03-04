@@ -260,7 +260,8 @@ extension Charge {
             status = .unknown(statusValue)
         case (_, .some, .some), (_, .some, .none), (_, .none, .some):
             throw DecodingError.dataCorruptedError(
-                forKey: .failureCode, in: container,
+                forKey: .failureCode,
+                in: container,
                 debugDescription: "Invalid Charge Failure status.")
         }
         
@@ -434,9 +435,12 @@ public struct ChargeParams: APIJSONQuery {
         metadata: [String: Any]? = nil
     ) {
         self.init(
-            value: value, payment: .customer(customerID: customerID, cardID: cardID),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .customer(customerID: customerID, cardID: cardID),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
@@ -448,9 +452,12 @@ public struct ChargeParams: APIJSONQuery {
         metadata: [String: Any]? = nil
     ) {
         self.init(
-            value: value, payment: .card(tokenID: cardID),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .card(tokenID: cardID),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
@@ -462,9 +469,12 @@ public struct ChargeParams: APIJSONQuery {
         metadata: [String: Any]? = nil
     ) {
         self.init(
-            value: value, payment: .source(source),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .source(source),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
@@ -476,9 +486,12 @@ public struct ChargeParams: APIJSONQuery {
         metadata: [String: Any]? = nil
     ) {
         self.init(
-            value: value, payment: .sourceType(sourceType),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .sourceType(sourceType),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
 }
 

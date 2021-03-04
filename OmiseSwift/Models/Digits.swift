@@ -27,8 +27,8 @@ extension Digits: Codable {
         let value = try container.decode(String.self)
         guard !value.isEmpty &&
             value.rangeOfCharacter(from: Digits.invalidCharacterSet) == nil else {
-                let context = DecodingError.Context(
-                    codingPath: decoder.codingPath, debugDescription: "Invalid Digits value")
+                let context = DecodingError.Context(codingPath: decoder.codingPath,
+                                                    debugDescription: "Invalid Digits value")
                 throw DecodingError.dataCorrupted(context)
         }
         

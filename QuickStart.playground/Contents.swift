@@ -88,8 +88,10 @@ Balance.retrieve(using: client) { (result) in
  ````
  */
 func createToken() {
-    let params = TokenParams(number: "4242424242424242", name: "Omise Appleseed",
-                             expiration: (10, 2020), securityCode: "123")
+    let params = TokenParams(number: "4242424242424242",
+                             name: "Omise Appleseed",
+                             expiration: (10, 2020),
+                             securityCode: "123")
     
     Token.create(using: client, usingKey: AnyAccessKey(publicKey), params: params) { (result) in
         switch result {

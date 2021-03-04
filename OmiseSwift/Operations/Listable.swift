@@ -35,7 +35,8 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
     static func listEndpoint(with params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: makeResourcePaths(),
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult
@@ -74,11 +75,15 @@ public extension List {
             return initialEndpoint
         }
         let listParams = ListParams(
-            offset: loadedIndices.last?.advanced(by: 1) ?? 0, limit: count ?? limit, order: order)
+            offset: loadedIndices.last?.advanced(by: 1) ?? 0,
+            limit: count ?? limit,
+            order: order)
         
         return TItem.ListEndpoint(
-            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            method: .get, query: listParams)
+            endpoint: initialEndpoint.endpoint,
+            pathComponents: initialEndpoint.pathComponents,
+            method: .get,
+            query: listParams)
     }
     
     @discardableResult
@@ -103,11 +108,15 @@ public extension List {
             return initialEndpoint
         }
         let listParams = ListParams(
-            offset: loadedFirstIndex.advanced(by: -limit), limit: count ?? limit, order: order)
+            offset: loadedFirstIndex.advanced(by: -limit),
+            limit: count ?? limit,
+            order: order)
         
         return TItem.ListEndpoint(
-            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            method: .get, query: listParams)
+            endpoint: initialEndpoint.endpoint,
+            pathComponents: initialEndpoint.pathComponents,
+            method: .get,
+            query: listParams)
     }
     
     @discardableResult
@@ -150,8 +159,10 @@ public extension List where TItem: OmiseCreatedObject {
         }
         
         return TItem.ListEndpoint(
-            endpoint: initialEndpoint.endpoint, pathComponents: initialEndpoint.pathComponents,
-            method: .get, query: listParams)
+            endpoint: initialEndpoint.endpoint,
+            pathComponents: initialEndpoint.pathComponents,
+            method: .get,
+            query: listParams)
     }
     
     @discardableResult
@@ -191,7 +202,8 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & Listable
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
         return ListEndpoint(
             pathComponents: makeResourcePathsWith(parent: parent),
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult
@@ -232,7 +244,8 @@ public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
     ) -> ListAPIEndpoint<Children> where Children.Parent == Self {
         return ListAPIEndpoint<Children>(
             pathComponents: Children.makeResourcePathsWith(parent: self),
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult
@@ -255,7 +268,8 @@ public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
     ) -> ListAPIEndpoint<Children> {
         return ListAPIEndpoint<Children>(
             pathComponents: Self.makeResourcePathsWith(parent: self, keyPath: keyPath),
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     @discardableResult

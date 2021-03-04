@@ -192,9 +192,8 @@ extension Capability {
         isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
         
         supportedMethods = try container.decode(Array<Capability.Method>.self, forKey: .paymentMethods)
-        methods = Dictionary(
-            uniqueKeysWithValues: zip(supportedMethods.map({ Capability.Method.Key(payment: $0.payment) }),
-                                      supportedMethods))
+        let supportedMethodKeys = supportedMethods.map({ Capability.Method.Key(payment: $0.payment) })
+        methods = Dictionary(uniqueKeysWithValues: zip(supportedMethodKeys, supportedMethods))
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -357,10 +356,9 @@ extension Capability.Method {
                 case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
                     try configurationContainers.encodeNil(forKey: .right(key))
                 default:
-                    throw EncodingError.invalidValue(
-                        value,
-                        EncodingError.Context(codingPath: configurationContainers.codingPath + [key],
-                                              debugDescription: "Invalid JSON value"))
+                    let errorContext = EncodingError.Context(codingPath: configurationContainers.codingPath + [key],
+                                                             debugDescription: "Invalid JSON value")
+                    throw EncodingError.invalidValue(value, errorContext)
                 }
             })
             

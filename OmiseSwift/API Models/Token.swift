@@ -100,7 +100,8 @@ extension Token: Retrievable {
         return RetrieveEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath, id],
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(
@@ -121,7 +122,8 @@ extension Token: Creatable {
         return CreateEndpoint(
             endpoint: .vault(key),
             pathComponents: [Token.resourcePath],
-            method: .post, query: params)
+            method: .post,
+            query: params)
     }
     
     public static func create(

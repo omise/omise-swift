@@ -8,7 +8,8 @@ extension Forex {
     public static func retrieveEndpoint(exchangeFrom currency: Currency) -> Forex.RetrieveEndpoint {
         return Forex.RetrieveEndpoint(
             pathComponents: [resourcePath, currency.code ],
-            method: .get, query: nil)
+            method: .get,
+            query: nil)
     }
     
     public static func retrieve(

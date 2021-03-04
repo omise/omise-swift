@@ -225,8 +225,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateInternetBankingSCBSource() {
         let expectation = self.expectation(description: "Creating Internet Banking SCB Source")
         
-        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
-                                               type: .internetBanking(.scb))
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .internetBanking(.scb))
 
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -248,8 +247,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateAlipaySource() {
         let expectation = self.expectation(description: "Creating Alipay Source")
         
-        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
-                                               type: .alipay)
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .alipay)
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -271,8 +269,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateTescoLotusBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Tesco Lotus Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
-                                               type: .billPayment(.tescoLotus))
+        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .billPayment(.tescoLotus))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
             defer { expectation.fulfill() }
@@ -294,7 +291,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testResilientBillPaymentSource() {
         let expectation = self.expectation(description: "Creating Resilient Bill Payment Source")
         
-        let createParams = PaymentSourceParams(amount: 100_000, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 100_000,
+                                               currency: .thb,
                                                type: .billPayment(SourceType.BillPayment.unknown("papaya")))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -407,9 +405,12 @@ class SourceOperationFixtureTests: FixtureTestCase {
     func testCreateBarcodeAlipaySource() throws {
         let expectation = self.expectation(description: "Creating Barcode Alipay Source")
         
-        let alipayBarcode = AlipayBarcodeParams(storeID: "store_1", storeName: "store 1",
-                                                terminalID: nil, barcode: "1234567890")
-        let createParams = PaymentSourceParams(amount: 1_000_000, currency: .thb,
+        let alipayBarcode = AlipayBarcodeParams(storeID: "store_1",
+                                                storeName: "store 1",
+                                                terminalID: nil,
+                                                barcode: "1234567890")
+        let createParams = PaymentSourceParams(amount: 1_000_000,
+                                               currency: .thb,
                                                type: .barcode(Barcode.alipay(alipayBarcode)))
         
         let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -439,9 +440,12 @@ class SourceOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodeAlipayBarcodeSource() throws {
-        let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store",
-                                                terminalID: nil, barcode: "1234567890123456")
-        let createSourceParams = PaymentSourceParams(amount: 1000, currency: .thb,
+        let alipayBarcode = AlipayBarcodeParams(storeID: "1",
+                                                storeName: "Main Store",
+                                                terminalID: nil,
+                                                barcode: "1234567890123456")
+        let createSourceParams = PaymentSourceParams(amount: 1000,
+                                                     currency: .thb,
                                                      type: .barcode(.alipay(alipayBarcode)))
         
         let encoder = URLQueryItemEncoder()
@@ -480,7 +484,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Creating Barcode WeChatPay Source")
         
         let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890")
-        let createParams = PaymentSourceParams(amount: 1_000_000, currency: .thb,
+        let createParams = PaymentSourceParams(amount: 1_000_000,
+                                               currency: .thb,
                                                type: .barcode(Barcode.weChatPay(weChatPayBarcode)))
         
         _ = PaymentSource.create(using: testClient, params: createParams, callback: { result in
@@ -507,7 +512,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
     
     func testEncodeWeChatPayBarcodeSource() throws {
         let weChatPayBarcode = WeChatPayBarcodeParams(barcode: "1234567890123456")
-        let createSourceParams = PaymentSourceParams(amount: 1000, currency: .thb,
+        let createSourceParams = PaymentSourceParams(amount: 1000,
+                                                     currency: .thb,
                                                      type: .barcode(.weChatPay(weChatPayBarcode)))
         
         let encoder = URLQueryItemEncoder()

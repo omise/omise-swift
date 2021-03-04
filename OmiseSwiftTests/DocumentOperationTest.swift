@@ -17,7 +17,9 @@ class DocumentOperationTest: LiveTest {
             case let .success(dispute):
                 
                 let documentRequest = Document.create(
-                    using: self.testClient, parent: dispute, params: documentParams,
+                    using: self.testClient,
+                    parent: dispute,
+                    params: documentParams,
                     callback: { (documentResult) in
                         defer { expectation.fulfill() }
                         

@@ -313,7 +313,8 @@ extension Dispute {
     ) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourcePath, state.rawValue],
-            method: .get, query: nil)
+            method: .get,
+            query: nil)
         
         return client.request(to: endpoint, callback: callback)
     }

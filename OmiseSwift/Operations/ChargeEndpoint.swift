@@ -20,7 +20,8 @@ extension Charge {
     public static func captureEndpoint(for id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(
             pathComponents: [resourcePath, id.idString, "capture"],
-            method: .post, query: nil)
+            method: .post,
+            query: nil)
     }
     
     public static func capture(
@@ -35,7 +36,8 @@ extension Charge {
     public static func reverseEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "reverse"],
-            method: .post, query: nil)
+            method: .post,
+            query: nil)
     }
     
     public static func reverse(
@@ -50,7 +52,8 @@ extension Charge {
     public static func expireEndpoint(for id: DataID<Charge>) -> ReverseEndpoint {
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "expire"],
-            method: .post, query: nil)
+            method: .post,
+            query: nil)
     }
     
     public static func expire(
@@ -67,7 +70,8 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_paid"],
-            method: .post, query: nil)
+            method: .post,
+            query: nil)
     }
     
     public static func markAsPaid(
@@ -84,7 +88,8 @@ extension Charge {
         
         return ReverseEndpoint(
             pathComponents: [resourcePath, id.idString, "mark_as_failed"],
-            method: .post, query: nil)
+            method: .post,
+            query: nil)
     }
     
     public static func markAsFailed(

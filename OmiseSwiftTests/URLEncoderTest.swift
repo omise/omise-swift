@@ -351,9 +351,13 @@ class URLEncoderTest: OmiseTestCase {
     
     func testCreateChargeParams() throws {
         let createChargeParams = ChargeParams(
-            value: Value(amount: 1_000_000, currency: .thb), cardID: "crd_test_12345",
-            chargeDescription: "A charge description", isAutoCapture: true, returnURL: URL(string: "https://omise.co"),
-            metadata: ["customer-id": "1", "stock-count": 66_473])
+            value: Value(amount: 1_000_000, currency: .thb),
+            cardID: "crd_test_12345",
+            chargeDescription: "A charge description",
+            isAutoCapture: true,
+            returnURL: URL(string: "https://omise.co"),
+            metadata: ["customer-id": "1", "stock-count": 66_473]
+        )
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets

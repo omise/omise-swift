@@ -29,9 +29,10 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receipt.vat, 102_200)
                 XCTAssertEqual(receipt.wht, 0)
                 XCTAssertEqual(receipt.total, 1_562_200)
-                XCTAssertEqual(receipt.issuedDateComponents,
-                               DateComponents(calendar: Calendar(identifier: .gregorian),
-                                              year: 2019, month: 3, day: 11))
+                XCTAssertEqual(receipt.issuedDateComponents, DateComponents(calendar: Calendar(identifier: .gregorian),
+                                                                            year: 2019,
+                                                                            month: 3,
+                                                                            day: 11))
                 XCTAssertEqual(receipt.currency, .thb)
                 XCTAssertFalse(receipt.isCreditNote)
             case let .failure(error):
@@ -108,7 +109,9 @@ class ReceiptsOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(receiptSampleData?.total, 1_562_200)
                 XCTAssertEqual(receiptSampleData?.issuedDateComponents,
                                DateComponents(calendar: Calendar(identifier: .gregorian),
-                                              year: 2019, month: 3, day: 11))
+                                              year: 2019,
+                                              month: 3,
+                                              day: 11))
                 XCTAssertEqual(receiptSampleData?.currency, .thb)
                 XCTAssertEqual(receiptSampleData?.isCreditNote, false)
 

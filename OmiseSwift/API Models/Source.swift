@@ -220,7 +220,8 @@ public enum Barcode: Codable, Equatable {
         public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
             self.init(
                 storeInformation: StoreInformation(storeID: storeID, storeName: storeName),
-                terminalID: terminalID, barcode: barcode)
+                terminalID: terminalID,
+                barcode: barcode)
         }
         
         public init(terminalID: String?, barcode: String) {
@@ -306,9 +307,9 @@ public struct Installment: Codable, Equatable {
                 .range(of: installmentPrefix)
                 .map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(SourceType.InstallmentBrand.init(rawValue:)) else {
-                    throw DecodingError.dataCorruptedError(
-                        forKey: CodingKeys.type, in: container,
-                        debugDescription: "Invalid Installment Source Type value")
+                    throw DecodingError.dataCorruptedError(forKey: CodingKeys.type,
+                                                           in: container,
+                                                           debugDescription: "Invalid Installment Source Type value")
         }
         
         self.brand = installmentBrand
@@ -483,7 +484,8 @@ extension PaymentSource: Creatable {
     public static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: ["sources"],
-            method: .post, query: params)
+            method: .post,
+            query: params)
     }
     
     public static func create(

@@ -57,8 +57,13 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     )
         where T.FilterParams == FilterParams {
             self.init(
-                scope: T.scopeName, query: query, order: order, filter: filter,
-                page: page, numberOfItemsPerPage: numberOfItemsPerPage)
+                scope: T.scopeName,
+                query: query,
+                order: order,
+                filter: filter,
+                page: page,
+                numberOfItemsPerPage: numberOfItemsPerPage
+            )
     }
 }
 
@@ -74,7 +79,8 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     static func search(
@@ -109,8 +115,12 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
 public extension Search {
     func makeLoadNextPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
-            page: self.loadedPages.last?.advanced(by: 1) ?? 1)
+            scope: self.scope,
+            query: self.query,
+            order: self.order,
+            filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: 1) ?? 1
+        )
         
         return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
@@ -132,8 +142,12 @@ public extension Search {
     
     func makeLoadPreviousPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
-            page: self.loadedPages.last?.advanced(by: -1) ?? 1)
+            scope: self.scope,
+            query: self.query,
+            order: self.order,
+            filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: -1) ?? 1
+        )
         
         return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }

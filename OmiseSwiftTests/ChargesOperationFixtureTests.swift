@@ -278,7 +278,8 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Alipay Charge create")
         
         let createParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                        sourceType: .alipay, returnURL: defaultReturnURL)
+                                        sourceType: .alipay,
+                                        returnURL: defaultReturnURL)
         
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -360,8 +361,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testBarcodeAlipayChargeCreate() {
         let expectation = self.expectation(description: "Barcode Alipay Charge create")
         
-        let alipayBarcode = AlipayBarcodeParams(storeID: "1", storeName: "Main Store",
-                                                terminalID: nil, barcode: "1234567890123456")
+        let alipayBarcode = AlipayBarcodeParams(storeID: "1",
+                                                storeName: "Main Store",
+                                                terminalID: nil,
+                                                barcode: "1234567890123456")
         let createParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
                                         sourceType: .barcode(.alipay(alipayBarcode)))
         
@@ -1049,8 +1052,11 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testEncodingCreateChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                  cardID: "tokn_test_12345", chargeDescription: "Hello",
-                                  isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+                                  cardID: "tokn_test_12345",
+                                  chargeDescription: "Hello",
+                                  isAutoCapture: nil,
+                                  returnURL: nil,
+                                  metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -1072,8 +1078,11 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testEncodingCreateCardChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                  cardID: "tokn_test_12345", chargeDescription: "Hello",
-                                  isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+                                  cardID: "tokn_test_12345",
+                                  chargeDescription: "Hello",
+                                  isAutoCapture: nil,
+                                  returnURL: nil,
+                                  metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -1095,8 +1104,12 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testEncodingCreateCustomerCardChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                  customerID: "cust_test_12345", cardID: "card_test_12345", chargeDescription: "Hello",
-                                  isAutoCapture: nil, returnURL: nil, metadata: ["customer id": "1"])
+                                  customerID: "cust_test_12345",
+                                  cardID: "card_test_12345",
+                                  chargeDescription: "Hello",
+                                  isAutoCapture: nil,
+                                  returnURL: nil,
+                                  metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -1275,14 +1288,20 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
     func testEncodingCreateSourceChargeParams() throws {
-        let source = PaymentSource(id: "src_test_12345", object: "source",
-                                   isLiveMode: false, location: "/sources/src_test_12345",
+        let source = PaymentSource(id: "src_test_12345",
+                                   object: "source",
+                                   isLiveMode: false,
+                                   location: "/sources/src_test_12345",
                                    createdDate: try XCTUnwrap(dateFormatter.date(from: "2019-05-23T06:00:30Z")),
-                                   currency: .thb, amount: 1_000_000,
-                                   flow: .redirect, paymentInformation: .alipay)
+                                   currency: .thb,
+                                   amount: 1_000_000,
+                                   flow: .redirect,
+                                   paymentInformation: .alipay)
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                  source: source, chargeDescription: "Hello",
-                                  isAutoCapture: nil, returnURL: nil,
+                                  source: source,
+                                  chargeDescription: "Hello",
+                                  isAutoCapture: nil,
+                                  returnURL: nil,
                                   metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()
@@ -1305,8 +1324,10 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     
     func testEncodingCreateFastTrackTescoLotusBillPaymentChargeParams() throws {
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
-                                  sourceType: .billPayment(.tescoLotus), chargeDescription: "Hello",
-                                  isAutoCapture: nil, returnURL: nil,
+                                  sourceType: .billPayment(.tescoLotus),
+                                  chargeDescription: "Hello",
+                                  isAutoCapture: nil,
+                                  returnURL: nil,
                                   metadata: ["customer id": "1"])
         
         let encoder = URLQueryItemEncoder()

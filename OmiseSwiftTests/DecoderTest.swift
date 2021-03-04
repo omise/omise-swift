@@ -60,11 +60,18 @@ class DecodeTests: XCTestCase {
     @available(iOS 11.0, macOS 10.13, *)
     func testTokenParamEncoding() throws {
         let params = TokenParams(
-            number: "4242424242424242", name: "John Doe",
-            expiration: (12, 2020), securityCode: "123",
+            number: "4242424242424242",
+            name: "John Doe",
+            expiration: (12, 2020),
+            securityCode: "123",
             billingAddress: BillingAddress(
-                street1: "123 Main Road", street2: nil, city: "Bangkok",
-                state: nil, postalCode: "10240", countryCode: nil, phoneNumber: "7777777777"))
+                street1: "123 Main Road",
+                street2: nil,
+                city: "Bangkok",
+                state: nil,
+                postalCode: "10240",
+                countryCode: nil,
+                phoneNumber: "7777777777"))
         
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]

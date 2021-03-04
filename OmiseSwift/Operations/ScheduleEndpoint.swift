@@ -9,7 +9,8 @@ extension Schedule where Data: OmiseLocatableObject {
     public static func listDataScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
         return ScheduleListEndpoint(
             pathComponents: [ Data.resourcePath, Schedule<Data>.resourcePath ],
-            method: .get, query: nil)
+            method: .get,
+            query: nil)
     }
     
     @discardableResult

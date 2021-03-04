@@ -14,7 +14,8 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: Self.makeResourcePaths(),
-            method: .post, query: params)
+            method: .post,
+            query: params)
     }
     
     static func create(
@@ -42,7 +43,8 @@ public extension OmiseAPIChildObject where Self: Creatable {
     static func createEndpointWith(parent: Parent, params: CreateParams) -> Self.CreateEndpoint {
         return Self.CreateEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent),
-            method: .post, query: params)
+            method: .post,
+            query: params)
     }
     
     static func create(
