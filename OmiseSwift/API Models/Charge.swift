@@ -408,7 +408,14 @@ public struct ChargeParams: APIJSONQuery {
         try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
-    private init(value: Value, payment: Payment, chargeDescription: String?, isAutoCapture: Bool?, returnURL: URL?, metadata: [String: Any]?) {
+    private init(
+        value: Value,
+        payment: Payment,
+        chargeDescription: String?,
+        isAutoCapture: Bool?,
+        returnURL: URL?,
+        metadata: [String: Any]?
+    ) {
         self.value = value
         self.payment = payment
         self.chargeDescription = chargeDescription
@@ -418,10 +425,14 @@ public struct ChargeParams: APIJSONQuery {
     }
     
     public init(
-        value: Value, customerID: DataID<Customer>, cardID: DataID<Card>? = nil,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        customerID: DataID<Customer>,
+        cardID: DataID<Card>? = nil,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
             value: value, payment: .customer(customerID: customerID, cardID: cardID),
             chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
@@ -429,10 +440,13 @@ public struct ChargeParams: APIJSONQuery {
     }
     
     public init(
-        value: Value, cardID: DataID<Token>,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        cardID: DataID<Token>,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
             value: value, payment: .card(tokenID: cardID),
             chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
@@ -440,10 +454,13 @@ public struct ChargeParams: APIJSONQuery {
     }
     
     public init(
-        value: Value, source: PaymentSource,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        source: PaymentSource,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
             value: value, payment: .source(source),
             chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
@@ -451,10 +468,13 @@ public struct ChargeParams: APIJSONQuery {
     }
     
     public init(
-        value: Value, sourceType: PaymentSourceParams.SourceParameter,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        sourceType: PaymentSourceParams.SourceParameter,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
             value: value, payment: .sourceType(sourceType),
             chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
@@ -565,17 +585,25 @@ public struct ChargeFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(isVoided, forKey: .isVoided)
     }
     
-    public init(amount: Double? = nil, isAuthorized: Bool? = nil,
-                isAutoCapture: Bool? = nil, isCaptured: Bool? = nil,
-                capturedDate: DateComponents? = nil,
-                cardLastDigits: Digits? = nil,
-                createdDate: DateComponents? = nil,
-                isCustomerPresent: Bool? = nil,
-                isDisputed: Bool? = nil,
-                failureCode: ChargeFailure.Code? = nil, failureMessage: String? = nil,
-                isRefunded: Bool? = nil, refundAmount: Double? = nil,
-                isReversed: Bool? = nil, status: Charge.APIStatus? = nil,
-                sourceOfFund: Charge.SourceOfFund? = nil, isVoided: Bool? = nil) {
+    public init(
+        amount: Double? = nil,
+        isAuthorized: Bool? = nil,
+        isAutoCapture: Bool? = nil,
+        isCaptured: Bool? = nil,
+        capturedDate: DateComponents? = nil,
+        cardLastDigits: Digits? = nil,
+        createdDate: DateComponents? = nil,
+        isCustomerPresent: Bool? = nil,
+        isDisputed: Bool? = nil,
+        failureCode: ChargeFailure.Code? = nil,
+        failureMessage: String? = nil,
+        isRefunded: Bool? = nil,
+        refundAmount: Double? = nil,
+        isReversed: Bool? = nil,
+        status: Charge.APIStatus? = nil,
+        sourceOfFund: Charge.SourceOfFund? = nil,
+        isVoided: Bool? = nil
+    ) {
         self.amount = amount
         self.isAuthorized = isAuthorized
         self.isAutoCapture = isAutoCapture

@@ -95,9 +95,11 @@ public struct CustomerParams: APIJSONQuery {
     }
     
     public init(
-        email: String? = nil, customerDescription: String? = nil, cardID: DataID<Card>? = nil,
+        email: String? = nil,
+        customerDescription: String? = nil,
+        cardID: DataID<Card>? = nil,
         metadata: [String: Any]? = nil
-        ) {
+    ) {
         self.email = email
         self.customerDescription = customerDescription
         self.cardID = cardID

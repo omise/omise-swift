@@ -117,9 +117,13 @@ public struct LinkFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(usedDate, forKey: .usedDate)
     }
     
-    public init(amount: Double? = nil, created: DateComponents? = nil,
-                isMultiple: Bool? = nil, isUsed: Bool? = nil,
-                usedDate: DateComponents? = nil) {
+    public init(
+        amount: Double? = nil,
+        created: DateComponents? = nil,
+        isMultiple: Bool? = nil,
+        isUsed: Bool? = nil,
+        usedDate: DateComponents? = nil
+    ) {
         self.amount = amount
         self.created = created
         self.isMultiple = isMultiple

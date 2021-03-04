@@ -25,9 +25,10 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
     }
     
     static func retrieve(
-        using client: APIClient, id: DataID<Self>,
+        using client: APIClient,
+        id: DataID<Self>,
         callback: @escaping RetrieveRequest.Callback
-        ) -> RetrieveRequest? {
+    ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
@@ -52,9 +53,11 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIde
     }
     
     static func retrieve(
-        using client: APIClient, parent: Parent, id: DataID<Self>,
+        using client: APIClient,
+        parent: Parent,
+        id: DataID<Self>,
         callback: @escaping RetrieveRequest.Callback
-        ) -> RetrieveRequest? {
+    ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
         return client.request(to: endpoint, callback: callback)
     }

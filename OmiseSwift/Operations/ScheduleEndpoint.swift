@@ -14,18 +14,20 @@ extension Schedule where Data: OmiseLocatableObject {
     
     @discardableResult
     public static func listDataSchedule(
-        using client: APIClient, params: ListParams? = nil,
+        using client: APIClient,
+        params: ListParams? = nil,
         callback: ScheduleListRequest.Callback?
-        ) -> ScheduleListRequest? {
+    ) -> ScheduleListRequest? {
         let endpoint = self.listDataScheduleEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
     public static func listDataSchedule(
-        using client: APIClient, listParams: ListParams? = nil,
+        using client: APIClient,
+        listParams: ListParams? = nil,
         callback: @escaping (APIResult<List<Schedule<Data>>>) -> Void
-        ) -> ScheduleListRequest? {
+    ) -> ScheduleListRequest? {
         let endpoint = self.listDataScheduleEndpoint(with: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in

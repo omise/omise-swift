@@ -41,17 +41,19 @@ extension Transfer {
     
     @discardableResult
     public static func listSchedule(
-        using client: APIClient, params: ListParams? = nil,
+        using client: APIClient,
+        params: ListParams? = nil,
         callback: ScheduleListRequest.Callback?
-        ) -> ScheduleListRequest? {
+    ) -> ScheduleListRequest? {
         return Schedule<Transfer>.listDataSchedule(using: client, params: params, callback: callback)
     }
     
     @discardableResult
     public static func listSchedule(
-        using client: APIClient, listParams: ListParams? = nil,
+        using client: APIClient,
+        listParams: ListParams? = nil,
         callback: @escaping (APIResult<List<Schedule<Transfer>>>) -> Void
-        ) -> ScheduleListRequest? {
+    ) -> ScheduleListRequest? {
         return Schedule<Transfer>.listDataSchedule(using: client, listParams: listParams, callback: callback)
     }
 }

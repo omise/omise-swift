@@ -124,8 +124,14 @@ public struct RecipientParams: APIJSONQuery {
         case bankAccount = "bank_account"
     }
     
-    public init(name: String? = nil, email: String? = nil, recipientDescription: String? = nil,
-                type: Recipient.RecipientType? = nil, taxID: String? = nil, bankAccount: BankAccountParams? = nil) {
+    public init(
+        name: String? = nil,
+        email: String? = nil,
+        recipientDescription: String? = nil,
+        type: Recipient.RecipientType? = nil,
+        taxID: String? = nil,
+        bankAccount: BankAccountParams? = nil
+    ) {
         self.name = name
         self.email = email
         self.recipientDescription = recipientDescription
@@ -137,9 +143,12 @@ public struct RecipientParams: APIJSONQuery {
 
 extension RecipientParams {
     public init(
-        createRecipientParamsWithName name: String, type: Recipient.RecipientType,
-        bankAccountName: String, bankAccountNumber: String, bankAccountBrand: String
-        ) {
+        createRecipientParamsWithName name: String,
+        type: Recipient.RecipientType,
+        bankAccountName: String,
+        bankAccountNumber: String,
+        bankAccountBrand: String
+    ) {
         self.name = name
         self.type = type
         self.bankAccount = BankAccountParams(
@@ -168,9 +177,13 @@ public struct RecipientFilterParams: OmiseFilterParams {
     public var isDeleted: Bool?
     public var type: Recipient.RecipientType?
     
-    public init(isActive: Bool? = nil, activatedDate: DateComponents? = nil,
-                bankLastDigits: Digits? = nil, isDeleted: Bool? = nil,
-                type: Recipient.RecipientType?) {
+    public init(
+        isActive: Bool? = nil,
+        activatedDate: DateComponents? = nil,
+        bankLastDigits: Digits? = nil,
+        isDeleted: Bool? = nil,
+        type: Recipient.RecipientType?
+    ) {
         self.isActive = isActive
         self.activatedDate = activatedDate
         self.bankLastDigits = bankLastDigits

@@ -253,9 +253,14 @@ public struct DisputeFilterParams: OmiseFilterParams {
         case status
     }
     
-    public init(amount: Double? = nil, cardLastDigits: Digits? = nil,
-                closedDate: DateComponents? = nil, createdDate: DateComponents? = nil,
-                currency: Currency? = nil, status: Dispute.Status? = nil) {
+    public init(
+        amount: Double? = nil,
+        cardLastDigits: Digits? = nil,
+        closedDate: DateComponents? = nil,
+        createdDate: DateComponents? = nil,
+        currency: Currency? = nil,
+        status: Dispute.Status? = nil
+    ) {
         self.amount = amount
         self.cardLastDigits = cardLastDigits
         self.closedDate = closedDate
@@ -301,9 +306,11 @@ extension Dispute: Searchable {
 
 extension Dispute {
     public static func list(
-        using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil,
+        using client: APIClient,
+        state: DisputeStatusQuery,
+        params: ListParams? = nil,
         callback: @escaping ListRequest.Callback
-        ) -> ListRequest? {
+    ) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourcePath, state.rawValue],
             method: .get, query: nil)

@@ -18,8 +18,10 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     }
     
     static func create(
-        using client: APIClient, params: CreateParams, callback: @escaping CreateRequest.Callback
-        ) -> CreateRequest? {
+        using client: APIClient,
+        params: CreateParams,
+        callback: @escaping CreateRequest.Callback
+    ) -> CreateRequest? {
         let endpoint = self.createEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
@@ -28,8 +30,9 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
 
 public extension APIClient {
     func create<T: OmiseAPIPrimaryObject & Creatable>(
-        params: T.CreateParams, callback: @escaping T.CreateRequest.Callback
-        ) -> T.CreateRequest? {
+        params: T.CreateParams,
+        callback: @escaping T.CreateRequest.Callback
+    ) -> T.CreateRequest? {
         return T.create(using: self, params: params, callback: callback)
     }
 }
@@ -43,9 +46,11 @@ public extension OmiseAPIChildObject where Self: Creatable {
     }
     
     static func create(
-        using client: APIClient, parent: Parent, params: CreateParams,
+        using client: APIClient,
+        parent: Parent,
+        params: CreateParams,
         callback: @escaping Self.CreateRequest.Callback
-        ) -> Self.CreateRequest? {
+    ) -> Self.CreateRequest? {
         let endpoint = self.createEndpointWith(parent: parent, params: params)
         return client.request(to: endpoint, callback: callback)
     }

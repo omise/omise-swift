@@ -18,9 +18,10 @@ public extension OmiseAPIPrimaryObject where Self: Destroyable & OmiseIdentifiab
     }
     
     static func destroy(
-        using client: APIClient, id: DataID<Self>,
+        using client: APIClient,
+        id: DataID<Self>,
         callback: @escaping DestroyRequest.Callback
-        ) -> DestroyRequest? {
+    ) -> DestroyRequest? {
         let endpoint = self.destroyEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
@@ -44,9 +45,11 @@ public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiable
     }
     
     static func destroy(
-        using client: APIClient, parent: Parent, id: DataID<Self>,
+        using client: APIClient,
+        parent: Parent,
+        id: DataID<Self>,
         callback: @escaping DestroyRequest.Callback
-        ) -> DestroyRequest? {
+    ) -> DestroyRequest? {
         let endpoint = self.destroyEndpointWith(parent: parent, id: id)
         return client.request(to: endpoint, callback: callback)
     }

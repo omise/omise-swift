@@ -242,11 +242,18 @@ public struct TransferFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(sentDate, forKey: .sentDate)
     }
     
-    public init(amount: Double? = nil, created: DateComponents? = nil,
-                currency: Currency? = nil, isDeleted: Bool? = nil,
-                bankLastDigits: Digits? = nil, fee: Double? = nil,
-                isPaid: Bool? = nil, paidDate: DateComponents? = nil,
-                isSent: Bool? = nil, sentDate: DateComponents? = nil) {
+    public init(
+        amount: Double? = nil,
+        created: DateComponents? = nil,
+        currency: Currency? = nil,
+        isDeleted: Bool? = nil,
+        bankLastDigits: Digits? = nil,
+        fee: Double? = nil,
+        isPaid: Bool? = nil,
+        paidDate: DateComponents? = nil,
+        isSent: Bool? = nil,
+        sentDate: DateComponents? = nil
+    ) {
         self.amount = amount
         self.created = created
         self.isDeleted = isDeleted

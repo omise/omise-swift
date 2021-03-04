@@ -73,9 +73,13 @@ public struct TokenParams: APIJSONQuery {
         try cardContainer.encodeIfPresent(billingAddress?.phoneNumber, forKey: .right(.phoneNumber))
     }
     
-    public init(number: String, name: String,
-                expiration: (month: Int, year: Int), securityCode: String?,
-                billingAddress: BillingAddress? = nil) {
+    public init(
+        number: String,
+        name: String,
+        expiration: (month: Int, year: Int),
+        securityCode: String?,
+        billingAddress: BillingAddress? = nil
+    ) {
         self.number = number
         self.name = name
         self.expiration = expiration
@@ -100,9 +104,11 @@ extension Token: Retrievable {
     }
     
     static func retrieve(
-        using client: APIClient, usingKey key: AccessKey, id: String,
+        using client: APIClient,
+        usingKey key: AccessKey,
+        id: String,
         callback: @escaping RetrieveRequest.Callback
-        ) -> RetrieveRequest? {
+    ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpoint(usingKey: key, id: id)
         return client.request(to: endpoint, callback: callback)
     }
@@ -119,9 +125,11 @@ extension Token: Creatable {
     }
     
     public static func create(
-        using client: APIClient, usingKey key: AccessKey, params: CreateParams,
+        using client: APIClient,
+        usingKey key: AccessKey,
+        params: CreateParams,
         callback: @escaping CreateRequest.Callback
-        ) -> CreateRequest? {
+    ) -> CreateRequest? {
         let endpoint = self.createEndpoint(usingKey: key, params: params)
         return client.request(to: endpoint, callback: callback)
     }

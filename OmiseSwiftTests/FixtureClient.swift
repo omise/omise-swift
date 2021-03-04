@@ -15,8 +15,8 @@ class FixtureClient: APIClient {
     @discardableResult
     override func request<QueryType, TResult>(
         to endpoint: APIEndpoint<QueryType, TResult>,
-        callback: ((Result<TResult, OmiseError>) -> Void)?)
-        -> APIRequest<QueryType, TResult>? where QueryType: APIQuery, TResult: OmiseObject {
+        callback: ((Result<TResult, OmiseError>) -> Void)?
+    ) -> APIRequest<QueryType, TResult>? where QueryType: APIQuery, TResult: OmiseObject {
             do {
                 let req: FixtureRequest<QueryType, TResult> = FixtureRequest(
                     client: self, endpoint: endpoint, callback: callback)

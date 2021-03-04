@@ -487,9 +487,10 @@ extension PaymentSource: Creatable {
     }
     
     public static func create(
-        using client: APIClient, params: CreateParams,
+        using client: APIClient,
+        params: CreateParams,
         callback: @escaping CreateRequest.Callback
-        ) -> CreateRequest? {
+    ) -> CreateRequest? {
         let endpoint = self.createEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
