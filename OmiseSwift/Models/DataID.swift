@@ -33,7 +33,7 @@ public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
 
 extension DataID: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        self.init(idString: value)!
+        self.init(idString: value)! // swiftlint:disable:this force_unwrapping
     }
 }
 

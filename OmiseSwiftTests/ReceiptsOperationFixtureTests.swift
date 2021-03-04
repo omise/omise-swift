@@ -1,9 +1,7 @@
 import XCTest
 import Omise
 
-
-private let receiptTestingID = DataID<Receipt>(idString: "rcpt_test_12345")!
-
+private let receiptTestingID: DataID<Receipt>! = DataID(idString: "rcpt_test_12345")
 
 class ReceiptsOperationFixtureTests: FixtureTestCase {
     

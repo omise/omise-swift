@@ -3,11 +3,10 @@
 import XCTest
 @testable import Omise
 
-
-private let defaultReturnURL = URL(string: "https://omise.co")!
-
 // swiftlint:disable type_body_length
 class ChargesOperationFixtureTests: FixtureTestCase {
+    private let defaultReturnURL: URL! = URL(string: "https://omise.co")
+    
     func testChargeRetrieve() {
         let chargeTestingID: DataID<Charge>  = "chrg_test_5fzbppsjk5q9cxqjz0o"
         let expectation = self.expectation(description: "Charge result")
@@ -289,7 +288,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 1_000_000)
                 XCTAssertEqual(charge.source?.paymentInformation, .alipay)
-                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+                XCTAssertEqual(charge.returnURL, self.defaultReturnURL)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -308,6 +307,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         let request = Charge.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
             
+            // swiftlint:disable force_unwrapping
             let billInformation = EnrolledSource.EnrolledPaymentInformation.BillPayment.BillInformation(
                 omiseTaxID: "0105556091152",
                 referenceNumber1: "072069591314674529",
@@ -324,7 +324,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 100_000)
                 XCTAssertEqual(charge.source?.paymentInformation, .billPayment(.tescoLotus(billInformation)))
-                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+                XCTAssertEqual(charge.returnURL, self.defaultReturnURL)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -348,7 +348,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 1_000_000)
                 XCTAssertEqual(charge.source?.paymentInformation, .internetBanking(.scb))
-                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+                XCTAssertEqual(charge.returnURL, self.defaultReturnURL)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -1218,7 +1218,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertNotNil(charge)
                 XCTAssertEqual(charge.value.amount, 100)
                 XCTAssertEqual(charge.source?.paymentInformation, .mobileBanking(.scb))
-                XCTAssertEqual(charge.returnURL, defaultReturnURL)
+                XCTAssertEqual(charge.returnURL, self.defaultReturnURL)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -1277,7 +1277,7 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     func testEncodingCreateSourceChargeParams() throws {
         let source = PaymentSource(id: "src_test_12345", object: "source",
                                    isLiveMode: false, location: "/sources/src_test_12345",
-                                   createdDate: dateFormatter.date(from: "2019-05-23T06:00:30Z")!,
+                                   createdDate: try XCTUnwrap(dateFormatter.date(from: "2019-05-23T06:00:30Z")),
                                    currency: .thb, amount: 1_000_000,
                                    flow: .redirect, paymentInformation: .alipay)
         let params = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),

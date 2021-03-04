@@ -7,10 +7,15 @@ class FixtureTestCase: OmiseTestCase {
         return FixtureClient(config: config)
     }
     
-    static let fixturesDirectoryURL = Bundle(for: FixtureClient.self).url(forResource: "Fixtures", withExtension: nil)!
-    static let apiOmiseFixturesDirectoryURL = Bundle(for: FixtureClient.self)
-        .url(forResource: "Fixtures", withExtension: nil)!
-        .appendingPathComponent("api.omise.co")
+    private var apiOmiseFixturesDirectoryURL: URL!
+    
+    override func setUpWithError() throws {
+        let bundle = Bundle(for: FixtureClient.self)
+        let url = try XCTUnwrap(bundle.url(forResource: "Fixtures", withExtension: nil))
+        apiOmiseFixturesDirectoryURL = url.appendingPathComponent("api.omise.co")
+        
+        try super.setUpWithError()
+    }
     
     func fixturesObjectFor<T: OmiseLocatableObject>(type: T.Type, dataID: DataID<T>, suffix: String? = nil) throws -> T {
         return try fixturesObjectFor(type: type, dataID: dataID.idString, suffix: suffix)
@@ -20,7 +25,7 @@ class FixtureTestCase: OmiseTestCase {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
+        var fileURL: URL = apiOmiseFixturesDirectoryURL
         let resourcePathIndex = T.resourcePath.firstIndex(where: { $0 != "/" }) ?? T.resourcePath.startIndex
         fileURL.appendPathComponent(String(T.resourcePath.suffix(from: resourcePathIndex)))
         
@@ -50,7 +55,7 @@ class FixtureTestCase: OmiseTestCase {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        var fileURL = FixtureTestCase.apiOmiseFixturesDirectoryURL
+        var fileURL: URL = self.apiOmiseFixturesDirectoryURL
         var dataIDComponent = String(
             T.resourcePath.suffix(from: T.resourcePath.firstIndex(where: { $0 != "/" }) ?? T.resourcePath.startIndex))
         

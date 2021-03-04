@@ -10,6 +10,7 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         
         let scheduleTestingID: DataID<Schedule<Charge>> = "schd_test_5fzpgks1yf8me0wabse"
         
+        // swiftlint:disable force_unwrapping
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -93,6 +94,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Schedule result")
         
         let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzoyq0dpywer0738br"
+        
+        // swiftlint:disable force_unwrapping
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             

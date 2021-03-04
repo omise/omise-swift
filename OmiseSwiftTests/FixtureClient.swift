@@ -1,13 +1,13 @@
-import Foundation
+import XCTest
 @testable import Omise
 
 
 class FixtureClient: APIClient {
-    let fixturesDirectoryURL: URL
+    fileprivate let fixturesDirectoryURL: URL?
     
     override init(config: APIConfiguration) {
         let bundle = Bundle(for: FixtureClient.self)
-        self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
+        self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)
         
         super.init(config: config)
     }
@@ -33,15 +33,14 @@ class FixtureClient: APIClient {
 
 
 class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<QueryType, TResult> {
-    var fixtureClient: FixtureClient? {
-        return client as? FixtureClient
-    }
+    private var fixtureClient: FixtureClient? { client as? FixtureClient }
     
     override func start() throws -> Self {
-        let fixtureFilePath = endpoint.fixtureFilePath
+        let client = try XCTUnwrap(fixtureClient)
+        let fixtureFilePath = try XCTUnwrap(endpoint.fixtureFilePath)
+        let fixturesDirectoryURL = try XCTUnwrap(client.fixturesDirectoryURL)
         
-        // swiftlint:disable force_cast
-        let fixtureFileURL = (client as! FixtureClient).fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
+        let fixtureFileURL = fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
         DispatchQueue.global().async {
             let data: Data?
             let thrownError: Error?
@@ -96,7 +95,7 @@ protocol AdditionalFixtureData {
 }
 
 extension Omise.APIEndpoint {
-    var fixtureFilePath: String {
+    var fixtureFilePath: String? {
         guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true),
             let hostname = components.host else {
                 preconditionFailure("Invalid URL")
@@ -118,6 +117,6 @@ extension Omise.APIEndpoint {
             filename += "-\(fixtureFileSuffix)"
         }
         filename += "-" + method.rawValue.lowercased()
-        return (filename as NSString).appendingPathExtension("json")! as String
+        return (filename as NSString).appendingPathExtension("json")
     }
 }

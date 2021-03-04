@@ -30,7 +30,7 @@ public class URLQueryItemEncoder {
         return characters
     }()
     
-    public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data {
+    public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data? {
         var components = URLComponents()
         components.queryItems = queryItems.map({
             URLQueryItem(
@@ -40,7 +40,7 @@ public class URLQueryItemEncoder {
                     URLQueryItemEncoder.formURLEncodedAllowedCharacters))
         })
         
-        return components.query!.data(using: .utf8)!
+        return components.query?.data(using: .utf8)
     }
 }
 

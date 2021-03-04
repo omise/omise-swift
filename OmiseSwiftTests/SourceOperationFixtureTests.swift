@@ -447,8 +447,12 @@ class SourceOperationFixtureTests: FixtureTestCase {
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
-        let createSourceEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
-            queryItems: try encoder.encode(createSourceParams)), encoding: .utf8)
+        let createSourceEncodedString: String = try {
+            let queryItems = try encoder.encode(createSourceParams)
+            let data = try XCTUnwrap(URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: queryItems))
+            return try XCTUnwrap(String(data: data, encoding: .utf8))
+        }()
+        
         XCTAssertEqual(createSourceEncodedString,
                        """
                        amount=1000&currency=THB&type=barcode_alipay&barcode=1234567890123456&\
@@ -457,8 +461,13 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createChargeParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
                                               sourceType: .barcode(Barcode.alipay(alipayBarcode)))
-        let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
-            queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
+        
+        let createChargeEncodedString: String = try {
+            let queryItems = try encoder.encode(createChargeParams)
+            let data = try XCTUnwrap(URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: queryItems))
+            return try XCTUnwrap(String(data: data, encoding: .utf8))
+        }()
+        
         XCTAssertEqual(createChargeEncodedString,
                        """
                        amount=1000000&currency=THB&source%5Btype%5D=barcode_alipay&\
@@ -504,8 +513,12 @@ class SourceOperationFixtureTests: FixtureTestCase {
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         
-        let createSourceEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
-            queryItems: try encoder.encode(createSourceParams)), encoding: .utf8)
+        let createSourceEncodedString: String = try {
+            let queryItems = try encoder.encode(createSourceParams)
+            let data = try XCTUnwrap(URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: queryItems))
+            return try XCTUnwrap(String(data: data, encoding: .utf8))
+        }()
+        
         XCTAssertEqual(createSourceEncodedString,
                        """
                        amount=1000&currency=THB&type=barcode_wechat&barcode=1234567890123456
@@ -513,8 +526,13 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createChargeParams = ChargeParams(value: Value(amount: 1_000_000, currency: .thb),
                                               sourceType: .barcode(Barcode.weChatPay(weChatPayBarcode)))
-        let createChargeEncodedString = String(data: URLQueryItemEncoder.encodeToFormURLEncodedData(
-            queryItems: try encoder.encode(createChargeParams)), encoding: .utf8)
+        
+        let createChargeEncodedString: String = try {
+            let queryItems = try encoder.encode(createChargeParams)
+            let data = try XCTUnwrap(URLQueryItemEncoder.encodeToFormURLEncodedData(queryItems: queryItems))
+            return try XCTUnwrap(String(data: data, encoding: .utf8))
+        }()
+        
         XCTAssertEqual(createChargeEncodedString,
                        """
                        amount=1000000&currency=THB&source%5Btype%5D=barcode_wechat&\

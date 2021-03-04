@@ -15,7 +15,7 @@ public enum ServerEndpoint {
         case .api:
             urlString = "https://api" + productionURLSuffix
         }
-        return URL(string: urlString)!
+        return URL(string: urlString)! // swiftlint:disable:this force_unwrapping
     }
     
     func url(withComponents components: [String]) -> URL {

@@ -74,9 +74,9 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     public var id: DataID<Card> {
         switch self {
         case .tokenized(let card):
-            return DataID<Card>(idString: card.id.idString)!
+            return DataID(idString: card.id.idString)! // swiftlint:disable:this force_unwrapping
         case .customer(let card):
-            return DataID<Card>(idString: card.id.idString)!
+            return DataID(idString: card.id.idString)! // swiftlint:disable:this force_unwrapping
         }
     }
     

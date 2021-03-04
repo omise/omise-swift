@@ -1,8 +1,7 @@
 import XCTest
 import Omise
 
-
-private let refundTestingID = DataID<Refund>(idString: "rfnd_test_5frz1pdm34u27646j5p")!
+private let refundTestingID: DataID<Refund>! = DataID(idString: "rfnd_test_5frz1pdm34u27646j5p")
 
 private let charge: Charge = {
     let bundle = Bundle(for: OmiseTestCase.self)

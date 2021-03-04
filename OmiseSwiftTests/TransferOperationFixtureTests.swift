@@ -1,10 +1,8 @@
 import XCTest
 import Omise
 
-
-private let transferTestingID = DataID<Transfer>(idString: "trsf_test_5fqeuv5ozoo0kffs0ji")!
-
 class TransferOperationFixtureTests: FixtureTestCase {
+    private let transferTestingID: DataID<Transfer>! = DataID(idString: "trsf_test_5fqeuv5ozoo0kffs0ji")
     
     func testTransferRetrieve() {
         let expectation = self.expectation(description: "transfer result")
@@ -110,7 +108,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.id, transferTestingID)
+                XCTAssertEqual(transfer.id, self.transferTestingID)
             case let .failure(error):
                 XCTFail("\(error)")
             }

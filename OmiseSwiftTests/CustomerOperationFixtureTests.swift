@@ -1,11 +1,9 @@
 import XCTest
 import Omise
 
-
-private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
-
-
 class CustomerOperationFixtureTests: FixtureTestCase {
+    let customerTestingID: DataID<Customer>! = DataID(idString: "cust_test_5fz0olfpy32zadv96ek")
+    
     func testCustomerRetrieve() {
         let expectation = self.expectation(description: "Customer result")
         
@@ -14,7 +12,7 @@ class CustomerOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(customer):
-                XCTAssertEqual(customer.id, customerTestingID)
+                XCTAssertEqual(customer.id, self.customerTestingID)
                 XCTAssertEqual(customer.location, "/customers/cust_test_5fz0olfpy32zadv96ek")
                 XCTAssertFalse(customer.isLiveMode)
                 XCTAssertEqual(customer.createdDate, dateFormatter.date(from: "2019-05-21T10:21:20Z"))

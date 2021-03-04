@@ -82,9 +82,9 @@ public enum Source: SourceData {
     public var id: DataID<Source> {
         switch self {
         case .enrolled(let source):
-            return DataID<Source>(idString: source.id.idString)!
+            return DataID(idString: source.id.idString)! // swiftlint:disable:this force_unwrapping
         case .source(let source):
-            return DataID<Source>(idString: source.id.idString)!
+            return DataID(idString: source.id.idString)! // swiftlint:disable:this force_unwrapping
         }
     }
     

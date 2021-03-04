@@ -3,12 +3,12 @@ import XCTest
 
 class SearchOperationTest: LiveTest {
     
-    func testSearchChargeByLastDigits() {
+    func testSearchChargeByLastDigits() throws {
         let expectation = self.expectation(description: "transfer result")
         
         var searchParams = SearchParams(searhScopeType: Charge.self)
         var searchFilter = ChargeFilterParams()
-        searchFilter.cardLastDigits = Digits(digitsString: "4242")!
+        searchFilter.cardLastDigits = try XCTUnwrap(Digits(digitsString: "4242"))
         searchParams.filter = searchFilter
         
         let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in

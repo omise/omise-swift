@@ -20,8 +20,8 @@ class DecodeTests: XCTestCase {
     
     func jsonData(withFileName name: String) throws -> Data {
         let bundle = Bundle(for: FixtureClient.self)
-        let directoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
-        let filePath = (name as NSString).appendingPathExtension("json")! as String
+        let directoryURL = try XCTUnwrap(bundle.url(forResource: "Fixtures", withExtension: nil))
+        let filePath = try XCTUnwrap((name as NSString).appendingPathExtension("json"))
         let fixtureFileURL = directoryURL.appendingPathComponent(filePath)
         return try Data(contentsOf: fixtureFileURL)
     }

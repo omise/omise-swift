@@ -299,7 +299,7 @@ class URLEncoderTest: OmiseTestCase {
     func testConvertChargeFilterParams() throws {
         var searchFilterParams = ChargeFilterParams()
         searchFilterParams.amount = 1000
-        searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")!
+        searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")
         searchFilterParams.isCaptured = true
         searchFilterParams.created = DateComponents(
             calendar: Calendar(identifier: .gregorian), year: 2016, month: 8, day: 1)

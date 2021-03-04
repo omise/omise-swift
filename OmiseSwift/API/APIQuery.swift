@@ -50,12 +50,21 @@ extension APIFileQuery {
         let crlf = "\r\n"
         let boundary = "------\(UUID().uuidString)"
         
-        var data = Data()
-        data.append("--\(boundary)\(crlf)".data(using: .utf8, allowLossyConversion: false)!)
-        data.append(#"Content-Disposition: form-data; name="file\"; filename="\#(self.filename)"\#(crlf + crlf)"#
-            .data(using: .utf8, allowLossyConversion: false)!)
-        data.append(self.fileContent)
-        data.append("\(crlf)--\(boundary)--".data(using: .utf8, allowLossyConversion: false)!)
+        let dataToAppend: [Data?] = [
+            "--\(boundary)\(crlf)".data(using: .utf8, allowLossyConversion: false),
+            #"Content-Disposition: form-data; name="file\"; filename="\#(self.filename)"\#(crlf + crlf)"#
+                .data(using: .utf8, allowLossyConversion: false),
+            self.fileContent,
+            "\(crlf)--\(boundary)--".data(using: .utf8, allowLossyConversion: false)
+        ]
+        
+        guard dataToAppend.contains(nil) else {
+            return nil
+        }
+        
+        let data = dataToAppend.compactMap({ $0 }).reduce(into: Data()) { (result, data) in
+            result.append(data)
+        }
         
         return ("multipart/form-data; boundary=\(boundary)", data)
     }

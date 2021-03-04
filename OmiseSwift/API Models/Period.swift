@@ -33,7 +33,7 @@ public enum Period {
             }
             
             public init(integerLiteral value: Int) {
-                self.init(rawValue: value)!
+                self.init(rawValue: value)! // swiftlint:disable:this force_unwrapping
             }
             
             public func hash(into hasher: inout Hasher) {
