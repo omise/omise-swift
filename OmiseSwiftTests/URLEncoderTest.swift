@@ -146,9 +146,15 @@ class URLEncoderTest: OmiseTestCase {
             "2deeper": ["nesting": ["also": "works"]  ],
             "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
             "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
-            "5deepdictionary": ["anesting": ["also": "works"],
-                                "another nesting": [ "deep": [ "deepest1": "hello 1", "deepest2": "hello 2" ],
-                                                     "deeparray": [ "rolling in", ["the": 2, "deep": 1]]]],
+            "5deepdictionary": [
+                "anesting": ["also": "works"],
+                "another nesting": [
+                    "deep": ["deepest1": "hello 1", "deepest2": "hello 2"],
+                    "deeparray": [
+                        "rolling in", ["the": 2, "deep": 1]
+                    ]
+                ]
+            ],
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
@@ -224,9 +230,15 @@ class URLEncoderTest: OmiseTestCase {
             "2deeper": ["nesting": ["also": "works"]  ],
             "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
             "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
-            "5deepdictionary": ["anesting": ["also": "works"],
-                                "another nesting": [ "deep": [ "deepest1": "hello 1", "deepest2": "hello 2" ],
-                                                     "deeparray": [ "rolling in", ["the": 2, "deep": 1]]]],
+            "5deepdictionary": [
+                "anesting": ["also": "works"],
+                "another nesting": [
+                    "deep": ["deepest1": "hello 1", "deepest2": "hello 2"],
+                    "deeparray": [
+                        "rolling in", ["the": 2, "deep": 1]
+                    ]
+                ]
+            ],
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],

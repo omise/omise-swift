@@ -228,7 +228,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case email
     }
     
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable cyclomatic_complexity function_body_length
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -236,13 +236,17 @@ extension EnrolledSource.EnrolledPaymentInformation {
         
         if typeValue.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = typeValue
-                .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.internetBanking) {
+                .range(of: internetBankingPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(InternetBanking.init(rawValue:))
+                .map(EnrolledSource.PaymentInformation.internetBanking) {
             self = internetBankingOffsite
         } else if typeValue.hasPrefix(mobileBankingPrefix),
             let mobileBankingOffsite = typeValue
-                .range(of: mobileBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(MobileBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.mobileBanking) {
+                .range(of: mobileBankingPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(MobileBanking.init(rawValue:))
+                .map(EnrolledSource.PaymentInformation.mobileBanking) {
             self = mobileBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay

@@ -252,8 +252,8 @@ extension Capability.Method {
         case .source(SourceType.fpx):
             self.payment = .fpx
         case .source(SourceType.unknown(let type)):
-            let configurations = try decoder.container(
-                keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
+            let codingKeys = SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self
+            let configurations = try decoder.container(keyedBy: codingKeys).decode()
             self.payment = .unknownSource(type, configurations: configurations)
         }
     }
@@ -436,7 +436,8 @@ extension Capability.Method {
                 let sourceTypeValue = sourceType.sourceTypePrefix
                 if sourceTypeValue.hasSuffix("_") {
                     return sourceTypeValue.lastIndex(of: "_")
-                        .map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
+                        .map(sourceTypeValue.prefix(upTo:))
+                        .map(String.init) ?? sourceTypeValue
                 } else {
                     return sourceTypeValue
                 }

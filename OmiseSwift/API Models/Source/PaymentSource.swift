@@ -89,15 +89,19 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
             
             if typeValue.hasPrefix(internetBankingPrefix),
                 let internetBankingOffsite = typeValue
-                    .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                    .flatMap(InternetBanking.init(rawValue:)).map(PaymentSourceInformation.internetBanking) {
+                    .range(of: internetBankingPrefix)
+                    .map({ String(typeValue[$0.upperBound...]) })
+                    .flatMap(InternetBanking.init(rawValue:))
+                    .map(PaymentSourceInformation.internetBanking) {
                 self = internetBankingOffsite
             } else if typeValue == alipayValue {
                 self = .alipay
             } else if typeValue.hasPrefix(billPaymentPrefix),
                 let billPaymentOffline = typeValue
-                    .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) })
-                    .flatMap(SourceType.BillPayment.init(rawValue:)).map(PaymentSourceInformation.billPayment) {
+                    .range(of: billPaymentPrefix)
+                    .map({ String(typeValue[$0.upperBound...]) })
+                    .flatMap(SourceType.BillPayment.init(rawValue:))
+                    .map(PaymentSourceInformation.billPayment) {
                 self = billPaymentOffline
             } else if typeValue.hasPrefix(barcodePrefix),
                 let barcodeValue = typeValue
