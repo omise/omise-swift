@@ -19,79 +19,6 @@ public struct EnrolledSource: SourceData {
         
         case unknown(name: String, references: [String: Any]?)
         
-        public enum BillPayment: Equatable {
-            
-            case tescoLotus(BillInformation?)
-            case unknown(name: String, references: [String: Any])
-            
-            public struct BillInformation: Codable, Equatable {
-                let omiseTaxID: String
-                let referenceNumber1: String
-                let referenceNumber2: String
-                let barcodeURL: URL
-                let expiredDate: Date
-                
-                private enum CodingKeys: String, CodingKey {
-                    case omiseTaxID = "omise_tax_id"
-                    case referenceNumber1 = "reference_number_1"
-                    case referenceNumber2 = "reference_number_2"
-                    case barcodeURL = "barcode"
-                    case expiredDate = "expires_at"
-                }
-            }
-            
-            public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
-                switch (lhs, rhs) {
-                case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
-                    return lhsValue == rhsValue
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
-        public enum Barcode: Equatable {
-            case alipay(AlipayBarcode?)
-            case weChatPay
-            case unknown(name: String, references: [String: Any])
-            
-            var value: String {
-                let value: String
-                switch self {
-                case .alipay:
-                    value = "alipay"
-                case .weChatPay:
-                    value = "wechat"
-                case .unknown(name: let name, references: _):
-                    value = name
-                }
-                return value
-            }
-            
-            public struct AlipayBarcode: Codable {
-                public let expiredDate: Date
-                fileprivate enum CodingKeys: String, CodingKey {
-                    case expiredDate = "expires_at"
-                }
-            }
-            
-            public static func ==(
-                lhs: EnrolledSource.EnrolledPaymentInformation.Barcode,
-                rhs: EnrolledSource.EnrolledPaymentInformation.Barcode
-                ) -> Bool {
-                switch (lhs, rhs) {
-                case (.alipay, .alipay):
-                    return true
-                case (.weChatPay, .weChatPay):
-                    return true
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
         var sourceType: Omise.SourceType {
             switch self {
             case .internetBanking(let bank):
@@ -137,10 +64,7 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        public static func ==(
-            lhs: EnrolledSource.EnrolledPaymentInformation,
-            rhs: EnrolledSource.EnrolledPaymentInformation
-            ) -> Bool {
+        public static func ==(lhs: EnrolledPaymentInformation, rhs: EnrolledPaymentInformation) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
@@ -180,6 +104,10 @@ public struct EnrolledSource: SourceData {
         return paymentInformation.sourceType
     }
     
+}
+
+extension EnrolledSource {
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case object
@@ -208,10 +136,89 @@ public struct EnrolledSource: SourceData {
         try container.encode(flow, forKey: .flow)
         try paymentInformation.encode(to: encoder)
     }
+    
 }
 
+extension EnrolledSource.EnrolledPaymentInformation {
+    
+    public enum BillPayment: Equatable {
+        case tescoLotus(BillInformation?)
+        case unknown(name: String, references: [String: Any])
+        
+        public struct BillInformation: Codable, Equatable {
+            let omiseTaxID: String
+            let referenceNumber1: String
+            let referenceNumber2: String
+            let barcodeURL: URL
+            let expiredDate: Date
+            
+            // swiftlint:disable nesting
+            private enum CodingKeys: String, CodingKey {
+                case omiseTaxID = "omise_tax_id"
+                case referenceNumber1 = "reference_number_1"
+                case referenceNumber2 = "reference_number_2"
+                case barcodeURL = "barcode"
+                case expiredDate = "expires_at"
+            }
+        }
+        
+        public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
+            switch (lhs, rhs) {
+            case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
+                return lhsValue == rhsValue
+            case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
+                return lhsName == rhsName
+            default:
+                return false
+            }
+        }
+    }
+    
+    public enum Barcode: Equatable {
+        case alipay(AlipayBarcode?)
+        case weChatPay
+        case unknown(name: String, references: [String: Any])
+        
+        var value: String {
+            let value: String
+            switch self {
+            case .alipay:
+                value = "alipay"
+            case .weChatPay:
+                value = "wechat"
+            case .unknown(name: let name, references: _):
+                value = name
+            }
+            return value
+        }
+        
+        public struct AlipayBarcode: Codable {
+            public let expiredDate: Date
+            
+            // swiftlint:disable nesting
+            private enum CodingKeys: String, CodingKey {
+                case expiredDate = "expires_at"
+            }
+        }
+        
+        public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
+            switch (lhs, rhs) {
+            case (.alipay, .alipay):
+                return true
+            case (.weChatPay, .weChatPay):
+                return true
+            case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
+                return lhsName == rhsName
+            default:
+                return false
+            }
+        }
+    }
+    
+}
 
 extension EnrolledSource.EnrolledPaymentInformation {
+    
     private enum CodingKeys: String, CodingKey {
         case type
         case references

@@ -89,34 +89,37 @@ extension Capability {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
         public let banks: [BankDetails]
-        public enum Payment: Equatable {
-            case card(Set<CardBrand>)
-            case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
-            case internetBanking(InternetBanking)
-            case mobileBanking(MobileBanking)
-            case billPayment(SourceType.BillPayment)
-            case barcode(SourceType.Barcode)
-            case alipay
-            case promptPay
-            case payNow
-            case truemoney
-            case payWithPointsCiti
-            case fpx
-            case unknownSource(String, configurations: JSONDictionary)
-        }
-        public struct BankDetails: Codable, Hashable {
-            enum CodingKeys: String, CodingKey {
-                case code, name
-                case isActive = "active"
-            }
-
-            public let code: String
-            public let name: String
-            public let isActive: Bool
-        }
     }
 }
 
+extension Capability.Method {
+    public enum Payment: Equatable {
+        case card(Set<CardBrand>)
+        case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
+        case internetBanking(InternetBanking)
+        case mobileBanking(MobileBanking)
+        case billPayment(SourceType.BillPayment)
+        case barcode(SourceType.Barcode)
+        case alipay
+        case promptPay
+        case payNow
+        case truemoney
+        case payWithPointsCiti
+        case fpx
+        case unknownSource(String, configurations: JSONDictionary)
+    }
+    
+    public struct BankDetails: Codable, Hashable {
+        enum CodingKeys: String, CodingKey {
+            case code, name
+            case isActive = "active"
+        }
+
+        public let code: String
+        public let name: String
+        public let isActive: Bool
+    }
+}
 
 extension Capability: Codable {
     private enum CodingKeys: String, CodingKey {

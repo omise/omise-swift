@@ -19,7 +19,6 @@ public enum Period {
     
     public enum MonthlyPeriodRule: Equatable {
         public struct DayOfMonth: RawRepresentable, Hashable, ExpressibleByIntegerLiteral {
-            public typealias RawValue = Int
             public let day: Int
             public var rawValue: Int {
                 return day
