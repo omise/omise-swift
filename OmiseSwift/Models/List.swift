@@ -68,10 +68,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.firstIndex(where: {
-            $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
-        var indexOfLastUpdatedItem = self.data.firstIndex(where: {
-            $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
+        var indexOfFirstUpdatedItem = data.firstIndex { $0.location == firstUpdatedItem.location } ?? data.startIndex
+        var indexOfLastUpdatedItem = data.firstIndex { $0.location == lastUpdatedItem.location } ?? data.endIndex
         
         if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
             swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
@@ -131,8 +129,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.firstIndex(where: { $0.location == firstUpdatedItem.location })
-        var indexOfLastUpdatedItem = self.data.firstIndex(where: { $0.location == lastUpdatedItem.location })
+        var indexOfFirstUpdatedItem = data.firstIndex { $0.location == firstUpdatedItem.location }
+        var indexOfLastUpdatedItem = data.firstIndex { $0.location == lastUpdatedItem.location }
         
         if let indexOfFirst = indexOfFirstUpdatedItem,
             let indexOfLast = indexOfLastUpdatedItem,

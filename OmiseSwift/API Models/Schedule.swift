@@ -167,13 +167,13 @@ extension Schedule {
         nextOccurrencesOnDateComponents = try container.decode(
             Array<DateComponents>.self, forKey: .nextOccurrenceDates)
         
-        let parameterKey = container.allKeys.first(where: { (key) -> Bool in
+        let parameterKey = container.allKeys.first { (key) -> Bool in
             if case .parameter = key {
                 return true
             } else {
                 return false
             }
-        })
+        }
         if let parameterKey = parameterKey {
             scheduleData = try container.decode(Data.ScheduleData.self, forKey: parameterKey)
         } else {

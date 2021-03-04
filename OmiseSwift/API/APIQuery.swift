@@ -32,7 +32,7 @@ extension APIURLQuery {
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
         urlComponents.queryItems = try? encoder.encode(self)
         return urlComponents.percentEncodedQuery?.data(using: .utf8)
-            .map({ ("application/x-www-form-urlencoded", $0) })
+            .map { ("application/x-www-form-urlencoded", $0) }
     }
 }
 
@@ -41,7 +41,7 @@ extension APIJSONQuery {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         let data = try? encoder.encode(self)
-        return data.map({ ("application/json", $0) })
+        return data.map { ("application/json", $0) }
     }
 }
 
@@ -62,7 +62,7 @@ extension APIFileQuery {
             return nil
         }
         
-        let data = dataToAppend.compactMap({ $0 }).reduce(into: Data()) { (result, data) in
+        let data = dataToAppend.compactMap { $0 }.reduce(into: Data()) { (result, data) in
             result.append(data)
         }
         

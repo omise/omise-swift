@@ -26,7 +26,7 @@ class FixtureTestCase: OmiseTestCase {
         decoder.dateDecodingStrategy = .iso8601
         
         var fileURL: URL = apiOmiseFixturesDirectoryURL
-        let resourcePathIndex = T.resourcePath.firstIndex(where: { $0 != "/" }) ?? T.resourcePath.startIndex
+        let resourcePathIndex = T.resourcePath.firstIndex { $0 != "/" } ?? T.resourcePath.startIndex
         fileURL.appendPathComponent(String(T.resourcePath.suffix(from: resourcePathIndex)))
         
         var dataIDComponent = dataID
@@ -57,7 +57,7 @@ class FixtureTestCase: OmiseTestCase {
         
         var fileURL: URL = self.apiOmiseFixturesDirectoryURL
         var dataIDComponent = String(
-            T.resourcePath.suffix(from: T.resourcePath.firstIndex(where: { $0 != "/" }) ?? T.resourcePath.startIndex))
+            T.resourcePath.suffix(from: T.resourcePath.firstIndex { $0 != "/" } ?? T.resourcePath.startIndex))
         
         if let suffix = suffix {
             dataIDComponent += "-\(suffix)"

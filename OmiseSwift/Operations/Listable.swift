@@ -58,9 +58,9 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
         let endpoint = self.listEndpoint(with: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 List(listEndpoint: endpoint, list: $0)
-            })
+            }
             callback(callbackResult)
         }
         
@@ -96,7 +96,7 @@ public extension List {
         
         let requestCallback: TItem.ListRequest.Callback = { [weak self] result in
             guard let list = self else { return }
-            let callbackResult = result.map({ list.insert(from: $0) })
+            let callbackResult = result.map { list.insert(from: $0) }
             callback(callbackResult)
         }
         
@@ -227,9 +227,9 @@ public extension OmiseAPIChildObject where Self: OmiseLocatableObject & Listable
         let endpoint = self.listEndpointWith(parent: parent, params: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 List(listEndpoint: endpoint, list: $0)
-            })
+            }
             callback(callbackResult)
         }
         

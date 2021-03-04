@@ -32,9 +32,9 @@ public extension Refund {
         let endpoint = self.listEndpoint(with: listParams)
         
         let requestCallback: ListRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 List(listEndpoint: endpoint, list: $0)
-            })
+            }
             callback(callbackResult)
         }
         

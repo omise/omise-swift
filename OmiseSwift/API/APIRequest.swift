@@ -78,7 +78,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
     
     fileprivate func performCallback(_ result: APIResult<ResultType>) {
         guard let cb = callback else { return }
-        client.operationQueue.addOperation({ cb(result) })
+        client.operationQueue.addOperation { cb(result) }
     }
     
     func makeURLRequest() throws -> URLRequest {

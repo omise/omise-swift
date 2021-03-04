@@ -227,7 +227,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .internetBanking(.scb))
 
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -239,7 +239,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -249,7 +249,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .alipay)
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -261,7 +261,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -271,7 +271,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .billPayment(.tescoLotus))
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -283,7 +283,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -295,7 +295,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                                                currency: .thb,
                                                type: .billPayment(SourceType.BillPayment.unknown("papaya")))
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -307,7 +307,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -321,7 +321,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             type: .internetBanking(.unknown("oms"))
         )
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -333,7 +333,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -350,7 +350,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .barcode(omiseBarcode))
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -375,7 +375,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -385,7 +385,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         
         let createParams = PaymentSourceParams(amount: 100_000, currency: .thb, type: .unknown("omise"))
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -397,7 +397,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
@@ -413,7 +413,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                                                currency: .thb,
                                                type: .barcode(Barcode.alipay(alipayBarcode)))
         
-        let request = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        let request = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -433,7 +433,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
 
@@ -488,7 +488,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
                                                currency: .thb,
                                                type: .barcode(Barcode.weChatPay(weChatPayBarcode)))
         
-        _ = PaymentSource.create(using: testClient, params: createParams, callback: { result in
+        _ = PaymentSource.create(using: testClient, params: createParams) { result in
             defer { expectation.fulfill() }
             
             switch result {
@@ -505,7 +505,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }

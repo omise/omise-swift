@@ -101,9 +101,9 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         let endpoint = self.searchEndpoint(with: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 Search(result: $0, order: searchParams?.order ?? .chronological)
-            })
+            }
             callback(callbackResult)
         }
         
@@ -133,7 +133,7 @@ public extension Search {
         let operation = self.makeLoadNextPageOperation()
         
         let requestCallback: TItem.SearchRequest.Callback = { result in
-            let callbackResult = result.map({ self.insert(from: $0) })
+            let callbackResult = result.map { self.insert(from: $0) }
             callback(callbackResult)
         }
         
@@ -160,7 +160,7 @@ public extension Search {
         let operation = makeLoadNextPageOperation()
         
         let requestCallback: TItem.SearchRequest.Callback = { result in
-            let callbackResult = result.map({ self.insert(from: $0) })
+            let callbackResult = result.map { self.insert(from: $0) }
             callback(callbackResult)
         }
         

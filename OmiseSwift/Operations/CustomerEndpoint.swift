@@ -36,9 +36,9 @@ extension Customer {
         let endpoint = self.listChargingCustomerScheduleEndpoint(for: customerID, params: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 List(listEndpoint: endpoint, list: $0)
-            })
+            }
             callback(callbackResult)
         }
         

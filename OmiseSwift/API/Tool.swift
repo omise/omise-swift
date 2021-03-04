@@ -273,9 +273,9 @@ extension KeyedDecodingContainerProtocol {
     func decode(_ type: Array<DateComponents>.Type, forKey key: Key) throws -> [DateComponents] {
         let dateComponentsValues = try decode(Array<String>.self, forKey: key)
         
-        return try dateComponentsValues.enumerated().map({ (index, element) in
+        return try dateComponentsValues.enumerated().map { (index, element) in
             try parsingDateComponentsValue(element, codingPath: codingPath + [key, ArrayIndexKey(index: index)])
-        })
+        }
     }
     
     func decodeOmiseAPIValueIfPresent(_ type: Bool.Type, forKey key: Key) throws -> Bool? {
@@ -435,9 +435,9 @@ extension KeyedEncodingContainerProtocol {
     }
     
     mutating func encode(_ dateComponents: [DateComponents], forKey key: Key) throws {
-        let dateComponentsValue = try dateComponents.enumerated().map({ (index, element) in
+        let dateComponentsValue = try dateComponents.enumerated().map { (index, element) in
             try _encode(element, codingPath: codingPath + [key, ArrayIndexKey(index: index)])
-        })
+        }
         try encode(dateComponentsValue, forKey: key)
     }
 }
@@ -445,7 +445,7 @@ extension KeyedEncodingContainerProtocol {
 
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     mutating func encode(_ value: [String: Any]) throws {
-        try value.forEach({ (key, value) in
+        try value.forEach { (key, value) in
             let key = JSONCodingKeys(key: key)
             switch value {
             case let value as Bool:
@@ -468,13 +468,13 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
                     EncodingError.Context(codingPath: codingPath + [key],
                                           debugDescription: "Invalid JSON value"))
             }
-        })
+        }
     }
     
     mutating func encode<SkippedKeys: CodingKey>(
         _ value: [String: Any], skippingKeysBy skippingKeys: SkippedKeys.Type
         ) throws {
-        try value.forEach({ (key, value) in
+        try value.forEach { (key, value) in
             guard SkippedKeys(stringValue: key) == nil else {
                 return
             }
@@ -500,7 +500,7 @@ extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
                     EncodingError.Context(codingPath: codingPath + [key],
                                           debugDescription: "Invalid JSON value"))
             }
-        })
+        }
     }
 }
 
@@ -530,7 +530,7 @@ extension KeyedEncodingContainerProtocol {
 
 extension UnkeyedEncodingContainer {
     mutating func encode(_ value: [Any]) throws {
-        try value.enumerated().forEach({ (index, value) in
+        try value.enumerated().forEach { (index, value) in
             switch value {
             case let value as Bool:
                 try encode(value)
@@ -553,7 +553,7 @@ extension UnkeyedEncodingContainer {
                     EncodingError.Context(codingPath: codingPath + keys,
                                           debugDescription: "Invalid JSON value"))
             }
-        })
+        }
     }
     
     private mutating func encodeArrayElement(_ value: [Any]) throws {

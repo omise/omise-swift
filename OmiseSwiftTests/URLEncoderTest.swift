@@ -124,7 +124,7 @@ class URLEncoderTest: OmiseTestCase {
         ] as [String: Any?])
         
         let encoder = URLQueryItemEncoder()
-        let result = try encoder.encode(values).map({ (query) in query.value ?? "$*nil*$" })
+        let result = try encoder.encode(values).map { (query) in query.value ?? "$*nil*$" }
         XCTAssertEqual(8, result.count)
         XCTAssertEqual(result, [
             "world",
@@ -320,7 +320,7 @@ class URLEncoderTest: OmiseTestCase {
         let items = try encoder.encode(searchFilterParams)
         
         XCTAssertEqual(4, items.count)
-        let result = Set(items.map({ (query) in query.value ?? "(nil)" }))
+        let result = Set(items.map { (query) in query.value ?? "(nil)" })
         XCTAssertEqual(result, [
             "1000.0",
             "4242",
@@ -341,7 +341,7 @@ class URLEncoderTest: OmiseTestCase {
         let expectedFromDateString = formatter.string(from: from)
         let expectedToDateString = formatter.string(from: to)
         XCTAssertEqual(3, items.count)
-        let result = items.map({ (query) in query.value ?? "(nil)" })
+        let result = items.map { (query) in query.value ?? "(nil)" }
         XCTAssertEqual(result, [
             expectedFromDateString,
             expectedToDateString,

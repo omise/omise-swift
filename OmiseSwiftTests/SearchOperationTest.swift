@@ -11,7 +11,7 @@ class SearchOperationTest: LiveTest {
         searchFilter.cardLastDigits = try XCTUnwrap(Digits(digitsString: "4242"))
         searchParams.filter = searchFilter
         
-        let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
+        let request = Charge.search(using: testClient, params: searchParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -22,7 +22,7 @@ class SearchOperationTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -36,7 +36,7 @@ class SearchOperationTest: LiveTest {
         searchFilter.isDisputed = true
         searchParams.filter = searchFilter
         
-        let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
+        let request = Charge.search(using: testClient, params: searchParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -47,7 +47,7 @@ class SearchOperationTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -66,7 +66,7 @@ class SearchOperationTest: LiveTest {
         searchFilter.createdDate = dateComponents
         searchParams.filter = searchFilter
         
-        let request = Charge.search(using: testClient, params: searchParams, callback: { (result) in
+        let request = Charge.search(using: testClient, params: searchParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -77,7 +77,7 @@ class SearchOperationTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -97,7 +97,7 @@ class SearchOperationTest: LiveTest {
         searchParams.filter = searchFilter
         searchParams.query = "john"
         
-        let request = Customer.search(using: testClient, params: searchParams, callback: { (result) in
+        let request = Customer.search(using: testClient, params: searchParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -108,7 +108,7 @@ class SearchOperationTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -123,7 +123,7 @@ class SearchOperationTest: LiveTest {
         
         searchParams.filter = searchFilter
         
-        let request = Recipient.search(using: testClient, params: searchParams, callback: { (result) in
+        let request = Recipient.search(using: testClient, params: searchParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -134,7 +134,7 @@ class SearchOperationTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)

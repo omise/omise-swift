@@ -192,7 +192,7 @@ extension Capability {
         isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
         
         supportedMethods = try container.decode(Array<Capability.Method>.self, forKey: .paymentMethods)
-        let supportedMethodKeys = supportedMethods.map({ Capability.Method.Key(payment: $0.payment) })
+        let supportedMethodKeys = supportedMethods.map { Capability.Method.Key(payment: $0.payment) }
         methods = Dictionary(uniqueKeysWithValues: zip(supportedMethodKeys, supportedMethods))
     }
     
@@ -206,9 +206,9 @@ extension Capability {
         try container.encode(isZeroInterests, forKey: .isZeroInterests)
         
         var methodsContainer = container.nestedUnkeyedContainer(forKey: .paymentMethods)
-        try supportedMethods.forEach({ method in
+        try supportedMethods.forEach { method in
             try methodsContainer.encode(method)
-        })
+        }
     }
 }
 

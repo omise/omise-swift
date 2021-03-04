@@ -32,9 +32,9 @@ extension Schedule where Data: OmiseLocatableObject {
         let endpoint = self.listDataScheduleEndpoint(with: listParams)
         
         let requestCallback: ScheduleListRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 List(listEndpoint: endpoint, list: $0)
-            })
+            }
             callback(callbackResult)
         }
         

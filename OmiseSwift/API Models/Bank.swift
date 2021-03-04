@@ -27,19 +27,18 @@ private let banks: [String: [String: JSONDictionary]] = {
 private let bankCountryCodeMap: [String: String] = {
     var countryCodes: [String: String] = [:]
     
-    banks.forEach({ let (countryCode, banks) = $0
-        banks.keys.forEach({ code in
+    banks.forEach { let (countryCode, banks) = $0
+        banks.keys.forEach { code in
             countryCodes[code] = countryCode
-        })
-    })
+        }
+    }
     
     return countryCodes
 }()
 
 
 // A dictionary where key is a bank's ID and value is a bank's information
-private let bankData: [String: JSONDictionary] =
-    [String: JSONDictionary](banks.flatMap({ $0.1 }), uniquingKeysWith: { $1 })
+private let bankData: [String: JSONDictionary] = Dictionary(banks.flatMap { $0.1 }) { $1 }
 
 public struct Bank {
     public let bankID: String

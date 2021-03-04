@@ -25,7 +25,7 @@ class ChargeOperationsTest: LiveTest {
     func testChargeRetrieve() {
         let expectation = self.expectation(description: "charge retrieve")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_54phpsikwx0q7sv8h4g", callback: { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_54phpsikwx0q7sv8h4g") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -40,7 +40,7 @@ class ChargeOperationsTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }

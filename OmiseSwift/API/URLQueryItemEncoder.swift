@@ -32,13 +32,13 @@ public class URLQueryItemEncoder {
     
     public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data? {
         var components = URLComponents()
-        components.queryItems = queryItems.map({
+        components.queryItems = queryItems.map {
             URLQueryItem(
                 name: $0.name.addingPercentEncoding(withAllowedCharacters:
                     URLQueryItemEncoder.formURLEncodedAllowedCharacters) ?? $0.name,
                 value: $0.value?.addingPercentEncoding(withAllowedCharacters:
                     URLQueryItemEncoder.formURLEncodedAllowedCharacters))
-        })
+        }
         
         return components.query?.data(using: .utf8)
     }
@@ -54,9 +54,9 @@ extension Array where Element == CodingKey {
         guard !isEmpty else { return "" }
         var keysPath = self
         let firstKey = keysPath.removeFirst()
-        let tailCodingKeyString = keysPath.reduce(into: "", {
+        let tailCodingKeyString = keysPath.reduce(into: "") {
             $0 += "[\($1.stringValue)]"
-        })
+        }
         
         return firstKey.stringValue + tailCodingKeyString
     }
