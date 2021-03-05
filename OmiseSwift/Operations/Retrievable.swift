@@ -3,7 +3,7 @@ import Foundation
 public protocol Retrievable {}
 
 public struct RetrieveParams: APIURLQuery {
-    public var isExpanded: Bool = false
+    public var isExpanded = false
     
     private enum CodingKeys: String, CodingKey {
         case isExpanded = "expand"

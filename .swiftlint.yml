@@ -1,3 +1,7 @@
+# 
+# Rule Directory Reference: https://realm.github.io/SwiftLint/rule-directory.html
+# 
+
 opt_in_rules:
   - attributes
   - closure_body_length
