@@ -7,11 +7,17 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: macos-latest
-
+    strategy:
+      matrix: 
+        include: 
+          - scheme: 'OmiseSwift Fixtures Test'
+            destination: 'platform=iOS Simulator,name=iPhone 12,OS=latest'
     steps:
     - uses: actions/checkout@v2
+      env:
+        scheme: ${{ matrix.scheme }}
+        destination: ${{ matrix.destination }}
     - name: Run xcodebuild with tests
-      run: xcodebuild test -quiet -scheme OmiseSwift\ Fixtures\ Test -destination 'platform=iOS Simulator,name=iPhone 12,OS=latest' ENABLE_TESTABILITY=yes
+      run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
