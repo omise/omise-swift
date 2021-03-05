@@ -114,6 +114,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
 }

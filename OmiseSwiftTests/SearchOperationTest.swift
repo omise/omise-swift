@@ -93,7 +93,7 @@ class SearchOperationTest: LiveTest {
         dateComponents.year = 2016
         dateComponents.month = 9
         dateComponents.day = 2
-        var searchFilter = CustomerFilterParams(createdDate: dateComponents)
+        let searchFilter = CustomerFilterParams(createdDate: dateComponents)
         searchParams.filter = searchFilter
         searchParams.query = "john"
         
@@ -119,7 +119,7 @@ class SearchOperationTest: LiveTest {
         
         var searchParams = SearchParams(searhScopeType: Recipient.self)
         searchParams.scope = Recipient.scopeName
-        var searchFilter = RecipientFilterParams(type: .individual)
+        let searchFilter = RecipientFilterParams(type: .individual)
         
         searchParams.filter = searchFilter
         

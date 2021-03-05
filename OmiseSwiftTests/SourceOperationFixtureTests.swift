@@ -241,6 +241,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -263,6 +264,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -285,6 +287,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -309,6 +312,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -335,6 +339,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -376,6 +381,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -398,6 +404,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
@@ -434,8 +441,8 @@ class SourceOperationFixtureTests: FixtureTestCase {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-
     }
     
     func testEncodeAlipayBarcodeSource() throws {
