@@ -7,7 +7,7 @@ public enum Period {
     case monthly(MonthlyPeriodRule)
     case unknown(String, [String: Any]?)
     
-    public enum Weekday: String, Equatable, Codable {
+    public enum Weekday: String, Equatable, Codable, Comparable, CaseIterable {
         case monday
         case tuesday
         case wednesday
@@ -15,6 +15,13 @@ public enum Period {
         case friday
         case saturday
         case sunday
+        
+        public static func < (lhs: Weekday, rhs: Weekday) -> Bool {
+            guard let lIndex = allCases.firstIndex(of: lhs), let rIndex = allCases.firstIndex(of: rhs) else {
+                return false
+            }
+            return lIndex < rIndex
+        }
     }
     
     public enum MonthlyPeriodRule: Equatable {
@@ -89,38 +96,7 @@ extension Period: Codable {
             try container.encode("week", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)
             var weekDaysContainers = ruleContainer.nestedUnkeyedContainer(forKey: .weekdays)
-            try weekDaysContainers.encode(contentsOf:
-                weekDays.sorted(by: { (first, second) -> Bool in
-                    switch (first, second) {
-                    case (.monday, _):
-                        return true
-                    case (.sunday, _):
-                        return false
-                    case (.tuesday, .monday):
-                        return false
-                    case (.tuesday, _):
-                        return true
-                    case (.saturday, .sunday):
-                        return true
-                    case (.saturday, _):
-                        return false
-                        
-                    case (.wednesday, .monday), (.wednesday, .tuesday):
-                        return false
-                    case (.wednesday, _):
-                        return true
-                        
-                    case (.friday, .saturday), (.friday, .sunday):
-                        return true
-                    case (.friday, _):
-                        return false
-                        
-                    case (.thursday, .monday), (.thursday, .tuesday), (.thursday, .wednesday), (.thursday, .thursday):
-                        return true
-                    case (.thursday, .friday), (.thursday, .saturday), (.thursday, .sunday):
-                        return false
-                    }
-                }))
+            try weekDaysContainers.encode(contentsOf: weekDays.sorted())
         case .monthly(let month):
             try container.encode("month", forKey: .period)
             var ruleContainer = container.nestedContainer(keyedBy: CodingKeys.RuleCodingKeys.self, forKey: .on)

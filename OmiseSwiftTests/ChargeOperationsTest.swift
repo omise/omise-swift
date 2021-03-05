@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import Omise
 
+// swiftlint:disable closure_body_length
 class ChargeOperationsTest: LiveTest {
     
     func testChargeList() {

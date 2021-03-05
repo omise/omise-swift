@@ -3,6 +3,7 @@ import Omise
 
 private let receiptTestingID: DataID<Receipt>! = DataID(idString: "rcpt_test_12345")
 
+// swiftlint:disable closure_body_length
 class ReceiptsOperationFixtureTests: FixtureTestCase {
     
     func testReceiptRetrieve() {

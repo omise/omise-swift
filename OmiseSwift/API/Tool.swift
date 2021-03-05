@@ -446,60 +446,43 @@ extension KeyedEncodingContainerProtocol {
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     mutating func encode(_ value: [String: Any]) throws {
         try value.forEach { (key, value) in
-            let key = JSONCodingKeys(key: key)
-            switch value {
-            case let value as Bool:
-                try encode(value, forKey: key)
-            case let value as Int:
-                try encode(value, forKey: key)
-            case let value as String:
-                try encode(value, forKey: key)
-            case let value as Double:
-                try encode(value, forKey: key)
-            case let value as [String: Any]:
-                try encode(value, forKey: key)
-            case let value as [Any]:
-                try encode(value, forKey: key)
-            case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
-                try encodeNil(forKey: key)
-            default:
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + [key],
-                                          debugDescription: "Invalid JSON value"))
-            }
+            try self.encode(value: value, forKey: key)
         }
     }
     
     mutating func encode<SkippedKeys: CodingKey>(
-        _ value: [String: Any], skippingKeysBy skippingKeys: SkippedKeys.Type
-        ) throws {
+        _ value: [String: Any],
+        skippingKeysBy skippingKeys: SkippedKeys.Type
+    ) throws {
         try value.forEach { (key, value) in
             guard SkippedKeys(stringValue: key) == nil else {
                 return
             }
-            let key = JSONCodingKeys(key: key)
-            switch value {
-            case let value as Bool:
-                try encode(value, forKey: key)
-            case let value as Int:
-                try encode(value, forKey: key)
-            case let value as String:
-                try encode(value, forKey: key)
-            case let value as Double:
-                try encode(value, forKey: key)
-            case let value as [String: Any]:
-                try encode(value, forKey: key)
-            case let value as [Any]:
-                try encode(value, forKey: key)
-            case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
-                try encodeNil(forKey: key)
-            default:
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + [key],
-                                          debugDescription: "Invalid JSON value"))
-            }
+            try self.encode(value: value, forKey: key)
+        }
+    }
+    
+    private mutating func encode(value: Any, forKey key: String) throws {
+        let key = JSONCodingKeys(key: key)
+        switch value {
+        case let value as Bool:
+            try encode(value, forKey: key)
+        case let value as Int:
+            try encode(value, forKey: key)
+        case let value as String:
+            try encode(value, forKey: key)
+        case let value as Double:
+            try encode(value, forKey: key)
+        case let value as [String: Any]:
+            try encode(value, forKey: key)
+        case let value as [Any]:
+            try encode(value, forKey: key)
+        case Optional<Any>.none:
+            try encodeNil(forKey: key)
+        default:
+            let errorContext = EncodingError.Context(codingPath: codingPath + [key],
+                                                     debugDescription: "Invalid JSON value")
+            throw EncodingError.invalidValue(value, errorContext)
         }
     }
 }
@@ -548,10 +531,9 @@ extension UnkeyedEncodingContainer {
                 try encodeNil()
             default:
                 let keys = JSONCodingKeys(intValue: index).map({ [ $0 ] }) ?? []
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + keys,
-                                          debugDescription: "Invalid JSON value"))
+                let errorContext = EncodingError.Context(codingPath: codingPath + keys,
+                                                         debugDescription: "Invalid JSON value")
+                throw EncodingError.invalidValue(value, errorContext)
             }
         }
     }
