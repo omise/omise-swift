@@ -285,6 +285,8 @@ public enum SourceType: Codable, Equatable, Hashable {
 
 
 extension SourceType {
+    
+    // swiftlint:disable function_body_length
     init(apiSoureTypeValue value: String) {
         if value.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = value

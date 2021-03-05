@@ -109,6 +109,7 @@ extension ChargeFailure.Code {
         }
     }
     
+    // swiftlint:disable function_body_length
     public init(code: String) {
         switch code {
         case "insufficient_fund":

@@ -382,7 +382,7 @@ public struct ChargeParams: APIJSONQuery {
         case returnURL = "return_uri"
         case metadata
         
-        fileprivate enum SourceCodingKeys: String, CodingKey {
+        private enum SourceCodingKeys: String, CodingKey {
             case type
         }
     }

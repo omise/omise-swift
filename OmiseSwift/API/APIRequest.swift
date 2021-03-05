@@ -34,7 +34,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         return self
     }
     
-    fileprivate func didComplete(_ data: Data?, response: URLResponse?, error: Error?) {
+    private func didComplete(_ data: Data?, response: URLResponse?, error: Error?) {
         // no one's in the forest to hear the leaf falls.
         guard callback != nil else { return }
         
@@ -76,7 +76,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         performCallback(result)
     }
     
-    fileprivate func performCallback(_ result: APIResult<ResultType>) {
+    private func performCallback(_ result: APIResult<ResultType>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation { cb(result) }
     }

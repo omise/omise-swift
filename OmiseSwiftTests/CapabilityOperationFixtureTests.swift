@@ -1,7 +1,7 @@
 import XCTest
 @testable import Omise
 
-// swiftlint:disable closure_body_length
+// swiftlint:disable closure_body_length function_body_length
 class CapabilityOperationFixtureTests: FixtureTestCase {
     func testCapabilityRetrieve() {
         let expectation = self.expectation(description: "Capability result")

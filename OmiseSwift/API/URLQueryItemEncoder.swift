@@ -45,7 +45,7 @@ public class URLQueryItemEncoder {
 }
 
 extension Array where Element == CodingKey {
-    fileprivate func queryItemKeyForKey(_ key: CodingKey) -> String {
+    private func queryItemKeyForKey(_ key: CodingKey) -> String {
         let keysPath = self + [key]
         return keysPath.queryItemKey
     }
@@ -246,7 +246,7 @@ extension URLQueryItemEncoder: Encoder {
 }
 
 extension URLQueryItemEncoder {
-    fileprivate struct KeyedContainer<Key: CodingKey>: KeyedEncodingContainerProtocol {
+    private struct KeyedContainer<Key: CodingKey>: KeyedEncodingContainerProtocol {
         let encoder: URLQueryItemEncoder
         let codingPath: [CodingKey]
         
@@ -349,7 +349,7 @@ extension URLQueryItemEncoder {
         }
     }
     
-    fileprivate struct SingleValueContanier: SingleValueEncodingContainer {
+    private struct SingleValueContanier: SingleValueEncodingContainer {
         let encoder: URLQueryItemEncoder
         var codingPath: [CodingKey]
         
@@ -426,7 +426,7 @@ extension URLQueryItemEncoder {
 }
 
 private class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
-    fileprivate let encoder: URLQueryItemEncoder
+    private let encoder: URLQueryItemEncoder
     
     init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
         self.encoder = encoder

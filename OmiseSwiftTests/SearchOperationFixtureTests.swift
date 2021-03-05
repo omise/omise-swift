@@ -33,6 +33,7 @@ class SearchOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeChargeFilterParams() throws {
         let filterParams = ChargeFilterParams(
             amount: 1000.00,

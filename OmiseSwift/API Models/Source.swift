@@ -291,7 +291,7 @@ public struct Installment: Codable, Equatable {
     
     public let isZeroInterests: Bool
     
-    fileprivate enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case isZeroInterests = "zero_interest_installments"
         case installmentTerms = "installment_term"

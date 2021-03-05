@@ -60,7 +60,7 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
         return self
     }
     
-    fileprivate func didComplete(data: Data?, error: Error?) {
+    private func didComplete(data: Data?, error: Error?) {
         guard callback != nil else { return }
         
         if let err = error {
@@ -83,7 +83,7 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
         }
     }
     
-    fileprivate func performCallback(_ result: APIResult<TResult>) {
+    private func performCallback(_ result: APIResult<TResult>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation { cb(result) }
     }

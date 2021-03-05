@@ -83,6 +83,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
             case type
         }
         
+        // swiftlint:disable function_body_length
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let typeValue = try container.decode(String.self, forKey: .type)
@@ -147,7 +148,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
 }
 
 extension PaymentSource {
-    fileprivate enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id
         case object
         case isLiveMode = "livemode"
