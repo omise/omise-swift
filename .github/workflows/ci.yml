@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run xcodebuild with tests
+      run: xcodebuild test -quiet -scheme OmiseSwift\ Fixtures\ Test -destination 'platform=iOS Simulator,name=iPhone 12,OS=latest' ENABLE_TESTABILITY=yes
