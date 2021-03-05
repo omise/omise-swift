@@ -19,8 +19,8 @@ class RecipientOperationTest: LiveTest {
             }
         }
         
+        XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
-
     }
 }
 
