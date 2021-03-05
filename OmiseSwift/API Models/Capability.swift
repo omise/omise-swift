@@ -28,7 +28,7 @@ public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
 
 
 extension Capability {
-    public static func ~=(lhs: Capability, rhs: Charge.CreateParams) -> Bool {
+    public static func ~= (lhs: Capability, rhs: Charge.CreateParams) -> Bool {
         func method(from capability: Capability, for payment: Charge.CreateParams.Payment) -> Method? {
             switch payment {
             case .card, .customer:
@@ -80,7 +80,7 @@ extension Capability {
             self.min = Swift.min(min, max)
         }
         
-        public static func ~=(lhs: Capability.Limit, rhs: Int64) -> Bool {
+        public static func ~= (lhs: Capability.Limit, rhs: Int64) -> Bool {
             return lhs.min <= rhs && rhs <= lhs.max
         }
     }

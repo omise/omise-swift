@@ -237,7 +237,7 @@ public enum Barcode: Codable, Equatable {
         }
     }
     
-    public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
+    public static func == (lhs: Barcode, rhs: Barcode) -> Bool {
         switch (lhs, rhs) {
         case (.alipay(let lhsValue), .alipay(let rhsValue)):
             return lhsValue == rhsValue

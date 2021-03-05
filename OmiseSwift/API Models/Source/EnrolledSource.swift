@@ -64,7 +64,7 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        public static func ==(lhs: EnrolledPaymentInformation, rhs: EnrolledPaymentInformation) -> Bool {
+        public static func == (lhs: EnrolledPaymentInformation, rhs: EnrolledPaymentInformation) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
@@ -162,7 +162,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
             }
         }
         
-        public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
+        public static func == (lhs: BillPayment, rhs: BillPayment) -> Bool {
             switch (lhs, rhs) {
             case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
                 return lhsValue == rhsValue
@@ -201,7 +201,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
             }
         }
         
-        public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
+        public static func == (lhs: Barcode, rhs: Barcode) -> Bool {
             switch (lhs, rhs) {
             case (.alipay, .alipay):
                 return true

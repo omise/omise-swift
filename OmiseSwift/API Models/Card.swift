@@ -486,7 +486,7 @@ extension Card: Equatable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: Card, rhs: Card) -> Bool {
+    public static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.id == rhs.id
     }
 }

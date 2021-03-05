@@ -60,7 +60,7 @@ public enum Period {
 
 
 extension Period: Equatable {
-    public static func ==(lhs: Period, rhs: Period) -> Bool {
+    public static func == (lhs: Period, rhs: Period) -> Bool {
         switch (lhs, rhs) {
         case (.daily, .daily):
             return true

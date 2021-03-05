@@ -41,7 +41,7 @@ public extension OmiseIdentifiableObject {
 }
 
 public extension OmiseIdentifiableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -51,7 +51,7 @@ public extension OmiseIdentifiableObject {
 }
 
 public extension OmiseLocatableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.location == rhs.location
     }
     
@@ -61,7 +61,7 @@ public extension OmiseLocatableObject {
 }
 
 public extension OmiseIdentifiableObject where Self: OmiseLocatableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id && lhs.location == rhs.location
     }
     
