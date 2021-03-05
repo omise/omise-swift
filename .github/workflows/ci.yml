@@ -23,7 +23,7 @@ jobs:
       run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
 
   lint:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Run linting
