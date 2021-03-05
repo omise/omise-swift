@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Searchable {
     static var scopeName: String { get }
     associatedtype FilterParams: OmiseFilterParams
@@ -67,9 +66,7 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     }
 }
 
-
 public protocol OmiseFilterParams: APIJSONQuery, Decodable {}
-
 
 public extension OmiseAPIPrimaryObject where Self: Searchable {
     typealias SearchEndpoint = APIEndpoint<SearchParams<FilterParams>, SearchResult<Self>>
@@ -110,7 +107,6 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         return client.request(to: endpoint, callback: requestCallback)
     }
 }
-
 
 public extension Search {
     func makeLoadNextPageOperation() -> TItem.SearchEndpoint {
@@ -167,7 +163,6 @@ public extension Search {
         return client.request(to: operation, callback: requestCallback)
     }
 }
-
 
 public extension APIClient {
     func create<T: OmiseAPIPrimaryObject & Searchable>(

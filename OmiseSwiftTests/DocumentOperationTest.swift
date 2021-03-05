@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 class DocumentOperationTest: LiveTest {
     
     func testDocumentCreate() throws {

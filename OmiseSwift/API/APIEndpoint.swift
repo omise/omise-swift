@@ -1,8 +1,6 @@
 import Foundation
 
-
 public typealias ListAPIEndpoint<Result: OmiseObject> = APIEndpoint<ListParams, ListProperty<Result>>
-
 
 public struct APIEndpoint<QueryType: APIQuery, DataType: OmiseObject> {
     
@@ -63,7 +61,6 @@ public struct APIEndpoint<QueryType: APIQuery, DataType: OmiseObject> {
         return try deserializeData(data)
     }
 }
-
 
 extension APIEndpoint where QueryType == NoAPIQuery {
     init(endpoint: ServerEndpoint = .api, pathComponents: [String], method: HTTPMethod) {

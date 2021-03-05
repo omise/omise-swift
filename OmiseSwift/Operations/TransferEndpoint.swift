@@ -1,6 +1,5 @@
 import Foundation
 
-
 extension Transfer {
     public typealias MarkEndpoint = MarkRequest.Endpoint
     public typealias MarkRequest = APIRequest<NoAPIQuery, Transfer>
@@ -33,7 +32,6 @@ extension Transfer {
         let endpoint = markAsPaidEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
-    
     
     public static func listScheduleEndpoint(with params: ListParams?) -> ScheduleListEndpoint {
         return Schedule<Transfer>.listDataScheduleEndpoint(with: params)

@@ -1,7 +1,6 @@
 import XCTest
 @testable import Omise
 
-
 class FixtureClient: APIClient {
     fileprivate let fixturesDirectoryURL: URL?
     
@@ -30,7 +29,6 @@ class FixtureClient: APIClient {
             return nil
     }
 }
-
 
 class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<QueryType, TResult> {
     private var fixtureClient: FixtureClient? { client as? FixtureClient }
@@ -88,7 +86,6 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
         client.operationQueue.addOperation { cb(result) }
     }
 }
-
 
 protocol AdditionalFixtureData {
     var fixtureFileSuffix: String? { get }

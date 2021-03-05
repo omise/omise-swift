@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct AnySchedulable: Schedulable {
     public typealias ScheduleData = AnyScheduleData
     public typealias Parameter = AnySchedulingParameter

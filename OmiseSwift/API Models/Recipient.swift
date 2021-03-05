@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Recipient: OmiseResourceObject, Equatable {
     public static let resourcePath = "/recipients"
     public static let idPrefix: String = "recp"
@@ -106,7 +105,6 @@ extension Recipient {
     }
 }
 
-
 public struct RecipientParams: APIJSONQuery {
     public var name: String?
     public var email: String?
@@ -164,7 +162,6 @@ extension Recipient: Updatable {
     public typealias UpdateParams = RecipientParams
 }
 
-
 extension Recipient: OmiseAPIPrimaryObject {}
 extension Recipient: Listable {}
 extension Recipient: Retrievable {}
@@ -217,7 +214,6 @@ public struct RecipientFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(type, forKey: .type)
     }
 }
-
 
 extension Recipient: Searchable {
     public typealias FilterParams = RecipientFilterParams

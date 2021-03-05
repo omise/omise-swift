@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 class DigitsTest: XCTestCase {
     func testCreateDigitsSuccessfully() {
         let firstDigits = Digits(digitsString: "1234")

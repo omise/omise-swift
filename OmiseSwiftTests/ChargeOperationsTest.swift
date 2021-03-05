@@ -22,7 +22,6 @@ class ChargeOperationsTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
      
-    
     func testChargeRetrieve() {
         let expectation = self.expectation(description: "charge retrieve")
         

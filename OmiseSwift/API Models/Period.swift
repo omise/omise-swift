@@ -1,6 +1,5 @@
 import Foundation
 
-
 public enum Period {
     case daily
     case weekly(Set<Weekday>)
@@ -57,7 +56,6 @@ public enum Period {
         case weekdayOfMonth(ordinal: Ordinal, weekday: Weekday)
     }
 }
-
 
 extension Period: Equatable {
     public static func == (lhs: Period, rhs: Period) -> Bool {
@@ -221,7 +219,6 @@ extension Period.Weekday {
             return nil
         }
     }
-    
     
     fileprivate var apiValue: String {
         switch self {

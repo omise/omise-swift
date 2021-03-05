@@ -1,6 +1,5 @@
 import Foundation
 
-
 extension Charge {
     public typealias ChargeOperationEndpoint = APIEndpoint<NoAPIQuery, Charge>
     public typealias ChargeOperationRequest = APIRequest<NoAPIQuery, Charge>
@@ -15,7 +14,6 @@ extension Charge {
     
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Charge>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Charge>>
-    
     
     public static func captureEndpoint(for id: DataID<Charge>) -> CaptureEndpoint {
         return CaptureEndpoint(

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Destroyable {
     var isDeleted: Bool { get }
 }
@@ -35,7 +34,6 @@ public extension APIClient {
         return T.destroy(using: self, id: dataID, callback: callback)
     }
 }
-
 
 public extension OmiseAPIChildObject where Self: Destroyable & OmiseIdentifiableObject {
     static func destroyEndpointWith(parent: Parent, id: DataID<Self>) -> DestroyEndpoint {

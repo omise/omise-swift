@@ -80,7 +80,6 @@ class RefundOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
         

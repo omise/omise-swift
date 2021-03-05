@@ -1,10 +1,8 @@
 import Foundation
 
-
 public protocol OmiseAPIChildObject: OmiseLocatableObject & OmiseIdentifiableObject {
     associatedtype Parent: OmiseResourceObject & OmiseAPIPrimaryObject
 }
-
 
 extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject {
     static func makeResourcePathsWith(parent: Parent, id: DataID<Self>? = nil) -> [String] {

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class APIClient: NSObject {
     public static let sessionIdentifier = "omise.co"
     
@@ -61,7 +60,6 @@ public class APIClient: NSObject {
         
         return nil
     }
-    
     
     func performCallback(_ callback: @escaping () -> Void) {
         operationQueue.addOperation(callback)

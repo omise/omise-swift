@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Link: OmiseResourceObject, Equatable {
     public static let resourcePath = "/links"
     public static let idPrefix: String = "link"
@@ -27,7 +26,6 @@ public struct Link: OmiseResourceObject, Equatable {
     public let paymentURL: URL
 }
 
-
 extension Link {
     private enum CodingKeys: String, CodingKey {
         case object
@@ -48,7 +46,6 @@ extension Link {
         case paymentURL = "payment_uri"
     }
 }
-
 
 public struct LinkParams: APIJSONQuery {
     public var value: Value
@@ -131,7 +128,6 @@ public struct LinkFilterParams: OmiseFilterParams {
         self.usedDate = usedDate
     }
 }
-
 
 extension Link: OmiseAPIPrimaryObject {}
 extension Link: Listable {}

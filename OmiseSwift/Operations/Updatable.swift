@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Updatable {
     associatedtype UpdateParams: APIJSONQuery
 }
@@ -29,7 +28,6 @@ public extension OmiseAPIPrimaryObject where Self: Updatable & OmiseIdentifiable
     }
 }
 
-
 public extension APIClient {
     func update<T: OmiseAPIPrimaryObject & Updatable>(
         dataID: DataID<T>,
@@ -39,7 +37,6 @@ public extension APIClient {
         return T.update(using: self, id: dataID, params: params, callback: callback)
     }
 }
-
 
 public extension OmiseAPIChildObject where Self: Updatable & OmiseIdentifiableObject {
     static func updateEndpointWith(parent: Parent, id: DataID<Self>, params: UpdateParams) -> UpdateEndpoint {

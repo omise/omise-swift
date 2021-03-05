@@ -3,7 +3,6 @@ import Foundation
 public let centBasedCurrencyFactor = 100
 public let identicalBasedCurrencyFactor = 1
 
-
 public enum Currency: Codable, Hashable {
     case thb
     case jpy

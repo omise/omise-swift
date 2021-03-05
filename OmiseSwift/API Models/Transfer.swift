@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Transfer: OmiseResourceObject, Equatable {
     public static let resourcePath = "/transfers"
     public static let idPrefix: String = "trsf"
@@ -140,7 +139,6 @@ extension Transfer {
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLiveMode, forKey: .isLiveMode)
         
-        
         try container.encode(shouldFailFast, forKey: .shouldFailFast)
         try container.encode(bankAccount, forKey: .bankAccount)
         try container.encode(isDeleted, forKey: .isDeleted)
@@ -168,7 +166,6 @@ extension Transfer {
     }
 }
 
-
 public struct TransferParams: APIJSONQuery {
     public var amount: Int64
     public var recipientID: DataID<Recipient>?
@@ -194,7 +191,6 @@ public struct UpdateTransferParams: APIJSONQuery {
         self.amount = amount
     }
 }
-
 
 public struct TransferFilterParams: OmiseFilterParams {
     public var amount: Double?
@@ -264,7 +260,6 @@ public struct TransferFilterParams: OmiseFilterParams {
         self.sentDate = sentDate
     }
 }
-
 
 extension Transfer: OmiseAPIPrimaryObject {}
 extension Transfer: Listable {}

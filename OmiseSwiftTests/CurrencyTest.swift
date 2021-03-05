@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 class CurrencyTest: XCTestCase {
     
     // swiftlint:disable function_body_length

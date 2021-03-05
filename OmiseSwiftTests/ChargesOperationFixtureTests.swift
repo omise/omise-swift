@@ -265,7 +265,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.fundingValue.amount, 1_000_000)
                 XCTAssertEqual(charge.fundingValue.currency, .thb)
                 
-                
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -1437,7 +1436,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(defaultCharge.createdDate, decodedCharge.createdDate)
     }
     
-    
     // MARK: - Resilient Cases
     
     func testResilientInternetBankingChargeRetrieve() {
@@ -1676,7 +1674,6 @@ class ChargesOperationFixtureTests: FixtureTestCase {
     }
     
 }
-
 
 extension ChargeParams: AdditionalFixtureData {
     var fixtureFileSuffix: String? {

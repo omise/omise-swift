@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public static let resourcePath = "documents"
     public static let idPrefix: String = "docu"
@@ -31,7 +30,6 @@ extension Document {
         case downloadURL = "download_uri"
     }
 }
-
 
 extension Document: Listable {}
 extension Document: Retrievable {}

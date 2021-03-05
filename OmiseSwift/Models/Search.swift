@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     
     public let scope: String
@@ -41,7 +40,6 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         self.loadedPages = CountableRange(result.page...result.page)
         self.data = result.data
     }
-    
     
     public func setList(from result: SearchResult<TItem>) -> [TItem] {
         self.data = result.data
@@ -86,7 +84,6 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         self.numberOfItemsPerPage = 0
         self.loadedPages = 0..<0
     }
-    
     
     public func insert(from value: SearchResult<TItem>) -> [TItem] {
         self.totalPages = value.totalPage

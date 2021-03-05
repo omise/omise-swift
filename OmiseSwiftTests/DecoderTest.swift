@@ -1,7 +1,6 @@
 import XCTest
 @testable import Omise
 
-
 struct MetadataDummy: Decodable {
     
     let metadata: [String: Any]

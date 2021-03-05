@@ -545,7 +545,6 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
     func testCreateChargeSchedule() {
         let expectation = self.expectation(description: "Create Schedule result")
         

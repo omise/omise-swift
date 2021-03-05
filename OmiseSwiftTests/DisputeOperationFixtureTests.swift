@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 private let disputeTestingID: DataID<Dispute> = "dspt_test_5fzexd718s2izg1md4l"
 
 class DisputeOperationFixtureTests: FixtureTestCase {

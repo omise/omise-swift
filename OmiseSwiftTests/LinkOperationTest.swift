@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 class LinkOperationTest: LiveTest {
     
     func testLinkRetrieve() {

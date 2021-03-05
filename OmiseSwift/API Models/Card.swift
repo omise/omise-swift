@@ -12,7 +12,6 @@ public enum CardBrand: String, Codable, Equatable {
     case maestro = "Maestro"
 }
 
-
 public enum CardFinancing: RawRepresentable, Codable, Equatable {
     
     case credit
@@ -54,7 +53,6 @@ public enum CardFinancing: RawRepresentable, Codable, Equatable {
         }
     }
 }
-
 
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
@@ -327,7 +325,6 @@ public struct CustomerCard: OmiseLocatableObject, OmiseIdentifiableObject, Omise
     public let passSecurityCodeCheck: Bool
 }
 
-
 extension CustomerCard {
     private enum CodingKeys: String, CodingKey {
         case object
@@ -428,7 +425,6 @@ public struct CardParams: APIJSONQuery {
     }
 }
 
-
 extension CustomerCard: Listable {}
 extension CustomerCard: Retrievable {}
 extension CustomerCard: Destroyable {}
@@ -439,7 +435,6 @@ extension CustomerCard: Updatable {
 extension CustomerCard: OmiseAPIChildObject {
     public typealias Parent = Customer
 }
-
 
 extension Customer {
     public func listCards(
@@ -475,7 +470,6 @@ extension Customer {
         return CustomerCard.destroy(using: client, parent: self, id: id, callback: callback)
     }
 }
-
 
 extension Card: Equatable {
     /// Returns a Boolean value indicating whether two values are equal.

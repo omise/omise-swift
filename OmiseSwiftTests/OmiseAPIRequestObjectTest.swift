@@ -2,7 +2,6 @@ import Foundation
 import XCTest
 @testable import Omise
 
-
 class OmiseAPIRequestObjectTest: FixtureTestCase {
     
     func testChargeRequest() {

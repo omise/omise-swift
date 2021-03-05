@@ -371,7 +371,6 @@ class SourceOperationFixtureTests: FixtureTestCase {
                     XCTFail("Wrong payment information")
                 }
 
-                
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -574,9 +573,7 @@ class SourceOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
 }
-
 
 extension PaymentSourceParams: AdditionalFixtureData {
     var fixtureFileSuffix: String? {

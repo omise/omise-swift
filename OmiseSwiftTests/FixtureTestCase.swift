@@ -48,7 +48,6 @@ class FixtureTestCase: OmiseTestCase {
         return try decoder.decode(T.self, from: data)
     }
     
-    
     func fixturesObjectFor<T: OmiseLocatableObject & SingletonRetrievable>(
         type: T.Type, suffix: String? = nil
         ) throws -> T {

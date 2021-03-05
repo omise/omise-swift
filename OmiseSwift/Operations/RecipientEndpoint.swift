@@ -1,6 +1,5 @@
 import Foundation
 
-
 extension Recipient {
     public typealias ScheduleListEndpoint = ListAPIEndpoint<Schedule<Transfer>>
     public typealias ScheduleListRequest = ListAPIRequest<Schedule<Transfer>>

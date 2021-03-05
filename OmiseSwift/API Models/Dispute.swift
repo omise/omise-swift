@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Dispute: OmiseResourceObject, Equatable {
     public static let resourcePath = "/disputes"
     public static let idPrefix: String = "dspt"
@@ -39,7 +38,6 @@ public struct Dispute: OmiseResourceObject, Equatable {
         case lost
     }
 }
-
 
 extension Dispute {
     public init(from decoder: Decoder) throws {
@@ -112,7 +110,6 @@ extension Dispute {
         case metadata
     }
 }
-
 
 extension Dispute {
     public enum Reason: Codable {
@@ -220,13 +217,11 @@ extension Dispute.Reason: Equatable {
     }
 }
 
-
 public enum DisputeStatusQuery: String {
     case open
     case pending
     case closed
 }
-
 
 public struct DisputeParams: APIJSONQuery {
     public var message: String?
@@ -290,7 +285,6 @@ public struct DisputeFilterParams: OmiseFilterParams {
     }
 }
 
-
 extension Dispute: OmiseAPIPrimaryObject {}
 extension Dispute: Listable {}
 extension Dispute: Retrievable {}
@@ -302,7 +296,6 @@ extension Dispute: Updatable {
 extension Dispute: Searchable {
     public typealias FilterParams = DisputeFilterParams
 }
-
 
 extension Dispute {
     public static func list(

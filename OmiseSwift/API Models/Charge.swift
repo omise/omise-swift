@@ -2,7 +2,6 @@
 
 import Foundation
 
-
 public struct Charge: OmiseResourceObject, Equatable {
     public static let resourcePath = "/charges"
     public static let idPrefix: String = "chrg"
@@ -353,7 +352,6 @@ extension Charge {
     }
 }
 
-
 public struct ChargeParams: APIJSONQuery {
     
     public enum Payment {
@@ -636,7 +634,6 @@ public struct ChargeFilterParams: OmiseFilterParams {
         self.isVoided = isVoided
     }
 }
-
 
 extension Charge: OmiseAPIPrimaryObject {}
 extension Charge: Listable {}

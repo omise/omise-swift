@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Creatable {
     associatedtype CreateParams: APIQuery
 }
@@ -28,7 +27,6 @@ public extension OmiseAPIPrimaryObject where Self: Creatable {
     }
 }
 
-
 public extension APIClient {
     func create<T: OmiseAPIPrimaryObject & Creatable>(
         params: T.CreateParams,
@@ -37,7 +35,6 @@ public extension APIClient {
         return T.create(using: self, params: params, callback: callback)
     }
 }
-
 
 public extension OmiseAPIChildObject where Self: Creatable {
     static func createEndpointWith(parent: Parent, params: CreateParams) -> Self.CreateEndpoint {

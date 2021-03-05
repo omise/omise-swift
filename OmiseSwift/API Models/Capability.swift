@@ -2,7 +2,6 @@
 
 import Foundation
 
-
 public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
     public static var resourcePath: String = "capability"
     
@@ -25,7 +24,6 @@ public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
         return methods[.source(sourceType)]
     }
 }
-
 
 extension Capability {
     public static func ~= (lhs: Capability, rhs: Charge.CreateParams) -> Bool {
@@ -64,7 +62,6 @@ extension Capability {
         return isValidValue && isPaymentValid
     }
 }
-
 
 extension Capability {
     public struct Limit: Codable, Equatable, Hashable {
@@ -136,7 +133,6 @@ extension Capability: Codable {
         case transfer = "transfer_amount"
     }
 }
-
 
 extension Capability.Method {
     private enum CodingKeys: String, CodingKey {
@@ -367,7 +363,6 @@ extension Capability.Method {
         }
     }
 }
-
 
 private let creditCardMethodTypeValue = "card"
 extension Capability.Method {

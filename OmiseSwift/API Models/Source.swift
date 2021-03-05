@@ -2,13 +2,11 @@
 
 import Foundation
 
-
 public enum Flow: String, Codable, Equatable {
     case redirect
     case offline
     case appRedirect = "app_redirect"
 }
-
 
 public protocol SourceData: OmiseIdentifiableObject {
     associatedtype PaymentInformation: Codable, Equatable
@@ -29,7 +27,6 @@ extension SourceData {
         return Value(amount: amount, currency: currency)
     }
 }
-
 
 public enum Source: SourceData {
     public static let idPrefix: String = "src"
@@ -117,7 +114,6 @@ extension Source {
         }
     }
 }
-
 
 public enum Barcode: Codable, Equatable {
     case alipay(AlipayBarcode)
@@ -282,7 +278,6 @@ public enum Barcode: Codable, Equatable {
     
 }
 
-
 public struct Installment: Codable, Equatable {
     /// The brand of the bank of the installment
     public let brand: SourceType.InstallmentBrand
@@ -324,7 +319,6 @@ public struct Installment: Codable, Equatable {
         try container.encode(numberOfTerms, forKey: .installmentTerms)
         try container.encode(isZeroInterests, forKey: .isZeroInterests)
     }
-    
     
     public static func availableTerms(for brand: SourceType.InstallmentBrand) -> IndexSet {
         switch brand {
@@ -426,7 +420,6 @@ public struct PaymentSourceParams: APIJSONQuery {
             }
         }
         
-        
         private enum CodingKeys: String, CodingKey {
             case type
         }
@@ -444,7 +437,6 @@ public struct PaymentSourceParams: APIJSONQuery {
             }
         }
     }
-    
     
     private enum CodingKeys: String, CodingKey {
         case amount
@@ -470,7 +462,6 @@ public struct PaymentSourceParams: APIJSONQuery {
         self.sourceParameter = type
     }
 }
-
 
 extension PaymentSource: OmiseAPIPrimaryObject {}
 extension PaymentSource: Retrievable {}

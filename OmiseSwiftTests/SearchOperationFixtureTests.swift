@@ -1,7 +1,6 @@
 import XCTest
 @testable import Omise
 
-
 class SearchOperationFixtureTests: FixtureTestCase {
     
     static let dateComponents: DateComponents = {
@@ -81,7 +80,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.isVoided, decodedChargeFilterParams.isVoided)
     }
     
-    
     func testEncodeRefundFilterParams() throws {
         let filterParams = RefundFilterParams(
             amount: 1000.00,
@@ -102,7 +100,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.createdDate, decodedFilterParams.createdDate)
         XCTAssertEqual(filterParams.isVoided, decodedFilterParams.isVoided)
     }
-    
     
     func testEncodeDisputeFilterParams() throws {
         let filterParams = DisputeFilterParams(
@@ -129,7 +126,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.status, decodedDisputedFilterParams.status)
     }
     
-    
     func testEncodeRecipientFilterParams() throws {
         let filterParams = RecipientFilterParams(
             isActive: false,
@@ -153,7 +149,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.type, decodedRecipientFilterParams.type)
     }
     
-    
     func testEncodeCustomerFilterParams() throws {
         let filterParams = CustomerFilterParams(
             createdDate: SearchOperationFixtureTests.dateComponents)
@@ -168,7 +163,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         
         XCTAssertEqual(filterParams.createdDate, decodedCustomerFilterParams.createdDate)
     }
-    
     
     func testEncodeLinkFilterParams() throws {
         let filterParams = LinkFilterParams(
@@ -192,7 +186,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.isUsed, decodedLinkFilterParams.isUsed)
         XCTAssertEqual(filterParams.usedDate, decodedLinkFilterParams.usedDate)
     }
-    
     
     func testEncodeTransferFilterParams() throws {
         let filterParams = TransferFilterParams(
@@ -223,7 +216,6 @@ class SearchOperationFixtureTests: FixtureTestCase {
         XCTAssertEqual(filterParams.sentDate, decodedTransferFilterParams.sentDate)
     }
 }
-
 
 extension SearchParams: AdditionalFixtureData {
     var fixtureFileSuffix: String? {

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class List<TItem: OmiseLocatableObject & Listable> {
     public private(set) var from: Date
     public private(set) var to: Date
@@ -165,7 +164,6 @@ public class List<TItem: OmiseLocatableObject & Listable> {
     }
 }
 
-
 extension List: RandomAccessCollection {
     public subscript(index: Array<TItem>.Index) -> TItem {
         return data[index]
@@ -196,7 +194,6 @@ extension List: RandomAccessCollection {
     }
 }
 
-
 func range(fromOffset offset: Int, count: Int) -> CountableRange<Int> {
     return offset..<(offset + count)
 }
@@ -213,7 +210,6 @@ func combine(range: CountableRange<Int>, with anotherRange: CountableRange<Int>)
         return range
     }
 }
-
 
 enum Side {
     case lower
@@ -236,7 +232,6 @@ extension CountableRange where Bound: Strideable {
         }
     }
 }
-
 
 func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> CountableRange<Int> {
     switch side {

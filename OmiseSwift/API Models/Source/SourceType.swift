@@ -1,6 +1,5 @@
 import Foundation
 
-
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
 let promptPayValue = "promptpay"
@@ -283,7 +282,6 @@ public enum SourceType: Codable, Equatable, Hashable {
     }
 }
 
-
 extension SourceType {
     
     // swiftlint:disable function_body_length
@@ -347,7 +345,6 @@ extension SourceType {
         try container.encode(value)
     }
 }
-
 
 public struct Truemoney: Hashable, Codable {
     public let phoneNumber: String?

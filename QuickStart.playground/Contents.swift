@@ -24,7 +24,6 @@ import Omise // <-- Make sure this works first by building the OmiseSwiftOSX tar
 let publicKey = "<#Your public key here#>" // <-- Change to your keys to see result in playground!
 let secretKey = "<#Your secret key here#>"
 
-
 /*:
  ## Create an instance of `APIClient`
  

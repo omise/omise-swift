@@ -9,7 +9,6 @@ import AppKit
 public typealias Color = NSColor
 #endif
 
-
 func omiseWarn(_ message: String) {
     print("[omise-swift] WARN: \(message)")
 }
@@ -52,7 +51,6 @@ public extension Color {
         }
     }
 }
-
 
 func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
     let jsonDecoder = JSONDecoder()
@@ -126,7 +124,6 @@ func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -
     return "\(year)-\(month)-\(day)"
 }
 
-
 extension Decoder {
     func decode(as type: [String: Any].Type) throws -> [String: Any] {
         let container = try self.container(keyedBy: JSONCodingKeys.self)
@@ -186,7 +183,6 @@ struct JSONCodingKeys: CodingKey {
         self.intValue = intValue
     }
 }
-
 
 enum CombineCodingKeys<Left: CodingKey, Right: CodingKey>: CodingKey {
     var stringValue: String {
@@ -255,7 +251,6 @@ struct SkippingKeyCodingKeys<Key: CodingKey>: CodingKey {
     }
 }
 
-
 extension KeyedDecodingContainerProtocol {
     func decode(_ type: DateComponents.Type, forKey key: Key) throws -> DateComponents {
         let dateComponentsValue = try decode(String.self, forKey: key)
@@ -321,7 +316,6 @@ extension KeyedDecodingContainerProtocol {
     }
 
 }
-
 
 extension KeyedDecodingContainerProtocol {
     func decode(_ type: [String: Any].Type, forKey key: Key) throws -> [String: Any] {
@@ -402,7 +396,6 @@ extension UnkeyedDecodingContainer {
     }
 }
 
-
 extension Encoder {
     func encode(_ dateComponents: DateComponents) throws {
         var container = singleValueContainer()
@@ -441,7 +434,6 @@ extension KeyedEncodingContainerProtocol {
         try encode(dateComponentsValue, forKey: key)
     }
 }
-
 
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
     mutating func encode(_ value: [String: Any]) throws {

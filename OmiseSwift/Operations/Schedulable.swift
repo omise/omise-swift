@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol SchedulingParameter: APIJSONQuery {}
 
 public protocol Schedulable: OmiseIdentifiableObject, OmiseCreatedObject {

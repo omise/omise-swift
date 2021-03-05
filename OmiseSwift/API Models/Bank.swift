@@ -6,7 +6,6 @@ import UIKit
 import AppKit
 #endif
 
-
 // We provide the banks information file in a JSON file format.
 // This JSON's keys are the country code of supported banks and
 // values are maps from the bank's ID to a JSON dictionary containing bank's information
@@ -35,7 +34,6 @@ private let bankCountryCodeMap: [String: String] = {
     
     return countryCodes
 }()
-
 
 // A dictionary where key is a bank's ID and value is a bank's information
 private let bankData: [String: JSONDictionary] = Dictionary(banks.flatMap { $0.1 }) { $1 }

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct ChargeFailure: Equatable {
     
     public let code: Code
@@ -51,7 +50,6 @@ public struct ChargeFailure: Equatable {
         case other(String)
     }
 }
-
 
 extension ChargeFailure.Code {
     
@@ -172,7 +170,6 @@ extension ChargeFailure.Code {
     }
 }
 
-
 public struct TransferFailure: Equatable {
     
     public let code: Code
@@ -185,7 +182,6 @@ public struct TransferFailure: Equatable {
         case paidFailed
         
         case other(String)
-        
         
         public var code: String {
             switch self {

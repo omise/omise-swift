@@ -60,7 +60,6 @@ class TransferOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
@@ -116,7 +115,6 @@ class TransferOperationFixtureTests: FixtureTestCase {
         
         waitForExpectations(timeout: 15.0, handler: nil)
     }
-    
     
     func testTransferOtherFailureCode() {
         let expectation = self.expectation(description: "transfer result")

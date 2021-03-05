@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public enum Status: Equatable {
         case running
@@ -212,7 +211,6 @@ extension Calendar {
     }()
 }
 
-
 extension Schedule.Status: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -254,12 +252,10 @@ extension Schedule.Status: Codable {
     }
 }
 
-
 extension Schedule: OmiseAPIPrimaryObject {}
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
 extension Schedule: Destroyable {}
-
 
 public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {
     public let every: Int

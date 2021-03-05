@@ -1,6 +1,5 @@
 import Foundation
 
-
 extension Forex {
     public typealias RetrieveEndpoint = APIEndpoint<NoAPIQuery, Forex>
     public typealias RetrieveRequest = APIRequest<NoAPIQuery, Forex>

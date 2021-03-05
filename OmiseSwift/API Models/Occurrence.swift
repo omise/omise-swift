@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Occurrence<Data: Schedulable>: OmiseResourceObject, Equatable {
     
     public enum Status: Equatable {
@@ -111,7 +110,6 @@ extension Occurrence {
         }
     }
 }
-
 
 extension Occurrence: OmiseAPIChildObject {
     public typealias Parent = Schedule<Data>

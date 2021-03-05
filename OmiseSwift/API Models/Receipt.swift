@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Receipt: OmiseResourceObject, Equatable {
     public static let idPrefix: String = "rcpt"
     public static let resourcePath = "/receipts"
@@ -125,7 +124,6 @@ extension Receipt {
         try container.encode(total, forKey: .total)
     }
 }
-
 
 extension Receipt: OmiseAPIPrimaryObject {}
 extension Receipt: Listable {}

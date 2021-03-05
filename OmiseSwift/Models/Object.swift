@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol OmiseObject: Codable {
     var object: String { get }
 }
@@ -25,14 +24,12 @@ public protocol OmiseLiveModeObject: OmiseObject {
     var isLiveMode: Bool { get }
 }
 
-
 public protocol OmiseResourceObject: OmiseLocatableObject,
                                      OmiseIdentifiableObject,
                                      OmiseLiveModeObject,
                                      OmiseCreatedObject {}
 
 public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
-
 
 public extension OmiseIdentifiableObject {
     static func validate(id: String) -> Bool {

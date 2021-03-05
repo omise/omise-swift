@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct EnrolledSource: SourceData {
     public typealias PaymentInformation = EnrolledSource.EnrolledPaymentInformation
     

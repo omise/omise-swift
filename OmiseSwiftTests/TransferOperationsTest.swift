@@ -95,7 +95,6 @@ class TransferOperationsTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
     func testCreateAndDestroy() {
         let expectation = self.expectation(description: "transfer create")
         

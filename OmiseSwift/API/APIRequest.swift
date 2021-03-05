@@ -1,9 +1,7 @@
 import Foundation
 
-
 public typealias ListAPIRequest<Result: OmiseObject> = APIRequest<ListParams, ListProperty<Result>>
 public typealias RetrieveAPIRequest<Result: OmiseObject> = APIRequest<RetrieveParams, Result>
-
 
 public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
     public typealias Endpoint = APIEndpoint<QueryType, ResultType>

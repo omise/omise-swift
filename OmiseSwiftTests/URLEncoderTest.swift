@@ -2,7 +2,6 @@ import Foundation
 @testable import Omise
 import XCTest
 
-
 // This is a special protocol to support decoding metadata type.
 // This situation will be greatly improved when `Conditional Conformance` feature land in Swift
 public protocol JSONType: Decodable {
@@ -51,7 +50,6 @@ public struct AnyJSONType: JSONType {
         }
     }
 }
-
 
 extension AnyJSONType: Encodable {
     public func encode(to encoder: Encoder) throws {
@@ -298,7 +296,6 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("inner", result[19].value)
         XCTAssertEqual("8deeper[nesting][also]", result[20].name)
         XCTAssertEqual("works", result[20].value)
-        
         
         XCTAssertEqual("0", result[21].value)
         XCTAssertEqual("9deeparrayindeepdictionary[array][0]", result[21].name)

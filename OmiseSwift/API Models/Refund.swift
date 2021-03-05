@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Refund: OmiseResourceObject, Equatable {
     public static let resourcePath = "/refunds"
     public static let idPrefix: String = "rfnd"
@@ -112,7 +111,6 @@ public struct RefundParams: APIJSONQuery {
     }
 }
 
-
 public struct RefundFilterParams: OmiseFilterParams {
     public var amount: Double?
     public var cardLastDigits: Digits?
@@ -155,7 +153,6 @@ public struct RefundFilterParams: OmiseFilterParams {
     }
 }
 
-
 extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
@@ -169,7 +166,6 @@ extension Refund: Searchable {
 extension Refund: OmiseAPIChildObject {
     public typealias Parent = Charge
 }
-
 
 extension Charge {
     public func retrieveRefund(

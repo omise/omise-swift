@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Listable {}
 
 public struct ListParams: APIURLQuery {
@@ -67,7 +66,6 @@ public extension OmiseAPIPrimaryObject where Self: Listable {
         return client.request(to: endpoint, callback: requestCallback)
     }
 }
-
 
 public extension List {
     func makeLoadNextPageOperation(count: Int?) -> TItem.ListEndpoint {
@@ -196,7 +194,6 @@ public extension APIClient {
     }
 }
 
-
 public extension OmiseAPIChildObject where Self: OmiseLocatableObject & Listable {
     @discardableResult
     static func listEndpointWith(parent: Parent, params: ListParams?) -> ListEndpoint {
@@ -259,7 +256,6 @@ public extension OmiseAPIPrimaryObject where Self: OmiseResourceObject {
         return client.request(to: endpoint, callback: callback)
     }
 }
-
 
 public extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
     func listEndpoint<Children: OmiseLocatableObject>(

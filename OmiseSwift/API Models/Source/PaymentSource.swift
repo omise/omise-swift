@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct PaymentSource: SourceData, OmiseResourceObject {
     public static let resourcePath = "sources"
     public static let idPrefix: String = "src"

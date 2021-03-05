@@ -1,6 +1,5 @@
 import Foundation
 
-
 public extension Refund {
     typealias ListEndpoint = APIEndpoint<ListParams, ListProperty<Refund>>
     typealias ListRequest = APIRequest<ListParams, ListProperty<Refund>>

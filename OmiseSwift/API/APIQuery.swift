@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol APIQuery: Encodable {
     func makePayload() -> (String, Data)?
 }
@@ -23,7 +22,6 @@ public enum NoAPIQuery: APIQuery {
     
     public func encode(to encoder: Encoder) throws {}
 }
-
 
 extension APIURLQuery {
     public func makePayload() -> (String, Data)? {

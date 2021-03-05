@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Token: OmiseResourceObject, Equatable {
     public static let resourcePath = "/tokens"
     public static let idPrefix: String = "tokn"
@@ -28,7 +27,6 @@ extension Token {
         case card
     }
 }
-
 
 public struct TokenParams: APIJSONQuery {
     public var name: String
@@ -87,7 +85,6 @@ public struct TokenParams: APIJSONQuery {
         self.billingAddress = billingAddress
     }
 }
-
 
 extension Token {}
 

@@ -2,9 +2,7 @@
 
 import Foundation
 
-
 let iso8601Formatter = ISO8601DateFormatter()
-
 
 public class URLQueryItemEncoder {
     public enum ArrayIndexEncodingStrategy {
@@ -22,7 +20,6 @@ public class URLQueryItemEncoder {
         try value.encode(to: self)
         return items
     }
-    
     
     private static let formURLEncodedAllowedCharacters: CharacterSet = {
         var characters = CharacterSet.urlQueryAllowed

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Retrievable {}
 
 public struct RetrieveParams: APIURLQuery {
@@ -35,7 +34,6 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
     }
 }
 
-
 public extension APIClient {
     func retrieve<T: OmiseAPIPrimaryObject & Retrievable>(
         dataID: DataID<T>, callback: @escaping T.RetrieveRequest.Callback
@@ -43,7 +41,6 @@ public extension APIClient {
         return T.retrieve(using: self, id: dataID, callback: callback)
     }
 }
-
 
 public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject & Retrievable {
     static func retrieveEndpointWith(parent: Parent, id: DataID<Self>) -> RetrieveEndpoint {

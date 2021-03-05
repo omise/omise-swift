@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public let idString: String
     
