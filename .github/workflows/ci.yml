@@ -16,8 +16,8 @@ jobs:
             destination: 'platform=iOS Simulator,name=iPhone 12,OS=latest'
     steps:
     - uses: actions/checkout@v2
+    - name: Run xcodebuild with tests
       env:
         scheme: ${{ matrix.scheme }}
         destination: ${{ matrix.destination }}
-    - name: Run xcodebuild with tests
-      run: xcodebuild clean test -quiet -scheme "${scheme}" -destination "${destination}" ENABLE_TESTABILITY=yes
+      run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
