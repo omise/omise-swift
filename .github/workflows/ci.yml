@@ -20,4 +20,4 @@ jobs:
         scheme: ${{ matrix.scheme }}
         destination: ${{ matrix.destination }}
     - name: Run xcodebuild with tests
-      run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
+      run: xcodebuild clean test -quiet -scheme "${scheme}" -destination "${destination}" ENABLE_TESTABILITY=yes
