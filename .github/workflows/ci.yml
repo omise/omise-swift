@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    strategy:
+      matrix: 
+        include: 
+          - scheme: 'OmiseSwift Fixtures Test'
+            destination: 'platform=iOS Simulator,name=iPhone 12,OS=latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      env:
+        scheme: ${{ matrix.scheme }}
+        destination: ${{ matrix.destination }}
+      run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
