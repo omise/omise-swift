@@ -21,3 +21,14 @@ jobs:
         scheme: ${{ matrix.scheme }}
         destination: ${{ matrix.destination }}
       run: xcodebuild clean test -quiet -scheme "$scheme" -destination "$destination" ENABLE_TESTABILITY=yes
+
+  lint:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run linting
+      uses: norio-nomura/action-swiftlint@3.2.1
+      with:
+        args: --strict
+      env:
+        DIFF_BASE: ${{ github.base_ref }}
