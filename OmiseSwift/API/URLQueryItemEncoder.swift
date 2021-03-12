@@ -1,8 +1,8 @@
+// swiftlint:disable file_length
+
 import Foundation
 
-
 let iso8601Formatter = ISO8601DateFormatter()
-
 
 public class URLQueryItemEncoder {
     public enum ArrayIndexEncodingStrategy {
@@ -10,7 +10,7 @@ public class URLQueryItemEncoder {
         case index
     }
     
-    fileprivate(set) public var codingPath: [CodingKey] = []
+    public fileprivate(set) var codingPath: [CodingKey] = []
     fileprivate var items: [URLQueryItem] = []
     public var arrayIndexEncodingStrategy = ArrayIndexEncodingStrategy.emptySquareBrackets
     public init() {}
@@ -21,29 +21,28 @@ public class URLQueryItemEncoder {
         return items
     }
     
-    
     private static let formURLEncodedAllowedCharacters: CharacterSet = {
         var characters = CharacterSet.urlQueryAllowed
         characters.remove(charactersIn: ":#[]@?/!$&'()*+,;=")
         return characters
     }()
     
-    public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data {
+    public static func encodeToFormURLEncodedData(queryItems: [URLQueryItem]) -> Data? {
         var components = URLComponents()
-        components.queryItems = queryItems.map({
+        components.queryItems = queryItems.map {
             URLQueryItem(
                 name: $0.name.addingPercentEncoding(withAllowedCharacters:
                     URLQueryItemEncoder.formURLEncodedAllowedCharacters) ?? $0.name,
                 value: $0.value?.addingPercentEncoding(withAllowedCharacters:
                     URLQueryItemEncoder.formURLEncodedAllowedCharacters))
-        })
+        }
         
-        return components.query!.data(using: .utf8)!
+        return components.query?.data(using: .utf8)
     }
 }
 
 extension Array where Element == CodingKey {
-    fileprivate func queryItemKeyForKey(_ key: CodingKey) -> String {
+    private func queryItemKeyForKey(_ key: CodingKey) -> String {
         let keysPath = self + [key]
         return keysPath.queryItemKey
     }
@@ -52,9 +51,9 @@ extension Array where Element == CodingKey {
         guard !isEmpty else { return "" }
         var keysPath = self
         let firstKey = keysPath.removeFirst()
-        let tailCodingKeyString = keysPath.reduce(into: "", {
+        let tailCodingKeyString = keysPath.reduce(into: "") {
             $0 += "[\($1.stringValue)]"
-        })
+        }
         
         return firstKey.stringValue + tailCodingKeyString
     }
@@ -228,9 +227,9 @@ extension URLQueryItemEncoder {
 }
 
 extension URLQueryItemEncoder: Encoder {
-    public var userInfo: [CodingUserInfoKey : Any] { return [:] }
+    public var userInfo: [CodingUserInfoKey: Any] { return [:] }
     
-    public func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
+    public func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key: CodingKey {
         return KeyedEncodingContainer(KeyedContainer<Key>(encoder: self, codingPath: codingPath))
     }
     
@@ -244,11 +243,11 @@ extension URLQueryItemEncoder: Encoder {
 }
 
 extension URLQueryItemEncoder {
-    fileprivate struct KeyedContainer<Key: CodingKey>: KeyedEncodingContainerProtocol {
+    private struct KeyedContainer<Key: CodingKey>: KeyedEncodingContainerProtocol {
         let encoder: URLQueryItemEncoder
         let codingPath: [CodingKey]
         
-        func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
+        func encode<T>(_ value: T, forKey key: Key) throws where T: Encodable {
             let codingPath = self.codingPath + [key]
             encoder.codingPath = codingPath
             defer { encoder.codingPath.removeLast() }
@@ -264,7 +263,7 @@ extension URLQueryItemEncoder {
         
         func nestedContainer<NestedKey>(
             keyedBy keyType: NestedKey.Type, forKey key: Key
-            ) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+            ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey {
             return KeyedEncodingContainer(KeyedContainer<NestedKey>(encoder: encoder, codingPath: codingPath + [key]))
         }
         
@@ -300,7 +299,7 @@ extension URLQueryItemEncoder {
         
         func nestedContainer<NestedKey>(
             keyedBy keyType: NestedKey.Type
-            ) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+            ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey {
             codingPath.append(
                 URLQueryItemArrayElementKey(
                     index: encodedItemsCount,
@@ -336,7 +335,7 @@ extension URLQueryItemEncoder {
             encodedItemsCount += 1
         }
         
-        func encode<T>(_ value: T) throws where T : Encodable {
+        func encode<T>(_ value: T) throws where T: Encodable {
             codingPath.append(
                 URLQueryItemArrayElementKey(
                     index: encodedItemsCount,
@@ -347,7 +346,7 @@ extension URLQueryItemEncoder {
         }
     }
     
-    fileprivate struct SingleValueContanier: SingleValueEncodingContainer {
+    private struct SingleValueContanier: SingleValueEncodingContainer {
         let encoder: URLQueryItemEncoder
         var codingPath: [CodingKey]
         
@@ -416,15 +415,15 @@ extension URLQueryItemEncoder {
             try encoder.push(value, forKey: codingPath)
         }
         
-        mutating func encode<T>(_ value: T) throws where T : Encodable {
+        mutating func encode<T>(_ value: T) throws where T: Encodable {
             encoder.codingPath = self.codingPath
             try encoder.push(value, forKey: codingPath)
         }
     }
 }
 
-fileprivate class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
-    fileprivate let encoder: URLQueryItemEncoder
+private class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
+    private let encoder: URLQueryItemEncoder
     
     init(encoder: URLQueryItemEncoder, codingPath: [CodingKey]) {
         self.encoder = encoder
@@ -438,7 +437,7 @@ fileprivate class URLQueryItemReferencingEncoder: URLQueryItemEncoder {
     }
 }
 
-fileprivate class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencingEncoder {
+private class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencingEncoder {
     var referencedUnkeyedContainer: UnkeyedContanier
     
     init(encoder: URLQueryItemEncoder, codingPath: [CodingKey], referencing: UnkeyedContanier) {
@@ -450,4 +449,3 @@ fileprivate class UnkeyedURLQueryItemReferencingEncoder: URLQueryItemReferencing
         referencedUnkeyedContainer.encodedItemsCount += items.count
     }
 }
-

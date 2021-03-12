@@ -1,7 +1,5 @@
 import Foundation
 
-
-
 public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
     public static let idPrefix: String = "rtrf"
     
@@ -13,7 +11,6 @@ public struct TransferSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omi
     public let recipientID: DataID<Recipient>
     public let amount: TransferSchedulingParameter.Amount
 }
-
 
 extension TransferSchedule {
     private enum CodingKeys: String, CodingKey {
@@ -65,12 +62,10 @@ extension TransferSchedule {
     }
 }
 
-
 extension Transfer: Schedulable {
     public typealias ScheduleData = TransferSchedule
     public typealias Parameter = TransferSchedulingParameter
 }
-
 
 public struct TransferSchedulingParameter: SchedulingParameter, APIJSONQuery, Equatable {
     public enum Amount: Equatable {
@@ -120,4 +115,3 @@ public struct TransferSchedulingParameter: SchedulingParameter, APIJSONQuery, Eq
         }
     }
 }
-

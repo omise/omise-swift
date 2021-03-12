@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     
     public let scope: String
@@ -9,10 +8,10 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
     public let order: Ordering
     
     public var loadedPages = 0..<0
-    private(set) public var total: Int = 0
-    private(set) public var numberOfItemsPerPage: Int = 0
-    private(set) public var totalPages: Int = 0
-    private(set) public var data: [TItem] = [] {
+    public private(set) var total: Int = 0
+    public private(set) var numberOfItemsPerPage: Int = 0
+    public private(set) var totalPages: Int = 0
+    public private(set) var data: [TItem] = [] {
         didSet {
             dataUpdatedHandler?(data)
         }
@@ -42,7 +41,6 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         self.data = result.data
     }
     
-    
     public func setList(from result: SearchResult<TItem>) -> [TItem] {
         self.data = result.data
         self.numberOfItemsPerPage = result.numberOfItemsPerPage
@@ -66,12 +64,8 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data
-            .firstIndex(where: { $0.location == firstUpdatedItem.location }) ??
-            self.data.startIndex
-        var indexOfLastUpdatedItem = self.data
-            .firstIndex(where: { $0.location == lastUpdatedItem.location }) ??
-            self.data.endIndex
+        var indexOfFirstUpdatedItem = data.firstIndex { $0.location == firstUpdatedItem.location } ?? data.startIndex
+        var indexOfLastUpdatedItem = data.firstIndex { $0.location == lastUpdatedItem.location } ?? data.endIndex
         
         if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
             swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
@@ -90,7 +84,6 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         self.numberOfItemsPerPage = 0
         self.loadedPages = 0..<0
     }
-    
     
     public func insert(from value: SearchResult<TItem>) -> [TItem] {
         self.totalPages = value.totalPage
@@ -113,4 +106,3 @@ public class Search<TItem: Searchable & OmiseAPIPrimaryObject> {
         return value.data
     }
 }
-

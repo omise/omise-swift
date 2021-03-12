@@ -1,13 +1,16 @@
+// swiftlint:disable file_length
+
 import XCTest
 @testable import Omise
 
-
+// swiftlint:disable type_body_length closure_body_length function_body_length
 class SchedulesOperationFixtureTests: FixtureTestCase {
     func testScheduleRetrieve() {
         let expectation = self.expectation(description: "Schedule result")
         
         let scheduleTestingID: DataID<Schedule<Charge>> = "schd_test_5fzpgks1yf8me0wabse"
         
+        // swiftlint:disable force_unwrapping
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -22,15 +25,15 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 let expectedMonthlyRule = Period.MonthlyPeriodRule.daysOfMonth([27])
                 XCTAssertEqual(schedule.period, Period.monthly(expectedMonthlyRule))
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.amount, 1000000)
+                XCTAssertEqual(schedule.scheduleData.amount, 1_000_000)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
                 let firstNextOccurrenceDate = gregorianCalendar.date(from:
-                    DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 27))!
+                    DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 27))!
                 let nextOccurrences = (0..<12).map({ (month) in
                     return gregorianCalendar.date(byAdding: .month, value: month, to: firstNextOccurrenceDate)
                         .flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
@@ -91,6 +94,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         let expectation = self.expectation(description: "Schedule result")
         
         let scheduleTestingID: DataID<Schedule<Charge>>  = "schd_test_5fzoyq0dpywer0738br"
+        
+        // swiftlint:disable force_unwrapping
         let request = Schedule<Charge>.retrieve(using: testClient, id: scheduleTestingID) { (result) in
             defer { expectation.fulfill() }
             
@@ -105,16 +110,16 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.daily)
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 100000)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 100_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
                 let firstNextOccurrenceDate = gregorianCalendar.date(
-                    from: DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 24))!
+                    from: DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 24))!
                 let nextOccurrences = (0..<30).map({ (day) in
                     return gregorianCalendar.date(byAdding: .day, value: day, to: firstNextOccurrenceDate)
                         .flatMap({ gregorianCalendar.dateComponents([.calendar, .year, .month, .day], from: $0) })!
@@ -178,7 +183,8 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 return
         }
         XCTAssertEqual(defaultRecentNextOccurrenceDate, decodedRecentNextOccurrenceDate)
-        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count, decodedSchedule.nextOccurrencesOnDateComponents.count)
+        XCTAssertEqual(defaultSchedule.nextOccurrencesOnDateComponents.count,
+                       decodedSchedule.nextOccurrencesOnDateComponents.count)
         
         XCTAssertEqual(defaultSchedule.occurrences.total, decodedSchedule.occurrences.total)
         XCTAssertEqual(defaultSchedule.occurrences.object, decodedSchedule.occurrences.object)
@@ -222,11 +228,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.weekdayOfMonth(ordinal: .last, weekday: .friday)))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 1000000)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 1_000_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
@@ -295,11 +301,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.weekdayOfMonth(ordinal: .first, weekday: .monday)))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 1000000)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 1_000_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
@@ -368,11 +374,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.weekly([.monday, .tuesday, .wednesday, .thursday, .friday]))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 1000_00)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 100_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
                 
@@ -445,11 +451,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([25])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 22))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 22))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 22))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 10_000_00)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 1_000_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
             case let .failure(error):
@@ -518,13 +524,13 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(Period.MonthlyPeriodRule.daysOfMonth([27])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: gregorianCalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: gregorianCalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: gregorianCalendar, year: 2020, month: 5, day: 23))
                 
                 let scheduleData = schedule.scheduleData
                 if let percentage = scheduleData.json["amount"] as? Int {
-                    XCTAssertEqual(percentage, 1000000)
+                    XCTAssertEqual(percentage, 1_000_000)
                 } else {
                     XCTFail("Wrong Charge amount parsed")
                 }
@@ -539,17 +545,20 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    
     func testCreateChargeSchedule() {
         let expectation = self.expectation(description: "Create Schedule result")
         
-        let parameter = ChargeSchedulingParameter(value: Value(amount: 1000000, currency: .thb),
-                                                  customerID: "cust_test_5fz0olfpy32zadv96ek", cardID: nil,
+        let parameter = ChargeSchedulingParameter(value: Value(amount: 1_000_000, currency: .thb),
+                                                  customerID: "cust_test_5fz0olfpy32zadv96ek",
+                                                  cardID: nil,
                                                   description: nil)
         let params = ScheduleParams<Charge>(
-            every: 1, period: .monthly(.daysOfMonth([1, 16])),
+            every: 1,
+            period: .monthly(.daysOfMonth([1, 16])),
             endDate: DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2020, month: 5, day: 23),
-            startDate: nil, scheduleData: parameter)
+            startDate: nil,
+            scheduleData: parameter
+        )
         let request = Schedule<Charge>.create(using: testClient, params: params) { (result) in
             defer { expectation.fulfill() }
             
@@ -562,11 +571,11 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(schedule.period, Period.monthly(.daysOfMonth([1, 16])))
                 XCTAssertEqual(schedule.every, 1)
                 XCTAssertEqual(schedule.startOnDateComponents,
-                               DateComponents(calendar: Calendar.scheduleAPICalendar,year: 2019, month: 5, day: 23))
+                               DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2019, month: 5, day: 23))
                 XCTAssertEqual(schedule.endOnDateComponents,
                                DateComponents(calendar: Calendar.scheduleAPICalendar, year: 2020, month: 5, day: 23))
                 
-                XCTAssertEqual(schedule.scheduleData.value.amount, 1000000)
+                XCTAssertEqual(schedule.scheduleData.value.amount, 1_000_000)
                 XCTAssertEqual(schedule.scheduleData.value.currency, Currency.thb)
                 XCTAssertEqual(schedule.scheduleData.customerID, "cust_test_5fz0olfpy32zadv96ek")
             case let .failure(error):
@@ -578,4 +587,3 @@ class SchedulesOperationFixtureTests: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
 }
-

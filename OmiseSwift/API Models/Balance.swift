@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public static let resourcePath = "/balance"
     
@@ -40,5 +39,3 @@ public struct Balance: OmiseLocatableObject, OmiseLiveModeObject, OmiseCreatedOb
 
 extension Balance: OmiseAPIPrimaryObject {}
 extension Balance: SingletonRetrievable {}
-
-

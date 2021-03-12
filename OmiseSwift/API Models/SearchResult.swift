@@ -62,4 +62,3 @@ extension SearchResult {
         case data
     }
 }
-

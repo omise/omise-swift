@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 #if os(iOS)
 import UIKit
@@ -6,7 +8,6 @@ public typealias Color = UIColor
 import AppKit
 public typealias Color = NSColor
 #endif
-
 
 func omiseWarn(_ message: String) {
     print("[omise-swift] WARN: \(message)")
@@ -51,7 +52,6 @@ public extension Color {
     }
 }
 
-
 func deserializeData<TObject: OmiseObject>(_ data: Data) throws -> TObject {
     let jsonDecoder = JSONDecoder()
     jsonDecoder.dateDecodingStrategy = .iso8601
@@ -80,9 +80,9 @@ private func parsingDateComponentsValue(_ value: String, codingPath: [CodingKey]
         scanner.scanString("-", into: nil) &&
         scanner.scanInt(&lastInt)
         else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: codingPath,
-                                      debugDescription: "Invalid Date Components value"))
+        let errorContext = DecodingError.Context(codingPath: codingPath,
+                                                 debugDescription: "Invalid Date Components value")
+        throw DecodingError.dataCorrupted(errorContext)
     }
     
     month = secondInt
@@ -105,7 +105,7 @@ private func parsingDateComponentsValue(_ value: String, codingPath: [CodingKey]
     return components
 }
 
-func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -> String {
+private func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -> String {
     guard (dateComponents.calendar?.identifier ?? Calendar.current.identifier) == .gregorian else {
         throw EncodingError.invalidValue(
             dateComponents,
@@ -123,16 +123,15 @@ func _encode(_ dateComponents: DateComponents, codingPath: [CodingKey]) throws -
     return "\(year)-\(month)-\(day)"
 }
 
-
 extension Decoder {
-    func decode(as type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+    func decode(as type: [String: Any].Type) throws -> [String: Any] {
         let container = try self.container(keyedBy: JSONCodingKeys.self)
         return try container.decode()
     }
     
     func decode<SkippedKeys: CodingKey>(
-        as type: Dictionary<String, Any>.Type, skippingKeys: SkippedKeys.Type
-        ) throws -> Dictionary<String, Any> {
+        as type: [String: Any].Type, skippingKeys: SkippedKeys.Type
+    ) throws -> [String: Any] {
         let container = try self.container(keyedBy: SkippingKeyCodingKeys<SkippedKeys>.self)
         return try container.decode()
     }
@@ -184,8 +183,7 @@ struct JSONCodingKeys: CodingKey {
     }
 }
 
-
-enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
+enum CombineCodingKeys<Left: CodingKey, Right: CodingKey>: CodingKey {
     var stringValue: String {
         switch self {
         case .left(let left):
@@ -228,7 +226,7 @@ enum CombineCodingKeys<Left: CodingKey, Right: CodingKey> : CodingKey {
     case right(Right)
 }
 
-struct SkippingKeyCodingKeys<Key: CodingKey> : CodingKey {
+struct SkippingKeyCodingKeys<Key: CodingKey>: CodingKey {
     let stringValue: String
     
     init?(stringValue: String) {
@@ -252,7 +250,6 @@ struct SkippingKeyCodingKeys<Key: CodingKey> : CodingKey {
     }
 }
 
-
 extension KeyedDecodingContainerProtocol {
     func decode(_ type: DateComponents.Type, forKey key: Key) throws -> DateComponents {
         let dateComponentsValue = try decode(String.self, forKey: key)
@@ -270,9 +267,9 @@ extension KeyedDecodingContainerProtocol {
     func decode(_ type: Array<DateComponents>.Type, forKey key: Key) throws -> [DateComponents] {
         let dateComponentsValues = try decode(Array<String>.self, forKey: key)
         
-        return try dateComponentsValues.enumerated().map({ (index, element) in
+        return try dateComponentsValues.enumerated().map { (index, element) in
             try parsingDateComponentsValue(element, codingPath: codingPath + [key, ArrayIndexKey(index: index)])
-        })
+        }
     }
     
     func decodeOmiseAPIValueIfPresent(_ type: Bool.Type, forKey key: Key) throws -> Bool? {
@@ -285,7 +282,11 @@ extension KeyedDecodingContainerProtocol {
             }
             
             guard let boolValue = Bool(value) else {
-                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a boolean")
+                throw DecodingError.dataCorruptedError(
+                    forKey: key,
+                    in: self,
+                    debugDescription: "Invalid Omise API Value for a boolean"
+                )
             }
             
             return boolValue
@@ -302,7 +303,11 @@ extension KeyedDecodingContainerProtocol {
             }
             
             guard let doubleValue = Double(value) else {
-                throw DecodingError.dataCorruptedError(forKey: key, in: self, debugDescription: "Invalid Omise API Value for a double")
+                throw DecodingError.dataCorruptedError(
+                    forKey: key,
+                    in: self,
+                    debugDescription: "Invalid Omise API Value for a double"
+                )
             }
             
             return doubleValue
@@ -311,34 +316,33 @@ extension KeyedDecodingContainerProtocol {
 
 }
 
-
 extension KeyedDecodingContainerProtocol {
-    func decode(_ type: Dictionary<String, Any>.Type, forKey key: Key) throws -> Dictionary<String, Any> {
+    func decode(_ type: [String: Any].Type, forKey key: Key) throws -> [String: Any] {
         let container = try self.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key)
         return try container.decode()
     }
     
-    func decodeIfPresent(_ type: Dictionary<String, Any>.Type, forKey key: Key) throws -> Dictionary<String, Any>? {
+    func decodeIfPresent(_ type: [String: Any].Type, forKey key: Key) throws -> [String: Any]? {
         guard try (contains(key) && !decodeNil(forKey: key)) else {
             return nil
         }
         return try decode(type, forKey: key)
     }
     
-    func decode(_ type: Array<Any>.Type, forKey key: Key) throws -> Array<Any> {
+    func decode(_ type: [Any].Type, forKey key: Key) throws -> [Any] {
         var container = try self.nestedUnkeyedContainer(forKey: key)
         return try container.decode()
     }
     
-    func decodeIfPresent(_ type: Array<Any>.Type, forKey key: Key) throws -> Array<Any>? {
+    func decodeIfPresent(_ type: [Any].Type, forKey key: Key) throws -> [Any]? {
         guard try (contains(key) && !decodeNil(forKey: key)) else {
             return nil
         }
         return try decode(type, forKey: key)
     }
     
-    func decode() throws -> Dictionary<String, Any> {
-        var dictionary = Dictionary<String, Any>()
+    func decode() throws -> [String: Any] {
+        var dictionary = [String: Any]()
         
         for key in allKeys {
             if let boolValue = try? decode(Bool.self, forKey: key) {
@@ -362,7 +366,7 @@ extension KeyedDecodingContainerProtocol {
 }
 
 extension UnkeyedDecodingContainer {
-    mutating func decode() throws -> Array<Any> {
+    mutating func decode() throws -> [Any] {
         var array: [Any] = []
         while isAtEnd == false {
             if let value = try? decode(Bool.self) {
@@ -380,17 +384,16 @@ extension UnkeyedDecodingContainer {
         return array
     }
     
-    private mutating func decodeArrayElement() throws -> Array<Any> {
+    private mutating func decodeArrayElement() throws -> [Any] {
         var nestedContainer = try self.nestedUnkeyedContainer()
         return try nestedContainer.decode()
     }
     
-    mutating func decode(_ type: Dictionary<String, Any>.Type) throws -> Dictionary<String, Any> {
+    mutating func decode(_ type: [String: Any].Type) throws -> [String: Any] {
         let nestedContainer = try self.nestedContainer(keyedBy: JSONCodingKeys.self)
         return try nestedContainer.decode()
     }
 }
-
 
 extension Encoder {
     func encode(_ dateComponents: DateComponents) throws {
@@ -398,14 +401,14 @@ extension Encoder {
         try container.encode(_encode(dateComponents, codingPath: codingPath))
     }
     
-    func encode(_ jsonDictionary: Dictionary<String, Any>) throws {
+    func encode(_ jsonDictionary: [String: Any]) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
         try container.encode(jsonDictionary)
     }
     
     func encode<SkippedKeys: CodingKey>(
-        _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
-        ) throws  {
+        _ value: [String: Any], skippingKeysBy skippingKeys: SkippedKeys.Type
+        ) throws {
         var container = self.container(keyedBy: JSONCodingKeys.self)
         try container.encode(value, skippingKeysBy: skippingKeys)
     }
@@ -424,93 +427,75 @@ extension KeyedEncodingContainerProtocol {
     }
     
     mutating func encode(_ dateComponents: [DateComponents], forKey key: Key) throws {
-        let dateComponentsValue = try dateComponents.enumerated().map({ (index, element) in
+        let dateComponentsValue = try dateComponents.enumerated().map { (index, element) in
             try _encode(element, codingPath: codingPath + [key, ArrayIndexKey(index: index)])
-        })
+        }
         try encode(dateComponentsValue, forKey: key)
     }
 }
 
-
 extension KeyedEncodingContainerProtocol where Key == JSONCodingKeys {
-    mutating func encode(_ value: Dictionary<String, Any>) throws {
-        try value.forEach({ (key, value) in
-            let key = JSONCodingKeys(key: key)
-            switch value {
-            case let value as Bool:
-                try encode(value, forKey: key)
-            case let value as Int:
-                try encode(value, forKey: key)
-            case let value as String:
-                try encode(value, forKey: key)
-            case let value as Double:
-                try encode(value, forKey: key)
-            case let value as Dictionary<String, Any>:
-                try encode(value, forKey: key)
-            case let value as Array<Any>:
-                try encode(value, forKey: key)
-            case Optional<Any>.none:
-                try encodeNil(forKey: key)
-            default:
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + [key],
-                                          debugDescription: "Invalid JSON value"))
-            }
-        })
+    mutating func encode(_ value: [String: Any]) throws {
+        try value.forEach { (key, value) in
+            try self.encode(value: value, forKey: key)
+        }
     }
     
     mutating func encode<SkippedKeys: CodingKey>(
-        _ value: Dictionary<String, Any>, skippingKeysBy skippingKeys: SkippedKeys.Type
-        ) throws  {
-        try value.forEach({ (key, value) in
+        _ value: [String: Any],
+        skippingKeysBy skippingKeys: SkippedKeys.Type
+    ) throws {
+        try value.forEach { (key, value) in
             guard SkippedKeys(stringValue: key) == nil else {
                 return
             }
-            let key = JSONCodingKeys(key: key)
-            switch value {
-            case let value as Bool:
-                try encode(value, forKey: key)
-            case let value as Int:
-                try encode(value, forKey: key)
-            case let value as String:
-                try encode(value, forKey: key)
-            case let value as Double:
-                try encode(value, forKey: key)
-            case let value as Dictionary<String, Any>:
-                try encode(value, forKey: key)
-            case let value as Array<Any>:
-                try encode(value, forKey: key)
-            case Optional<Any>.none:
-                try encodeNil(forKey: key)
-            default:
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + [key],
-                                          debugDescription: "Invalid JSON value"))
-            }
-        })
+            try self.encode(value: value, forKey: key)
+        }
+    }
+    
+    private mutating func encode(value: Any, forKey key: String) throws {
+        let key = JSONCodingKeys(key: key)
+        switch value {
+        case let value as Bool:
+            try encode(value, forKey: key)
+        case let value as Int:
+            try encode(value, forKey: key)
+        case let value as String:
+            try encode(value, forKey: key)
+        case let value as Double:
+            try encode(value, forKey: key)
+        case let value as [String: Any]:
+            try encode(value, forKey: key)
+        case let value as [Any]:
+            try encode(value, forKey: key)
+        case Optional<Any>.none:
+            try encodeNil(forKey: key)
+        default:
+            let errorContext = EncodingError.Context(codingPath: codingPath + [key],
+                                                     debugDescription: "Invalid JSON value")
+            throw EncodingError.invalidValue(value, errorContext)
+        }
     }
 }
 
 extension KeyedEncodingContainerProtocol {
-    mutating func encode(_ value: Dictionary<String, Any>, forKey key: Key) throws {
+    mutating func encode(_ value: [String: Any], forKey key: Key) throws {
         var container = self.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key)
         try container.encode(value)
     }
     
-    mutating func encodeIfPresent(_ value: Dictionary<String, Any>?, forKey key: Key) throws {
+    mutating func encodeIfPresent(_ value: [String: Any]?, forKey key: Key) throws {
         if let value = value {
             try encode(value, forKey: key)
         }
     }
     
-    mutating func encode(_ value: Array<Any>, forKey key: Key) throws {
+    mutating func encode(_ value: [Any], forKey key: Key) throws {
         var container = self.nestedUnkeyedContainer(forKey: key)
         try container.encode(value)
     }
     
-    mutating func encodeIfPresent(_ value: Array<Any>?, forKey key: Key) throws {
+    mutating func encodeIfPresent(_ value: [Any]?, forKey key: Key) throws {
         if let value = value {
             try encode(value, forKey: key)
         }
@@ -518,8 +503,8 @@ extension KeyedEncodingContainerProtocol {
 }
 
 extension UnkeyedEncodingContainer {
-    mutating func encode(_ value: Array<Any>) throws {
-        try value.enumerated().forEach({ (index, value) in
+    mutating func encode(_ value: [Any]) throws {
+        try value.enumerated().forEach { (index, value) in
             switch value {
             case let value as Bool:
                 try encode(value)
@@ -529,30 +514,28 @@ extension UnkeyedEncodingContainer {
                 try encode(value)
             case let value as Double:
                 try encode(value)
-            case let value as Dictionary<String, Any>:
+            case let value as [String: Any]:
                 try encode(value)
-            case let value as Array<Any>:
+            case let value as [Any]:
                 try encodeArrayElement(value)
-            case Optional<Any>.none:
+            case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
                 try encodeNil()
             default:
                 let keys = JSONCodingKeys(intValue: index).map({ [ $0 ] }) ?? []
-                throw EncodingError.invalidValue(
-                    value,
-                    EncodingError.Context(codingPath: codingPath + keys,
-                                          debugDescription: "Invalid JSON value"))
+                let errorContext = EncodingError.Context(codingPath: codingPath + keys,
+                                                         debugDescription: "Invalid JSON value")
+                throw EncodingError.invalidValue(value, errorContext)
             }
-        })
+        }
     }
     
-    private mutating func encodeArrayElement(_ value: Array<Any>) throws {
+    private mutating func encodeArrayElement(_ value: [Any]) throws {
         var nestedContainer = self.nestedUnkeyedContainer()
         try nestedContainer.encode(value)
     }
     
-    mutating func encode(_ value: Dictionary<String, Any>) throws {
+    mutating func encode(_ value: [String: Any]) throws {
         var nestedContainer = self.nestedContainer(keyedBy: JSONCodingKeys.self)
         try nestedContainer.encode(value)
     }
 }
-

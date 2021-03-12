@@ -1,9 +1,8 @@
 import XCTest
 import Omise
 
-
-private let cardTestingID = DataID<CustomerCard>(idString: "card_test_5fzbq7cypephj6fd3zq")!
-private let customerTestingID = DataID<Customer>(idString: "cust_test_5fz0olfpy32zadv96ek")!
+private let cardTestingID: DataID<CustomerCard>! = DataID(idString: "card_test_5fzbq7cypephj6fd3zq")
+private let customerTestingID: DataID<Customer>! = DataID(idString: "cust_test_5fz0olfpy32zadv96ek")
 
 private let customer: Customer = {
     let bundle = Bundle(for: OmiseTestCase.self)
@@ -20,9 +19,8 @@ private let customer: Customer = {
     
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
-    return try! decoder.decode(Customer.self, from: data)
+    return try! decoder.decode(Customer.self, from: data) // swiftlint:disable:this force_try
 }()
-
 
 class CustomerCardOperationFixtureTests: FixtureTestCase {
     func testCustomerRetrieve() {
@@ -83,7 +81,6 @@ class CustomerCardOperationFixtureTests: FixtureTestCase {
     
     func testDeleteCard() {
         let expectation = self.expectation(description: "Customer Card Delete")
-        
         
         let request = CustomerCard.list(using: testClient, parent: customer, params: nil) { (result) in
             defer { expectation.fulfill() }

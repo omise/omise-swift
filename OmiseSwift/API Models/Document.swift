@@ -1,9 +1,6 @@
 import Foundation
 
-
-public struct Document
-    : OmiseLocatableObject, OmiseIdentifiableObject,
-      OmiseLiveModeObject, OmiseCreatedObject, Equatable {
+public struct Document: OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {
     public static let resourcePath = "documents"
     public static let idPrefix: String = "docu"
     
@@ -19,6 +16,8 @@ public struct Document
     public let downloadURL: URL?
 }
 
+extension Document: Equatable { }
+
 extension Document {
     private enum CodingKeys: String, CodingKey {
         case object
@@ -32,7 +31,6 @@ extension Document {
     }
 }
 
-
 extension Document: Listable {}
 extension Document: Retrievable {}
 extension Document: Destroyable {}
@@ -41,8 +39,8 @@ public struct DocumentParams: APIFileQuery {
     public var filename: String
     public var fileContent: Data
     
-    public init(url: URL) {
-        self.fileContent = try! Data(contentsOf: url, options: .mappedIfSafe)
+    public init(url: URL) throws {
+        self.fileContent = try Data(contentsOf: url, options: .mappedIfSafe)
         self.filename = url.lastPathComponent
     }
 }
@@ -54,4 +52,3 @@ extension Document: OmiseAPIChildObject {
 extension Document: Creatable {
     public typealias CreateParams = DocumentParams
 }
-

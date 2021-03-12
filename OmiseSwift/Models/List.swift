@@ -1,15 +1,14 @@
 import Foundation
 
-
 public class List<TItem: OmiseLocatableObject & Listable> {
-    private(set) public var from: Date
-    private(set) public var to: Date
+    public private(set) var from: Date
+    public private(set) var to: Date
     var loadedIndices = 0..<0
     public let order: Ordering
     
-    private(set) public var limit: Int = 0
-    private(set) public var total: Int = 0
-    private(set) public var data: [TItem] = [] {
+    public private(set) var limit: Int = 0
+    public private(set) var total: Int = 0
+    public private(set) var data: [TItem] = [] {
         didSet {
             dataUpdatedHandler?(data)
         }
@@ -68,10 +67,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.firstIndex(where: {
-            $0.location == firstUpdatedItem.location }) ?? self.data.startIndex
-        var indexOfLastUpdatedItem = self.data.firstIndex(where: {
-            $0.location == lastUpdatedItem.location }) ?? self.data.endIndex
+        var indexOfFirstUpdatedItem = data.firstIndex { $0.location == firstUpdatedItem.location } ?? data.startIndex
+        var indexOfLastUpdatedItem = data.firstIndex { $0.location == lastUpdatedItem.location } ?? data.endIndex
         
         if indexOfFirstUpdatedItem.distance(to: indexOfLastUpdatedItem) < 0 {
             swap(&indexOfFirstUpdatedItem, &indexOfLastUpdatedItem)
@@ -131,8 +128,8 @@ public class List<TItem: OmiseLocatableObject & Listable> {
             return []
         }
         
-        var indexOfFirstUpdatedItem = self.data.firstIndex(where: { $0.location == firstUpdatedItem.location })
-        var indexOfLastUpdatedItem = self.data.firstIndex(where: { $0.location == lastUpdatedItem.location })
+        var indexOfFirstUpdatedItem = data.firstIndex { $0.location == firstUpdatedItem.location }
+        var indexOfLastUpdatedItem = data.firstIndex { $0.location == lastUpdatedItem.location }
         
         if let indexOfFirst = indexOfFirstUpdatedItem,
             let indexOfLast = indexOfLastUpdatedItem,
@@ -167,7 +164,6 @@ public class List<TItem: OmiseLocatableObject & Listable> {
     }
 }
 
-
 extension List: RandomAccessCollection {
     public subscript(index: Array<TItem>.Index) -> TItem {
         return data[index]
@@ -198,7 +194,6 @@ extension List: RandomAccessCollection {
     }
 }
 
-
 func range(fromOffset offset: Int, count: Int) -> CountableRange<Int> {
     return offset..<(offset + count)
 }
@@ -215,7 +210,6 @@ func combine(range: CountableRange<Int>, with anotherRange: CountableRange<Int>)
         return range
     }
 }
-
 
 enum Side {
     case lower
@@ -239,7 +233,6 @@ extension CountableRange where Bound: Strideable {
     }
 }
 
-
 func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> CountableRange<Int> {
     switch side {
     case .lower:
@@ -248,4 +241,3 @@ func expand(range: CountableRange<Int>, on side: Side, for length: Int) -> Count
         return range.lowerBound..<range.upperBound.advanced(by: length)
     }
 }
-

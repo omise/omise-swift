@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, OmiseLiveModeObject {
     public static let idPrefix: String = "rchg"
     
@@ -21,7 +20,6 @@ public struct ChargeSchedule: OmiseIdentifiableObject, OmiseCreatedObject, Omise
     }
 }
 
-
 extension ChargeSchedule {
     private enum CodingKeys: String, CodingKey {
         case object
@@ -36,7 +34,6 @@ extension ChargeSchedule {
         case currency
     }
 }
-
 
 extension Charge: Schedulable {
     public typealias ScheduleData = ChargeSchedule

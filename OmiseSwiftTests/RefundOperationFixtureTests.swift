@@ -1,8 +1,7 @@
 import XCTest
 import Omise
 
-
-private let refundTestingID = DataID<Refund>(idString: "rfnd_test_5frz1pdm34u27646j5p")!
+private let refundTestingID: DataID<Refund>! = DataID(idString: "rfnd_test_5frz1pdm34u27646j5p")
 
 private let charge: Charge = {
     let bundle = Bundle(for: OmiseTestCase.self)
@@ -19,7 +18,7 @@ private let charge: Charge = {
     
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
-    return try! decoder.decode(Charge.self, from: data)
+    return try! decoder.decode(Charge.self, from: data) // swiftlint:disable:this force_try
 }()
 
 class RefundOperationFixtureTests: FixtureTestCase {
@@ -31,7 +30,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(refund):
-                XCTAssertEqual(refund.value.amount, 100000)
+                XCTAssertEqual(refund.value.amount, 100_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -85,7 +84,7 @@ class RefundOperationFixtureTests: FixtureTestCase {
     func testRefundCreate() {
         let expectation = self.expectation(description: "Refund create")
         
-        let createParams = RefundParams(amount: 10000)
+        let createParams = RefundParams(amount: 10_000)
         
         let request = Refund.create(using: testClient, parent: charge, params: createParams) { (result) in
             defer { expectation.fulfill() }

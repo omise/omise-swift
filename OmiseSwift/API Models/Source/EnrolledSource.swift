@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct EnrolledSource: SourceData {
     public typealias PaymentInformation = EnrolledSource.EnrolledPaymentInformation
     
@@ -18,79 +17,6 @@ public struct EnrolledSource: SourceData {
         case fpx(FPX)
         
         case unknown(name: String, references: [String: Any]?)
-        
-        public enum BillPayment: Equatable {
-            
-            case tescoLotus(BillInformation?)
-            case unknown(name: String, references: [String: Any])
-            
-            public struct BillInformation: Codable, Equatable {
-                let omiseTaxID: String
-                let referenceNumber1: String
-                let referenceNumber2: String
-                let barcodeURL: URL
-                let expiredDate: Date
-                
-                private enum CodingKeys: String, CodingKey {
-                    case omiseTaxID = "omise_tax_id"
-                    case referenceNumber1 = "reference_number_1"
-                    case referenceNumber2 = "reference_number_2"
-                    case barcodeURL = "barcode"
-                    case expiredDate = "expires_at"
-                }
-            }
-            
-            public static func ==(lhs: BillPayment, rhs: BillPayment) -> Bool {
-                switch (lhs, rhs) {
-                case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
-                    return lhsValue == rhsValue
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
-        
-        public enum Barcode: Equatable {
-            case alipay(AlipayBarcode?)
-            case weChatPay
-            case unknown(name: String, references: [String: Any])
-            
-            var value: String {
-                let value: String
-                switch self {
-                case .alipay:
-                    value = "alipay"
-                case .weChatPay:
-                    value = "wechat"
-                case .unknown(name: let name, references: _):
-                    value = name
-                }
-                return value
-            }
-            
-            public struct AlipayBarcode: Codable {
-                public let expiredDate: Date
-                fileprivate enum CodingKeys: String, CodingKey {
-                    case expiredDate = "expires_at"
-                }
-            }
-            
-            public static func ==(
-                lhs: EnrolledSource.EnrolledPaymentInformation.Barcode,
-                rhs: EnrolledSource.EnrolledPaymentInformation.Barcode
-                ) -> Bool {
-                switch (lhs, rhs) {
-                case (.alipay, .alipay):
-                    return true
-                case (.weChatPay, .weChatPay):
-                    return true
-                case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
-                    return lhsName == rhsName
-                default: return false
-                }
-            }
-        }
         
         var sourceType: Omise.SourceType {
             switch self {
@@ -137,10 +63,7 @@ public struct EnrolledSource: SourceData {
             }
         }
         
-        public static func ==(
-            lhs: EnrolledSource.EnrolledPaymentInformation,
-            rhs: EnrolledSource.EnrolledPaymentInformation
-            ) -> Bool {
+        public static func == (lhs: EnrolledPaymentInformation, rhs: EnrolledPaymentInformation) -> Bool {
             switch (lhs, rhs) {
             case (.internetBanking(let lhsValue), .internetBanking(let rhsValue)):
                 return lhsValue == rhsValue
@@ -180,6 +103,10 @@ public struct EnrolledSource: SourceData {
         return paymentInformation.sourceType
     }
     
+}
+
+extension EnrolledSource {
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case object
@@ -195,7 +122,7 @@ public struct EnrolledSource: SourceData {
         currency = try container.decode(Currency.self, forKey: .currency)
         amount = try container.decode(Int64.self, forKey: .amount)
         flow = try container.decode(Flow.self, forKey: .flow)
-        paymentInformation = try PaymentInformation.init(from: decoder)
+        paymentInformation = try PaymentInformation(from: decoder)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -208,10 +135,89 @@ public struct EnrolledSource: SourceData {
         try container.encode(flow, forKey: .flow)
         try paymentInformation.encode(to: encoder)
     }
+    
 }
 
+extension EnrolledSource.EnrolledPaymentInformation {
+    
+    public enum BillPayment: Equatable {
+        case tescoLotus(BillInformation?)
+        case unknown(name: String, references: [String: Any])
+        
+        public struct BillInformation: Codable, Equatable {
+            let omiseTaxID: String
+            let referenceNumber1: String
+            let referenceNumber2: String
+            let barcodeURL: URL
+            let expiredDate: Date
+            
+            // swiftlint:disable nesting
+            private enum CodingKeys: String, CodingKey {
+                case omiseTaxID = "omise_tax_id"
+                case referenceNumber1 = "reference_number_1"
+                case referenceNumber2 = "reference_number_2"
+                case barcodeURL = "barcode"
+                case expiredDate = "expires_at"
+            }
+        }
+        
+        public static func == (lhs: BillPayment, rhs: BillPayment) -> Bool {
+            switch (lhs, rhs) {
+            case let (.tescoLotus(lhsValue), .tescoLotus(rhsValue)):
+                return lhsValue == rhsValue
+            case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
+                return lhsName == rhsName
+            default:
+                return false
+            }
+        }
+    }
+    
+    public enum Barcode: Equatable {
+        case alipay(AlipayBarcode?)
+        case weChatPay
+        case unknown(name: String, references: [String: Any])
+        
+        var value: String {
+            let value: String
+            switch self {
+            case .alipay:
+                value = "alipay"
+            case .weChatPay:
+                value = "wechat"
+            case .unknown(name: let name, references: _):
+                value = name
+            }
+            return value
+        }
+        
+        public struct AlipayBarcode: Codable {
+            public let expiredDate: Date
+            
+            // swiftlint:disable nesting
+            private enum CodingKeys: String, CodingKey {
+                case expiredDate = "expires_at"
+            }
+        }
+        
+        public static func == (lhs: Barcode, rhs: Barcode) -> Bool {
+            switch (lhs, rhs) {
+            case (.alipay, .alipay):
+                return true
+            case (.weChatPay, .weChatPay):
+                return true
+            case let (.unknown(name: lhsName, references: _), .unknown(name: rhsName, references: _)):
+                return lhsName == rhsName
+            default:
+                return false
+            }
+        }
+    }
+    
+}
 
 extension EnrolledSource.EnrolledPaymentInformation {
+    
     private enum CodingKeys: String, CodingKey {
         case type
         case references
@@ -221,6 +227,7 @@ extension EnrolledSource.EnrolledPaymentInformation {
         case email
     }
     
+    // swiftlint:disable cyclomatic_complexity function_body_length
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -228,13 +235,17 @@ extension EnrolledSource.EnrolledPaymentInformation {
         
         if typeValue.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = typeValue
-                .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.internetBanking) {
+                .range(of: internetBankingPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(InternetBanking.init(rawValue:))
+                .map(EnrolledSource.PaymentInformation.internetBanking) {
             self = internetBankingOffsite
         } else if typeValue.hasPrefix(mobileBankingPrefix),
             let mobileBankingOffsite = typeValue
-                .range(of: mobileBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                .flatMap(MobileBanking.init(rawValue:)).map(EnrolledSource.PaymentInformation.mobileBanking) {
+                .range(of: mobileBankingPrefix)
+                .map({ String(typeValue[$0.upperBound...]) })
+                .flatMap(MobileBanking.init(rawValue:))
+                .map(EnrolledSource.PaymentInformation.mobileBanking) {
             self = mobileBankingOffsite
         } else if typeValue == alipayValue {
             self = .alipay

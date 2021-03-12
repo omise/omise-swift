@@ -1,7 +1,6 @@
 import XCTest
 import Omise
 
-
 class DigitsTest: XCTestCase {
     func testCreateDigitsSuccessfully() {
         let firstDigits = Digits(digitsString: "1234")
@@ -45,10 +44,10 @@ class DigitsTest: XCTestCase {
         XCTAssertNil(thirdTry)
     }
     
-    func testDigitsEquality() {
-        let firstDigits = Digits(digitsString: "1234")!
-        let secondDigits = Digits(digitsString: "1234")!
-        let thirdDigits = Digits(digitsString: "4242")!
+    func testDigitsEquality() throws {
+        let firstDigits = try XCTUnwrap(Digits(digitsString: "1234"))
+        let secondDigits = try XCTUnwrap(Digits(digitsString: "1234"))
+        let thirdDigits = try XCTUnwrap(Digits(digitsString: "4242"))
         
         XCTAssertEqual(firstDigits, secondDigits)
         XCTAssertNotEqual(firstDigits, thirdDigits)

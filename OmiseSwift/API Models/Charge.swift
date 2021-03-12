@@ -1,5 +1,6 @@
-import Foundation
+// swiftlint:disable file_length
 
+import Foundation
 
 public struct Charge: OmiseResourceObject, Equatable {
     public static let resourcePath = "/charges"
@@ -107,7 +108,7 @@ public struct Charge: OmiseResourceObject, Equatable {
 
 extension Charge {
     
-    public enum Status : Equatable {
+    public enum Status: Equatable {
         case failed(ChargeFailure)
         case expired
         case reversed
@@ -124,7 +125,7 @@ extension Charge {
         case failed
     }
     
-    public enum SourceOfFund : String, Codable, Equatable {
+    public enum SourceOfFund: String, Codable, Equatable {
         case card
         case offsite
         case offline
@@ -194,6 +195,7 @@ extension Charge {
         case metadata
     }
     
+    // swiftlint:disable function_body_length
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
@@ -257,7 +259,8 @@ extension Charge {
             status = .unknown(statusValue)
         case (_, .some, .some), (_, .some, .none), (_, .none, .some):
             throw DecodingError.dataCorruptedError(
-                forKey: .failureCode, in: container,
+                forKey: .failureCode,
+                in: container,
                 debugDescription: "Invalid Charge Failure status.")
         }
         
@@ -349,7 +352,6 @@ extension Charge {
     }
 }
 
-
 public struct ChargeParams: APIJSONQuery {
     
     public enum Payment {
@@ -378,7 +380,7 @@ public struct ChargeParams: APIJSONQuery {
         case returnURL = "return_uri"
         case metadata
         
-        fileprivate enum SourceCodingKeys: String, CodingKey {
+        private enum SourceCodingKeys: String, CodingKey {
             case type
         }
     }
@@ -405,7 +407,14 @@ public struct ChargeParams: APIJSONQuery {
         try container.encodeIfPresent(metadata, forKey: .metadata)
     }
     
-    private init(value: Value, payment: Payment, chargeDescription: String?, isAutoCapture: Bool?, returnURL: URL?, metadata: [String: Any]?) {
+    private init(
+        value: Value,
+        payment: Payment,
+        chargeDescription: String?,
+        isAutoCapture: Bool?,
+        returnURL: URL?,
+        metadata: [String: Any]?
+    ) {
         self.value = value
         self.payment = payment
         self.chargeDescription = chargeDescription
@@ -415,47 +424,72 @@ public struct ChargeParams: APIJSONQuery {
     }
     
     public init(
-        value: Value, customerID: DataID<Customer>, cardID: DataID<Card>? = nil,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        customerID: DataID<Customer>,
+        cardID: DataID<Card>? = nil,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
-            value: value, payment: .customer(customerID: customerID, cardID: cardID),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .customer(customerID: customerID, cardID: cardID),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
-        value: Value, cardID: DataID<Token>,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        cardID: DataID<Token>,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
-            value: value, payment: .card(tokenID: cardID),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .card(tokenID: cardID),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
-        value: Value, source: PaymentSource,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        source: PaymentSource,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
-            value: value, payment: .source(source),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .source(source),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
     
     public init(
-        value: Value, sourceType: PaymentSourceParams.SourceParameter,
-        chargeDescription: String? = nil, isAutoCapture: Bool? = nil,
-        returnURL: URL? = nil, metadata: [String: Any]? = nil
-        ) {
+        value: Value,
+        sourceType: PaymentSourceParams.SourceParameter,
+        chargeDescription: String? = nil,
+        isAutoCapture: Bool? = nil,
+        returnURL: URL? = nil,
+        metadata: [String: Any]? = nil
+    ) {
         self.init(
-            value: value, payment: .sourceType(sourceType),
-            chargeDescription: chargeDescription, isAutoCapture: isAutoCapture,
-            returnURL: returnURL, metadata: metadata)
+            value: value,
+            payment: .sourceType(sourceType),
+            chargeDescription: chargeDescription,
+            isAutoCapture: isAutoCapture,
+            returnURL: returnURL,
+            metadata: metadata)
     }
 }
 
@@ -562,17 +596,25 @@ public struct ChargeFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(isVoided, forKey: .isVoided)
     }
     
-    public init(amount: Double? = nil, isAuthorized: Bool? = nil,
-                isAutoCapture: Bool? = nil, isCaptured: Bool? = nil,
-                capturedDate: DateComponents? = nil,
-                cardLastDigits: Digits? = nil,
-                createdDate: DateComponents? = nil,
-                isCustomerPresent: Bool? = nil,
-                isDisputed: Bool? = nil,
-                failureCode: ChargeFailure.Code? = nil, failureMessage: String? = nil,
-                isRefunded: Bool? = nil, refundAmount: Double? = nil,
-                isReversed: Bool? = nil, status: Charge.APIStatus? = nil,
-                sourceOfFund: Charge.SourceOfFund? = nil, isVoided: Bool? = nil) {
+    public init(
+        amount: Double? = nil,
+        isAuthorized: Bool? = nil,
+        isAutoCapture: Bool? = nil,
+        isCaptured: Bool? = nil,
+        capturedDate: DateComponents? = nil,
+        cardLastDigits: Digits? = nil,
+        createdDate: DateComponents? = nil,
+        isCustomerPresent: Bool? = nil,
+        isDisputed: Bool? = nil,
+        failureCode: ChargeFailure.Code? = nil,
+        failureMessage: String? = nil,
+        isRefunded: Bool? = nil,
+        refundAmount: Double? = nil,
+        isReversed: Bool? = nil,
+        status: Charge.APIStatus? = nil,
+        sourceOfFund: Charge.SourceOfFund? = nil,
+        isVoided: Bool? = nil
+    ) {
         self.amount = amount
         self.isAuthorized = isAuthorized
         self.isAutoCapture = isAutoCapture
@@ -593,7 +635,6 @@ public struct ChargeFilterParams: OmiseFilterParams {
     }
 }
 
-
 extension Charge: OmiseAPIPrimaryObject {}
 extension Charge: Listable {}
 extension Charge: Retrievable {}
@@ -609,4 +650,3 @@ extension Charge: Updatable {
 extension Charge: Searchable {
     public typealias FilterParams = ChargeFilterParams
 }
-

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Dispute: OmiseResourceObject, Equatable {
     public static let resourcePath = "/disputes"
     public static let idPrefix: String = "dspt"
@@ -40,7 +39,6 @@ public struct Dispute: OmiseResourceObject, Equatable {
     }
 }
 
-
 extension Dispute {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -59,7 +57,7 @@ extension Dispute {
         reasonCode = try container.decode(Reason.self, forKey: .reasonCode)
         responseMessage = try container.decodeIfPresent(String.self, forKey: .responseMessage)
         adminMessage = try container.decodeIfPresent(String.self, forKey: .adminMessage)
-        transactions = try container.decode(Array<Transaction<Dispute>>.self, forKey: .transactions)
+        transactions = try container.decode([Transaction<Dispute>].self, forKey: .transactions)
         charge = try container.decode(DetailProperty<Charge>.self, forKey: .charge)
         documents = try container.decode(ListProperty<Document>.self, forKey: .documents)
         closedDate = try container.decodeIfPresent(Date.self, forKey: .closedDate)
@@ -112,7 +110,6 @@ extension Dispute {
         case metadata
     }
 }
-
 
 extension Dispute {
     public enum Reason: Codable {
@@ -173,7 +170,8 @@ extension Dispute.Reason: Equatable {
             
         case "not_available":
             self = .notAvailable
-        case "other": fallthrough
+        case "other":
+            self = .other
         default:
             self = .other
         }
@@ -219,13 +217,11 @@ extension Dispute.Reason: Equatable {
     }
 }
 
-
 public enum DisputeStatusQuery: String {
     case open
     case pending
     case closed
 }
-
 
 public struct DisputeParams: APIJSONQuery {
     public var message: String?
@@ -252,9 +248,14 @@ public struct DisputeFilterParams: OmiseFilterParams {
         case status
     }
     
-    public init(amount: Double? = nil, cardLastDigits: Digits? = nil,
-                closedDate: DateComponents? = nil, createdDate: DateComponents? = nil,
-                currency: Currency? = nil, status: Dispute.Status? = nil) {
+    public init(
+        amount: Double? = nil,
+        cardLastDigits: Digits? = nil,
+        closedDate: DateComponents? = nil,
+        createdDate: DateComponents? = nil,
+        currency: Currency? = nil,
+        status: Dispute.Status? = nil
+    ) {
         self.amount = amount
         self.cardLastDigits = cardLastDigits
         self.closedDate = closedDate
@@ -284,7 +285,6 @@ public struct DisputeFilterParams: OmiseFilterParams {
     }
 }
 
-
 extension Dispute: OmiseAPIPrimaryObject {}
 extension Dispute: Listable {}
 extension Dispute: Retrievable {}
@@ -297,15 +297,17 @@ extension Dispute: Searchable {
     public typealias FilterParams = DisputeFilterParams
 }
 
-
 extension Dispute {
     public static func list(
-        using client: APIClient, state: DisputeStatusQuery, params: ListParams? = nil, 
+        using client: APIClient,
+        state: DisputeStatusQuery,
+        params: ListParams? = nil,
         callback: @escaping ListRequest.Callback
-        ) -> ListRequest? {
+    ) -> ListRequest? {
         let endpoint = ListEndpoint(
             pathComponents: [resourcePath, state.rawValue],
-            method: .get, query: nil)
+            method: .get,
+            query: nil)
         
         return client.request(to: endpoint, callback: callback)
     }

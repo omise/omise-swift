@@ -1,13 +1,12 @@
-import Foundation
+import XCTest
 @testable import Omise
 
-
-class FixtureClient: APIClient {    
-    let fixturesDirectoryURL: URL
+class FixtureClient: APIClient {
+    fileprivate let fixturesDirectoryURL: URL?
     
-    public override init(config: APIConfiguration) {
+    override init(config: APIConfiguration) {
         let bundle = Bundle(for: FixtureClient.self)
-        self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
+        self.fixturesDirectoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)
         
         super.init(config: config)
     }
@@ -15,51 +14,51 @@ class FixtureClient: APIClient {
     @discardableResult
     override func request<QueryType, TResult>(
         to endpoint: APIEndpoint<QueryType, TResult>,
-        callback: ((Result<TResult, OmiseError>) -> Void)?)
-        -> APIRequest<QueryType, TResult>? where QueryType : APIQuery, TResult : OmiseObject {
+        callback: ((Result<TResult, OmiseError>) -> Void)?
+    ) -> APIRequest<QueryType, TResult>? where QueryType: APIQuery, TResult: OmiseObject {
             do {
                 let req: FixtureRequest<QueryType, TResult> = FixtureRequest(
                     client: self, endpoint: endpoint, callback: callback)
                 return try req.start()
             } catch let err as NSError {
-                operationQueue.addOperation() { callback?(.failure(.other(err))) }
+                operationQueue.addOperation { callback?(.failure(.other(err))) }
             } catch let err as OmiseError {
-                operationQueue.addOperation() { callback?(.failure(err)) }
+                operationQueue.addOperation { callback?(.failure(err)) }
             }
             
             return nil
     }
 }
 
-
 class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<QueryType, TResult> {
-    var fixtureClient: FixtureClient? {
-        return client as? FixtureClient
-    }
+    private var fixtureClient: FixtureClient? { client as? FixtureClient }
     
     override func start() throws -> Self {
-        let fixtureFilePath = endpoint.fixtureFilePath
-        let fixtureFileURL = (client as! FixtureClient).fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
+        let client = try XCTUnwrap(fixtureClient)
+        let fixtureFilePath = try XCTUnwrap(endpoint.fixtureFilePath)
+        let fixturesDirectoryURL = try XCTUnwrap(client.fixturesDirectoryURL)
+        
+        let fixtureFileURL = fixturesDirectoryURL.appendingPathComponent(fixtureFilePath)
         DispatchQueue.global().async {
             let data: Data?
-            let error: Error?
+            let thrownError: Error?
             
             defer {
-                self.didComplete(data: data, error: error)
+                self.didComplete(data: data, error: thrownError)
             }
             
             do {
                 data = try Data(contentsOf: fixtureFileURL)
-                error = nil
-            } catch let thrownError {
+                thrownError = nil
+            } catch {
                 data = nil
-                error = thrownError
+                thrownError = error
             }
         }
         return self
     }
     
-    fileprivate func didComplete(data: Data?, error: Error?) {
+    private func didComplete(data: Data?, error: Error?) {
         guard callback != nil else { return }
         
         if let err = error {
@@ -82,19 +81,18 @@ class FixtureRequest<QueryType: APIQuery, TResult: OmiseObject>: APIRequest<Quer
         }
     }
     
-    fileprivate func performCallback(_ result: APIResult<TResult>) {
+    private func performCallback(_ result: APIResult<TResult>) {
         guard let cb = callback else { return }
         client.operationQueue.addOperation { cb(result) }
     }
 }
-
 
 protocol AdditionalFixtureData {
     var fixtureFileSuffix: String? { get }
 }
 
 extension Omise.APIEndpoint {
-    var fixtureFilePath: String {
+    var fixtureFilePath: String? {
         guard let components = URLComponents(url: makeURL(), resolvingAgainstBaseURL: true),
             let hostname = components.host else {
                 preconditionFailure("Invalid URL")
@@ -116,7 +114,6 @@ extension Omise.APIEndpoint {
             filename += "-\(fixtureFileSuffix)"
         }
         filename += "-" + method.rawValue.lowercased()
-        return (filename as NSString).appendingPathExtension("json")! as String
+        return (filename as NSString).appendingPathExtension("json")
     }
 }
-

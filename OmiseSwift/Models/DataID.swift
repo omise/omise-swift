@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public let idString: String
     
@@ -18,7 +17,7 @@ public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let idString = try container.decode(String.self)
-        if let id = DataID<Data>.init(idString: idString) {
+        if let id = DataID<Data>(idString: idString) {
             self = id
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid data ID value")
@@ -33,7 +32,7 @@ public struct DataID<Data: OmiseIdentifiableObject>: Hashable, Codable {
 
 extension DataID: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        self.init(idString: value)!
+        self.init(idString: value)! // swiftlint:disable:this force_unwrapping
     }
 }
 
@@ -42,4 +41,3 @@ extension DataID: CustomStringConvertible {
         return idString
     }
 }
-

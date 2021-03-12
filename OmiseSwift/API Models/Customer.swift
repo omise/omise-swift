@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Customer: OmiseResourceObject, Equatable {
     public static let resourcePath = "/customers"
     public static let idPrefix: String = "cust"
@@ -22,7 +21,6 @@ public struct Customer: OmiseResourceObject, Equatable {
     
     public let metadata: JSONDictionary
 }
-
 
 extension Customer {
     private enum CodingKeys: String, CodingKey {
@@ -95,9 +93,11 @@ public struct CustomerParams: APIJSONQuery {
     }
     
     public init(
-        email: String? = nil, customerDescription: String? = nil, cardID: DataID<Card>? = nil,
+        email: String? = nil,
+        customerDescription: String? = nil,
+        cardID: DataID<Card>? = nil,
         metadata: [String: Any]? = nil
-        ) {
+    ) {
         self.email = email
         self.customerDescription = customerDescription
         self.cardID = cardID
@@ -145,5 +145,3 @@ extension Customer: Searchable {
 }
 
 extension Customer: Destroyable {}
-
-

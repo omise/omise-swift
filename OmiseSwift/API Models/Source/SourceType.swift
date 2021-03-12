@@ -1,6 +1,5 @@
 import Foundation
 
-
 let internetBankingPrefix = "internet_banking_"
 let alipayValue = "alipay"
 let promptPayValue = "promptpay"
@@ -93,7 +92,7 @@ public enum MobileBanking: RawRepresentable, Equatable, Hashable {
     case unknown(String)
 }
 
-public struct FPX: Codable, Equatable , Hashable {
+public struct FPX: Codable, Equatable, Hashable {
     public let email: String?
     public let bank: String
     
@@ -119,7 +118,7 @@ public enum SourceType: Codable, Equatable, Hashable {
     case unknown(String)
     
     public enum BillPayment: RawRepresentable, Equatable, Hashable {
-        static private let tescoLotusValue = "tesco_lotus"
+        private static let tescoLotusValue = "tesco_lotus"
         case tescoLotus
         case unknown(String)
         
@@ -143,8 +142,8 @@ public enum SourceType: Codable, Equatable, Hashable {
     }
     
     public enum Barcode: RawRepresentable, Equatable, Hashable {
-        static private let alipayValue = "alipay"
-        static private let weChatPayValue = "wechat"
+        private static let alipayValue = "alipay"
+        private static let weChatPayValue = "wechat"
         
         case alipay
         case weChatPay
@@ -283,13 +282,16 @@ public enum SourceType: Codable, Equatable, Hashable {
     }
 }
 
-
 extension SourceType {
+    
+    // swiftlint:disable function_body_length
     init(apiSoureTypeValue value: String) {
         if value.hasPrefix(internetBankingPrefix),
             let internetBankingOffsite = value
-                .range(of: internetBankingPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(InternetBanking.init(rawValue:)).map(SourceType.internetBanking) {
+                .range(of: internetBankingPrefix)
+                .map({ String(value[$0.upperBound...]) })
+                .flatMap(InternetBanking.init(rawValue:))
+                .map(SourceType.internetBanking) {
             self = internetBankingOffsite
         } else if value == alipayValue {
             self = .alipay
@@ -299,23 +301,31 @@ extension SourceType {
             self = .payNow
         } else if value.hasPrefix(billPaymentPrefix),
             let billPaymentOffline = value
-                .range(of: billPaymentPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(BillPayment.init(rawValue:)).map(SourceType.billPayment) {
+                .range(of: billPaymentPrefix)
+                .map({ String(value[$0.upperBound...]) })
+                .flatMap(BillPayment.init(rawValue:))
+                .map(SourceType.billPayment) {
             self = billPaymentOffline
         } else if value.hasPrefix(installmentPrefix),
             let installment = value
-                .range(of: installmentPrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(InstallmentBrand.init(rawValue:)).map(SourceType.installment) {
+                .range(of: installmentPrefix)
+                .map({ String(value[$0.upperBound...]) })
+                .flatMap(InstallmentBrand.init(rawValue:))
+                .map(SourceType.installment) {
             self = installment
         } else if value.hasPrefix(barcodePrefix),
             let barcodeValue = value
-                .range(of: barcodePrefix).map({ String(value[$0.upperBound...]) })
-                .flatMap(Barcode.init(rawValue:)).map(SourceType.barcode) {
+                .range(of: barcodePrefix)
+                .map({ String(value[$0.upperBound...]) })
+                .flatMap(Barcode.init(rawValue:))
+                .map(SourceType.barcode) {
             self = barcodeValue
         } else if value.hasPrefix(mobileBankingPrefix),
             let mobileBankingOffsite = value
-              .range(of: mobileBankingPrefix).map({ String(value[$0.upperBound...]) })
-              .flatMap(MobileBanking.init(rawValue:)).map(SourceType.mobileBanking) {
+                .range(of: mobileBankingPrefix)
+                .map({ String(value[$0.upperBound...]) })
+                .flatMap(MobileBanking.init(rawValue:))
+                .map(SourceType.mobileBanking) {
             self = mobileBankingOffsite
         } else if value == fpxValue {
             self = .fpx
@@ -335,7 +345,6 @@ extension SourceType {
         try container.encode(value)
     }
 }
-
 
 public struct Truemoney: Hashable, Codable {
     public let phoneNumber: String?

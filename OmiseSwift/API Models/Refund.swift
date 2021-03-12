@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Refund: OmiseResourceObject, Equatable {
     public static let resourcePath = "/refunds"
     public static let idPrefix: String = "rfnd"
@@ -112,7 +111,6 @@ public struct RefundParams: APIJSONQuery {
     }
 }
 
-
 public struct RefundFilterParams: OmiseFilterParams {
     public var amount: Double?
     public var cardLastDigits: Digits?
@@ -126,8 +124,12 @@ public struct RefundFilterParams: OmiseFilterParams {
         case isVoided = "voided"
     }
     
-    public init(amount: Double? = nil, cardLastDigits: Digits? = nil,
-                createdDate: DateComponents? = nil, isVoided: Bool? = nil) {
+    public init(
+        amount: Double? = nil,
+        cardLastDigits: Digits? = nil,
+        createdDate: DateComponents? = nil,
+        isVoided: Bool? = nil
+    ) {
         self.amount = amount
         self.cardLastDigits = cardLastDigits
         self.createdDate = createdDate
@@ -151,7 +153,6 @@ public struct RefundFilterParams: OmiseFilterParams {
     }
 }
 
-
 extension Refund: Creatable {
     public typealias CreateParams = RefundParams
 }
@@ -166,20 +167,20 @@ extension Refund: OmiseAPIChildObject {
     public typealias Parent = Charge
 }
 
-
 extension Charge {
     public func retrieveRefund(
-        using client: APIClient, id: DataID<Refund>, 
+        using client: APIClient,
+        id: DataID<Refund>,
         callback: @escaping Refund.RetrieveRequest.Callback
-        ) -> Refund.RetrieveRequest? {
+    ) -> Refund.RetrieveRequest? {
         return Refund.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     
     public func createRefund(
-        using client: APIClient, params: RefundParams, 
+        using client: APIClient,
+        params: RefundParams,
         callback: @escaping Refund.CreateRequest.Callback
-        ) -> Refund.CreateRequest? {
+    ) -> Refund.CreateRequest? {
         return Refund.create(using: client, parent: self, params: params, callback: callback)
     }
 }
-

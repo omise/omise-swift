@@ -1,3 +1,4 @@
+import Foundation
 
 public enum DetailProperty<T: OmiseIdentifiableObject> {
     case notLoaded(DataID<T>)
@@ -48,4 +49,3 @@ extension DetailProperty: Codable {
         }
     }
 }
-

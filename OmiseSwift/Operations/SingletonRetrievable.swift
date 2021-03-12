@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol SingletonRetrievable {}
 
 public extension SingletonRetrievable where Self: OmiseLocatableObject {
@@ -11,7 +10,8 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return SingletonRetrieveEndpoint(
             pathComponents: [Self.resourcePath],
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(
@@ -22,7 +22,6 @@ public extension SingletonRetrievable where Self: OmiseLocatableObject {
     }
 }
 
-
 public extension APIClient {
     func retrieve<T: OmiseAPIPrimaryObject & SingletonRetrievable>(
         _ type: T.Type, callback: @escaping T.SingletonRetrieveRequest.Callback
@@ -30,4 +29,3 @@ public extension APIClient {
         return T.retrieve(using: self, callback: callback)
     }
 }
-

@@ -1,10 +1,9 @@
 import Foundation
 
-
 public protocol Retrievable {}
 
 public struct RetrieveParams: APIURLQuery {
-    public var isExpanded: Bool = false
+    public var isExpanded = false
     
     private enum CodingKeys: String, CodingKey {
         case isExpanded = "expand"
@@ -21,18 +20,19 @@ public extension OmiseAPIPrimaryObject where Self: Retrievable & OmiseIdentifiab
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePaths(id: id),
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(
-        using client: APIClient, id: DataID<Self>, 
+        using client: APIClient,
+        id: DataID<Self>,
         callback: @escaping RetrieveRequest.Callback
-        ) -> RetrieveRequest? {
+    ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpoint(for: id)
         return client.request(to: endpoint, callback: callback)
     }
 }
-
 
 public extension APIClient {
     func retrieve<T: OmiseAPIPrimaryObject & Retrievable>(
@@ -42,21 +42,22 @@ public extension APIClient {
     }
 }
 
-
-public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject & Retrievable {    
+public extension OmiseAPIChildObject where Self: OmiseLocatableObject & OmiseIdentifiableObject & Retrievable {
     static func retrieveEndpointWith(parent: Parent, id: DataID<Self>) -> RetrieveEndpoint {
         let retrieveParams = RetrieveParams(isExpanded: true)
         return RetrieveEndpoint(
             pathComponents: Self.makeResourcePathsWith(parent: parent, id: id),
-            method: .get, query: retrieveParams)
+            method: .get,
+            query: retrieveParams)
     }
     
     static func retrieve(
-        using client: APIClient, parent: Parent, id: DataID<Self>, 
+        using client: APIClient,
+        parent: Parent,
+        id: DataID<Self>,
         callback: @escaping RetrieveRequest.Callback
-        ) -> RetrieveRequest? {
+    ) -> RetrieveRequest? {
         let endpoint = self.retrieveEndpointWith(parent: parent, id: id)
         return client.request(to: endpoint, callback: callback)
     }
 }
-

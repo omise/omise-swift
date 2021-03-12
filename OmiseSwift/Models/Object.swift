@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol OmiseObject: Codable {
     var object: String { get }
 }
@@ -25,23 +24,21 @@ public protocol OmiseLiveModeObject: OmiseObject {
     var isLiveMode: Bool { get }
 }
 
-
-public protocol OmiseResourceObject
-  : OmiseLocatableObject, OmiseIdentifiableObject, OmiseLiveModeObject, OmiseCreatedObject {}
+public protocol OmiseResourceObject: OmiseLocatableObject,
+                                     OmiseIdentifiableObject,
+                                     OmiseLiveModeObject,
+                                     OmiseCreatedObject {}
 
 public protocol OmiseAPIPrimaryObject: OmiseLocatableObject {}
 
-
 public extension OmiseIdentifiableObject {
     static func validate(id: String) -> Bool {
-        return id.range(of:
-            #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#,
-            options: [.regularExpression, .anchored]) != nil
+        id.range(of: #"^\#(Self.idPrefix)(_test)?_[0-9a-z]+$"#, options: [.regularExpression, .anchored]) != nil
     }
 }
 
 public extension OmiseIdentifiableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -51,7 +48,7 @@ public extension OmiseIdentifiableObject {
 }
 
 public extension OmiseLocatableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.location == rhs.location
     }
     
@@ -61,7 +58,7 @@ public extension OmiseLocatableObject {
 }
 
 public extension OmiseIdentifiableObject where Self: OmiseLocatableObject {
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id && lhs.location == rhs.location
     }
     
@@ -91,4 +88,3 @@ extension OmiseAPIPrimaryObject where Self: OmiseIdentifiableObject {
         return paths
     }
 }
-

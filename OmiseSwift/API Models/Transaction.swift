@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Transaction<Origin: OmiseIdentifiableObject>: OmiseResourceObject, Equatable {
     public static var resourcePath: String {
         return "/transactions"
@@ -51,9 +50,6 @@ extension Transaction {
     }
 }
 
-
 extension Transaction: OmiseAPIPrimaryObject {}
 extension Transaction: Listable {}
 extension Transaction: Retrievable {}
-
-

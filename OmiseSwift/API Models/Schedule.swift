@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Schedule<Data: Schedulable>: OmiseResourceObject, Equatable {
     public enum Status: Equatable {
         case running
@@ -158,7 +157,7 @@ extension Schedule {
         isActive = try container.decode(Bool.self, forKey: .isActive)
         
         every = try container.decode(Int.self, forKey: .every)
-        period = try Period.init(from: decoder)
+        period = try Period(from: decoder)
         
         startOnDateComponents = try container.decode(DateComponents.self, forKey: .startDate)
         endOnDateComponents = try container.decode(DateComponents.self, forKey: .endDate)
@@ -167,20 +166,19 @@ extension Schedule {
         nextOccurrencesOnDateComponents = try container.decode(
             Array<DateComponents>.self, forKey: .nextOccurrenceDates)
         
-        let parameterKey = container.allKeys.first(where: { (key) -> Bool in
+        let parameterKey = container.allKeys.first { (key) -> Bool in
             if case .parameter = key {
                 return true
             } else {
                 return false
             }
-        })
+        }
         if let parameterKey = parameterKey {
             scheduleData = try container.decode(Data.ScheduleData.self, forKey: parameterKey)
         } else {
-            throw DecodingError.keyNotFound(
-                Schedule<Data>.CodingKeys.parameter("parameter"),
-                DecodingError.Context(codingPath: container.codingPath,
-                                      debugDescription: "Missing scheduling parameter"))
+            let errorContext = DecodingError.Context(codingPath: container.codingPath,
+                                                     debugDescription: "Missing scheduling parameter")
+            throw DecodingError.keyNotFound(Schedule<Data>.CodingKeys.parameter("parameter"), errorContext)
         }
     }
     
@@ -212,7 +210,6 @@ extension Calendar {
         return Calendar(identifier: .gregorian)
     }()
 }
-
 
 extension Schedule.Status: Codable {
     public init(from decoder: Decoder) throws {
@@ -255,12 +252,10 @@ extension Schedule.Status: Codable {
     }
 }
 
-
 extension Schedule: OmiseAPIPrimaryObject {}
 extension Schedule: Listable {}
 extension Schedule: Retrievable {}
 extension Schedule: Destroyable {}
-
 
 public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {
     public let every: Int
@@ -283,9 +278,6 @@ public struct ScheduleParams<Data: Schedulable>: APIJSONQuery {
     }
 }
 
-extension Schedule : Creatable where Data : Creatable & Schedulable {
+extension Schedule: Creatable where Data: Creatable & Schedulable {
     public typealias CreateParams = ScheduleParams<Data>
 }
-
-
-

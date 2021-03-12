@@ -1,6 +1,5 @@
 import Foundation
 
-
 public protocol Searchable {
     static var scopeName: String { get }
     associatedtype FilterParams: OmiseFilterParams
@@ -32,9 +31,13 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
     }
     
     public init(
-        scope: String, query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil,
-        page: Int? = nil, numberOfItemsPerPage: Int? = nil
-        ) {
+        scope: String,
+        query: String? = nil,
+        order: Ordering? = nil,
+        filter: FilterParams? = nil,
+        page: Int? = nil,
+        numberOfItemsPerPage: Int? = nil
+    ) {
         self.scope = scope
         self.query = query
         self.order = order
@@ -43,19 +46,27 @@ public struct SearchParams<FilterParams: OmiseFilterParams>: APIJSONQuery {
         self.numberOfItemsPerPage = numberOfItemsPerPage
     }
     
-    public init<T: Searchable>(searhScopeType: T.Type,
-                               query: String? = nil, order: Ordering? = nil, filter: FilterParams? = nil,
-                               page: Int? = nil,  numberOfItemsPerPage: Int? = nil)
+    public init<T: Searchable>(
+        searhScopeType: T.Type,
+        query: String? = nil,
+        order: Ordering? = nil,
+        filter: FilterParams? = nil,
+        page: Int? = nil,
+        numberOfItemsPerPage: Int? = nil
+    )
         where T.FilterParams == FilterParams {
             self.init(
-                scope: T.scopeName, query: query, order: order, filter: filter,
-                page: page, numberOfItemsPerPage: numberOfItemsPerPage)
+                scope: T.scopeName,
+                query: query,
+                order: order,
+                filter: filter,
+                page: page,
+                numberOfItemsPerPage: numberOfItemsPerPage
+            )
     }
 }
 
-
-public protocol OmiseFilterParams: APIJSONQuery , Decodable {}
-
+public protocol OmiseFilterParams: APIJSONQuery, Decodable {}
 
 public extension OmiseAPIPrimaryObject where Self: Searchable {
     typealias SearchEndpoint = APIEndpoint<SearchParams<FilterParams>, SearchResult<Self>>
@@ -65,28 +76,31 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
         return SearchEndpoint(
             endpoint: .api,
             pathComponents: ["search"],
-            method: .get, query: params)
+            method: .get,
+            query: params)
     }
     
     static func search(
-        using client: APIClient, params: SearchParams<FilterParams>? = nil,
+        using client: APIClient,
+        params: SearchParams<FilterParams>? = nil,
         callback: SearchRequest.Callback?
-        ) -> SearchRequest? {
+    ) -> SearchRequest? {
         let endpoint = self.searchEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
     
     @discardableResult
     static func search(
-        using client: APIClient, searchParams: SearchParams<FilterParams>? = nil,
+        using client: APIClient,
+        searchParams: SearchParams<FilterParams>? = nil,
         callback: @escaping (APIResult<Search<Self>>) -> Void
-        ) -> SearchRequest? {
+    ) -> SearchRequest? {
         let endpoint = self.searchEndpoint(with: searchParams)
         
         let requestCallback: SearchRequest.Callback = { result in
-            let callbackResult = result.map({
+            let callbackResult = result.map {
                 Search(result: $0, order: searchParams?.order ?? .chronological)
-            })
+            }
             callback(callbackResult)
         }
         
@@ -94,12 +108,15 @@ public extension OmiseAPIPrimaryObject where Self: Searchable {
     }
 }
 
-
 public extension Search {
     func makeLoadNextPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
-            page: self.loadedPages.last?.advanced(by: 1) ?? 1)
+            scope: self.scope,
+            query: self.query,
+            order: self.order,
+            filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: 1) ?? 1
+        )
         
         return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
@@ -108,11 +125,11 @@ public extension Search {
     func loadNextPage(
         using client: APIClient,
         callback: @escaping (APIResult<[TItem]>) -> Void
-        ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
+    ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
         let operation = self.makeLoadNextPageOperation()
         
         let requestCallback: TItem.SearchRequest.Callback = { result in
-            let callbackResult = result.map({ self.insert(from: $0) })
+            let callbackResult = result.map { self.insert(from: $0) }
             callback(callbackResult)
         }
         
@@ -121,8 +138,12 @@ public extension Search {
     
     func makeLoadPreviousPageOperation() -> TItem.SearchEndpoint {
         let listParams = SearchParams(
-            scope: self.scope, query: self.query, order: self.order, filter: self.filters,
-            page: self.loadedPages.last?.advanced(by: -1) ?? 1)
+            scope: self.scope,
+            query: self.query,
+            order: self.order,
+            filter: self.filters,
+            page: self.loadedPages.last?.advanced(by: -1) ?? 1
+        )
         
         return TItem.SearchEndpoint(endpoint: .api, pathComponents: ["search"], method: .get, query: listParams)
     }
@@ -131,11 +152,11 @@ public extension Search {
     func loadPreviousPage(
         using client: APIClient,
         callback: @escaping (APIResult<[TItem]>) -> Void
-        ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
+    ) -> APIRequest<SearchParams<TItem.FilterParams>, TItem.SearchEndpoint.Result>? {
         let operation = makeLoadNextPageOperation()
         
         let requestCallback: TItem.SearchRequest.Callback = { result in
-            let callbackResult = result.map({ self.insert(from: $0) })
+            let callbackResult = result.map { self.insert(from: $0) }
             callback(callbackResult)
         }
         
@@ -143,12 +164,10 @@ public extension Search {
     }
 }
 
-
 public extension APIClient {
     func create<T: OmiseAPIPrimaryObject & Searchable>(
         params: SearchParams<T.FilterParams>, callback: @escaping T.SearchRequest.Callback
-        ) -> T.SearchRequest? {
+    ) -> T.SearchRequest? {
         return T.search(using: self, params: params, callback: callback)
     }
 }
-

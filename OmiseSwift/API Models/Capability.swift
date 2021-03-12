@@ -1,5 +1,6 @@
-import Foundation
+// swiftlint:disable file_length
 
+import Foundation
 
 public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
     public static var resourcePath: String = "capability"
@@ -24,9 +25,8 @@ public struct Capability: OmiseLocatableObject, OmiseAPIPrimaryObject {
     }
 }
 
-
 extension Capability {
-    public static func ~=(lhs: Capability, rhs: Charge.CreateParams) -> Bool {
+    public static func ~= (lhs: Capability, rhs: Charge.CreateParams) -> Bool {
         func method(from capability: Capability, for payment: Charge.CreateParams.Payment) -> Method? {
             switch payment {
             case .card, .customer:
@@ -63,9 +63,8 @@ extension Capability {
     }
 }
 
-
 extension Capability {
-    public struct Limit : Codable, Equatable, Hashable {
+    public struct Limit: Codable, Equatable, Hashable {
         public let max: Int64
         public let min: Int64
         
@@ -78,7 +77,7 @@ extension Capability {
             self.min = Swift.min(min, max)
         }
         
-        public static func ~=(lhs: Capability.Limit, rhs: Int64) -> Bool {
+        public static func ~= (lhs: Capability.Limit, rhs: Int64) -> Bool {
             return lhs.min <= rhs && rhs <= lhs.max
         }
     }
@@ -87,34 +86,37 @@ extension Capability {
         public let payment: Payment
         public let supportedCurrencies: Set<Currency>
         public let banks: [BankDetails]
-        public enum Payment : Equatable {
-            case card(Set<CardBrand>)
-            case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
-            case internetBanking(InternetBanking)
-            case mobileBanking(MobileBanking)
-            case billPayment(SourceType.BillPayment)
-            case barcode(SourceType.Barcode)
-            case alipay
-            case promptPay
-            case payNow
-            case truemoney
-            case payWithPointsCiti
-            case fpx
-            case unknownSource(String, configurations: JSONDictionary)
-        }
-        public struct BankDetails: Codable, Hashable {
-            enum CodingKeys: String, CodingKey {
-                case code, name
-                case isActive = "active"
-            }
-
-            public let code: String
-            public let name: String
-            public let isActive: Bool
-        }
     }
 }
 
+extension Capability.Method {
+    public enum Payment: Equatable {
+        case card(Set<CardBrand>)
+        case installment(SourceType.InstallmentBrand, availableNumberOfTerms: IndexSet)
+        case internetBanking(InternetBanking)
+        case mobileBanking(MobileBanking)
+        case billPayment(SourceType.BillPayment)
+        case barcode(SourceType.Barcode)
+        case alipay
+        case promptPay
+        case payNow
+        case truemoney
+        case payWithPointsCiti
+        case fpx
+        case unknownSource(String, configurations: JSONDictionary)
+    }
+    
+    public struct BankDetails: Codable, Hashable {
+        enum CodingKeys: String, CodingKey {
+            case code, name
+            case isActive = "active"
+        }
+
+        public let code: String
+        public let name: String
+        public let isActive: Bool
+    }
+}
 
 extension Capability: Codable {
     private enum CodingKeys: String, CodingKey {
@@ -131,7 +133,6 @@ extension Capability: Codable {
         case transfer = "transfer_amount"
     }
 }
-
 
 extension Capability.Method {
     private enum CodingKeys: String, CodingKey {
@@ -187,9 +188,8 @@ extension Capability {
         isZeroInterests = try container.decode(Bool.self, forKey: .isZeroInterests)
         
         supportedMethods = try container.decode(Array<Capability.Method>.self, forKey: .paymentMethods)
-        methods = Dictionary(
-            uniqueKeysWithValues: zip(supportedMethods.map({ Capability.Method.Key(payment: $0.payment) }),
-                                      supportedMethods))
+        let supportedMethodKeys = supportedMethods.map { Capability.Method.Key(payment: $0.payment) }
+        methods = Dictionary(uniqueKeysWithValues: zip(supportedMethodKeys, supportedMethods))
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -202,9 +202,9 @@ extension Capability {
         try container.encode(isZeroInterests, forKey: .isZeroInterests)
         
         var methodsContainer = container.nestedUnkeyedContainer(forKey: .paymentMethods)
-        try supportedMethods.forEach({ method in
+        try supportedMethods.forEach { method in
             try methodsContainer.encode(method)
-        })
+        }
     }
 }
 
@@ -247,12 +247,13 @@ extension Capability.Method {
         case .source(SourceType.fpx):
             self.payment = .fpx
         case .source(SourceType.unknown(let type)):
-            let configurations = try decoder.container(
-                keyedBy: SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self).decode()
+            let codingKeys = SkippingKeyCodingKeys<Capability.Method.CodingKeys>.self
+            let configurations = try decoder.container(keyedBy: codingKeys).decode()
             self.payment = .unknownSource(type, configurations: configurations)
         }
     }
     
+    // swiftlint:disable function_body_length
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Capability.Method.CodingKeys.self)
         try container.encode(supportedCurrencies, forKey: .supportedCurrencies)
@@ -261,14 +262,16 @@ extension Capability.Method {
         switch payment {
         case .card(let brands):
             var paymentConfigurations = encoder.container(
-                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self
+            )
             try paymentConfigurations.encode(brands, forKey: .right(.brands))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
             try paymentConfigurations.encode(Key.card, forKey: .left(.name))
         case .installment(let brand, availableNumberOfTerms: let availableNumberOfTerms):
             var paymentConfigurations = encoder.container(
-                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self)
+                keyedBy: CombineCodingKeys<Capability.Method.CodingKeys, Capability.Method.ConfigurationCodingKeys>.self
+            )
             try paymentConfigurations.encode(Array(availableNumberOfTerms), forKey: .right(.allowedInstallmentTerms))
             
             try paymentConfigurations.encode(Array(supportedCurrencies), forKey: .left(.supportedCurrencies))
@@ -342,17 +345,16 @@ extension Capability.Method {
                     try configurationContainers.encode(value, forKey: .right(key))
                 case let value as Double:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case let value as Dictionary<String, Any>:
+                case let value as [String: Any]:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case let value as Array<Any>:
+                case let value as [Any]:
                     try configurationContainers.encode(value, forKey: .right(key))
-                case Optional<Any>.none:
+                case Optional<Any>.none: // swiftlint:disable:this syntactic_sugar
                     try configurationContainers.encodeNil(forKey: .right(key))
                 default:
-                    throw EncodingError.invalidValue(
-                        value,
-                        EncodingError.Context(codingPath: configurationContainers.codingPath + [key],
-                                              debugDescription: "Invalid JSON value"))
+                    let errorContext = EncodingError.Context(codingPath: configurationContainers.codingPath + [key],
+                                                             debugDescription: "Invalid JSON value")
+                    throw EncodingError.invalidValue(value, errorContext)
                 }
             })
             
@@ -362,10 +364,9 @@ extension Capability.Method {
     }
 }
 
-
 private let creditCardMethodTypeValue = "card"
 extension Capability.Method {
-    fileprivate enum Key : RawRepresentable, Hashable, Codable {
+    fileprivate enum Key: RawRepresentable, Hashable, Codable {
         case card
         case source(SourceType)
         
@@ -428,7 +429,8 @@ extension Capability.Method {
                 let sourceTypeValue = sourceType.sourceTypePrefix
                 if sourceTypeValue.hasSuffix("_") {
                     return sourceTypeValue.lastIndex(of: "_")
-                        .map(sourceTypeValue.prefix(upTo:)).map(String.init) ?? sourceTypeValue
+                        .map(sourceTypeValue.prefix(upTo:))
+                        .map(String.init) ?? sourceTypeValue
                 } else {
                     return sourceTypeValue
                 }
@@ -438,4 +440,3 @@ extension Capability.Method {
 }
 
 extension Capability: SingletonRetrievable {}
-

@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 @testable import Omise
 
+// swiftlint:disable closure_body_length function_body_length
 class ChargeOperationsTest: LiveTest {
     
     func testChargeList() {
@@ -22,11 +23,10 @@ class ChargeOperationsTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
      
-    
     func testChargeRetrieve() {
         let expectation = self.expectation(description: "charge retrieve")
         
-        let request = Charge.retrieve(using: testClient, id: "chrg_test_54phpsikwx0q7sv8h4g", callback: { (result) in
+        let request = Charge.retrieve(using: testClient, id: "chrg_test_54phpsikwx0q7sv8h4g") { (result) in
             defer { expectation.fulfill() }
             
             switch result {
@@ -41,7 +41,7 @@ class ChargeOperationsTest: LiveTest {
             case let .failure(error):
                 XCTFail("\(error)")
             }
-        })
+        }
         
         XCTAssertNotNil(request)
         waitForExpectations(timeout: 15.0, handler: nil)
@@ -80,7 +80,7 @@ class ChargeOperationsTest: LiveTest {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
-    func testChargeInfiniteListWithBefore() -> Void {
+    func testChargeInfiniteListWithBefore() {
         let expectation = self.expectation(description: "transfer list")
         let firstExpectation = self.expectation(description: "transfer list")
         let secondExpectation = self.expectation(description: "Load more of transfer list")

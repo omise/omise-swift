@@ -15,12 +15,12 @@ public enum ServerEndpoint {
         case .api:
             urlString = "https://api" + productionURLSuffix
         }
-        return URL(string: urlString)!
+        return URL(string: urlString)! // swiftlint:disable:this force_unwrapping
     }
     
     func url(withComponents components: [String]) -> URL {
-        return components.reduce(url, { (url, segment) -> URL in
+        return components.reduce(url) { (url, segment) -> URL in
             return url.appendingPathComponent(segment, isDirectory: false)
-        })
+        }
     }
 }

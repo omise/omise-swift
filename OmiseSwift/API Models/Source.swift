@@ -1,12 +1,12 @@
-import Foundation
+// swiftlint:disable file_length
 
+import Foundation
 
 public enum Flow: String, Codable, Equatable {
     case redirect
     case offline
     case appRedirect = "app_redirect"
 }
-
 
 public protocol SourceData: OmiseIdentifiableObject {
     associatedtype PaymentInformation: Codable, Equatable
@@ -27,7 +27,6 @@ extension SourceData {
         return Value(amount: amount, currency: currency)
     }
 }
-
 
 public enum Source: SourceData {
     public static let idPrefix: String = "src"
@@ -80,9 +79,9 @@ public enum Source: SourceData {
     public var id: DataID<Source> {
         switch self {
         case .enrolled(let source):
-            return DataID<Source>(idString: source.id.idString)!
+            return DataID(idString: source.id.idString)! // swiftlint:disable:this force_unwrapping
         case .source(let source):
-            return DataID<Source>(idString: source.id.idString)!
+            return DataID(idString: source.id.idString)! // swiftlint:disable:this force_unwrapping
         }
     }
     
@@ -100,9 +99,9 @@ public enum Source: SourceData {
 extension Source {
     public init(from decoder: Decoder) throws {
         do {
-            self = .enrolled(try EnrolledSource.init(from: decoder))
+            self = .enrolled(try EnrolledSource(from: decoder))
         } catch is DecodingError {
-            self = .source(try PaymentSource.init(from: decoder))
+            self = .source(try PaymentSource(from: decoder))
         }
     }
     
@@ -115,7 +114,6 @@ extension Source {
         }
     }
 }
-
 
 public enum Barcode: Codable, Equatable {
     case alipay(AlipayBarcode)
@@ -218,7 +216,8 @@ public enum Barcode: Codable, Equatable {
         public init(storeID: String, storeName: String, terminalID: String?, barcode: String) {
             self.init(
                 storeInformation: StoreInformation(storeID: storeID, storeName: storeName),
-                terminalID: terminalID, barcode: barcode)
+                terminalID: terminalID,
+                barcode: barcode)
         }
         
         public init(terminalID: String?, barcode: String) {
@@ -234,7 +233,7 @@ public enum Barcode: Codable, Equatable {
         }
     }
     
-    public static func ==(lhs: Barcode, rhs: Barcode) -> Bool {
+    public static func == (lhs: Barcode, rhs: Barcode) -> Bool {
         switch (lhs, rhs) {
         case (.alipay(let lhsValue), .alipay(let rhsValue)):
             return lhsValue == rhsValue
@@ -279,7 +278,6 @@ public enum Barcode: Codable, Equatable {
     
 }
 
-
 public struct Installment: Codable, Equatable {
     /// The brand of the bank of the installment
     public let brand: SourceType.InstallmentBrand
@@ -288,7 +286,7 @@ public struct Installment: Codable, Equatable {
     
     public let isZeroInterests: Bool
     
-    fileprivate enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case type
         case isZeroInterests = "zero_interest_installments"
         case installmentTerms = "installment_term"
@@ -304,9 +302,9 @@ public struct Installment: Codable, Equatable {
                 .range(of: installmentPrefix)
                 .map({ String(typeValue[$0.upperBound...]) })
                 .flatMap(SourceType.InstallmentBrand.init(rawValue:)) else {
-                    throw DecodingError.dataCorruptedError(
-                        forKey: CodingKeys.type, in: container,
-                        debugDescription: "Invalid Installment Source Type value")
+                    throw DecodingError.dataCorruptedError(forKey: CodingKeys.type,
+                                                           in: container,
+                                                           debugDescription: "Invalid Installment Source Type value")
         }
         
         self.brand = installmentBrand
@@ -321,7 +319,6 @@ public struct Installment: Codable, Equatable {
         try container.encode(numberOfTerms, forKey: .installmentTerms)
         try container.encode(isZeroInterests, forKey: .isZeroInterests)
     }
-    
     
     public static func availableTerms(for brand: SourceType.InstallmentBrand) -> IndexSet {
         switch brand {
@@ -338,7 +335,8 @@ public struct Installment: Codable, Equatable {
         case .scb:
             return IndexSet([ 3, 4, 6, 9, 10 ])
         case .unknown:
-            return IndexSet(1...360) // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
+            // We don't have the availabe terms for those unknown brand but we think 30 years should be enough
+            return IndexSet(1...360)
         }
     }
     
@@ -422,7 +420,6 @@ public struct PaymentSourceParams: APIJSONQuery {
             }
         }
         
-        
         private enum CodingKeys: String, CodingKey {
             case type
         }
@@ -440,7 +437,6 @@ public struct PaymentSourceParams: APIJSONQuery {
             }
         }
     }
-    
     
     private enum CodingKeys: String, CodingKey {
         case amount
@@ -467,7 +463,6 @@ public struct PaymentSourceParams: APIJSONQuery {
     }
 }
 
-
 extension PaymentSource: OmiseAPIPrimaryObject {}
 extension PaymentSource: Retrievable {}
 
@@ -480,16 +475,16 @@ extension PaymentSource: Creatable {
     public static func createEndpoint(with params: CreateParams) -> CreateEndpoint {
         return CreateEndpoint(
             pathComponents: ["sources"],
-            method: .post, query: params)
+            method: .post,
+            query: params)
     }
     
     public static func create(
-        using client: APIClient, params: CreateParams, 
+        using client: APIClient,
+        params: CreateParams,
         callback: @escaping CreateRequest.Callback
-        ) -> CreateRequest? {
+    ) -> CreateRequest? {
         let endpoint = self.createEndpoint(with: params)
         return client.request(to: endpoint, callback: callback)
     }
 }
-
-

@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct PaymentSource: SourceData, OmiseResourceObject {
     public static let resourcePath = "sources"
     public static let idPrefix: String = "src"
@@ -83,28 +82,33 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
             case type
         }
         
+        // swiftlint:disable function_body_length
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let typeValue = try container.decode(String.self, forKey: .type)
             
             if typeValue.hasPrefix(internetBankingPrefix),
                 let internetBankingOffsite = typeValue
-                    .range(of: internetBankingPrefix).map({ String(typeValue[$0.upperBound...]) })
-                    .flatMap(InternetBanking.init(rawValue:)).map(PaymentSourceInformation.internetBanking) {
+                    .range(of: internetBankingPrefix)
+                    .map({ String(typeValue[$0.upperBound...]) })
+                    .flatMap(InternetBanking.init(rawValue:))
+                    .map(PaymentSourceInformation.internetBanking) {
                 self = internetBankingOffsite
             } else if typeValue == alipayValue {
                 self = .alipay
             } else if typeValue.hasPrefix(billPaymentPrefix),
                 let billPaymentOffline = typeValue
-                    .range(of: billPaymentPrefix).map({ String(typeValue[$0.upperBound...]) })
-                    .flatMap(SourceType.BillPayment.init(rawValue:)).map(PaymentSourceInformation.billPayment) {
+                    .range(of: billPaymentPrefix)
+                    .map({ String(typeValue[$0.upperBound...]) })
+                    .flatMap(SourceType.BillPayment.init(rawValue:))
+                    .map(PaymentSourceInformation.billPayment) {
                 self = billPaymentOffline
             } else if typeValue.hasPrefix(barcodePrefix),
                 let barcodeValue = typeValue
                     .range(of: barcodePrefix).map({ String(typeValue[$0.upperBound...]) }) {
                 switch barcodeValue {
                 case SourceType.Barcode.alipay.rawValue:
-                    let alipayBarcode = try Barcode.AlipayBarcode.init(from: decoder)
+                    let alipayBarcode = try Barcode.AlipayBarcode(from: decoder)
                     self = .barcode(.alipay(alipayBarcode))
                 case SourceType.Barcode.weChatPay.rawValue:
                     let weChatPayBarcode = try Barcode.WeChatPayBarcode(from: decoder)
@@ -143,7 +147,7 @@ public struct PaymentSource: SourceData, OmiseResourceObject {
 }
 
 extension PaymentSource {
-    fileprivate enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id
         case object
         case isLiveMode = "livemode"
@@ -184,4 +188,3 @@ extension PaymentSource {
         try paymentInformation.encode(to: encoder)
     }
 }
-

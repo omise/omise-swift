@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Receipt: OmiseResourceObject, Equatable {
     public static let idPrefix: String = "rcpt"
     public static let resourcePath = "/receipts"
@@ -126,8 +125,6 @@ extension Receipt {
     }
 }
 
-
 extension Receipt: OmiseAPIPrimaryObject {}
 extension Receipt: Listable {}
 extension Receipt: Retrievable {}
-

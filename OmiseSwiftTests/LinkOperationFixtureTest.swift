@@ -1,9 +1,9 @@
 import XCTest
 import Omise
 
-private let linkTestingID = DataID<Link>(idString: "link_test_5bh0ji63ctfk4gug2d5")!
-
 class LinkOperationFixtureTest: FixtureTestCase {
+    private let linkTestingID: DataID<Link>! = DataID(idString: "link_test_5bh0ji63ctfk4gug2d5")
+    
     func testLinkRetrieve() {
         let expectation = self.expectation(description: "Link result")
         
@@ -12,7 +12,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
             
             switch result {
             case let .success(link):
-                XCTAssertEqual(link.value.amount, 120000)
+                XCTAssertEqual(link.value.amount, 120_000)
                 XCTAssertEqual(link.charges.total, 1)
             case let .failure(error):
                 XCTFail("\(error)")
@@ -23,6 +23,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
         waitForExpectations(timeout: 15.0, handler: nil)
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeLinkRetrieve() throws {
         let defaultLink = try fixturesObjectFor(type: Link.self, dataID: linkTestingID)
         
@@ -107,7 +108,7 @@ class LinkOperationFixtureTest: FixtureTestCase {
                 XCTAssertEqual(linksList.data.count, 6)
                 let linkSampleData = linksList.data.first
                 XCTAssertNotNil(linkSampleData)
-                XCTAssertEqual(linkSampleData?.value.amount, 20000)
+                XCTAssertEqual(linkSampleData?.value.amount, 20_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }

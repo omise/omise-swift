@@ -1,9 +1,7 @@
 import Foundation
 
-
 public typealias ListAPIRequest<Result: OmiseObject> = APIRequest<ListParams, ListProperty<Result>>
 public typealias RetrieveAPIRequest<Result: OmiseObject> = APIRequest<RetrieveParams, Result>
-
 
 public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
     public typealias Endpoint = APIEndpoint<QueryType, ResultType>
@@ -34,7 +32,7 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         return self
     }
     
-    fileprivate func didComplete(_ data: Data?, response: URLResponse?, error: Error?) {
+    private func didComplete(_ data: Data?, response: URLResponse?, error: Error?) {
         // no one's in the forest to hear the leaf falls.
         guard callback != nil else { return }
         
@@ -69,16 +67,16 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         } catch let err as OmiseError {
             result = .failure(err)
             
-        } catch let err {
-            result = .failure(.other(err))
+        } catch {
+            result = .failure(.other(error))
         }
         
         performCallback(result)
     }
     
-    fileprivate func performCallback(_ result: APIResult<ResultType>) {
+    private func performCallback(_ result: APIResult<ResultType>) {
         guard let cb = callback else { return }
-        client.operationQueue.addOperation({ cb(result) })
+        client.operationQueue.addOperation { cb(result) }
     }
     
     func makeURLRequest() throws -> URLRequest {
@@ -113,4 +111,3 @@ public class APIRequest<QueryType: APIQuery, ResultType: OmiseObject> {
         return request as URLRequest
     }
 }
-

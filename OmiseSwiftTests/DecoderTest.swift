@@ -1,7 +1,6 @@
 import XCTest
 @testable import Omise
 
-
 struct MetadataDummy: Decodable {
     
     let metadata: [String: Any]
@@ -10,7 +9,7 @@ struct MetadataDummy: Decodable {
         case metadata
     }
     
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         metadata = try container.decode([String: Any].self, forKey: .metadata)
     }
@@ -20,8 +19,8 @@ class DecodeTests: XCTestCase {
     
     func jsonData(withFileName name: String) throws -> Data {
         let bundle = Bundle(for: FixtureClient.self)
-        let directoryURL = bundle.url(forResource: "Fixtures", withExtension: nil)!
-        let filePath = (name as NSString).appendingPathExtension("json")! as String
+        let directoryURL = try XCTUnwrap(bundle.url(forResource: "Fixtures", withExtension: nil))
+        let filePath = try XCTUnwrap((name as NSString).appendingPathExtension("json"))
         let fixtureFileURL = directoryURL.appendingPathComponent(filePath)
         return try Data(contentsOf: fixtureFileURL)
     }
@@ -52,19 +51,26 @@ class DecodeTests: XCTestCase {
             XCTAssertTrue(array.count == 2)
             XCTAssertEqual(array[0] as? String, "value_1")
             XCTAssertEqual(array[1] as? String, "value_2")
-        } catch let thrownError {
-            XCTFail(thrownError.localizedDescription)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
     
     @available(iOS 11.0, macOS 10.13, *)
     func testTokenParamEncoding() throws {
         let params = TokenParams(
-            number: "4242424242424242", name: "John Doe",
-            expiration: (12, 2020), securityCode: "123",
+            number: "4242424242424242",
+            name: "John Doe",
+            expiration: (12, 2020),
+            securityCode: "123",
             billingAddress: BillingAddress(
-                street1: "123 Main Road", street2: nil, city: "Bangkok",
-                state: nil, postalCode: "10240", countryCode: nil, phoneNumber: "7777777777"))
+                street1: "123 Main Road",
+                street2: nil,
+                city: "Bangkok",
+                state: nil,
+                postalCode: "10240",
+                countryCode: nil,
+                phoneNumber: "7777777777"))
         
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
@@ -75,4 +81,3 @@ class DecodeTests: XCTestCase {
         XCTAssertEqual(jsonData, encodedData)
     }
 }
-

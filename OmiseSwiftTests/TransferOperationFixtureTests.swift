@@ -1,10 +1,8 @@
 import XCTest
 import Omise
 
-
-private let transferTestingID = DataID<Transfer>(idString: "trsf_test_5fqeuv5ozoo0kffs0ji")!
-
 class TransferOperationFixtureTests: FixtureTestCase {
+    private let transferTestingID: DataID<Transfer>! = DataID(idString: "trsf_test_5fqeuv5ozoo0kffs0ji")
     
     func testTransferRetrieve() {
         let expectation = self.expectation(description: "transfer result")
@@ -14,7 +12,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 1000000)
+                XCTAssertEqual(transfer.value.amount, 1_000_000)
                 XCTAssertEqual(transfer.sentDate, dateFormatter.date(from: "2019-05-22T06:47:57Z"))
                 XCTAssertEqual(transfer.paidDate, dateFormatter.date(from: "2019-05-22T06:47:59Z"))
                 XCTAssertFalse(transfer.shouldFailFast)
@@ -66,7 +64,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferCreate() {
         let expectation = self.expectation(description: "transfer create")
         
-        let createParams = TransferParams(amount: 96094, failFast: true)
+        let createParams = TransferParams(amount: 96_094, failFast: true)
         
         let request = Transfer.create(using: testClient, params: createParams) { (result) in
             defer { expectation.fulfill() }
@@ -87,14 +85,14 @@ class TransferOperationFixtureTests: FixtureTestCase {
     func testTransferUpdate() {
         let expectation = self.expectation(description: "transfer update")
         
-        let updateParams = UpdateTransferParams(amount: 1_000_00)
+        let updateParams = UpdateTransferParams(amount: 100_000)
         
         let request = Transfer.update(using: testClient, id: transferTestingID, params: updateParams) { (result) in
             defer { expectation.fulfill() }
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 1000000)
+                XCTAssertEqual(transfer.value.amount, 1_000_000)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -112,7 +110,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.id, transferTestingID)
+                XCTAssertEqual(transfer.id, self.transferTestingID)
             case let .failure(error):
                 XCTFail("\(error)")
             }
@@ -130,14 +128,14 @@ class TransferOperationFixtureTests: FixtureTestCase {
             
             switch result {
             case let .success(transfer):
-                XCTAssertEqual(transfer.value.amount, 8000000)
+                XCTAssertEqual(transfer.value.amount, 8_000_000)
                 XCTAssertNil(transfer.sentDate)
                 XCTAssertNil(transfer.paidDate)
                 if case Transfer.Status.failed(let failure) = transfer.status,
                     case .other(let code) = failure.code {
                     XCTAssertEqual(code, "other")
                 } else {
-                    XCTFail()
+                    XCTFail("Unexpected transfer status")
                 }
             case let .failure(error):
                 XCTFail("\(error)")
@@ -167,8 +165,7 @@ class TransferOperationFixtureTests: FixtureTestCase {
             case .other(let decodedTransferFailedCode) = decodedTransferFailed.code {
             XCTAssertEqual(transferFailedCode, decodedTransferFailedCode)
         } else {
-            XCTFail()
+            XCTFail("Unexpected transfer status")
         }
     }
 }
-

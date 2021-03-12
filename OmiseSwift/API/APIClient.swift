@@ -1,6 +1,5 @@
 import Foundation
 
-
 public class APIClient: NSObject {
     public static let sessionIdentifier = "omise.co"
     
@@ -50,20 +49,19 @@ public class APIClient: NSObject {
                 client: self, endpoint: endpoint, callback: callback)
             return try req.start()
         } catch let err as OmiseError {
-            performCallback() {
+            performCallback {
                 callback?(.failure(err))
             }
-        } catch let err {
-            performCallback() {
-                callback?(.failure(.other(err)))
+        } catch {
+            performCallback {
+                callback?(.failure(.other(error)))
             }
         }
         
         return nil
     }
     
-    
-    func performCallback(_ callback: @escaping () -> ()) {
+    func performCallback(_ callback: @escaping () -> Void) {
         operationQueue.addOperation(callback)
     }
     

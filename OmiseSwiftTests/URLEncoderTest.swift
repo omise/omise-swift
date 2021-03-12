@@ -2,7 +2,6 @@ import Foundation
 @testable import Omise
 import XCTest
 
-
 // This is a special protocol to support decoding metadata type.
 // This situation will be greatly improved when `Conditional Conformance` feature land in Swift
 public protocol JSONType: Decodable {
@@ -52,7 +51,6 @@ public struct AnyJSONType: JSONType {
     }
 }
 
-
 extension AnyJSONType: Encodable {
     public func encode(to encoder: Encoder) throws {
         switch jsonValue {
@@ -78,7 +76,7 @@ extension AnyJSONType: Encodable {
         case let value as [Encodable]:
             var container = encoder.unkeyedContainer()
             try container.encode(contentsOf: value.map(AnyJSONType.init))
-        case let value as Dictionary<String, AnyJSONType>:
+        case let value as [String: AnyJSONType]:
             var container = encoder.container(keyedBy: AnyJSONAttributeEncodingKey.self)
             let sortedValuesByKey = value.sorted(by: { (first, second) -> Bool in
                 return first.key < second.key
@@ -87,18 +85,19 @@ extension AnyJSONType: Encodable {
                 let value = AnyJSONType(value)
                 try container.encode(value, forKey: AnyJSONAttributeEncodingKey(stringValue: key))
             }
-        default: fatalError()
+        default: fatalError("Unexpected json object")
         }
     }
 }
 
-fileprivate struct AnyJSONAttributeEncodingKey: CodingKey {
+private struct AnyJSONAttributeEncodingKey: CodingKey {
     let stringValue: String
     init?(intValue: Int) { return nil }
     var intValue: Int? { return nil }
     init(stringValue: String) { self.stringValue = stringValue }
 }
 
+// swiftlint:disable type_body_length
 class URLEncoderTest: OmiseTestCase {
     func testEncodeBasic() throws {
         let values = AnyJSONType(["hello": "world"])
@@ -115,15 +114,15 @@ class URLEncoderTest: OmiseTestCase {
             "0hello": "world",
             "1num": 42,
             "2number": 64,
-            "3long": 1234123412341234,
+            "3long": 1_234_123_412_341_234,
             "4bool": false,
             "5boolean": true,
             "6date": Date(timeIntervalSince1970: 0),
-            "7nil": String?.none as Optional<String>,
-            ] as [String: Optional<Any>])
+            "7nil": String?.none as String?
+        ] as [String: Any?])
         
         let encoder = URLQueryItemEncoder()
-        let result = try encoder.encode(values).map({ (query) in query.value ?? "$*nil*$" })
+        let result = try encoder.encode(values).map { (query) in query.value ?? "$*nil*$" }
         XCTAssertEqual(8, result.count)
         XCTAssertEqual(result, [
             "world",
@@ -133,10 +132,11 @@ class URLEncoderTest: OmiseTestCase {
             "false",
             "true",
             "1970-01-01T00:00:00Z",
-            "$*nil*$",
-            ])
+            "$*nil*$"
+        ])
     }
     
+    // swiftlint:disable function_body_length
     func testEncodeNestedWithEmptyIndexStrategy() throws {
         let values = AnyJSONType([
             "0outer": "normal",
@@ -144,14 +144,20 @@ class URLEncoderTest: OmiseTestCase {
             "2deeper": ["nesting": ["also": "works"]  ],
             "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
             "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
-            "5deepdictionary": ["anesting": ["also": "works"],
-                                "another nesting": [ "deep": [ "deepest1" : "hello 1", "deepest2": "hello 2" ],
-                                                     "deeparray": [ "rolling in", ["the" : 2, "deep": 1]]]],
+            "5deepdictionary": [
+                "anesting": ["also": "works"],
+                "another nesting": [
+                    "deep": ["deepest1": "hello 1", "deepest2": "hello 2"],
+                    "deeparray": [
+                        "rolling in", ["the": 2, "deep": 1]
+                    ]
+                ]
+            ],
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
-            ])
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
+        ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -222,14 +228,20 @@ class URLEncoderTest: OmiseTestCase {
             "2deeper": ["nesting": ["also": "works"]  ],
             "3array": [ "one", "two", "three", [ "deepest": "inside deepest" ] ],
             "4deeparray": [ "one", "two", "three", [ "deepest", "inside deepest" ] ],
-            "5deepdictionary": ["anesting": ["also": "works"],
-                                "another nesting": [ "deep": [ "deepest1" : "hello 1", "deepest2": "hello 2" ],
-                                                     "deeparray": [ "rolling in", ["the" : 2, "deep": 1]]]],
+            "5deepdictionary": [
+                "anesting": ["also": "works"],
+                "another nesting": [
+                    "deep": ["deepest1": "hello 1", "deepest2": "hello 2"],
+                    "deeparray": [
+                        "rolling in", ["the": 2, "deep": 1]
+                    ]
+                ]
+            ],
             "6outer": "normal",
             "7nested": ["inside": "inner"] as [String: String],
             "8deeper": ["nesting": ["also": "works"]  ],
-            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ],
-            ])
+            "9deeparrayindeepdictionary": [ "array": [ "0", "1", "2" ] ]
+        ])
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .index
@@ -285,7 +297,6 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("8deeper[nesting][also]", result[20].name)
         XCTAssertEqual("works", result[20].value)
         
-        
         XCTAssertEqual("0", result[21].value)
         XCTAssertEqual("9deeparrayindeepdictionary[array][0]", result[21].name)
         XCTAssertEqual("1", result[22].value)
@@ -297,7 +308,7 @@ class URLEncoderTest: OmiseTestCase {
     func testConvertChargeFilterParams() throws {
         var searchFilterParams = ChargeFilterParams()
         searchFilterParams.amount = 1000
-        searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")!
+        searchFilterParams.cardLastDigits = LastDigits(lastDigitsString: "4242")
         searchFilterParams.isCaptured = true
         searchFilterParams.created = DateComponents(
             calendar: Calendar(identifier: .gregorian), year: 2016, month: 8, day: 1)
@@ -306,13 +317,13 @@ class URLEncoderTest: OmiseTestCase {
         let items = try encoder.encode(searchFilterParams)
         
         XCTAssertEqual(4, items.count)
-        let result = Set(items.map({ (query) in query.value ?? "(nil)" }))
+        let result = Set(items.map { (query) in query.value ?? "(nil)" })
         XCTAssertEqual(result, [
             "1000.0",
             "4242",
             "true",
-            "2016-8-1",
-            ])
+            "2016-8-1"
+        ])
     }
     
     func testConvertListParams() throws {
@@ -327,19 +338,23 @@ class URLEncoderTest: OmiseTestCase {
         let expectedFromDateString = formatter.string(from: from)
         let expectedToDateString = formatter.string(from: to)
         XCTAssertEqual(3, items.count)
-        let result = items.map({ (query) in query.value ?? "(nil)" })
+        let result = items.map { (query) in query.value ?? "(nil)" }
         XCTAssertEqual(result, [
             expectedFromDateString,
             expectedToDateString,
-            "chronological",
-            ])
+            "chronological"
+        ])
     }
     
     func testCreateChargeParams() throws {
         let createChargeParams = ChargeParams(
-            value: Value(amount: 10_000_00, currency: .thb), cardID: "crd_test_12345",
-            chargeDescription: "A charge description", isAutoCapture: true, returnURL: URL(string: "https://omise.co"),
-            metadata: ["customer-id": "1", "stock-count": 66473])
+            value: Value(amount: 1_000_000, currency: .thb),
+            cardID: "crd_test_12345",
+            chargeDescription: "A charge description",
+            isAutoCapture: true,
+            returnURL: URL(string: "https://omise.co"),
+            metadata: ["customer-id": "1", "stock-count": 66_473]
+        )
         
         let encoder = URLQueryItemEncoder()
         encoder.arrayIndexEncodingStrategy = .emptySquareBrackets
@@ -364,4 +379,3 @@ class URLEncoderTest: OmiseTestCase {
         XCTAssertEqual("66473", result[7].value)
     }
 }
-

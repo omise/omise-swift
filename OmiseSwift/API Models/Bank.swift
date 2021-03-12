@@ -6,9 +6,8 @@ import UIKit
 import AppKit
 #endif
 
-
 // We provide the banks information file in a JSON file format.
-// This JSON's keys are the country code of supported banks and 
+// This JSON's keys are the country code of supported banks and
 // values are maps from the bank's ID to a JSON dictionary containing bank's information
 // [ "th": [ "test": [ /* bank's information */ ] ] ]
 private let banks: [String: [String: JSONDictionary]] = {
@@ -27,19 +26,17 @@ private let banks: [String: [String: JSONDictionary]] = {
 private let bankCountryCodeMap: [String: String] = {
     var countryCodes: [String: String] = [:]
     
-    banks.forEach({ let (countryCode, banks) = $0;
-        banks.keys.forEach({ code in
+    banks.forEach { let (countryCode, banks) = $0
+        banks.keys.forEach { code in
             countryCodes[code] = countryCode
-        })
-    })
+        }
+    }
     
     return countryCodes
 }()
 
-
 // A dictionary where key is a bank's ID and value is a bank's information
-private let bankData: [String: JSONDictionary] =
-    Dictionary<String, JSONDictionary>(banks.flatMap({ $0.1 }), uniquingKeysWith: { $1 })
+private let bankData: [String: JSONDictionary] = Dictionary(banks.flatMap { $0.1 }) { $1 }
 
 public struct Bank {
     public let bankID: String
@@ -69,4 +66,3 @@ public struct Bank {
         self.preferredColor = (data?["color"] as? String).flatMap(Color.init(hexString:))
     }
 }
-

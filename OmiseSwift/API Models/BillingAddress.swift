@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct BillingAddress: Codable, Equatable {
     public let street1: String?
     public let street2: String?
@@ -20,4 +19,3 @@ public struct BillingAddress: Codable, Equatable {
         case phoneNumber = "phone_number"
     }
 }
-

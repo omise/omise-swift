@@ -1,3 +1,5 @@
+// swiftlint:disable file_length
+
 import Foundation
 
 public enum CardBrand: String, Codable, Equatable {
@@ -9,7 +11,6 @@ public enum CardBrand: String, Codable, Equatable {
     case discover = "Discover"
     case maestro = "Maestro"
 }
-
 
 public enum CardFinancing: RawRepresentable, Codable, Equatable {
     
@@ -53,7 +54,6 @@ public enum CardFinancing: RawRepresentable, Codable, Equatable {
     }
 }
 
-
 public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     case tokenized(TokenizedCard)
     case customer(CustomerCard)
@@ -72,9 +72,9 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     public var id: DataID<Card> {
         switch self {
         case .tokenized(let card):
-            return DataID<Card>(idString: card.id.idString)!
+            return DataID(idString: card.id.idString)! // swiftlint:disable:this force_unwrapping
         case .customer(let card):
-            return DataID<Card>(idString: card.id.idString)!
+            return DataID(idString: card.id.idString)! // swiftlint:disable:this force_unwrapping
         }
     }
     
@@ -178,7 +178,7 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
     }
 }
 
-extension Card {    
+extension Card {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         do {
@@ -325,7 +325,6 @@ public struct CustomerCard: OmiseLocatableObject, OmiseIdentifiableObject, Omise
     public let passSecurityCodeCheck: Bool
 }
 
-
 extension CustomerCard {
     private enum CodingKeys: String, CodingKey {
         case object
@@ -411,9 +410,13 @@ public struct CardParams: APIJSONQuery {
         case city
     }
     
-    public init(name: String? = nil,
-                expirationMonth: Int? = nil, expirationYear: Int? = nil,
-                postalCode: String? = nil, city: String? = nil) {
+    public init(
+        name: String? = nil,
+        expirationMonth: Int? = nil,
+        expirationYear: Int? = nil,
+        postalCode: String? = nil,
+        city: String? = nil
+    ) {
         self.name = name
         self.expirationMonth = expirationMonth
         self.expirationYear = expirationYear
@@ -421,7 +424,6 @@ public struct CardParams: APIJSONQuery {
         self.city = city
     }
 }
-
 
 extension CustomerCard: Listable {}
 extension CustomerCard: Retrievable {}
@@ -434,37 +436,40 @@ extension CustomerCard: OmiseAPIChildObject {
     public typealias Parent = Customer
 }
 
-
 extension Customer {
     public func listCards(
-        using client: APIClient, params: ListParams? = nil,
+        using client: APIClient,
+        params: ListParams? = nil,
         callback: @escaping CustomerCard.ListRequest.Callback
-        ) -> CustomerCard.ListRequest? {
+    ) -> CustomerCard.ListRequest? {
         return self.list(keyPath: \.cards, using: client, params: params, callback: callback)
     }
     
     public func retrieveCard(
-        using client: APIClient, id: DataID<CustomerCard>,
+        using client: APIClient,
+        id: DataID<CustomerCard>,
         callback: @escaping CustomerCard.RetrieveRequest.Callback
-        ) -> CustomerCard.RetrieveRequest? {
+    ) -> CustomerCard.RetrieveRequest? {
         return CustomerCard.retrieve(using: client, parent: self, id: id, callback: callback)
     }
     
     public func updateCard(
-        using client: APIClient, id: DataID<CustomerCard>, params: CardParams,
+        using client: APIClient,
+        id: DataID<CustomerCard>,
+        params: CardParams,
         callback: @escaping CustomerCard.UpdateRequest.Callback
-        ) -> CustomerCard.UpdateRequest? {
+    ) -> CustomerCard.UpdateRequest? {
         return CustomerCard.update(using: client, parent: self, id: id, params: params, callback: callback)
     }
     
     public func destroyCard(
-        using client: APIClient, id: DataID<CustomerCard>,
+        using client: APIClient,
+        id: DataID<CustomerCard>,
         callback: @escaping CustomerCard.DestroyRequest.Callback
-        ) -> CustomerCard.DestroyRequest? {
+    ) -> CustomerCard.DestroyRequest? {
         return CustomerCard.destroy(using: client, parent: self, id: id, callback: callback)
     }
 }
-
 
 extension Card: Equatable {
     /// Returns a Boolean value indicating whether two values are equal.
@@ -475,8 +480,7 @@ extension Card: Equatable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: Card, rhs: Card) -> Bool {
+    public static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.id == rhs.id
     }
 }
-

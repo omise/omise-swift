@@ -1,6 +1,5 @@
 import Foundation
 
-
 public struct Transfer: OmiseResourceObject, Equatable {
     public static let resourcePath = "/transfers"
     public static let idPrefix: String = "trsf"
@@ -114,7 +113,7 @@ extension Transfer {
         net = try container.decode(Int64.self, forKey: .net)
         totalFee = try container.decode(Int64.self, forKey: .totalFee)
         recipient = try container.decode(DetailProperty<Recipient>.self, forKey: .recipient)
-        transactions = try container.decode(Array<Transaction<Transfer>>.self, forKey: .transactions)
+        transactions = try container.decode([Transaction<Transfer>].self, forKey: .transactions)
         
         let failureCode = try container.decodeIfPresent(TransferFailure.Code.self, forKey: .failureCode)
         let failureMessage = try container.decodeIfPresent(String.self, forKey: .failureMessage)
@@ -139,7 +138,6 @@ extension Transfer {
         try container.encode(id, forKey: .id)
         try container.encode(createdDate, forKey: .createdDate)
         try container.encode(isLiveMode, forKey: .isLiveMode)
-        
         
         try container.encode(shouldFailFast, forKey: .shouldFailFast)
         try container.encode(bankAccount, forKey: .bankAccount)
@@ -168,7 +166,6 @@ extension Transfer {
     }
 }
 
-
 public struct TransferParams: APIJSONQuery {
     public var amount: Int64
     public var recipientID: DataID<Recipient>?
@@ -194,7 +191,6 @@ public struct UpdateTransferParams: APIJSONQuery {
         self.amount = amount
     }
 }
-
 
 public struct TransferFilterParams: OmiseFilterParams {
     public var amount: Double?
@@ -242,11 +238,18 @@ public struct TransferFilterParams: OmiseFilterParams {
         try container.encodeIfPresent(sentDate, forKey: .sentDate)
     }
     
-    public init(amount: Double? = nil, created: DateComponents? = nil,
-                currency: Currency? = nil, isDeleted: Bool? = nil,
-                bankLastDigits: Digits? = nil, fee: Double? = nil,
-                isPaid: Bool? = nil, paidDate: DateComponents? = nil,
-                isSent: Bool? = nil, sentDate: DateComponents? = nil) {
+    public init(
+        amount: Double? = nil,
+        created: DateComponents? = nil,
+        currency: Currency? = nil,
+        isDeleted: Bool? = nil,
+        bankLastDigits: Digits? = nil,
+        fee: Double? = nil,
+        isPaid: Bool? = nil,
+        paidDate: DateComponents? = nil,
+        isSent: Bool? = nil,
+        sentDate: DateComponents? = nil
+    ) {
         self.amount = amount
         self.created = created
         self.isDeleted = isDeleted
@@ -257,7 +260,6 @@ public struct TransferFilterParams: OmiseFilterParams {
         self.sentDate = sentDate
     }
 }
-
 
 extension Transfer: OmiseAPIPrimaryObject {}
 extension Transfer: Listable {}
@@ -276,4 +278,3 @@ extension Transfer: Destroyable {}
 extension Transfer: Searchable {
     public typealias FilterParams = TransferFilterParams
 }
-
