@@ -74,7 +74,7 @@ extension Recipient {
         isDefault = try container.decode(Bool.self, forKey: .isDefault)
         failureCode = try container.decodeIfPresent(FailureCode.self, forKey: .failureCode)
         name = try container.decode(String.self, forKey: .name)
-        email = try container.decode(String.self, forKey: .email)
+        email = try container.decode(String?.self, forKey: .email)
         recipientDescription = try container.decodeIfPresent(String.self, forKey: .recipientDescription)
         type = try container.decode(RecipientType.self, forKey: .type)
         taxID = try container.decodeIfPresent(String.self, forKey: .taxID)
