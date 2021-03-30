@@ -48,7 +48,7 @@
       "default": true,
       "active": true,
       "name": "mobile.omise+th@gmail.com",
-      "email": "mobile.omise+th@gmail.com",
+      "email": null,
       "description": "Default recipient",
       "type": "individual",
       "tax_id": "",
