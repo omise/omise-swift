@@ -12,7 +12,7 @@ let package = Package(
             name: "Omise",
             type: .dynamic,
             targets: ["Omise"]
-        ),
+        )
     ],
     targets: [
         .target(
