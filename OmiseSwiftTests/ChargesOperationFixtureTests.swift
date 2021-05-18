@@ -761,6 +761,16 @@ class ChargesOperationFixtureTests: FixtureTestCase {
                 XCTAssertEqual(charge.source?.flow, .redirect)
                 XCTAssertEqual(charge.source?.paymentInformation,
                                EnrolledSource.EnrolledPaymentInformation.installment(.bay))
+                
+                XCTAssertEqual(charge.card?.brand, .visa)
+                XCTAssertEqual(charge.card?.lastDigits, Digits(digitsString: "1234"))
+                
+                switch charge.paymentInformation {
+                case .source(let source):
+                    XCTAssertEqual(source, .installment(.bay))
+                default:
+                    XCTFail("Unexpected payment info: \(charge.paymentInformation)")
+                }
             case let .failure(error):
                 XCTFail("\(error)")
             }
