@@ -270,11 +270,11 @@ extension Charge {
         card = try container.decodeIfPresent(Card.self, forKey: .card)
         
         switch (card, source) {
+        case (_, let source?):
+            payment = .source(source)
         case (let card?, nil):
             payment = .card(card)
-        case (nil, let source?):
-            payment = .source(source)
-        case (nil, nil), (.some, .some):
+        case (nil, nil):
             payment = .unknown
         }
     }

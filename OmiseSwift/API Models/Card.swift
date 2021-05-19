@@ -159,7 +159,7 @@ public enum Card: OmiseIdentifiableObject, OmiseLiveModeObject {
         }
     }
     
-    public var fingerPrint: String {
+    public var fingerPrint: String? {
         switch self {
         case .tokenized(let card):
             return card.fingerPrint
@@ -219,7 +219,7 @@ public struct TokenizedCard: OmiseIdentifiableObject, OmiseLiveModeObject, Omise
     public let expiration: (month: Int, year: Int)?
     
     public let name: String?
-    public let fingerPrint: String
+    public let fingerPrint: String?
     
     public let financing: CardFinancing?
     
@@ -279,11 +279,11 @@ extension TokenizedCard {
         firstDigits = try container.decodeIfPresent(Digits.self, forKey: .firstDigits)
         lastDigits = try container.decode(Digits.self, forKey: .lastDigits)
         brand = try container.decode(CardBrand.self, forKey: .brand)
-        name = try container.decode(String.self, forKey: .name)
+        name = try container.decodeIfPresent(String.self, forKey: .name)
         bankName = try container.decodeIfPresent(String.self, forKey: .bankName)
         billingAddress = try BillingAddress(from: decoder)
         financing = try container.decodeIfPresent(CardFinancing.self, forKey: .financing)
-        fingerPrint = try container.decode(String.self, forKey: .fingerPrint)
+        fingerPrint = try container.decodeIfPresent(String.self, forKey: .fingerPrint)
         passSecurityCodeCheck = try container.decode(Bool.self, forKey: .passSecurityCodeCheck)
         let expirationMonth = try container.decodeIfPresent(Int.self, forKey: .expirationMonth)
         let expirationYear = try container.decodeIfPresent(Int.self, forKey: .expirationYear)

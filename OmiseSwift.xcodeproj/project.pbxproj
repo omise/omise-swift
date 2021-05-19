@@ -204,6 +204,7 @@
 		8AF2219F21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */; };
 		8AF584421E0153AC00D7D647 /* ChargeOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */; };
 		98256FF31D225E3000F91436 /* TransferOperationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98256FF11D225E3000F91436 /* TransferOperationsTest.swift */; };
+		F678EA8F260C318B00EA7F7E /* RecipientOperationFixtureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F678EA8E260C318B00EA7F7E /* RecipientOperationFixtureTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -337,6 +338,7 @@
 		8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOperationFixtureTests.swift; sourceTree = "<group>"; };
 		8AF584411E0153AC00D7D647 /* ChargeOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChargeOperationsTest.swift; sourceTree = "<group>"; };
 		98256FF11D225E3000F91436 /* TransferOperationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferOperationsTest.swift; sourceTree = "<group>"; };
+		F678EA8E260C318B00EA7F7E /* RecipientOperationFixtureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientOperationFixtureTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,6 +454,7 @@
 				8A590B491EDD780A003C60E0 /* ForexOperationFixtureTests.swift */,
 				8AD3F2D41DEC113200F68FB4 /* LinkOperationFixtureTest.swift */,
 				8A5880EE1F46EEB300647405 /* ReceiptsOperationFixtureTests.swift */,
+				F678EA8E260C318B00EA7F7E /* RecipientOperationFixtureTests.swift */,
 				8A2698A11D743A2100515A0A /* RefundOperationFixtureTests.swift */,
 				8A4469D11ED5A40C00F07334 /* SchedulesOperationFixtureTests.swift */,
 				8AF2219D21A40EE900AAF0F9 /* SearchOperationFixtureTests.swift */,
@@ -981,6 +984,7 @@
 				8A07D2F51D73F5040030B68D /* FixtureClient.swift in Sources */,
 				8A98759E1F0673C90090D56F /* DocumentOperationTest.swift in Sources */,
 				8A1CF6B01F8BC1D7003EDB38 /* DigitsTest.swift in Sources */,
+				F678EA8F260C318B00EA7F7E /* RecipientOperationFixtureTests.swift in Sources */,
 				22112D0D1CC7910700D0DB54 /* OmiseTestCase.swift in Sources */,
 				8A208DDD21A81267009104C0 /* CapabilityOperationFixtureTests.swift in Sources */,
 			);
